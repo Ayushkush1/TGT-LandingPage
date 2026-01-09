@@ -1,0 +1,112 @@
+import Link from 'next/link';
+import * as React from 'react';
+import { ChevronDown, Mail, Phone, FileText, ScanSearch } from 'lucide-react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+export const Navbar = () => {
+    return (
+        <nav className="w-full py-6 px-4 md:px-8 lg:px-12 flex items-center justify-between sticky top-0 z-50 relative">
+
+            {/* Logo */}
+            <div className="flex items-center gap-2.5 relative z-10">
+                <div className="bg-[#9A7B12] rounded-xl p-1.5 shadow-lg shadow-blue-900/10">
+                    <span className="text-white font-bold px-1 text-sm tracking-widest">TGT</span>
+                </div>
+                <span className="text-xl font-bold text-gray-900 tracking-tight">The Gold Technologies</span>
+            </div>
+
+            {/* Center Links */}
+            <div className="hidden md:flex items-center gap-10 relative z-10">
+                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Home</Link>
+                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">About Us</Link>
+                <div className="relative group h-full flex items-center">
+                    <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+                        <span>Services</span>
+                        <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+                    </div>
+
+                    {/* Premium Dropdown */}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
+                        <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
+                            <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+                                {[
+                                    { title: "UI/UX Designing", desc: "Intuitive, engaging, and user-centric interfaces." },
+                                    { title: "Website Design & Development", desc: "High-performance, responsive, and modern websites." },
+                                    { title: "Mobile App Development", desc: "Native and cross-platform apps for iOS & Android." },
+                                    { title: "Custom Software Development", desc: "Tailored software solutions for unique business needs." },
+                                    { title: "Business Software Solutions", desc: "Scalable ERP, CRM, and enterprise management tools." },
+                                    { title: "Business Intelligence Solutions", desc: "Data-driven insights to spark strategic growth." },
+                                    { title: "IOT Solutions", desc: "Smart connectivity and automation for devices." },
+                                    { title: "AI & ML Solution", desc: "Advanced AI algorithms and predictive modeling." },
+                                    { title: "Branding", desc: "Distinctive brand identities that resonate with audiences." },
+                                    { title: "Digital Marketing", desc: "SEO, SMM, and paid strategies to maximize reach." },
+                                    { title: "Accessibility Services", desc: "Ensuring digital presence is accessible to everyone." },
+                                ].map((service, i) => (
+                                    <Link
+                                        key={i}
+                                        href="#"
+                                        className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
+                                    >
+                                        <div className="flex-1">
+                                            <div className="flex items-center justify-between mb-0.5">
+                                                <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">{service.title}</span>
+                                                <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">→</span>
+                                            </div>
+                                            <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">{service.desc}</p>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Blog</Link>
+                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Contact Us</Link>
+            </div>
+
+            {/* Right Buttons */}
+            <div className="flex items-center gap-2 relative z-10">
+                <TooltipProvider delayDuration={0}>
+                    <div className="flex items-center gap-1">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <button className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80">
+                                    <Mail className="w-[18px] h-[18px]" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">
+                                <p>info@thegoldtechnologies.com</p>
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <button className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80">
+                                    <Phone className="w-[18px] h-[18px]" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">
+                                <p>+91 8368198551</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
+                </TooltipProvider>
+
+                {/* Vertical Separator */}
+                <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>
+
+                <div className="hidden lg:block ml-1">
+                    <Link href="#" className="flex items-center gap-2 text-white bg-[#0B0F29] hover:bg-black px-5 py-2.5 rounded-full transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)]">
+                        <ScanSearch className="w-5 h-5 text-white" />
+                        <span className="text-[11px] font-bold uppercase tracking-widest">Free Website Audit</span>
+                    </Link>
+                </div>
+            </div>
+        </nav>
+    );
+};

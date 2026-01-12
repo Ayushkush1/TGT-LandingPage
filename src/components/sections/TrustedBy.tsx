@@ -1,4 +1,7 @@
+'use client';
+
 import React from "react";
+import { motion } from "framer-motion";
 
 export const TrustedBy = () => {
     return (
@@ -7,16 +10,35 @@ export const TrustedBy = () => {
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8">
 
                     {/* Label */}
-                    <div className="text-center md:text-left">
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="text-center md:text-left"
+                    >
                         <p className="text-sm font-semibold text-gray-900">Trusted by 50+ Companies</p>
                         <p className="text-xs text-gray-500 mt-1">From startups to enterprises</p>
-                    </div>
+                    </motion.div>
 
                     {/* Separator on desktop */}
-                    <div className="hidden md:block w-px h-10 bg-gray-200"></div>
+                    <motion.div
+                        initial={{ scaleY: 0 }}
+                        whileInView={{ scaleY: 1 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.4, delay: 0.2 }}
+                        className="hidden md:block w-px h-10 bg-gray-200"
+                    ></motion.div>
 
                     {/* Logos Slider Mask */}
-                    <div className="flex-1 overflow-hidden relative" style={{ maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)' }}>
+                    <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="flex-1 overflow-hidden relative"
+                        style={{ maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)' }}
+                    >
                         <div className="flex w-max animate-marquee items-center group-hover:pause">
                             {/* First Set */}
                             <div className="flex items-center gap-24 pr-12">
@@ -91,7 +113,7 @@ export const TrustedBy = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

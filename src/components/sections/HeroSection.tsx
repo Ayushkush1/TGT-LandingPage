@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight, Mail, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 // Mock Projects Data with "Artistic" themes
 const projects = [
@@ -39,7 +40,12 @@ export const HeroSection = () => {
             <div className="max-w-4xl mx-auto text-center space-y-6 xl:space-y-6 3xl:space-y-10 px-4 mb-[70px] relative z-10 pt-4 xl:pt-4 3xl:pt-10">
 
                 {/* Trust Indicator */}
-                <div className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full border border-gray-100 bg-white shadow-sm">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full border border-gray-100 bg-white shadow-sm"
+                >
                     {/* Overlapping Avatars */}
                     <div className="flex items-center -space-x-2">
                         <div className="w-5 h-5 rounded-full bg-gradient-to-br from-brand-gold to-[#B5952F] border-2 border-white"></div>
@@ -48,30 +54,45 @@ export const HeroSection = () => {
                         <div className="w-5 h-5 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-white"></div>
                     </div>
                     <span className="text-xs font-medium text-gray-600">Trusted by <span className="text-black font-semibold">50+</span> businesses</span>
-                </div>
+                </motion.div>
 
                 {/* Headline - Editorial Style */}
-                <h1 className="text-5xl md:text-[6rem] font-medium text-black leading-[0.95] mb-6 tracking-tighter">
+                <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="text-5xl md:text-[6rem] font-medium text-black leading-[0.95] mb-6 tracking-tighter"
+                >
                     Software artisans <br />
                     <span className="text-[#D4AF37]/60 italic font-light">crafting digital reality.</span>
-                </h1>
+                </motion.h1>
 
                 {/* Subtext - Clean & Tight */}
-                <p className="text-lg text-gray-500 max-w-xl mx-auto mb-6 leading-relaxed font-normal antialiased">
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="text-lg text-gray-500 max-w-xl mx-auto mb-6 leading-relaxed font-normal antialiased"
+                >
                     Professional web development and software solutions for your business.
                     Modern, fast, and built to grow with you.
-                </p>
+                </motion.p>
 
                 {/* Buttons - Monochrome */}
-                <div className="flex items-center justify-center gap-6 pt-2">
-                     
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="flex items-center justify-center gap-6 pt-2"
+                >
+
                     <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex justify-center items-center gap-3 group">
                         Book Free Consultation <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                     </button>
                     <button className="text-black px-6 py-4 rounded-full text-md font-medium hover:bg-brand-gold/10 transition-colors border border-transparent hover:border-[#D4AF37]">
                         Request Quote
                     </button>
-                </div>
+                </motion.div>
             </div>
 
             {/* 2. Artistic "Cover Flow" Project Slider */}

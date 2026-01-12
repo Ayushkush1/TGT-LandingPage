@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpRight, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 
 const MagneticButton = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
     const ref = useRef<HTMLDivElement>(null);
@@ -35,6 +35,8 @@ const MagneticButton = ({ children, className = "" }: { children: React.ReactNod
 
 export const Footer = () => {
     const containerRef = useRef(null);
+    const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end end"]
@@ -54,7 +56,12 @@ export const Footer = () => {
 
     return (
         <footer className="relative bg-white pt-10 px-2 md:px-4 pb-4" ref={containerRef}>
-            <div className="bg-[#020410] rounded-[3rem] md:rounded-[4rem] text-white overflow-hidden relative min-h-[85vh] flex flex-col justify-between p-8 md:p-16">
+            <motion.div
+                initial={{ y: 100, opacity: 0 }}
+                animate={isInView ? { y: 0, opacity: 1 } : { y: 100, opacity: 0 }}
+                transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="bg-[#020410] rounded-[3rem] md:rounded-[4rem] text-white overflow-hidden relative min-h-[85vh] flex flex-col justify-between p-8 md:p-16"
+            >
 
                 {/* Background Noise/Gradient */}
                 <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_50%_-20%,#D4AF37,transparent_50%)]"></div>
@@ -170,7 +177,7 @@ export const Footer = () => {
                     </button>
                 </div>
 
-            </div>
+            </motion.div>
         </footer>
     );
 };

@@ -2,6 +2,7 @@
 
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 export const WhatWeDo = () => {
     const [activeService, setActiveService] = useState(0);
@@ -12,27 +13,63 @@ export const WhatWeDo = () => {
 
                 {/* Section Header */}
                 <div className="text-center max-w-4xl mx-auto mb-20">
-                    <div className="flex items-center justify-center gap-4 mb-6">
-                        <div className="h-px w-8 bg-gray-400/30"></div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.5 }}
+                        className="flex items-center justify-center gap-4 mb-6"
+                    >
+                        <motion.div
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="h-px w-8 bg-gray-400/30"
+                        ></motion.div>
                         <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">What We Do</span>
-                        <div className="h-px w-8 bg-gray-400/30"></div>
-                    </div>
+                        <motion.div
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="h-px w-8 bg-gray-400/30"
+                        ></motion.div>
+                    </motion.div>
 
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight"
+                    >
                         End-to-End <span className="font-serif italic font-medium text-[#D4AF37]">Solutions</span> for <br />
                         Your <span className="relative inline-block z-10">
                             Digital Journey
                             <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
                         </span>.
-                    </h2>
+                    </motion.h2>
 
-                    <p className="text-lg text-gray-500 font-light leading-relaxed max-w-2xl mx-auto">
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                        className="text-lg text-gray-500 font-light leading-relaxed max-w-2xl mx-auto"
+                    >
                         From initial concept to final deployment, we provide a full spectrum of digital services tailored to your unique business needs.
-                    </p>
+                    </motion.p>
                 </div>
 
                 {/* Unified Accordion Container */}
-                <div className="flex flex-col lg:flex-row gap-3 h-[600px] lg:h-[500px]">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="flex flex-col lg:flex-row gap-3 h-[600px] lg:h-[500px]"
+                >
                     {[
                         {
                             id: 'web',
@@ -75,8 +112,16 @@ export const WhatWeDo = () => {
                             borderColor: 'border-[#D4AF37]/30'
                         }
                     ].map((service, index) => (
-                        <div
+                        <motion.div
                             key={service.id}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{
+                                duration: 0.5,
+                                delay: 0.7 + (index * 0.1),
+                                ease: [0.25, 0.46, 0.45, 0.94]
+                            }}
                             onMouseEnter={() => setActiveService(index)}
                             className={`relative rounded-[32px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer ${index === activeService ? `flex-[3.5] ${service.borderColor}` : 'flex-[0.5] border-transparent'} group bg-[#0B0F29] shadow-lg h-full`}
                         >
@@ -120,12 +165,18 @@ export const WhatWeDo = () => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
 
                 {/* Minimalist Horizontal CTA */}
-                <div className="mt-20 mb-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="mt-20 mb-10"
+                >
                     <div className="max-w-7xl mx-auto bg-[#F5F5F7] rounded-[2.5rem] px-8 py-10 md:px-16 md:py-14 flex flex-col md:flex-row items-center justify-between gap-10 shadow-sm border border-white/50">
                         <div className="flex-1 text-center md:text-left space-y-3">
                             <h3 className="text-3xl md:text-[42px] font-bold text-[#0B0F29] leading-[1.1] tracking-tight max-w-2xl">
@@ -140,7 +191,7 @@ export const WhatWeDo = () => {
                             </button>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

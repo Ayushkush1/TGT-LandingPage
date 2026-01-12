@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import * as React from 'react';
 import { ChevronDown, Mail, Phone, FileText, ScanSearch } from 'lucide-react';
+import { motion } from 'framer-motion';
 import {
     Tooltip,
     TooltipContent,
@@ -9,22 +12,59 @@ import {
 } from "@/components/ui/tooltip"
 
 export const Navbar = () => {
+    const [scrolled, setScrolled] = React.useState(false);
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
-        <nav className="w-full py-6 px-4 md:px-8 lg:px-12 flex items-center justify-between sticky top-0 z-50 relative">
+        <motion.nav
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+                duration: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94]
+            }}
+            className={`w-full py-6 px-4 md:px-8 lg:px-12 flex items-center justify-between sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'backdrop-blur-xl bg-white/80 shadow-sm' : 'bg-transparent'
+                }`}
+        >
 
             {/* Logo */}
-            <div className="flex items-center gap-2.5 relative z-10">
+            <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="flex items-center gap-2.5 relative z-10"
+            >
                 <div className="bg-[#9A7B12] rounded-xl p-1.5 shadow-lg shadow-blue-900/10">
                     <span className="text-white font-bold px-1 text-sm tracking-widest">TGT</span>
                 </div>
                 <span className="text-xl font-bold text-gray-900 tracking-tight">The Gold Technologies</span>
-            </div>
+            </motion.div>
 
             {/* Center Links */}
             <div className="hidden md:flex items-center gap-10 relative z-10">
-                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Home</Link>
-                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">About Us</Link>
-                <div className="relative group h-full flex items-center">
+                {['Home', 'About Us'].map((item, i) => (
+                    <motion.div
+                        key={item}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 + (i * 0.1), duration: 0.5 }}
+                    >
+                        <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">{item}</Link>
+                    </motion.div>
+                ))}
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.5 }}
+                    className="relative group h-full flex items-center"
+                >
                     <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
                         <span>Services</span>
                         <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
@@ -64,9 +104,17 @@ export const Navbar = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Blog</Link>
-                <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Contact Us</Link>
+                </motion.div>
+                {['Blog', 'Contact Us'].map((item, i) => (
+                    <motion.div
+                        key={item}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 + (i * 0.1), duration: 0.5 }}
+                    >
+                        <Link href="#" className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors">{item}</Link>
+                    </motion.div>
+                ))}
             </div>
 
             {/* Right Buttons */}
@@ -107,6 +155,6 @@ export const Navbar = () => {
                     </Link>
                 </div>
             </div>
-        </nav>
+        </motion.nav >
     );
 };

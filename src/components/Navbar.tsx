@@ -197,9 +197,8 @@ export const Navbar = () => {
                 <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>
 
                 <div className="hidden lg:block ml-1">
-                    <Link href="#" className="flex items-center gap-1 text-gray-900 bg-white/60 backdrop-blur-md hover:bg-white/80 pr-5 pl-4 py-1 rounded-full transition-all duration-300 border border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm">
-                        <img src="/images/search.gif" alt="Search Audit" className="w-8 h-8 object-contain" />
-                        <span className="text-[11px] font-bold uppercase tracking-widest">Free Website Audit</span>
+                    <Link href="#" className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 px-4 py-2 rounded-full transition-all duration-300 border border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm">
+                        <ScanSearch className="w-5 h-5 object-contain" />                        <span className="text-[11px] font-bold uppercase tracking-widest">Free Website Audit</span>
                     </Link>
                 </div>
             </div>

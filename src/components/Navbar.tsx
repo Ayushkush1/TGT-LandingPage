@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import * as React from 'react';
-import { ChevronDown, Mail, Phone, FileText, ScanSearch } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ChevronDown, Mail, MailOpen, Phone, FileText, ScanSearch } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Tooltip,
     TooltipContent,
@@ -13,6 +13,8 @@ import {
 
 export const Navbar = () => {
     const [scrolled, setScrolled] = React.useState(false);
+    const [isEmailHovered, setIsEmailHovered] = React.useState(false);
+    const [isPhoneHovered, setIsPhoneHovered] = React.useState(false);
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -105,7 +107,7 @@ export const Navbar = () => {
                         </div>
                     </div>
                 </motion.div>
-                {['Blog', 'Contact Us'].map((item, i) => (
+                {['Products', 'Contact Us'].map((item, i) => (
                     <motion.div
                         key={item}
                         initial={{ opacity: 0, y: -10 }}
@@ -123,8 +125,36 @@ export const Navbar = () => {
                     <div className="flex items-center gap-1">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <button className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80">
-                                    <Mail className="w-[18px] h-[18px]" />
+                                <button
+                                    className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 w-10 h-10 flex items-center justify-center relative overflow-hidden"
+                                    onMouseEnter={() => setIsEmailHovered(true)}
+                                    onMouseLeave={() => setIsEmailHovered(false)}
+                                >
+                                    <AnimatePresence initial={false}>
+                                        {isEmailHovered ? (
+                                            <motion.div
+                                                key="open"
+                                                initial={{ opacity: 0, scale: 0.5 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.5 }}
+                                                transition={{ duration: 0.1 }}
+                                                className="absolute"
+                                            >
+                                                <MailOpen className="w-[18px] h-[18px]" />
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="closed"
+                                                initial={{ opacity: 0, scale: 0.5 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.5 }}
+                                                transition={{ duration: 0.1 }}
+                                                className="absolute"
+                                            >
+                                                <Mail className="w-[18px] h-[18px]" />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
@@ -134,8 +164,26 @@ export const Navbar = () => {
 
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <button className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80">
-                                    <Phone className="w-[18px] h-[18px]" />
+                                <button
+                                    className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 group"
+                                    onMouseEnter={() => setIsPhoneHovered(true)}
+                                    onMouseLeave={() => setIsPhoneHovered(false)}
+                                >
+                                    <motion.div
+                                        animate={isPhoneHovered ? {
+                                            rotate: [0, -10, 10, -10, 10, 0],
+                                            transition: {
+                                                duration: 0.6,
+                                                repeat: Infinity,
+                                                ease: "easeInOut"
+                                            }
+                                        } : {
+                                            rotate: 0,
+                                            transition: { duration: 0.2, ease: "easeOut" }
+                                        }}
+                                    >
+                                        <Phone className="w-[18px] h-[18px]" />
+                                    </motion.div>
                                 </button>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">
@@ -149,8 +197,8 @@ export const Navbar = () => {
                 <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>
 
                 <div className="hidden lg:block ml-1">
-                    <Link href="#" className="flex items-center gap-2 text-white bg-[#0B0F29] hover:bg-black px-5 py-2.5 rounded-full transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)]">
-                        <ScanSearch className="w-5 h-5 text-white" />
+                    <Link href="#" className="flex items-center gap-1 text-gray-900 bg-white/60 backdrop-blur-md hover:bg-white/80 pr-5 pl-4 py-1 rounded-full transition-all duration-300 border border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm">
+                        <img src="/images/search.gif" alt="Search Audit" className="w-8 h-8 object-contain" />
                         <span className="text-[11px] font-bold uppercase tracking-widest">Free Website Audit</span>
                     </Link>
                 </div>

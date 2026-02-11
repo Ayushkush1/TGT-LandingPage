@@ -64,21 +64,26 @@ const OurBlog = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        {/* Left text */}
-        <div className=" flex flex-col gap-1.5">
-          <h3 className="text-4xl font-bold text-gray-900 leading-tight">
-            Our Blogs
-          </h3>
-          <p className="text-gray-500 leading-relaxed text-base">
-            Exploring Industry Insights and Expertise.
-          </p>
+      {/* Section Header */}
+      <div className="flex items-end justify-between mb-16 px-2">
+        <div className="max-w-xl">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="h-px w-12 bg-[#D4AF37]"></div>
+            <span className="text-[#D4AF37] font-bold tracking-[0.2em] text-xs uppercase">
+              Our Blog
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
+            Insights & <br />
+            <span className="font-serif italic text-[#D4AF37]">
+              Perspectives
+            </span>
+          </h2>
         </div>
 
-        <button className="flex items-center gap-2 text-gray-500 hover:text-gray-900 text-sm transition-colors">
-          See more Blogs
-          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+        <button className="hidden md:flex items-center gap-2 text-[#0B0F29] font-bold uppercase tracking-widest hover:text-[#D4AF37] transition-colors group text-xs border-b border-[#0B0F29] pb-1 hover:border-[#D4AF37]">
+          View All Articles
+          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
         </button>
       </div>
 
@@ -104,7 +109,7 @@ const OurBlog = () => {
                   />
                 </div>
                 <div className="px-8 py-6 flex flex-col gap-4">
-                  <h3 className="text-2xl font-bold text-gray-900  line-clamp-2">
+                  <h3 className="text-2xl font-bold text-gray-900 leading-tight">
                     {featuredStory.title}
                   </h3>
                   <p className="text-gray-500 leading-relaxed text-base">
@@ -138,9 +143,10 @@ const OurBlog = () => {
                   />
                 </div>
                 <div className="px-8 py-6 flex flex-col gap-4">
-                  <h3 className="text-2xl font-bold text-gray-900  line-clamp-2">
+                  <h3 className="text-2xl font-bold text-gray-900 leading-tight">
                     {hoveredStory.title}
                   </h3>
+                  <h3 className="text-2xl font-bold text-gray-900  line-clamp-2"></h3>
                   <p className="text-gray-500 leading-relaxed text-base">
                     {hoveredStory.description}
                   </p>

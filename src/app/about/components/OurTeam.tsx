@@ -117,26 +117,44 @@ function OurTeam() {
 
   return (
     <div
-      className="targeted-element bg-[#F3F4F8] light-element flex flex-col items-center
+      className="targeted-element bg-[#F3F4F8] light-element flex flex-col items-center -mb-24
      justify-center mid:gap-[0rem] gap-[2.5rem] mid:pb-[14rem] mid:pt-[9rem] py-[4rem] mid:py-0"
     >
-      <div className="text-center mb-8 max-w-7xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-3xl font-bold text-gray-900 mb-4"
-        >
-          Meet Our Team
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-base text-gray-600 max-w-2xl mx-auto"
-        >
-          Passionate individuals working together to build something amazing
-        </motion.p>
+      {/* Heading */}
+      <div className="text-center max-w-4xl mx-auto mb-20">
+        <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="h-px w-8 bg-gray-400/30"></div>
+          <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
+            Meet Our Team
+          </span>
+          <div className="h-px w-8 bg-gray-400/30"></div>
+        </div>
+
+        <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
+          The People Behind{" "}
+          <span className="font-serif italic font-medium text-[#D4AF37]">
+            Our Success
+          </span>{" "}
+          <br />
+          Driving{" "}
+          <span className="relative inline-block z-10">
+            Innovation Forward
+            <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
+          </span>
+          .
+        </h2>
+
+        <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
+          At{" "}
+          <span className="font-semibold text-gray-900">
+            The Gold Technologies
+          </span>
+          , our team is made up of passionate creators, strategists, and
+          engineers committed to building impactful digital solutions and
+          delivering real value to our clients.
+        </p>
       </div>
+
       {/* TEAMS FOR DESKTOP */}
       <div className="max-w-7xl mx-auto">
         <div

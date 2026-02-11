@@ -6,7 +6,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --font-inter: 'Inter', sans-serif;
+  --font-inter: "Inter", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,9 +19,8 @@
 
 body {
   background: white; /* Default to white as per design */
+  scroll-behavior: smooth;
 }
-
-
 
 @layer base {
   :root {
@@ -78,8 +77,6 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {

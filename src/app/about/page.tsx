@@ -3,6 +3,10 @@ import { Navbar } from "@/components/Navbar";
 import AboutFirm from "./components/AboutFirm";
 import OurBlog from "./components/OurBlog";
 import OurTeam from "./components/OurTeam";
+import { TrustedBy } from "@/components/sections/TrustedBy";
+import { OurPartners } from "@/components/sections/OurPartners";
+import { OurReputation } from "@/components/sections/OurReputation";
+import { Integrations } from "@/components/sections/Integrations";
 
 function AboutPage() {
   return (
@@ -27,12 +31,12 @@ function AboutPage() {
           <AboutFirm />
         </div>
       </div>
-
-      {/* Team section */}
-      <OurTeam />
-      {/* Blog Section */}
-      <OurBlog />
-
+      <TrustedBy />
+      <OurTeam /> {/* Team section */}
+      <OurPartners /> {/* Partner Logos */}
+      <OurReputation /> {/* Client Success */}
+      <Integrations /> {/* Tech Stack */} {/* Integrations */}
+      <OurBlog /> {/* Blog Section */}
       <Footer />
     </main>
   );

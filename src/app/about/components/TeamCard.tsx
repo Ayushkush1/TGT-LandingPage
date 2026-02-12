@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { TeamCardProps } from "./OurTeam";

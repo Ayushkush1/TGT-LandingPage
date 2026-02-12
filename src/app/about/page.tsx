@@ -7,6 +7,9 @@ import { TrustedBy } from "@/components/sections/TrustedBy";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { Integrations } from "@/components/sections/Integrations";
+import PortfolioSection from "./components/PortfolioSection";
+import VideoSection from "./components/VideoSection";
+import VisionSection from "./components/VisionSection";
 
 function AboutPage() {
   return (
@@ -32,10 +35,13 @@ function AboutPage() {
         </div>
       </div>
       <TrustedBy />
+      <VideoSection />
+      <VisionSection />
       <OurTeam /> {/* Team section */}
       <OurPartners /> {/* Partner Logos */}
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
+      <PortfolioSection /> {/* PortfolioSection */}
       <OurBlog /> {/* Blog Section */}
       <Footer />
     </main>

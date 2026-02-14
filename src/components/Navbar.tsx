@@ -96,51 +96,62 @@ export const Navbar = () => {
                   {
                     title: "UI/UX Designing",
                     desc: "Intuitive, engaging, and user-centric interfaces.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Website Design & Development",
                     desc: "High-performance, responsive, and modern websites.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Mobile App Development",
                     desc: "Native and cross-platform apps for iOS & Android.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Custom Software Development",
                     desc: "Tailored software solutions for unique business needs.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Business Software Solutions",
                     desc: "Scalable ERP, CRM, and enterprise management tools.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Business Intelligence Solutions",
                     desc: "Data-driven insights to spark strategic growth.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "IOT Solutions",
                     desc: "Smart connectivity and automation for devices.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "AI & ML Solution",
                     desc: "Advanced AI algorithms and predictive modeling.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Branding",
                     desc: "Distinctive brand identities that resonate with audiences.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Digital Marketing",
                     desc: "SEO, SMM, and paid strategies to maximize reach.",
+                    link: "/service/ui-ux-designing",
                   },
                   {
                     title: "Accessibility Services",
                     desc: "Ensuring digital presence is accessible to everyone.",
+                    link: "/service/ui-ux-designing",
                   },
                 ].map((service, i) => (
                   <Link
                     key={i}
-                    href="#"
+                    href={service?.link}
                     className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
                   >
                     <div className="flex-1">

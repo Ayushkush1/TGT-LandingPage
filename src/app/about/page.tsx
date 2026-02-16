@@ -1,15 +1,15 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import AboutFirm from "./components/AboutFirm";
-import OurBlog from "./components/OurBlog";
 import OurTeam from "./components/OurTeam";
 import { TrustedBy } from "@/components/sections/TrustedBy";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { Integrations } from "@/components/sections/Integrations";
-import PortfolioSection from "./components/PortfolioSection";
 import VideoSection from "./components/VideoSection";
 import VisionSection from "./components/VisionSection";
+import PortfolioSection from "@/app/about/components/PortfolioSection";
+import { BlogSection } from "@/components/sections/BlogSection";
 
 function AboutPage() {
   return (
@@ -42,7 +42,7 @@ function AboutPage() {
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
-      <OurBlog /> {/* Blog Section */}
+      <BlogSection /> {/* Blog Section */}
       <Footer />
     </main>
   );

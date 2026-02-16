@@ -1,55 +1,53 @@
+import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-
-import { TrustedBy } from "@/components/sections/TrustedBy";
+import { BlogSection } from "@/components/sections/BlogSection";
+import { Integrations } from "@/components/sections/Integrations";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
+import { TrustedBy } from "@/components/sections/TrustedBy";
+import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import ServicesAccordion from "../ui-ux-designing/ServiceRow";
 
-import HeroSection, { type Pillar } from "./HeroSection";
-import PortfolioSection from "@/app/about/components/PortfolioSection";
-import { BlogSection } from "@/components/sections/BlogSection";
-import ServicesAccordion from "./ServiceRow";
-
-const uiUxHeroContent = {
+const customSoftwareDevelopment = {
   label: "Our Services",
-  headingLines: ["UI", "UX", "Designing"],
+  headingLines: ["Custom Software", "Development"],
   paragraphs: [
-    "We are a dynamic IT solutions and consulting firm dedicated to empowering businesses through technology-driven solutions. With a client-focused approach and a commitment to innovation, we specialize in transforming our clients' digital journeys.",
-    "We pride ourselves on being at the forefront of innovation, providing comprehensive IT consultation and cutting-edge IT Solution services to empower businesses in the digital age — your dedicated partner in navigating the ever-evolving landscape of information technology.",
+    "We build tailored software solutions that fit your unique business processes. From enterprise applications to workflow automation and internal tools, we create custom software that streamlines operations and drives efficiency.",
+    "Our team analyzes your requirements, designs scalable architectures, and delivers robust solutions using modern technologies and best practices. Your dedicated partner for custom software that grows with your business.",
   ],
-  cta: { text: "Start your project", href: "/#contactUs" },
+  cta: { text: "Get started", href: "/#contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
-    alt: "Two professionals having a discussion",
+    alt: "Custom software development team at work",
   },
   statSince: "2015",
   statProjects: "200",
   pillars: [
     {
       number: "01",
-      title: "Strategic Approach",
-      desc: "Thoughtful planning tailored to your unique business goals and market position.",
+      title: "Tailored Solutions",
+      desc: "Custom-built software designed specifically for your business processes and requirements.",
     },
     {
       number: "02",
-      title: "Cutting-Edge Technology",
-      desc: "Leveraging the latest innovations to keep your business ahead of the curve.",
+      title: "Enterprise-Grade",
+      desc: "Robust, secure, and scalable applications built to handle complex business needs.",
     },
     {
       number: "03",
-      title: "Expert Team",
-      desc: "Seasoned professionals with deep expertise across every technology domain.",
+      title: "Process Automation",
+      desc: "Streamline workflows and automate repetitive tasks to boost productivity and efficiency.",
     },
     {
       number: "04",
-      title: "Client-Centric Approach",
-      desc: "Your success is our benchmark — we build solutions around your needs.",
+      title: "Ongoing Support",
+      desc: "Continuous maintenance, updates, and enhancements to keep your software current and optimized.",
     },
   ] as Pillar[],
 };
 
-function UIUXDesigning() {
+function CustomSoftwareDevelopment() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -69,20 +67,20 @@ function UIUXDesigning() {
         {/* Content */}
         <div className="relative z-10">
           <Navbar />
-          <HeroSection {...uiUxHeroContent} />
+          <HeroSection {...customSoftwareDevelopment} />
         </div>
       </div>
       <TrustedBy />
       <OurReputation /> {/* Client Success */}
-      <ServicesAccordion />
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}
       <OurPartners />
+      <ServicesAccordion />
       <BlogSection /> {/* Blog Section */}
       <Footer />
     </main>
   );
 }
 
-export default UIUXDesigning;
+export default CustomSoftwareDevelopment;

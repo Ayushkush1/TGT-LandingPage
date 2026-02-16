@@ -1,55 +1,53 @@
+import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-
-import { TrustedBy } from "@/components/sections/TrustedBy";
+import { BlogSection } from "@/components/sections/BlogSection";
+import { Integrations } from "@/components/sections/Integrations";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
+import { TrustedBy } from "@/components/sections/TrustedBy";
+import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import ServicesAccordion from "../ui-ux-designing/ServiceRow";
 
-import HeroSection, { type Pillar } from "./HeroSection";
-import PortfolioSection from "@/app/about/components/PortfolioSection";
-import { BlogSection } from "@/components/sections/BlogSection";
-import ServicesAccordion from "./ServiceRow";
-
-const uiUxHeroContent = {
+const iotHeroContent = {
   label: "Our Services",
-  headingLines: ["UI", "UX", "Designing"],
+  headingLines: ["IoT", "Solutions"],
   paragraphs: [
-    "We are a dynamic IT solutions and consulting firm dedicated to empowering businesses through technology-driven solutions. With a client-focused approach and a commitment to innovation, we specialize in transforming our clients' digital journeys.",
-    "We pride ourselves on being at the forefront of innovation, providing comprehensive IT consultation and cutting-edge IT Solution services to empower businesses in the digital age — your dedicated partner in navigating the ever-evolving landscape of information technology.",
+    "We design and develop smart IoT solutions that connect devices, collect data, and automate processes in real time. From industrial automation to smart homes and connected products, we turn physical systems into intelligent digital ecosystems.",
+    "Our IoT services include device integration, cloud connectivity, data analytics, and secure infrastructure — enabling you to monitor, control, and optimize operations from anywhere. Your trusted partner for building connected technology solutions.",
   ],
-  cta: { text: "Start your project", href: "/#contactUs" },
+  cta: { text: "Start your IoT project", href: "/#contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
-    alt: "Two professionals having a discussion",
+    alt: "IoT engineers working on connected devices and smart systems",
   },
   statSince: "2015",
   statProjects: "200",
   pillars: [
     {
       number: "01",
-      title: "Strategic Approach",
-      desc: "Thoughtful planning tailored to your unique business goals and market position.",
+      title: "Smart Device Integration",
+      desc: "Seamless connectivity between sensors, devices, and platforms.",
     },
     {
       number: "02",
-      title: "Cutting-Edge Technology",
-      desc: "Leveraging the latest innovations to keep your business ahead of the curve.",
+      title: "Real-Time Monitoring",
+      desc: "Track performance and data instantly with intelligent dashboards.",
     },
     {
       number: "03",
-      title: "Expert Team",
-      desc: "Seasoned professionals with deep expertise across every technology domain.",
+      title: "Secure & Scalable Systems",
+      desc: "Reliable infrastructure built for large-scale connected environments.",
     },
     {
       number: "04",
-      title: "Client-Centric Approach",
-      desc: "Your success is our benchmark — we build solutions around your needs.",
+      title: "Automation & Efficiency",
+      desc: "Optimize operations and reduce manual effort through smart automation.",
     },
   ] as Pillar[],
 };
 
-function UIUXDesigning() {
+function IOTSolutions() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -69,13 +67,13 @@ function UIUXDesigning() {
         {/* Content */}
         <div className="relative z-10">
           <Navbar />
-          <HeroSection {...uiUxHeroContent} />
+          <HeroSection {...iotHeroContent} />
         </div>
       </div>
       <TrustedBy />
       <OurReputation /> {/* Client Success */}
-      <ServicesAccordion />
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
+      <ServicesAccordion />
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}
       <OurPartners />
@@ -85,4 +83,4 @@ function UIUXDesigning() {
   );
 }
 
-export default UIUXDesigning;
+export default IOTSolutions;

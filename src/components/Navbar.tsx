@@ -101,52 +101,52 @@ export const Navbar = () => {
                   {
                     title: "Website Design & Development",
                     desc: "High-performance, responsive, and modern websites.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/website-design-development",
                   },
                   {
                     title: "Mobile App Development",
                     desc: "Native and cross-platform apps for iOS & Android.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/mobile-app-development",
                   },
                   {
                     title: "Custom Software Development",
                     desc: "Tailored software solutions for unique business needs.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/custom-software-development",
                   },
                   {
                     title: "Business Software Solutions",
                     desc: "Scalable ERP, CRM, and enterprise management tools.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/business-software-solutions",
                   },
                   {
                     title: "Business Intelligence Solutions",
                     desc: "Data-driven insights to spark strategic growth.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/business-intelligence-solutions",
                   },
                   {
                     title: "IOT Solutions",
                     desc: "Smart connectivity and automation for devices.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/iot-solutions",
                   },
                   {
                     title: "AI & ML Solution",
                     desc: "Advanced AI algorithms and predictive modeling.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/ai-ml-solutions",
                   },
                   {
                     title: "Branding",
                     desc: "Distinctive brand identities that resonate with audiences.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/branding",
                   },
                   {
                     title: "Digital Marketing",
                     desc: "SEO, SMM, and paid strategies to maximize reach.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/digital-marketing",
                   },
                   {
                     title: "Accessibility Services",
                     desc: "Ensuring digital presence is accessible to everyone.",
-                    link: "/service/ui-ux-designing",
+                    link: "/service/accessibility-services",
                   },
                 ].map((service, i) => (
                   <Link
@@ -181,7 +181,7 @@ export const Navbar = () => {
             transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
           >
             <Link
-              href={item === "Products" ? "/products" : "#contactUs"}
+              href={item === "Products" ? "/products" : "/#contactUs"}
               className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               {item}

@@ -1,55 +1,52 @@
+import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-
-import { TrustedBy } from "@/components/sections/TrustedBy";
+import { BlogSection } from "@/components/sections/BlogSection";
+import { Integrations } from "@/components/sections/Integrations";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
+import { TrustedBy } from "@/components/sections/TrustedBy";
+import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
 
-import HeroSection, { type Pillar } from "./HeroSection";
-import PortfolioSection from "@/app/about/components/PortfolioSection";
-import { BlogSection } from "@/components/sections/BlogSection";
-import ServicesAccordion from "./ServiceRow";
-
-const uiUxHeroContent = {
+const accessibilityServicesHeroContent = {
   label: "Our Services",
-  headingLines: ["UI", "UX", "Designing"],
+  headingLines: ["Accessibility", "Services"],
   paragraphs: [
-    "We are a dynamic IT solutions and consulting firm dedicated to empowering businesses through technology-driven solutions. With a client-focused approach and a commitment to innovation, we specialize in transforming our clients' digital journeys.",
-    "We pride ourselves on being at the forefront of innovation, providing comprehensive IT consultation and cutting-edge IT Solution services to empower businesses in the digital age — your dedicated partner in navigating the ever-evolving landscape of information technology.",
+    "We make your digital products accessible to everyone. From WCAG compliance audits to remediation and ongoing support, we ensure your websites and applications are usable by people with disabilities.",
+    "Our team combines accessibility expertise with technical implementation — we audit, fix, and test to meet WCAG 2.1 AA standards. We help you reach more users, reduce legal risk, and build inclusive digital experiences. Your dedicated partner for accessibility.",
   ],
-  cta: { text: "Start your project", href: "/#contactUs" },
+  cta: { text: "Make it accessible", href: "/#contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
-    alt: "Two professionals having a discussion",
+    alt: "Accessibility services team conducting an audit",
   },
   statSince: "2015",
   statProjects: "200",
   pillars: [
     {
       number: "01",
-      title: "Strategic Approach",
-      desc: "Thoughtful planning tailored to your unique business goals and market position.",
+      title: "WCAG Compliance",
+      desc: "Audit and remediation to meet WCAG 2.1 AA standards for accessibility compliance.",
     },
     {
       number: "02",
-      title: "Cutting-Edge Technology",
-      desc: "Leveraging the latest innovations to keep your business ahead of the curve.",
+      title: "Testing & Validation",
+      desc: "Comprehensive testing with screen readers, keyboard navigation, and assistive technologies.",
     },
     {
       number: "03",
-      title: "Expert Team",
-      desc: "Seasoned professionals with deep expertise across every technology domain.",
+      title: "Inclusive Design",
+      desc: "Design and development practices that prioritize accessibility from the start.",
     },
     {
       number: "04",
-      title: "Client-Centric Approach",
-      desc: "Your success is our benchmark — we build solutions around your needs.",
+      title: "Ongoing Support",
+      desc: "Continuous monitoring and updates to maintain accessibility as your product evolves.",
     },
   ] as Pillar[],
 };
 
-function UIUXDesigning() {
+function AccessibilityServices() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -69,12 +66,11 @@ function UIUXDesigning() {
         {/* Content */}
         <div className="relative z-10">
           <Navbar />
-          <HeroSection {...uiUxHeroContent} />
+          <HeroSection {...accessibilityServicesHeroContent} />
         </div>
       </div>
       <TrustedBy />
       <OurReputation /> {/* Client Success */}
-      <ServicesAccordion />
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}
@@ -85,4 +81,4 @@ function UIUXDesigning() {
   );
 }
 
-export default UIUXDesigning;
+export default AccessibilityServices;

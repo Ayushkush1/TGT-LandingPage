@@ -1,55 +1,53 @@
+import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-
-import { TrustedBy } from "@/components/sections/TrustedBy";
+import { BlogSection } from "@/components/sections/BlogSection";
+import { Integrations } from "@/components/sections/Integrations";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
+import { TrustedBy } from "@/components/sections/TrustedBy";
+import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import ServicesAccordion from "../ui-ux-designing/ServiceRow";
 
-import HeroSection, { type Pillar } from "./HeroSection";
-import PortfolioSection from "@/app/about/components/PortfolioSection";
-import { BlogSection } from "@/components/sections/BlogSection";
-import ServicesAccordion from "./ServiceRow";
-
-const uiUxHeroContent = {
+const businessIntelligenceHeroContent = {
   label: "Our Services",
-  headingLines: ["UI", "UX", "Designing"],
+  headingLines: ["Business", "Intelligence", "Solutions"],
   paragraphs: [
-    "We are a dynamic IT solutions and consulting firm dedicated to empowering businesses through technology-driven solutions. With a client-focused approach and a commitment to innovation, we specialize in transforming our clients' digital journeys.",
-    "We pride ourselves on being at the forefront of innovation, providing comprehensive IT consultation and cutting-edge IT Solution services to empower businesses in the digital age — your dedicated partner in navigating the ever-evolving landscape of information technology.",
+    "We design and implement business intelligence solutions that turn your data into clear, actionable insights. From dashboards and reporting to self-service analytics, we help your teams make better decisions, faster.",
+    "Our experts work with your existing systems to centralize data, define reliable metrics, and deliver intuitive visualizations. Your dedicated partner for BI platforms that scale with your organization.",
   ],
-  cta: { text: "Start your project", href: "/#contactUs" },
+  cta: { text: "Unlock insights", href: "/#contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
-    alt: "Two professionals having a discussion",
+    alt: "Business intelligence and analytics team reviewing dashboards",
   },
   statSince: "2015",
   statProjects: "200",
   pillars: [
     {
       number: "01",
-      title: "Strategic Approach",
-      desc: "Thoughtful planning tailored to your unique business goals and market position.",
+      title: "Data Strategy",
+      desc: "Align your data, KPIs, and governance with business objectives for trustworthy insights.",
     },
     {
       number: "02",
-      title: "Cutting-Edge Technology",
-      desc: "Leveraging the latest innovations to keep your business ahead of the curve.",
+      title: "Dashboards & Reporting",
+      desc: "Interactive dashboards and reports that give stakeholders real-time visibility into performance.",
     },
     {
       number: "03",
-      title: "Expert Team",
-      desc: "Seasoned professionals with deep expertise across every technology domain.",
+      title: "Data Integration",
+      desc: "Connect disparate systems and consolidate data into a single, reliable source of truth.",
     },
     {
       number: "04",
-      title: "Client-Centric Approach",
-      desc: "Your success is our benchmark — we build solutions around your needs.",
+      title: "Advanced Analytics",
+      desc: "Leverage forecasting and deeper analysis to identify trends and opportunities earlier.",
     },
   ] as Pillar[],
 };
 
-function UIUXDesigning() {
+function BusinessIntelligenceSolutions() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -69,12 +67,12 @@ function UIUXDesigning() {
         {/* Content */}
         <div className="relative z-10">
           <Navbar />
-          <HeroSection {...uiUxHeroContent} />
+          <HeroSection {...businessIntelligenceHeroContent} />
         </div>
       </div>
       <TrustedBy />
-      <OurReputation /> {/* Client Success */}
       <ServicesAccordion />
+      <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}
@@ -85,4 +83,4 @@ function UIUXDesigning() {
   );
 }
 
-export default UIUXDesigning;
+export default BusinessIntelligenceSolutions;

@@ -1,31 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-const pillars = [
-  {
-    number: "01",
-    title: "Strategic Approach",
-    desc: "Thoughtful planning tailored to your unique business goals and market position.",
-  },
-  {
-    number: "02",
-    title: "Cutting-Edge Technology",
-    desc: "Leveraging the latest innovations to keep your business ahead of the curve.",
-  },
-  {
-    number: "03",
-    title: "Expert Team",
-    desc: "Seasoned professionals with deep expertise across every technology domain.",
-  },
-  {
-    number: "04",
-    title: "Client-Centric Approach",
-    desc: "Your success is our benchmark — we build solutions around your needs.",
-  },
-];
+export type Pillar = {
+  number: string;
+  title: string;
+  desc: string;
+};
+
+export type HeroSectionProps = {
+  label?: string;
+  headingLines: string[];
+  paragraphs: string[];
+  cta: { text: string; href: string };
+  image: { src: string; alt: string };
+  statSince?: string;
+  statProjects?: string;
+  pillars: Pillar[];
+};
 
 const containerVariants = {
   hidden: {},
@@ -43,7 +38,16 @@ const itemVariants = {
   },
 };
 
-function HeroSection() {
+function HeroSection({
+  label = "Our Services",
+  headingLines,
+  paragraphs,
+  cta,
+  image,
+  statSince = "2015",
+  statProjects = "200",
+  pillars,
+}: HeroSectionProps) {
   return (
     <motion.section
       initial="hidden"
@@ -53,7 +57,7 @@ function HeroSection() {
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-white font-serif"
     >
       {/* ── Top Row ── */}
-      <div className="flex flex-col lg:flex-row gap-16 items-center mb-16">
+      <div className="flex flex-col lg:flex-row gap-20 items-center mb-16">
         {/* Left: Vertical accent + heading */}
         <motion.div
           variants={itemVariants}
@@ -63,23 +67,19 @@ function HeroSection() {
           <div className="flex flex-col items-center gap-4 pt-2">
             <div className="w-0.5 h-16 rounded-sm bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/10" />
             <span className="text-[10px] tracking-[0.2em] uppercase text-gray-400 font-semibold font-sans [writing-mode:vertical-rl] [text-orientation:mixed]">
-              Our identity
+              {label}
             </span>
           </div>
 
           <div>
-            {/* Tag chip */}
-            <span className="inline-flex items-center mb-4 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-full px-3.5 py-1 text-[11px] font-semibold tracking-wider uppercase text-[#0B0F29] font-sans">
-              About Us
-            </span>
-
             {/* Big editorial heading */}
             <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
-              UI
-              <br />
-              UX
-              <br />
-              Designing
+              {headingLines.map((line, i) => (
+                <span key={i}>
+                  {line}
+                  {i < headingLines.length - 1 && <br />}
+                </span>
+              ))}
             </h2>
           </div>
         </motion.div>
@@ -90,41 +90,27 @@ function HeroSection() {
           className="flex-1 flex flex-col gap-8 pt-10 font-sans"
         >
           <div className="flex flex-col gap-4">
-            <p className="text-gray-500 text-lg leading-7 font-medium">
-              We are a dynamic IT solutions and consulting firm dedicated to
-              empowering businesses through technology-driven solutions. With a
-              client-focused approach and a commitment to innovation, we
-              specialize in transforming our clients&apos; digital journeys.
-            </p>
-            <p className="text-gray-500 text-lg leading-7 font-medium">
-              We pride ourselves on being at the forefront of innovation,
-              providing comprehensive IT consultation and cutting-edge IT
-              Solution services to empower businesses in the digital age — your
-              dedicated partner in navigating the ever-evolving landscape of
-              information technology.
-            </p>
+            {paragraphs.map((p, i) => (
+              <p
+                key={i}
+                className="text-gray-500 text-lg leading-7 font-medium"
+              >
+                {p}
+              </p>
+            ))}
           </div>
 
           {/* CTAs */}
           <div className="flex flex-wrap gap-4">
-            <motion.button
-              whileHover={{
-                borderColor: "#D4AF37",
-                boxShadow: "0 0 30px rgba(212,175,55,0.35)",
-              }}
-              whileTap={{ scale: 0.98 }}
-              className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3.5 px-9 rounded-full font-semibold tracking-wide border border-transparent cursor-pointer font-sans text-[15px] transition-colors"
-            >
-              See openings
-              <ArrowRight />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="bg-white text-gray-700 py-3.5 px-9 rounded-full font-medium border border-gray-300 cursor-pointer font-sans text-[15px] shrink-0 hover:bg-gray-50 transition-colors"
-            >
-              Read more
-            </motion.button>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                href={cta.href}
+                className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3.5 px-9 rounded-full font-semibold tracking-wide border border-transparent font-sans text-[15px] transition-colors hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.35)]"
+              >
+                {cta.text}
+                <ArrowRight />
+              </Link>
+            </motion.div>
           </div>
         </motion.div>
       </div>
@@ -140,8 +126,8 @@ function HeroSection() {
           className="relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl"
         >
           <img
-            src="https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg"
-            alt="Two professionals having a discussion"
+            src={image.src}
+            alt={image.alt}
             className="w-full h-full object-cover object-top absolute inset-0"
           />
 
@@ -152,37 +138,42 @@ function HeroSection() {
           />
 
           {/* Stat — bottom left */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
-          >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
-              Excellence since
-            </p>
-            <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-              2015
-            </p>
-            <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
-          </motion.div>
+          {statSince && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                Excellence since
+              </p>
+              <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+                {statSince}
+              </p>
+              <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
+            </motion.div>
+          )}
 
           {/* Stat — top right */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
-          >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
-              Projects delivered
-            </p>
-            <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-              200<span className="text-[#D4AF37]">+</span>
-            </p>
-          </motion.div>
+          {statProjects && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                Projects delivered
+              </p>
+              <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+                {statProjects}
+                <span className="text-[#D4AF37]">+</span>
+              </p>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Pillars 2×2 */}

@@ -7,30 +7,56 @@ const AboutFirm = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className=" flex flex-col gap-10">
           {/* Left Column - Text Content */}
-          <div className=" flex  gap-28 items-start">
-            <h2 className="text-4xl md:text-5xl flex-shrink-0 font-extrabold text-[#0B0F29] tracking-tight leading-tight">
-              About Us
-            </h2>
-            <div className=" flex flex-col gap-6">
-              <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                We are a dynamic IT solutions and consulting firm dedicated to
-                empowering businesses through technology-driven solutions. With
-                a client-focused approach and a commitment to innovation, we
-                specialize in transforming our clients’ digital journeys by
-                providing high quality services that meet the evolving demands
-                of the modern marketplace.
-              </p>
 
-              <div className="flex gap-4">
-                <div className="flex gap-4">
-                  <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 group">
-                    See openings
-                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                  </button>
-                </div>
-                <button className="bg-white flex-shrink-0 hover:bg-gray-50 text-gray-700 px-10 py-3.5 rounded-full font-medium border border-gray-300 transition-colors duration-200">
-                  Read more
-                </button>
+          {/* ── Top Row ── */}
+          <div className="flex flex-col lg:flex-row gap-20 items-center mb-16">
+            {/* Left: Vertical accent + heading */}
+            <div className="flex gap-6 items-start flex-shrink-0 lg:w-96">
+              {/* Vertical rule + rotated label */}
+              <div className="flex flex-col items-center gap-4 pt-2">
+                <div className="w-0.5 h-16 rounded-sm bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/10" />
+                <span className="text-[10px] tracking-[0.2em] uppercase text-gray-400 font-semibold font-sans [writing-mode:vertical-rl] [text-orientation:mixed]">
+                  Who We Are
+                </span>
+              </div>
+
+              <div>
+                {/* Big editorial heading */}
+                <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
+                  The <br /> Gold
+                  <br />
+                  Technologies
+                </h2>
+              </div>
+            </div>
+
+            {/* Right: Body text + CTAs */}
+            <div className="flex-1 flex flex-col gap-8 pt-10 font-sans">
+              <div className="flex flex-col gap-4">
+                <p className="text-gray-500 text-lg leading-7 font-medium">
+                  We are a dynamic IT solutions and consulting firm dedicated to
+                  empowering businesses through technology-driven solutions.
+                  With a client-focused approach and a commitment to innovation,
+                  we specialize in transforming our clients&apos; digital
+                  journeys.
+                </p>
+                <p className="text-gray-500 text-lg leading-7 font-medium">
+                  Since 2015, we have been your dedicated partner in the digital
+                  age — providing comprehensive IT consultation and cutting-edge
+                  solutions to help you navigate the ever-evolving landscape of
+                  technology.
+                </p>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="/#contactUs"
+                  className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3.5 px-9 rounded-full font-semibold tracking-wide border border-transparent font-sans text-[15px] transition-colors hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.35)]"
+                >
+                  Get in touch
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" />
+                </a>
               </div>
             </div>
           </div>

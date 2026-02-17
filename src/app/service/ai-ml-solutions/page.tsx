@@ -7,6 +7,7 @@ import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { TrustedBy } from "@/components/sections/TrustedBy";
 import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import ServicesAccordion from "../ui-ux-designing/ServiceRow";
 
 const aiAndMLHeroContent = {
   label: "Our Services",
@@ -71,6 +72,7 @@ function AIAndMLSolutions() {
       </div>
       <TrustedBy />
       <OurReputation /> {/* Client Success */}
+      <ServicesAccordion />
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}

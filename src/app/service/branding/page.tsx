@@ -7,6 +7,7 @@ import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { TrustedBy } from "@/components/sections/TrustedBy";
 import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import ServicesAccordion from "../ui-ux-designing/ServiceRow";
 
 const brandingHeroContent = {
   label: "Our Services",
@@ -73,6 +74,7 @@ function Branding() {
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
+      <ServicesAccordion />
       {/* Partner Logos */}
       <OurPartners />
       <BlogSection /> {/* Blog Section */}

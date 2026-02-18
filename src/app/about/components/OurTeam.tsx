@@ -25,9 +25,9 @@ const teamMembers: TeamMember[] = [
   // Leadership Row
   {
     name: "Meghna Tiwari",
-    designation: "Founder/CEO",
+    designation: "Founder & CEO",
     col: 1,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
+    linkedin: "https://www.linkedin.com/in/meghna-tiwari",
     image: "/images/Meghna.jpg",
   },
   {
@@ -48,14 +48,17 @@ const teamMembers: TeamMember[] = [
   // Department Heads
   {
     name: "Mitali Gulat",
-    designation: "Finance Head",
+    designation: "CGO",
     col: 0,
     linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
     image: "/images/Mitali.jpg",
   },
   {
+    name: "Parusha",
+    designation: "Business Growth Manager",
     col: 0,
-    isEmpty: true,
+    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
+    image: "/images/Andrea.png",
   },
   {
     name: "Andrea",
@@ -75,7 +78,7 @@ const teamMembers: TeamMember[] = [
     name: "Aditya",
     designation: "UI/UX Lead",
     col: 3,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
+    linkedin: "https://www.linkedin.com/in/aditya-nigam-267a84261/",
     image: "/images/Varun.png",
   },
   {
@@ -86,10 +89,10 @@ const teamMembers: TeamMember[] = [
   // Team Members
   {
     name: "Ayush Kushwaha",
-    designation: "Senior Software Engineer",
+    designation: "Tech Lead- IT",
     col: 4,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Varun.png",
+    linkedin: "https://www.linkedin.com/in/ayush-kushwaha-b3b76915b/",
+    image: "/images/Ayush.png",
   },
   {
     name: "Abhishek",

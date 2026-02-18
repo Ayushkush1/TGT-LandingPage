@@ -170,10 +170,9 @@ function VisionSection() {
                 </span>{" "}
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                Our vision is to become a leading force in IT consultation and
-                solutions, empowering organizations to unlock new opportunities,
-                achieve sustainable growth, and confidently lead their
-                industries in an evolving technological world.
+                To establish ourselves as a trusted leader in IT solutions,
+                empowering businesses to confidently embrace technology and
+                excel in a rapidly evolving digital landscape.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4 pt-4">
                 {[
@@ -218,10 +217,9 @@ function VisionSection() {
               </h3>
 
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                Our mission is to provide expert IT consultation and scalable
-                solutions that optimize operations, strengthen security, and
-                foster innovation — ensuring every strategy aligns with our
-                clients’ goals in a rapidly evolving digital landscape.
+                To deliver innovative and scalable IT solutions that optimize
+                processes, enhance security, and inspire innovation, enabling
+                businesses to thrive in a tech- driven world
               </p>
               <div className="flex gap-4 pt-4">
                 <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 group">

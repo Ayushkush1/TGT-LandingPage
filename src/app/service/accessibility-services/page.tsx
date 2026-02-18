@@ -7,6 +7,7 @@ import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { TrustedBy } from "@/components/sections/TrustedBy";
 import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import ServicesAccordion from "../ui-ux-designing/ServiceRow";
 
 const accessibilityServicesHeroContent = {
   label: "Our Services",
@@ -15,7 +16,7 @@ const accessibilityServicesHeroContent = {
     "We make your digital products accessible to everyone. From WCAG compliance audits to remediation and ongoing support, we ensure your websites and applications are usable by people with disabilities.",
     "Our team combines accessibility expertise with technical implementation — we audit, fix, and test to meet WCAG 2.1 AA standards. We help you reach more users, reduce legal risk, and build inclusive digital experiences. Your dedicated partner for accessibility.",
   ],
-  cta: { text: "Make it accessible", href: "/#contactUs" },
+  cta: { text: "Make it accessible", href: "/contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
     alt: "Accessibility services team conducting an audit",
@@ -46,6 +47,70 @@ const accessibilityServicesHeroContent = {
   ] as Pillar[],
 };
 
+const SERVICES = [
+  {
+    number: "01",
+    title: "Accessibility Audit",
+    category: "Compliance · Evaluation",
+    description:
+      "Comprehensive audit of your website or application to identify accessibility barriers based on WCAG 2.1 AA standards.",
+    tags: ["WCAG Audit", "Issue Report", "Compliance Check", "Prioritization"],
+    outcome: "A clear roadmap of accessibility issues and recommended fixes.",
+  },
+  {
+    number: "02",
+    title: "Remediation & Implementation",
+    category: "Development · Fixes",
+    description:
+      "Fix accessibility issues in code, design, and content to ensure full compliance and usability for assistive technologies.",
+    tags: ["Code Fixes", "ARIA", "Semantic HTML", "Design Adjustments"],
+    outcome: "An accessible product that works seamlessly for all users.",
+  },
+  {
+    number: "03",
+    title: "Assistive Technology Testing",
+    category: "Testing · Validation",
+    description:
+      "Test your product using screen readers, keyboard navigation, and other assistive tools to ensure real-world usability.",
+    tags: ["Screen Readers", "Keyboard Testing", "Voice Control", "Validation"],
+    outcome: "Verified accessibility across major assistive technologies.",
+  },
+  {
+    number: "04",
+    title: "Inclusive UX Design",
+    category: "Design · Accessibility",
+    description:
+      "Design interfaces that consider diverse user needs, including visual, motor, cognitive, and auditory impairments.",
+    tags: [
+      "Color Contrast",
+      "Readable UI",
+      "Accessible Components",
+      "UX Patterns",
+    ],
+    outcome: "Inclusive experiences that improve usability for everyone.",
+  },
+  {
+    number: "05",
+    title: "Accessibility Training",
+    category: "Education · Enablement",
+    description:
+      "Train your design and development teams on accessibility best practices and standards.",
+    tags: ["Workshops", "Guidelines", "Best Practices", "Team Training"],
+    outcome:
+      "An empowered team capable of building accessible products independently.",
+  },
+  {
+    number: "06",
+    title: "Ongoing Monitoring & Support",
+    category: "Maintenance · Compliance",
+    description:
+      "Continuous monitoring, updates, and support to maintain accessibility as your product evolves.",
+    tags: ["Monitoring", "Updates", "Compliance Maintenance", "Support"],
+    outcome:
+      "Long-term accessibility compliance and improved user satisfaction.",
+  },
+];
+
 function AccessibilityServices() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
@@ -70,6 +135,7 @@ function AccessibilityServices() {
         </div>
       </div>
       <TrustedBy />
+      <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}

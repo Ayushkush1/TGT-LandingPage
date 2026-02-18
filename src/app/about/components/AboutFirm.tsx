@@ -51,7 +51,7 @@ const AboutFirm = () => {
               {/* CTAs */}
               <div className="flex flex-wrap gap-4">
                 <a
-                  href="/#contactUs"
+                  href="/contactUs"
                   className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3.5 px-9 rounded-full font-semibold tracking-wide border border-transparent font-sans text-[15px] transition-colors hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.35)]"
                 >
                   Get in touch

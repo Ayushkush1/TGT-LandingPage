@@ -12,47 +12,7 @@ type Service = {
   outcome: string;
 };
 
-const SERVICES: Service[] = [
-  {
-    number: "01",
-    title: "Creative Direction",
-    category: "Strategy · Branding",
-    description:
-      "We define the visual and strategic foundation of your brand to ensure consistency across every touchpoint.",
-    tags: ["Brand Vision", "Art Direction", "Positioning", "Identity"],
-    outcome: "Established a cohesive brand presence across all platforms.",
-  },
-  {
-    number: "02",
-    title: "Product & UX Design",
-    category: "Design · Experience",
-    description:
-      "Designing intuitive, elegant digital products focused on usability, aesthetics, and real user needs.",
-    tags: ["UX Research", "Wireframes", "UI Systems", "Prototyping"],
-    outcome: "Improved user engagement and satisfaction significantly.",
-  },
-  {
-    number: "03",
-    title: "Web & App Development",
-    category: "Engineering · Technology",
-    description:
-      "Building high-performance websites and applications using modern frameworks and scalable architecture.",
-    tags: ["Next.js", "React", "Performance", "Scalability"],
-    outcome:
-      "Delivered lightning-fast experiences with seamless functionality.",
-  },
-  {
-    number: "04",
-    title: "Growth & Optimization",
-    category: "Marketing · Analytics",
-    description:
-      "Data-driven marketing strategies to scale your business, increase visibility, and maximize conversions.",
-    tags: ["SEO", "Analytics", "Campaigns", "Conversion"],
-    outcome: "Achieved consistent growth and measurable ROI.",
-  },
-];
-
-function ServiceRow(service: Service) {
+function ServiceRow({ service }: { service: Service }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -127,7 +87,7 @@ function ServiceRow(service: Service) {
             </p>
 
             <div className="flex flex-wrap gap-2">
-              {service.tags.map((tag) => (
+              {service?.tags?.map((tag, index) => (
                 <span
                   key={tag}
                   className="text-[10px] uppercase tracking-wider px-3 py-1 rounded-full border border-gray-200 text-gray-500"
@@ -143,7 +103,11 @@ function ServiceRow(service: Service) {
   );
 }
 
-export default function ServicesAccordion() {
+export default function ServicesAccordion({
+  SERVICES,
+}: {
+  SERVICES: Service[];
+}) {
   return (
     <section className="max-w-7xl mx-auto px-6 py-20 bg-white">
       {/* Header Section */}
@@ -171,7 +135,7 @@ export default function ServicesAccordion() {
 
       <ul className="border-t border-gray-200">
         {SERVICES.map((service) => (
-          <ServiceRow key={service.number} {...service} />
+          <ServiceRow key={service.number} service={service} />
         ))}
       </ul>
     </section>

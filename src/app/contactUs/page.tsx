@@ -1,6 +1,7 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { EnquirySection } from "@/components/sections/EnquirySection";
+import MapSection from "@/components/sections/MapSection";
 
 function ContactUs() {
   return (
@@ -25,6 +26,7 @@ function ContactUs() {
         </div>
       </div>
       <EnquirySection /> {/* Contact Form */}
+      <MapSection />
       <Footer />
     </main>
   );

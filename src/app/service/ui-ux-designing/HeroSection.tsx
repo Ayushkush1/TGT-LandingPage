@@ -22,14 +22,14 @@ export type HeroSectionProps = {
   pillars: Pillar[];
 };
 
-const containerVariants = {
+export const containerVariants = {
   hidden: {},
   show: {
     transition: { staggerChildren: 0.15, delayChildren: 0.1 },
   },
 };
 
-const itemVariants = {
+export const itemVariants = {
   hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
@@ -187,7 +187,7 @@ function HeroSection({
   );
 }
 
-const pillarCardVariants = {
+export const pillarCardVariants = {
   hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
@@ -196,7 +196,7 @@ const pillarCardVariants = {
   },
 };
 
-const pillarFillTransition = {
+export const pillarFillTransition = {
   duration: 0.35,
   ease: [0.4, 0, 0.2, 1] as const,
 };
@@ -206,7 +206,7 @@ const pillarTextTransition = {
   ease: [0.4, 0, 0.2, 1] as const,
 };
 
-function PillarCard({
+export function PillarCard({
   number,
   title,
   desc,

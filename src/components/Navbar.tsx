@@ -181,7 +181,7 @@ export const Navbar = () => {
             transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
           >
             <Link
-              href={item === "Products" ? "/products" : "/#contactUs"}
+              href={item === "Products" ? "/products" : "/contactUs"}
               className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               {item}

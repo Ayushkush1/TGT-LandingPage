@@ -16,7 +16,7 @@ const digitalMarketingHeroContent = {
     "We create data-driven digital marketing strategies that help your business grow online, attract the right audience, and increase conversions. From SEO and social media to paid advertising and content marketing, we deliver measurable results.",
     "Our team combines creativity with analytics — optimizing campaigns, tracking performance, and refining strategies to maximize ROI. Your trusted partner for building a strong and impactful online presence.",
   ],
-  cta: { text: "Start your marketing campaign", href: "/#contactUs" },
+  cta: { text: "Start your marketing campaign", href: "/contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
     alt: "Digital marketing team planning online growth strategies",
@@ -46,6 +46,64 @@ const digitalMarketingHeroContent = {
     },
   ] as Pillar[],
 };
+const SERVICES = [
+  {
+    number: "01",
+    title: "Search Engine Optimization (SEO)",
+    category: "Organic · Visibility",
+    description:
+      "Improve your website’s ranking on search engines with technical SEO, keyword strategy, and high-quality content optimization.",
+    tags: ["Keyword Research", "On-Page SEO", "Technical SEO", "Link Building"],
+    outcome:
+      "Increased organic traffic, higher rankings, and long-term visibility.",
+  },
+  {
+    number: "02",
+    title: "Social Media Marketing",
+    category: "Engagement · Branding",
+    description:
+      "Build a strong social presence through strategic content, community management, and platform-specific campaigns.",
+    tags: ["Content Strategy", "Instagram", "LinkedIn", "Community Growth"],
+    outcome: "Higher engagement, brand awareness, and loyal audience growth.",
+  },
+  {
+    number: "03",
+    title: "Performance Advertising (PPC)",
+    category: "Paid · Acquisition",
+    description:
+      "Targeted paid campaigns across Google, Meta, and other platforms to drive qualified leads and conversions.",
+    tags: ["Google Ads", "Meta Ads", "Retargeting", "A/B Testing"],
+    outcome: "Maximized ROI with measurable lead generation and sales.",
+  },
+  {
+    number: "04",
+    title: "Content Marketing",
+    category: "Content · Strategy",
+    description:
+      "Create valuable content that educates, engages, and converts your audience across blogs, videos, and campaigns.",
+    tags: ["Blogs", "Video Content", "Copywriting", "Storytelling"],
+    outcome: "Stronger authority, trust, and consistent inbound traffic.",
+  },
+  {
+    number: "05",
+    title: "Email & Marketing Automation",
+    category: "Retention · Automation",
+    description:
+      "Personalized email campaigns and automated workflows to nurture leads and retain customers effectively.",
+    tags: ["Email Campaigns", "Automation", "CRM Integration", "Segmentation"],
+    outcome: "Improved customer retention and higher lifetime value.",
+  },
+  {
+    number: "06",
+    title: "Analytics & Conversion Optimization",
+    category: "Data · Performance",
+    description:
+      "Track user behavior, analyze campaign performance, and optimize funnels to increase conversions.",
+    tags: ["Google Analytics", "Heatmaps", "A/B Testing", "CRO"],
+    outcome:
+      "Data-driven decisions leading to continuous growth and efficiency.",
+  },
+];
 
 function DigitalMarketing() {
   return (
@@ -71,8 +129,8 @@ function DigitalMarketing() {
         </div>
       </div>
       <TrustedBy />
+      <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}
-      <ServicesAccordion />
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}

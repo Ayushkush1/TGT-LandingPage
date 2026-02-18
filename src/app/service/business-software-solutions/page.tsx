@@ -16,7 +16,7 @@ const businessSoftwareSolutionsHeroContent = {
     "We deliver comprehensive software solutions that transform how your business operates. From ERP and CRM systems to business intelligence and analytics platforms, we provide integrated solutions that drive growth and efficiency.",
     "Our team combines deep industry knowledge with technical expertise to deliver software that aligns with your business goals. We ensure seamless integration, data security, and scalability. Your dedicated partner for business software solutions.",
   ],
-  cta: { text: "Explore solutions", href: "/#contactUs" },
+  cta: { text: "Explore solutions", href: "/contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
     alt: "Business software solutions team at work",
@@ -47,6 +47,65 @@ const businessSoftwareSolutionsHeroContent = {
   ] as Pillar[],
 };
 
+const SERVICES = [
+  {
+    number: "01",
+    title: "ERP Implementation",
+    category: "Enterprise · Operations",
+    description:
+      "Deploy and customize Enterprise Resource Planning systems to unify finance, HR, supply chain, and operations.",
+    tags: ["ERP", "Process Integration", "Data Centralization", "Automation"],
+    outcome:
+      "Streamlined operations with real-time visibility across departments.",
+  },
+  {
+    number: "02",
+    title: "CRM Solutions",
+    category: "Customer · Management",
+    description:
+      "Implement Customer Relationship Management platforms to manage leads, sales pipelines, and customer interactions.",
+    tags: ["Sales Automation", "Lead Tracking", "Customer Insights", "Support"],
+    outcome: "Improved customer relationships and increased sales efficiency.",
+  },
+  {
+    number: "03",
+    title: "Business Intelligence & Analytics",
+    category: "Data · Insights",
+    description:
+      "Advanced analytics dashboards and reporting tools that convert raw data into actionable business insights.",
+    tags: ["Dashboards", "Reporting", "KPIs", "Predictive Analytics"],
+    outcome: "Data-driven decision-making and performance optimization.",
+  },
+  {
+    number: "04",
+    title: "System Integration Services",
+    category: "Integration · Connectivity",
+    description:
+      "Connect disparate business applications into a unified ecosystem with secure data exchange.",
+    tags: ["API Integration", "Middleware", "Automation", "Data Sync"],
+    outcome: "Seamless communication between systems and improved efficiency.",
+  },
+  {
+    number: "05",
+    title: "Cloud Business Applications",
+    category: "Cloud · Infrastructure",
+    description:
+      "Deploy scalable business applications on cloud platforms for flexibility, security, and accessibility.",
+    tags: ["SaaS", "Cloud Migration", "Scalability", "Security"],
+    outcome: "Flexible systems that support remote work and business growth.",
+  },
+  {
+    number: "06",
+    title: "Consulting & Support",
+    category: "Strategy · Maintenance",
+    description:
+      "Expert consulting, implementation support, and continuous optimization to maximize software value.",
+    tags: ["Consulting", "Training", "Maintenance", "Optimization"],
+    outcome:
+      "Long-term success and maximum ROI from your software investments.",
+  },
+];
+
 function BusinessSoftwareSolutions() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
@@ -71,10 +130,10 @@ function BusinessSoftwareSolutions() {
         </div>
       </div>
       <TrustedBy />
+      <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
-      <ServicesAccordion />
       {/* Partner Logos */}
       <OurPartners />
       <BlogSection /> {/* Blog Section */}

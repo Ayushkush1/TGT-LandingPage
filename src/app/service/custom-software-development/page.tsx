@@ -16,7 +16,7 @@ const customSoftwareDevelopment = {
     "We build tailored software solutions that fit your unique business processes. From enterprise applications to workflow automation and internal tools, we create custom software that streamlines operations and drives efficiency.",
     "Our team analyzes your requirements, designs scalable architectures, and delivers robust solutions using modern technologies and best practices. Your dedicated partner for custom software that grows with your business.",
   ],
-  cta: { text: "Get started", href: "/#contactUs" },
+  cta: { text: "Get started", href: "/contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
     alt: "Custom software development team at work",
@@ -46,6 +46,63 @@ const customSoftwareDevelopment = {
     },
   ] as Pillar[],
 };
+const SERVICES = [
+  {
+    number: "01",
+    title: "Enterprise Software Development",
+    category: "Enterprise · Applications",
+    description:
+      "Design and development of large-scale enterprise systems tailored to complex business operations and workflows.",
+    tags: ["ERP Systems", "CRM Solutions", "Scalable Architecture", "Security"],
+    outcome: "Robust enterprise platforms that improve operational efficiency.",
+  },
+  {
+    number: "02",
+    title: "Web & Mobile App Development",
+    category: "Applications · Platforms",
+    description:
+      "Custom web and mobile applications built with modern frameworks to deliver seamless user experiences.",
+    tags: ["React", "Next.js", "iOS", "Android"],
+    outcome: "High-performance apps accessible across devices and platforms.",
+  },
+  {
+    number: "03",
+    title: "Workflow Automation Systems",
+    category: "Automation · Productivity",
+    description:
+      "Automate repetitive processes and integrate systems to streamline business operations and reduce manual work.",
+    tags: ["Process Automation", "Integration", "APIs", "Efficiency"],
+    outcome: "Faster operations with reduced errors and operational costs.",
+  },
+  {
+    number: "04",
+    title: "Legacy System Modernization",
+    category: "Modernization · Migration",
+    description:
+      "Upgrade outdated software with modern technologies, improved performance, and enhanced security.",
+    tags: ["Migration", "Refactoring", "Cloud Upgrade", "Performance"],
+    outcome:
+      "Future-ready systems with improved scalability and maintainability.",
+  },
+  {
+    number: "05",
+    title: "Cloud-Based Solutions",
+    category: "Cloud · Infrastructure",
+    description:
+      "Develop and deploy cloud-native applications with secure, scalable, and flexible infrastructure.",
+    tags: ["AWS", "Azure", "Microservices", "DevOps"],
+    outcome: "Reliable cloud solutions that support business growth.",
+  },
+  {
+    number: "06",
+    title: "Maintenance & Support",
+    category: "Support · Optimization",
+    description:
+      "Continuous monitoring, updates, and enhancements to ensure your software remains secure and high-performing.",
+    tags: ["Monitoring", "Bug Fixes", "Updates", "Performance Tuning"],
+    outcome: "Stable software with long-term reliability and performance.",
+  },
+];
 
 function CustomSoftwareDevelopment() {
   return (
@@ -71,12 +128,12 @@ function CustomSoftwareDevelopment() {
         </div>
       </div>
       <TrustedBy />
+      <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}
       <OurPartners />
-      <ServicesAccordion />
       <BlogSection /> {/* Blog Section */}
       <Footer />
     </main>

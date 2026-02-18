@@ -16,7 +16,7 @@ const aiAndMLHeroContent = {
     "We build intelligent AI and Machine Learning solutions that help businesses automate processes, gain insights, and make smarter decisions. From predictive analytics to natural language processing, we turn data into powerful digital assets.",
     "Our team designs scalable AI systems using modern frameworks and cloud technologies — ensuring accuracy, performance, and seamless integration with your existing platforms. Your trusted partner for AI-driven innovation.",
   ],
-  cta: { text: "Start your AI project", href: "/#contactUs" },
+  cta: { text: "Start your AI project", href: "/contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
     alt: "AI and Machine Learning development team working on intelligent solutions",
@@ -47,6 +47,74 @@ const aiAndMLHeroContent = {
   ] as Pillar[],
 };
 
+const SERVICES = [
+  {
+    number: "01",
+    title: "AI Strategy & Consulting",
+    category: "Strategy · Planning",
+    description:
+      "Identify high-impact AI opportunities, assess data readiness, and define a clear roadmap for implementation.",
+    tags: ["Use Cases", "Data Assessment", "Roadmap", "ROI Analysis"],
+    outcome: "A practical AI adoption plan aligned with business objectives.",
+  },
+  {
+    number: "02",
+    title: "Machine Learning Model Development",
+    category: "ML · Engineering",
+    description:
+      "Design, train, and deploy custom machine learning models tailored to your specific business needs.",
+    tags: [
+      "Model Training",
+      "Supervised Learning",
+      "Optimization",
+      "Deployment",
+    ],
+    outcome:
+      "Accurate models that deliver reliable predictions and automation.",
+  },
+  {
+    number: "03",
+    title: "Natural Language Processing",
+    category: "AI · Language",
+    description:
+      "Build intelligent systems that understand and process human language for chatbots, sentiment analysis, and more.",
+    tags: ["Chatbots", "Text Analysis", "Speech-to-Text", "Conversational AI"],
+    outcome: "Enhanced customer interactions and automated communication.",
+  },
+  {
+    number: "04",
+    title: "Computer Vision Solutions",
+    category: "AI · Vision",
+    description:
+      "Enable machines to interpret and analyze visual data for applications like recognition, detection, and quality control.",
+    tags: [
+      "Image Recognition",
+      "Object Detection",
+      "Video Analysis",
+      "Inspection",
+    ],
+    outcome: "Improved accuracy and efficiency in visual data processing.",
+  },
+  {
+    number: "05",
+    title: "Predictive Analytics",
+    category: "Analytics · Forecasting",
+    description:
+      "Leverage historical data to forecast trends, customer behavior, and operational outcomes.",
+    tags: ["Forecasting", "Trend Analysis", "Risk Modeling", "Optimization"],
+    outcome: "Proactive decision-making based on future insights.",
+  },
+  {
+    number: "06",
+    title: "AI Integration & Deployment",
+    category: "Implementation · Systems",
+    description:
+      "Seamlessly integrate AI solutions into your existing applications, workflows, and infrastructure.",
+    tags: ["APIs", "Cloud Deployment", "Automation", "Scalability"],
+    outcome: "Smooth adoption of AI capabilities across your organization.",
+  },
+];
+
 function AIAndMLSolutions() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
@@ -71,8 +139,8 @@ function AIAndMLSolutions() {
         </div>
       </div>
       <TrustedBy />
+      <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}
-      <ServicesAccordion />
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}

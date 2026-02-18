@@ -16,7 +16,7 @@ const iotHeroContent = {
     "We design and develop smart IoT solutions that connect devices, collect data, and automate processes in real time. From industrial automation to smart homes and connected products, we turn physical systems into intelligent digital ecosystems.",
     "Our IoT services include device integration, cloud connectivity, data analytics, and secure infrastructure — enabling you to monitor, control, and optimize operations from anywhere. Your trusted partner for building connected technology solutions.",
   ],
-  cta: { text: "Start your IoT project", href: "/#contactUs" },
+  cta: { text: "Start your IoT project", href: "/contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
     alt: "IoT engineers working on connected devices and smart systems",
@@ -47,6 +47,45 @@ const iotHeroContent = {
   ] as Pillar[],
 };
 
+const SERVICES = [
+  {
+    number: "01",
+    title: "IoT Strategy & Consulting",
+    category: "Planning · Architecture",
+    description:
+      "We assess your business needs and design a scalable IoT roadmap, selecting the right hardware, connectivity, and cloud architecture.",
+    tags: ["Use-Case Mapping", "Architecture", "Tech Stack", "Roadmap"],
+    outcome: "Clear implementation plan aligned with business goals and ROI.",
+  },
+  {
+    number: "02",
+    title: "Device & Sensor Integration",
+    category: "Hardware · Connectivity",
+    description:
+      "Seamless integration of sensors, embedded systems, and gateways to enable reliable device communication.",
+    tags: ["Embedded Systems", "Gateways", "Protocols", "Edge Devices"],
+    outcome: "Connected ecosystem with stable and efficient data flow.",
+  },
+  {
+    number: "03",
+    title: "Cloud & Data Management",
+    category: "Cloud · Analytics",
+    description:
+      "Secure cloud infrastructure to collect, store, and process IoT data with real-time analytics and dashboards.",
+    tags: ["AWS IoT", "Azure IoT", "Data Pipelines", "Dashboards"],
+    outcome: "Actionable insights for smarter decision-making.",
+  },
+  {
+    number: "04",
+    title: "Automation & Monitoring",
+    category: "Operations · Intelligence",
+    description:
+      "Real-time monitoring systems with automation rules to optimize performance and reduce manual intervention.",
+    tags: ["Alerts", "Automation", "Remote Control", "Optimization"],
+    outcome: "Improved efficiency, reduced downtime, and operational savings.",
+  },
+];
+
 function IOTSolutions() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
@@ -71,9 +110,9 @@ function IOTSolutions() {
         </div>
       </div>
       <TrustedBy />
+      <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
-      <ServicesAccordion />
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}
       <OurPartners />

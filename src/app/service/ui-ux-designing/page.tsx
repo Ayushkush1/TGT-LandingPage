@@ -18,7 +18,7 @@ const uiUxHeroContent = {
     "We are a dynamic IT solutions and consulting firm dedicated to empowering businesses through technology-driven solutions. With a client-focused approach and a commitment to innovation, we specialize in transforming our clients' digital journeys.",
     "We pride ourselves on being at the forefront of innovation, providing comprehensive IT consultation and cutting-edge IT Solution services to empower businesses in the digital age — your dedicated partner in navigating the ever-evolving landscape of information technology.",
   ],
-  cta: { text: "Start your project", href: "/#contactUs" },
+  cta: { text: "Start your project", href: "/contactUs" },
   image: {
     src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
     alt: "Two professionals having a discussion",
@@ -49,6 +49,82 @@ const uiUxHeroContent = {
   ] as Pillar[],
 };
 
+const SERVICES = [
+  {
+    number: "01",
+    title: "User Research & Discovery",
+    category: "Research · Strategy",
+    description:
+      "We dive deep into your users' behaviours, needs, and pain points through interviews, surveys, and usability testing to inform every design decision.",
+    tags: [
+      "User Interviews",
+      "Usability Testing",
+      "Personas",
+      "Journey Mapping",
+    ],
+    outcome:
+      "Built designs grounded in real user insight, reducing rework and guesswork.",
+  },
+  {
+    number: "02",
+    title: "Wireframing & Prototyping",
+    category: "Design · Interaction",
+    description:
+      "From low-fidelity sketches to high-fidelity interactive prototypes, we map out every screen and flow before a single line of code is written.",
+    tags: ["Wireframes", "Interactive Prototypes", "User Flows", "Figma"],
+    outcome: "Validated concepts early, saving development time and budget.",
+  },
+  {
+    number: "03",
+    title: "UI Design & Visual Systems",
+    category: "Visual Design · Branding",
+    description:
+      "We craft pixel-perfect interfaces with cohesive design systems — ensuring your product looks stunning and scales consistently across every screen.",
+    tags: [
+      "Design Systems",
+      "Component Libraries",
+      "Typography",
+      "Colour Theory",
+    ],
+    outcome:
+      "Delivered a scalable visual language that accelerates future development.",
+  },
+  {
+    number: "04",
+    title: "Interaction & Motion Design",
+    category: "Animation · Experience",
+    description:
+      "Subtle micro-interactions and purposeful animations that guide users, provide feedback, and bring your product to life without overwhelming the experience.",
+    tags: ["Micro-interactions", "Motion Design", "Lottie", "Transitions"],
+    outcome:
+      "Elevated perceived quality and user delight through thoughtful motion.",
+  },
+  {
+    number: "05",
+    title: "Accessibility & Inclusive Design",
+    category: "Accessibility · Compliance",
+    description:
+      "We design for everyone — applying WCAG standards and inclusive design principles so your product is usable by people of all abilities.",
+    tags: [
+      "WCAG 2.1",
+      "Contrast Ratios",
+      "Screen Readers",
+      "Keyboard Navigation",
+    ],
+    outcome:
+      "Achieved WCAG AA compliance and expanded your accessible user base.",
+  },
+  {
+    number: "06",
+    title: "Design Handoff & Dev Support",
+    category: "Collaboration · Delivery",
+    description:
+      "We bridge the gap between design and engineering with thorough handoff documentation, annotated specs, and ongoing support throughout development.",
+    tags: ["Figma Handoff", "Design Tokens", "Dev Documentation", "QA Review"],
+    outcome:
+      "Seamless design-to-development workflow with zero lost-in-translation issues.",
+  },
+];
 function UIUXDesigning() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
@@ -73,8 +149,8 @@ function UIUXDesigning() {
         </div>
       </div>
       <TrustedBy />
+      <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}
-      <ServicesAccordion />
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}
       {/* Partner Logos */}

@@ -122,9 +122,36 @@ function OurTeam() {
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
       <div
+        id="team"
         className="targeted-element bg-[#F3F4F8] light-element flex flex-col items-center -mb-24
      justify-center mid:gap-[0rem] gap-[2.5rem] mid:pb-[14rem] mid:pt-[9rem] py-[4rem] mid:py-0"
       >
+        {/* TEAMS FOR DESKTOP */}
+        <div className="max-w-7xl mx-auto">
+          <div
+            className="grid gap-6 items-start"
+            style={{
+              gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
+            }}
+          >
+            {Array.from({ length: COLS }).map((_, ci) => (
+              <div
+                key={ci}
+                className="flex flex-col gap-6"
+                style={{ paddingTop: `${colOffsets[ci] ?? 0}px` }}
+              >
+                {columns[ci].map((member, ri) => (
+                  <TeamCard
+                    key={`${ci}-${ri}`}
+                    member={member}
+                    delay={ci * 0.06 + ri * 0.08}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Heading */}
         <div className="text-center max-w-4xl mx-auto mb-20">
           <div className="flex items-center justify-center gap-4 mb-6">
@@ -158,32 +185,6 @@ function OurTeam() {
             engineers committed to building impactful digital solutions and
             delivering real value to our clients.
           </p>
-        </div>
-
-        {/* TEAMS FOR DESKTOP */}
-        <div className="max-w-7xl mx-auto">
-          <div
-            className="grid gap-6 items-start"
-            style={{
-              gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-            }}
-          >
-            {Array.from({ length: COLS }).map((_, ci) => (
-              <div
-                key={ci}
-                className="flex flex-col gap-6"
-                style={{ paddingTop: `${colOffsets[ci] ?? 0}px` }}
-              >
-                {columns[ci].map((member, ri) => (
-                  <TeamCard
-                    key={`${ci}-${ri}`}
-                    member={member}
-                    delay={ci * 0.06 + ri * 0.08}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </AnimatedSection>

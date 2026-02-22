@@ -1,5 +1,10 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { Integrations } from "@/components/sections/Integrations";
+import { OurReputation } from "@/components/sections/OurReputation";
+import CTABanner from "./components/CTABanner";
+import HeroSection from "./components/HeroSection";
+import PortfolioSection from "../about/components/PortfolioSection";
 
 function PortfolioPage() {
   return (
@@ -21,9 +26,13 @@ function PortfolioPage() {
         {/* Content */}
         <div className="relative z-10">
           <Navbar />
+          <HeroSection />
         </div>
       </div>
-
+      <PortfolioSection /> {/* PortfolioSection */}
+      <Integrations />
+      <OurReputation />
+      <CTABanner />
       <Footer />
     </main>
   );

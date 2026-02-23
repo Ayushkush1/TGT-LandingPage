@@ -9,14 +9,22 @@ function VideoSection() {
  justify-center mid:gap-[0rem] gap-[2.5rem] mid:pb-[14rem] mid:pt-[9rem] py-[4rem] mid:py-0"
       >
         {/* Heading */}
-        <div className="text-center max-w-7xl  relative z-10 mx-auto lg:mx-0">
+
+        <div className="text-center max-w-4xl mx-auto mb-20">
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-            Innovation Crafted
-            <br />
-            With Excellence
+            Innovation Crafted <br />
+            With{" "}
+            <span className="font-serif italic font-medium text-[#D4AF37]">
+              Excellence
+            </span>{" "}
+            <span className="relative inline-block z-10"></span>.
           </h2>
 
-          <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-xl mx-auto">
+          <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
+            At{" "}
+            <span className="font-semibold text-gray-900">
+              The Gold Technologies{" "}
+            </span>
             We help businesses innovate, grow, and scale through smart, reliable
             technology solutions tailored for real results.
           </p>

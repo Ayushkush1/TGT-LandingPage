@@ -25,8 +25,8 @@ function AboutPage() {
           }}
         />
 
-        {/* Subtle Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
+        {/* Subtle Gradient Overlay (tokenized) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-white to-white/5 pointer-events-none" />
 
         {/* Content */}
         <div className="relative z-10">

@@ -77,7 +77,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className="relative bg-white pt-10 px-2 md:px-4 pb-4"
+      className="relative bg-white pt-10 px-2 md:px-4 pb-4 z-0"
       ref={containerRef}
     >
       <motion.div
@@ -168,22 +168,16 @@ export const Footer = () => {
                 About Us
               </a>
               <a
-                href="#"
+                href="/service/website-design-development"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Services
               </a>
               <a
-                href="#"
+                href="/portfolio"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Portfolio
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Career
               </a>
             </div>
             <div className="flex flex-col gap-4">

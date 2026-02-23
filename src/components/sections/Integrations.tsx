@@ -66,7 +66,7 @@ const AnimatedCounter = ({
 export const Integrations = () => {
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
-      <section className="py-32 bg-white overflow-hidden relative font-sans">
+      <section className="py-32 bg-white overflow-hidden relative font-sans z-0">
         <div className="max-w-[1400px] mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-0">
           {/* --- LEFT GRID --- */}
           <div className="hidden lg:grid grid-cols-2 gap-6 opacity-100 transform -translate-x-12">

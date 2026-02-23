@@ -1,9 +1,12 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { EnquirySection } from "@/components/sections/EnquirySection";
-import MapSection from "@/components/sections/MapSection";
+import { Integrations } from "@/components/sections/Integrations";
+import { OurReputation } from "@/components/sections/OurReputation";
+import CTABanner from "./components/CTABanner";
+import HeroSection from "./components/HeroSection";
+import PortfolioSection from "../about/components/PortfolioSection";
 
-function ContactUs() {
+function PortfolioPage() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -23,13 +26,16 @@ function ContactUs() {
         {/* Content */}
         <div className="relative z-10">
           <Navbar />
+          <HeroSection />
         </div>
       </div>
-      <EnquirySection /> {/* Contact Form */}
-      <MapSection />
+      <PortfolioSection /> {/* PortfolioSection */}
+      <Integrations />
+      <OurReputation />
+      <CTABanner />
       <Footer />
     </main>
   );
 }
 
-export default ContactUs;
+export default PortfolioPage;

@@ -80,13 +80,10 @@ export default function BlogPage() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
-      <div className="relative">
-        {/* Content */}
-        <div className="relative z-10">
-          <Navbar />
-          <HeroSection blog={blog} />
-        </div>
-      </div>
+      <div className="relative">{/* Content */}</div>
+      <Navbar />
+      <HeroSection blog={blog} />
+      {/* Hero Section */}
       <div>
         {/* ── Two-Column Layout ── */}
         <div

@@ -27,13 +27,9 @@ function AboutPage() {
 
         {/* Subtle Gradient Overlay (tokenized) */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-white to-white/5 pointer-events-none" />
-
-        {/* Content */}
-        <div className="relative z-10">
-          <Navbar />
-          <AboutFirm />
-        </div>
       </div>
+      <Navbar />
+      <AboutFirm />
       <TrustedBy />
       <VideoSection />
       <VisionSection />

@@ -72,9 +72,9 @@ export const Navbar = () => {
         }}
         className={`flex items-center sticky  z-50 transition-all duration-300 ${
           scrolled
-            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto pr-5 pl-4 py-px"
+            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto px-10 py-px"
             : cn(
-                "justify-between w-full py-4 px-4 md:px-8 lg:px-12 top-0",
+                "justify-between w-full py-6 px-4 md:px-8 lg:px-12 top-0",
                 isHomePage ? "bg-black" : "bg-transparent"
               )
         }`}

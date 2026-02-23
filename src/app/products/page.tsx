@@ -102,7 +102,6 @@ function ProductPage() {
         {/* Content */}
         <div className="relative z-10">
           <Navbar />
-          {/* <HeroSection {...productHeroContent} /> */}
           <motion.section
             initial="hidden"
             whileInView="show"
@@ -175,140 +174,142 @@ function ProductPage() {
             </div>
 
             {/* ── Bottom Row: Image + Pillar Cards ── */}
-            <motion.div
-              variants={containerVariants}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
-            >
-              {/* Image block */}
+            <div className=" flex flex-col gap-12">
               <motion.div
-                variants={itemVariants}
-                className="relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl"
+                variants={containerVariants}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
               >
-                <img
-                  src={productHeroContent?.image.src}
-                  alt={productHeroContent?.image.alt}
-                  className="w-full h-full object-cover object-top absolute inset-0"
-                />
+                {/* Image block */}
+                <motion.div
+                  variants={itemVariants}
+                  className="relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl"
+                >
+                  <img
+                    src={productHeroContent?.image.src}
+                    alt={productHeroContent?.image.alt}
+                    className="w-full h-full object-cover object-top absolute inset-0"
+                  />
 
-                {/* Gradient overlay */}
-                <div
-                  className="absolute inset-0 bg-gradient-to-b from-transparent from-[40%] to-[rgba(11,15,41,0.6)]"
-                  aria-hidden
-                />
+                  {/* Gradient overlay */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-b from-transparent from-[40%] to-[rgba(11,15,41,0.6)]"
+                    aria-hidden
+                  />
 
-                {/* Stat — bottom left */}
-                {productHeroContent?.statSince && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
-                  >
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
-                      Excellence since
-                    </p>
-                    <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-                      {productHeroContent?.statSince}
-                    </p>
-                    <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
-                  </motion.div>
-                )}
+                  {/* Stat — bottom left */}
+                  {productHeroContent?.statSince && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3, duration: 0.5 }}
+                      className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+                    >
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                        Excellence since
+                      </p>
+                      <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+                        {productHeroContent?.statSince}
+                      </p>
+                      <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
+                    </motion.div>
+                  )}
 
-                {/* Stat — top right */}
-                {productHeroContent?.statProjects && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
-                  >
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
-                      Projects delivered
-                    </p>
-                    <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-                      {productHeroContent?.statProjects}
-                      <span className="text-[#D4AF37]">+</span>
-                    </p>
-                  </motion.div>
-                )}
+                  {/* Stat — top right */}
+                  {productHeroContent?.statProjects && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3, duration: 0.5 }}
+                      className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+                    >
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                        Projects delivered
+                      </p>
+                      <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+                        {productHeroContent?.statProjects}
+                        <span className="text-[#D4AF37]">+</span>
+                      </p>
+                    </motion.div>
+                  )}
+                </motion.div>
+
+                {/* Pillars 2×2 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
+                  {productHeroContent?.pillars.map((p) => (
+                    <PillarCard key={p.number} {...p} />
+                  ))}
+                </div>
               </motion.div>
-
-              {/* Pillars 2×2 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
-                {productHeroContent?.pillars.map((p) => (
-                  <PillarCard key={p.number} {...p} />
-                ))}
-              </div>
-            </motion.div>
-            <motion.div
-              variants={containerVariants}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 items-center "
-            >
-              {/* Pillars 2×2 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
-                {productHeroContent?.pillars2.map((p) => (
-                  <PillarCard key={p.number} {...p} />
-                ))}
-              </div>
-
-              {/* Image block */}
               <motion.div
-                variants={itemVariants}
-                className="relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl"
+                variants={containerVariants}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-8  items-center "
               >
-                <img
-                  src={productHeroContent?.image2.src}
-                  alt={productHeroContent?.image2.alt}
-                  className="w-full h-full object-cover object-top absolute inset-0"
-                />
+                {/* Pillars 2×2 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
+                  {productHeroContent?.pillars2.map((p) => (
+                    <PillarCard key={p.number} {...p} />
+                  ))}
+                </div>
 
-                {/* Gradient overlay */}
-                <div
-                  className="absolute inset-0 bg-gradient-to-b from-transparent from-[40%] to-[rgba(11,15,41,0.6)]"
-                  aria-hidden
-                />
+                {/* Image block */}
+                <motion.div
+                  variants={itemVariants}
+                  className="relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl"
+                >
+                  <img
+                    src={productHeroContent?.image2.src}
+                    alt={productHeroContent?.image2.alt}
+                    className="w-full h-full object-cover object-top absolute inset-0"
+                  />
 
-                {/* Stat — bottom left */}
-                {productHeroContent?.statSince && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
-                  >
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
-                      Excellence since
-                    </p>
-                    <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-                      {productHeroContent?.statSince}
-                    </p>
-                    <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
-                  </motion.div>
-                )}
+                  {/* Gradient overlay */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-b from-transparent from-[40%] to-[rgba(11,15,41,0.6)]"
+                    aria-hidden
+                  />
 
-                {/* Stat — top right */}
-                {productHeroContent?.statProjects && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
-                  >
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
-                      Projects delivered
-                    </p>
-                    <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-                      {productHeroContent?.statProjects}
-                      <span className="text-[#D4AF37]">+</span>
-                    </p>
-                  </motion.div>
-                )}
+                  {/* Stat — bottom left */}
+                  {productHeroContent?.statSince && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3, duration: 0.5 }}
+                      className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+                    >
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                        Excellence since
+                      </p>
+                      <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+                        {productHeroContent?.statSince}
+                      </p>
+                      <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
+                    </motion.div>
+                  )}
+
+                  {/* Stat — top right */}
+                  {productHeroContent?.statProjects && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3, duration: 0.5 }}
+                      className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+                    >
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                        Projects delivered
+                      </p>
+                      <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+                        {productHeroContent?.statProjects}
+                        <span className="text-[#D4AF37]">+</span>
+                      </p>
+                    </motion.div>
+                  )}
+                </motion.div>
               </motion.div>
-            </motion.div>
+            </div>
           </motion.section>
         </div>
       </div>

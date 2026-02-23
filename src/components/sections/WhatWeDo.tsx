@@ -4,9 +4,23 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const WhatWeDo = () => {
   const [activeService, setActiveService] = useState(0);
+  const router = useRouter();
+
+  const serviceRoutes: { [key: string]: string } = {
+    web: "/service/website-design-development",
+    app: "/service/mobile-app-development",
+    ui: "/service/ui-ux-designing",
+    custom: "/service/custom-software-development",
+    iot: "/service/iot-solutions",
+  };
+
+  const handleServiceClick = (serviceId: string) => {
+    router.push(serviceRoutes[serviceId]);
+  };
 
   return (
     <section className="py-20 px-4 md:px-8 ">
@@ -136,6 +150,7 @@ export const WhatWeDo = () => {
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
               onMouseEnter={() => setActiveService(index)}
+              onClick={() => handleServiceClick(service.id)}
               className={`relative rounded-[32px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer ${index === activeService ? `flex-[3.5] ${service.borderColor}` : "flex-[0.5] border-transparent"} group bg-[#0B0F29] shadow-lg h-full`}
             >
               {/* Background: Image or Gradient */}
@@ -183,7 +198,10 @@ export const WhatWeDo = () => {
                   <p className="text-gray-300 text-sm leading-relaxed mb-6 font-medium line-clamp-2">
                     {service.desc}
                   </p>
-                  <button className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-[#0B0F29] transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                  <button
+                    onClick={() => handleServiceClick(service.id)}
+                    className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-[#0B0F29] transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                  >
                     Explore <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>

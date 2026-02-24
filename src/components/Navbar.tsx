@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { FreeAuditPopup } from "./FreeAuditPopup";
+import Image from "next/image";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -44,31 +45,41 @@ export const Navbar = () => {
         }}
         className={`flex items-center sticky  z-50 transition-all duration-300 ${
           scrolled
-            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto px-10 py-px"
+            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto pr-5 pl-4 py-px"
             : "bg-transparent justify-between w-full py-6 px-4 md:px-8 lg:px-12 top-0"
         }`}
       >
         {/* Logo */}
-        {!scrolled && (
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="flex items-center gap-2.5 relative z-10"
-          >
-            <div className="bg-[#9A7B12] rounded-xl p-1.5 shadow-lg shadow-blue-900/10">
-              <span className="text-white font-bold px-1 text-sm tracking-widest">
-                TGT
-              </span>
-            </div>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="flex items-center gap-2.5 relative z-10"
+        >
+          <Image
+            src={"/logo.jpeg"}
+            alt="logo"
+            height={40}
+            width={40}
+            className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
+          />
+          {/* <div className="bg-[#9A7B12] rounded-xl p-1.5 shadow-lg shadow-blue-900/10">
+            <span className="text-white font-bold px-1 text-sm tracking-widest">
+            TGT
+            </span>
+            </div> */}
+          {!scrolled && (
             <span className="text-xl font-bold text-gray-900 tracking-tight">
               The Gold Technologies
             </span>
-          </motion.div>
-        )}
+          )}
+        </motion.div>
 
         {/* Center Links */}
-        <div className="hidden md:flex items-center gap-10 relative z-10">
+        <div
+          className={`hidden md:flex items-center 
+        ${!scrolled ? "gap-10" : "gap-5"} relative z-10`}
+        >
           {["Home", "About Us"].map((item, i) => (
             <motion.div
               key={item}
@@ -198,87 +209,89 @@ export const Navbar = () => {
         </div>
 
         {/* Right Buttons */}
-        {!scrolled && (
-          <div className="flex items-center gap-2 relative z-10">
-            <TooltipProvider delayDuration={0}>
-              <div className="flex items-center gap-1">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 w-10 h-10 flex items-center justify-center relative overflow-hidden"
-                      onMouseEnter={() => setIsEmailHovered(true)}
-                      onMouseLeave={() => setIsEmailHovered(false)}
+        <div className="flex items-center gap-2 relative z-10">
+          <TooltipProvider delayDuration={0}>
+            <div
+              className={`flex items-center gap-1  ${!scrolled ? "" : " ml-8"}`}
+            >
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 w-10 h-10 flex items-center justify-center relative overflow-hidden"
+                    onMouseEnter={() => setIsEmailHovered(true)}
+                    onMouseLeave={() => setIsEmailHovered(false)}
+                  >
+                    <AnimatePresence initial={false}>
+                      {isEmailHovered ? (
+                        <motion.div
+                          key="open"
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.5 }}
+                          transition={{ duration: 0.1 }}
+                          className="absolute"
+                        >
+                          <MailOpen className="w-[18px] h-[18px]" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="closed"
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.5 }}
+                          transition={{ duration: 0.1 }}
+                          className="absolute"
+                        >
+                          <Mail className="w-[18px] h-[18px]" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>info@thegoldtechnologies.com</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 group"
+                    onMouseEnter={() => setIsPhoneHovered(true)}
+                    onMouseLeave={() => setIsPhoneHovered(false)}
+                  >
+                    <motion.div
+                      animate={
+                        isPhoneHovered
+                          ? {
+                              rotate: [0, -10, 10, -10, 10, 0],
+                              transition: {
+                                duration: 0.6,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              },
+                            }
+                          : {
+                              rotate: 0,
+                              transition: { duration: 0.2, ease: "easeOut" },
+                            }
+                      }
                     >
-                      <AnimatePresence initial={false}>
-                        {isEmailHovered ? (
-                          <motion.div
-                            key="open"
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.5 }}
-                            transition={{ duration: 0.1 }}
-                            className="absolute"
-                          >
-                            <MailOpen className="w-[18px] h-[18px]" />
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key="closed"
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.5 }}
-                            transition={{ duration: 0.1 }}
-                            className="absolute"
-                          >
-                            <Mail className="w-[18px] h-[18px]" />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>info@thegoldtechnologies.com</p>
-                  </TooltipContent>
-                </Tooltip>
+                      <Phone className="w-[18px] h-[18px]" />
+                    </motion.div>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>+91 8368198551</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </TooltipProvider>
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 group"
-                      onMouseEnter={() => setIsPhoneHovered(true)}
-                      onMouseLeave={() => setIsPhoneHovered(false)}
-                    >
-                      <motion.div
-                        animate={
-                          isPhoneHovered
-                            ? {
-                                rotate: [0, -10, 10, -10, 10, 0],
-                                transition: {
-                                  duration: 0.6,
-                                  repeat: Infinity,
-                                  ease: "easeInOut",
-                                },
-                              }
-                            : {
-                                rotate: 0,
-                                transition: { duration: 0.2, ease: "easeOut" },
-                              }
-                        }
-                      >
-                        <Phone className="w-[18px] h-[18px]" />
-                      </motion.div>
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>+91 8368198551</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-            </TooltipProvider>
+          {/* Vertical Separator */}
+          {!scrolled && <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>}
 
-            {/* Vertical Separator */}
-            <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>
-
+          {!scrolled && (
             <div
               className="hidden lg:block ml-1"
               onClick={() => setOpenAuditForm(true)}
@@ -293,8 +306,8 @@ export const Navbar = () => {
                 </span>
               </Link>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </motion.nav>
       <FreeAuditPopup
         setOpenAuditForm={setOpenAuditForm}

@@ -35,7 +35,7 @@ function VideoSection() {
 
         {/* Video section */}
         <section className="max-w-7xl w-full">
-          <div className=" w-[90%] h-[600px] m-auto rounded-3xl overflow-hidden">
+          <div className=" w-[90%] h-[600px] m-auto rounded-[3rem] overflow-hidden">
             <iframe
               className="w-full h-full"
               src="https://www.youtube.com/embed/Zp1fuVhlP6o?si=M7ocbQbSEnPKZ0EQ"

@@ -86,3 +86,20 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Swiper thumb active styles ─────────────────────────────────── */
+.portfolio-thumbs .swiper-slide-thumb-active .thumb-overlay {
+  opacity: 0 !important;
+}
+.portfolio-thumbs .swiper-slide-thumb-active > div {
+  outline: 2px solid #d4af37;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.45);
+  color: #f2f2f2 !important;
+}
+.portfolio-thumbs .swiper-slide > div {
+  transition:
+    outline 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+  color: #fffcfc7b;
+}

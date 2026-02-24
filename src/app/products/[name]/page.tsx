@@ -3,9 +3,22 @@
 import CTABanner from "@/app/portfolio/components/CTABanner";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { useParams } from "next/navigation";
 import HeroSection from "./components/HeroSection";
+import { portfolios } from "@/app/about/components/PortfolioSection";
+import ServicesAccordion, {
+  Service,
+} from "@/app/service/ui-ux-designing/ServiceRow";
+import { Integrations } from "@/components/sections/Integrations";
+import { OurReputation } from "@/components/sections/OurReputation";
 
 function SingleProduct() {
+  const slug = useParams().name;
+  const product =
+    portfolios.find(
+      (p) => p.title.toLowerCase().replace(/\s+/g, "-") === slug,
+    ) || portfolios[0];
+
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -23,7 +36,10 @@ function SingleProduct() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <HeroSection />
+      <HeroSection product={product} />
+      <ServicesAccordion SERVICES={product.SERVICES as Service[]} />
+      <OurReputation />
+      <Integrations />
       <CTABanner />
       <Footer />
     </main>

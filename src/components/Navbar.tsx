@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import { FreeAuditPopup } from "./FreeAuditPopup";
 import Image from "next/image";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -63,11 +64,6 @@ export const Navbar = () => {
             width={40}
             className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
           />
-          {/* <div className="bg-[#9A7B12] rounded-xl p-1.5 shadow-lg shadow-blue-900/10">
-            <span className="text-white font-bold px-1 text-sm tracking-widest">
-            TGT
-            </span>
-            </div> */}
           {!scrolled && (
             <span className="text-xl font-bold text-gray-900 tracking-tight">
               The Gold Technologies
@@ -87,12 +83,14 @@ export const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
             >
-              <Link
-                href={item === "Home" ? "/" : "/about"}
-                className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-              >
-                {item}
-              </Link>
+              <MagneticButton intensity={0.3}>
+                <Link
+                  href={item === "Home" ? "/" : "/about"}
+                  className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                >
+                  {item}
+                </Link>
+              </MagneticButton>
             </motion.div>
           ))}
           <motion.div
@@ -101,10 +99,12 @@ export const Navbar = () => {
             transition={{ delay: 0.5, duration: 0.5 }}
             className="relative group h-full flex items-center"
           >
-            <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
-              <span>Services</span>
-              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
-            </div>
+            <MagneticButton intensity={0.3}>
+              <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+                <span>Services</span>
+                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+              </div>
+            </MagneticButton>
 
             {/* Premium Dropdown */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
@@ -198,12 +198,14 @@ export const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
             >
-              <Link
-                href={item === "Products" ? "/products" : "/contactUs"}
-                className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-              >
-                {item}
-              </Link>
+              <MagneticButton intensity={0.3}>
+                <Link
+                  href={item === "Products" ? "/products" : "/contactUs"}
+                  className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                >
+                  {item}
+                </Link>
+              </MagneticButton>
             </motion.div>
           ))}
         </div>
@@ -290,22 +292,20 @@ export const Navbar = () => {
 
           {/* Vertical Separator */}
           {!scrolled && <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>}
-
           {!scrolled && (
-            <div
-              className="hidden lg:block ml-1"
-              onClick={() => setOpenAuditForm(true)}
-            >
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 px-4 py-2 rounded-full transition-all duration-300 border border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm"
-              >
-                <ScanSearch className="w-5 h-5 object-contain" />{" "}
-                <span className="text-[11px] font-bold uppercase tracking-widest">
-                  Free Website Audit
-                </span>
-              </Link>
-            </div>
+            <MagneticButton intensity={0.25} className="hidden lg:block ml-1">
+              <div onClick={() => setOpenAuditForm(true)}>
+                <Link
+                  href="#"
+                  className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 px-4 py-2 rounded-full transition-all duration-300 border border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm"
+                >
+                  <ScanSearch className="w-5 h-5 object-contain" />{" "}
+                  <span className="text-[11px] font-bold uppercase tracking-widest">
+                    Free Website Audit
+                  </span>
+                </Link>
+              </div>
+            </MagneticButton>
           )}
         </div>
       </motion.nav>

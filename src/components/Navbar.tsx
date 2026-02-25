@@ -191,7 +191,60 @@ export const Navbar = () => {
               </div>
             </div>
           </motion.div>
-          {["Products", "Contact Us"].map((item, i) => (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="relative group h-full flex items-center"
+          >
+            <MagneticButton intensity={0.3}>
+              <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+                <span>Products</span>
+                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+              </div>
+            </MagneticButton>
+
+            {/* Premium Dropdown */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
+              <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                  {[
+                    {
+                      title: "IP ERP",
+                      desc: "ERP dashboard with clean interface and efficient workflows.",
+                      link: "/products",
+                    },
+                    {
+                      title: "Catfy Catalog",
+                      desc: "Modern product catalog with intuitive navigation and layout.",
+                      link: "/products",
+                    },
+                  ].map((service, i) => (
+                    <Link
+                      key={i}
+                      href={service?.link}
+                      className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">
+                            {service.title}
+                          </span>
+                          <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">
+                            →
+                          </span>
+                        </div>
+                        <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">
+                          {service.desc}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+          {["Contact Us"].map((item, i) => (
             <motion.div
               key={item}
               initial={{ opacity: 0, y: -10 }}

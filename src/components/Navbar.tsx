@@ -26,13 +26,40 @@ export const Navbar = () => {
   const [isEmailHovered, setIsEmailHovered] = React.useState(false);
   const [isPhoneHovered, setIsPhoneHovered] = React.useState(false);
   const [openAuditForm, setOpenAuditForm] = React.useState(false);
+  const currentScrolledRef = React.useRef(scrolled);
 
   React.useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    currentScrolledRef.current = scrolled;
+  }, [scrolled]);
+
+  React.useEffect(() => {
+    let ticking = false;
+
+    const updateScroll = () => {
+      const scrollY = window.scrollY;
+
+      // Hysteresis → prevents flickering
+      if (scrollY > 80 && !currentScrolledRef.current) {
+        setScrolled(true);
+      } else if (scrollY < 40 && currentScrolledRef.current) {
+        setScrolled(false);
+      }
+
+      ticking = false;
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScroll);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (

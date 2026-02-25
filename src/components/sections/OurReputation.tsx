@@ -182,10 +182,15 @@ export const OurReputation = () => {
             <p className="text-[#0B0F29] font-serif text-2xl font-medium italic">
               See how impactful design makes a difference?
             </p>
-            <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 mx-auto group">
+            <a
+              href="https://calendar.app.google/5nNHP69fUR5WEMvt9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#0B0F29] w-max text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 mx-auto group"
+            >
               SCHEDULE A CALL
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
+            </a>
           </div>
         </div>
       </section>

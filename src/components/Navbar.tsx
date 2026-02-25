@@ -3,304 +3,369 @@
 import Link from "next/link";
 import * as React from "react";
 import {
-    ChevronDown,
-    Mail,
-    MailOpen,
-    Phone,
-    FileText,
-    ScanSearch,
+  ChevronDown,
+  Mail,
+  MailOpen,
+  Phone,
+  FileText,
+  ScanSearch,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { FreeAuditPopup } from "./FreeAuditPopup";
+import Image from "next/image";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 export const Navbar = () => {
-    const [scrolled, setScrolled] = React.useState(false);
-    const [isEmailHovered, setIsEmailHovered] = React.useState(false);
-    const [isPhoneHovered, setIsPhoneHovered] = React.useState(false);
-    const [openAuditForm, setOpenAuditForm] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
+  const [isEmailHovered, setIsEmailHovered] = React.useState(false);
+  const [isPhoneHovered, setIsPhoneHovered] = React.useState(false);
+  const [openAuditForm, setOpenAuditForm] = React.useState(false);
 
-    React.useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    return (
-        <>
-            <motion.nav
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                    duration: 0.8,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                className={`w-full py-6 px-4 md:px-8 lg:px-12 flex items-center justify-between sticky top-0 z-50 transition-all duration-300 ${scrolled ? "backdrop-blur-xl bg-white/80 shadow-sm" : "bg-transparent"
-                    }`}
+  return (
+    <>
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          duration: 0.8,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        }}
+        className={`flex items-center sticky  z-50 transition-all duration-300 ${
+          scrolled
+            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto pr-5 pl-4 py-px"
+            : "bg-transparent justify-between w-full py-6 px-4 md:px-8 lg:px-12 top-0"
+        }`}
+      >
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="flex items-center gap-2.5 relative z-10"
+        >
+          <Image
+            src={"/logo.jpeg"}
+            alt="logo"
+            height={40}
+            width={40}
+            className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
+          />
+          {!scrolled && (
+            <span className="text-xl font-bold text-gray-900 tracking-tight">
+              The Gold Technologies
+            </span>
+          )}
+        </motion.div>
+
+        {/* Center Links */}
+        <div
+          className={`hidden md:flex items-center 
+        ${!scrolled ? "gap-10" : "gap-5"} relative z-10`}
+        >
+          {["Home", "About Us"].map((item, i) => (
+            <motion.div
+              key={item}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
             >
-                {/* Logo */}
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2, duration: 0.6 }}
-                    className="flex items-center gap-2.5 relative z-10"
+              <MagneticButton intensity={0.3}>
+                <Link
+                  href={item === "Home" ? "/" : "/about"}
+                  className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
                 >
-                    <div className="bg-[#9A7B12] rounded-xl p-1.5 shadow-lg shadow-blue-900/10">
-                        <span className="text-white font-bold px-1 text-sm tracking-widest">
-                            TGT
-                        </span>
-                    </div>
-                    <span className="text-xl font-bold text-gray-900 tracking-tight">
-                        The Gold Technologies
-                    </span>
-                </motion.div>
+                  {item}
+                </Link>
+              </MagneticButton>
+            </motion.div>
+          ))}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="relative group h-full flex items-center"
+          >
+            <MagneticButton intensity={0.3}>
+              <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+                <span>Services</span>
+                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+              </div>
+            </MagneticButton>
 
-                {/* Center Links */}
-                <div className="hidden md:flex items-center gap-10 relative z-10">
-                    {["Home", "About Us"].map((item, i) => (
-                        <motion.div
-                            key={item}
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-                        >
-                            <MagneticButton intensity={0.3}>
-                                <Link
-                                    href={item === "Home" ? "/" : "/about"}
-                                    className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-                                >
-                                    {item}
-                                </Link>
-                            </MagneticButton>
-                        </motion.div>
-                    ))}
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.5 }}
-                        className="relative group h-full flex items-center"
+            {/* Premium Dropdown */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
+              <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
+                <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+                  {[
+                    {
+                      title: "UI/UX Designing",
+                      desc: "Intuitive, engaging, and user-centric interfaces.",
+                      link: "/service/ui-ux-designing",
+                    },
+                    {
+                      title: "Website Design & Development",
+                      desc: "High-performance, responsive, and modern websites.",
+                      link: "/service/website-design-development",
+                    },
+                    {
+                      title: "Mobile App Development",
+                      desc: "Native and cross-platform apps for iOS & Android.",
+                      link: "/service/mobile-app-development",
+                    },
+                    {
+                      title: "Custom Software Development",
+                      desc: "Tailored software solutions for unique business needs.",
+                      link: "/service/custom-software-development",
+                    },
+                    {
+                      title: "Business Software Solutions",
+                      desc: "Scalable ERP, CRM, and enterprise management tools.",
+                      link: "/service/business-software-solutions",
+                    },
+                    {
+                      title: "Business Intelligence Solutions",
+                      desc: "Data-driven insights to spark strategic growth.",
+                      link: "/service/business-intelligence-solutions",
+                    },
+                    {
+                      title: "IOT Solutions",
+                      desc: "Smart connectivity and automation for devices.",
+                      link: "/service/iot-solutions",
+                    },
+                    {
+                      title: "AI & ML Solution",
+                      desc: "Advanced AI algorithms and predictive modeling.",
+                      link: "/service/ai-ml-solutions",
+                    },
+                    {
+                      title: "Branding",
+                      desc: "Distinctive brand identities that resonate with audiences.",
+                      link: "/service/branding",
+                    },
+                    {
+                      title: "Digital Marketing",
+                      desc: "SEO, SMM, and paid strategies to maximize reach.",
+                      link: "/service/digital-marketing",
+                    },
+                    {
+                      title: "Accessibility Services",
+                      desc: "Ensuring digital presence is accessible to everyone.",
+                      link: "/service/accessibility-services",
+                    },
+                  ].map((service, i) => (
+                    <Link
+                      key={i}
+                      href={service?.link}
+                      className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
                     >
-                        <MagneticButton intensity={0.3}>
-                            <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
-                                <span>Services</span>
-                                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
-                            </div>
-                        </MagneticButton>
-
-                        {/* Premium Dropdown */}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
-                            <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
-                                <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                                    {[
-                                        {
-                                            title: "UI/UX Designing",
-                                            desc: "Intuitive, engaging, and user-centric interfaces.",
-                                            link: "/service/ui-ux-designing",
-                                        },
-                                        {
-                                            title: "Website Design & Development",
-                                            desc: "High-performance, responsive, and modern websites.",
-                                            link: "/service/website-design-development",
-                                        },
-                                        {
-                                            title: "Mobile App Development",
-                                            desc: "Native and cross-platform apps for iOS & Android.",
-                                            link: "/service/mobile-app-development",
-                                        },
-                                        {
-                                            title: "Custom Software Development",
-                                            desc: "Tailored software solutions for unique business needs.",
-                                            link: "/service/custom-software-development",
-                                        },
-                                        {
-                                            title: "Business Software Solutions",
-                                            desc: "Scalable ERP, CRM, and enterprise management tools.",
-                                            link: "/service/business-software-solutions",
-                                        },
-                                        {
-                                            title: "Business Intelligence Solutions",
-                                            desc: "Data-driven insights to spark strategic growth.",
-                                            link: "/service/business-intelligence-solutions",
-                                        },
-                                        {
-                                            title: "IOT Solutions",
-                                            desc: "Smart connectivity and automation for devices.",
-                                            link: "/service/iot-solutions",
-                                        },
-                                        {
-                                            title: "AI & ML Solution",
-                                            desc: "Advanced AI algorithms and predictive modeling.",
-                                            link: "/service/ai-ml-solutions",
-                                        },
-                                        {
-                                            title: "Branding",
-                                            desc: "Distinctive brand identities that resonate with audiences.",
-                                            link: "/service/branding",
-                                        },
-                                        {
-                                            title: "Digital Marketing",
-                                            desc: "SEO, SMM, and paid strategies to maximize reach.",
-                                            link: "/service/digital-marketing",
-                                        },
-                                        {
-                                            title: "Accessibility Services",
-                                            desc: "Ensuring digital presence is accessible to everyone.",
-                                            link: "/service/accessibility-services",
-                                        },
-                                    ].map((service, i) => (
-                                        <Link
-                                            key={i}
-                                            href={service?.link}
-                                            className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
-                                        >
-                                            <div className="flex-1">
-                                                <div className="flex items-center justify-between mb-0.5">
-                                                    <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">
-                                                        {service.title}
-                                                    </span>
-                                                    <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">
-                                                        →
-                                                    </span>
-                                                </div>
-                                                <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">
-                                                    {service.desc}
-                                                </p>
-                                            </div>
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">
+                            {service.title}
+                          </span>
+                          <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">
+                            →
+                          </span>
                         </div>
-                    </motion.div>
-                    {["Products", "Contact Us"].map((item, i) => (
+                        <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">
+                          {service.desc}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="relative group h-full flex items-center"
+          >
+            <MagneticButton intensity={0.3}>
+              <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+                <span>Products</span>
+                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+              </div>
+            </MagneticButton>
+
+            {/* Premium Dropdown */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
+              <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                  {[
+                    {
+                      title: "IP ERP",
+                      desc: "ERP dashboard with clean interface and efficient workflows.",
+                      link: "/products",
+                    },
+                    {
+                      title: "Catfy Catalog",
+                      desc: "Modern product catalog with intuitive navigation and layout.",
+                      link: "/products",
+                    },
+                  ].map((service, i) => (
+                    <Link
+                      key={i}
+                      href={service?.link}
+                      className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">
+                            {service.title}
+                          </span>
+                          <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">
+                            →
+                          </span>
+                        </div>
+                        <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">
+                          {service.desc}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+          {["Contact Us"].map((item, i) => (
+            <motion.div
+              key={item}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
+            >
+              <MagneticButton intensity={0.3}>
+                <Link
+                  href={item === "Products" ? "/products" : "/contactUs"}
+                  className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                >
+                  {item}
+                </Link>
+              </MagneticButton>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Right Buttons */}
+        <div className="flex items-center gap-2 relative z-10">
+          <TooltipProvider delayDuration={0}>
+            <div
+              className={`flex items-center gap-1  ${!scrolled ? "" : " ml-8"}`}
+            >
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 w-10 h-10 flex items-center justify-center relative overflow-hidden"
+                    onMouseEnter={() => setIsEmailHovered(true)}
+                    onMouseLeave={() => setIsEmailHovered(false)}
+                  >
+                    <AnimatePresence initial={false}>
+                      {isEmailHovered ? (
                         <motion.div
-                            key={item}
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
+                          key="open"
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.5 }}
+                          transition={{ duration: 0.1 }}
+                          className="absolute"
                         >
-                            <MagneticButton intensity={0.3}>
-                                <Link
-                                    href={item === "Products" ? "/products" : "/contactUs"}
-                                    className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-                                >
-                                    {item}
-                                </Link>
-                            </MagneticButton>
+                          <MailOpen className="w-[18px] h-[18px]" />
                         </motion.div>
-                    ))}
-                </div>
-
-                {/* Right Buttons */}
-                <div className="flex items-center gap-2 relative z-10">
-                    <TooltipProvider delayDuration={0}>
-                        <div className="flex items-center gap-1">
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <button
-                                        className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 w-10 h-10 flex items-center justify-center relative overflow-hidden"
-                                        onMouseEnter={() => setIsEmailHovered(true)}
-                                        onMouseLeave={() => setIsEmailHovered(false)}
-                                    >
-                                        <AnimatePresence initial={false}>
-                                            {isEmailHovered ? (
-                                                <motion.div
-                                                    key="open"
-                                                    initial={{ opacity: 0, scale: 0.5 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    exit={{ opacity: 0, scale: 0.5 }}
-                                                    transition={{ duration: 0.1 }}
-                                                    className="absolute"
-                                                >
-                                                    <MailOpen className="w-[18px] h-[18px]" />
-                                                </motion.div>
-                                            ) : (
-                                                <motion.div
-                                                    key="closed"
-                                                    initial={{ opacity: 0, scale: 0.5 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    exit={{ opacity: 0, scale: 0.5 }}
-                                                    transition={{ duration: 0.1 }}
-                                                    className="absolute"
-                                                >
-                                                    <Mail className="w-[18px] h-[18px]" />
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </button>
-                                </TooltipTrigger>
-                                <TooltipContent side="bottom">
-                                    <p>info@thegoldtechnologies.com</p>
-                                </TooltipContent>
-                            </Tooltip>
-
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <button
-                                        className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 group"
-                                        onMouseEnter={() => setIsPhoneHovered(true)}
-                                        onMouseLeave={() => setIsPhoneHovered(false)}
-                                    >
-                                        <motion.div
-                                            animate={
-                                                isPhoneHovered
-                                                    ? {
-                                                        rotate: [0, -10, 10, -10, 10, 0],
-                                                        transition: {
-                                                            duration: 0.6,
-                                                            repeat: Infinity,
-                                                            ease: "easeInOut",
-                                                        },
-                                                    }
-                                                    : {
-                                                        rotate: 0,
-                                                        transition: { duration: 0.2, ease: "easeOut" },
-                                                    }
-                                            }
-                                        >
-                                            <Phone className="w-[18px] h-[18px]" />
-                                        </motion.div>
-                                    </button>
-                                </TooltipTrigger>
-                                <TooltipContent side="bottom">
-                                    <p>+91 8368198551</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </div>
-                    </TooltipProvider>
-
-                    {/* Vertical Separator */}
-                    <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>
-
-                    <MagneticButton intensity={0.25} className="hidden lg:block ml-1">
-                        <div
-                            onClick={() => setOpenAuditForm(true)}
+                      ) : (
+                        <motion.div
+                          key="closed"
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.5 }}
+                          transition={{ duration: 0.1 }}
+                          className="absolute"
                         >
-                            <Link
-                                href="#"
-                                className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 px-4 py-2 rounded-full transition-all duration-300 border border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm"
-                            >
-                                <ScanSearch className="w-5 h-5 object-contain" />{" "}
-                                <span className="text-[11px] font-bold uppercase tracking-widest">
-                                    Free Website Audit
-                                </span>
-                            </Link>
-                        </div>
-                    </MagneticButton>
-                </div>
-            </motion.nav>
-            <FreeAuditPopup
-                setOpenAuditForm={setOpenAuditForm}
-                openAuditForm={openAuditForm}
-            />
-        </>
-    );
+                          <Mail className="w-[18px] h-[18px]" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>info@thegoldtechnologies.com</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="text-gray-600 hover:text-black transition-colors rounded-full p-2.5 hover:bg-gray-100/80 group"
+                    onMouseEnter={() => setIsPhoneHovered(true)}
+                    onMouseLeave={() => setIsPhoneHovered(false)}
+                  >
+                    <motion.div
+                      animate={
+                        isPhoneHovered
+                          ? {
+                              rotate: [0, -10, 10, -10, 10, 0],
+                              transition: {
+                                duration: 0.6,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              },
+                            }
+                          : {
+                              rotate: 0,
+                              transition: { duration: 0.2, ease: "easeOut" },
+                            }
+                      }
+                    >
+                      <Phone className="w-[18px] h-[18px]" />
+                    </motion.div>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>+91 8368198551</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </TooltipProvider>
+
+          {/* Vertical Separator */}
+          {!scrolled && <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>}
+          {!scrolled && (
+            <MagneticButton intensity={0.25} className="hidden lg:block ml-1">
+              <div onClick={() => setOpenAuditForm(true)}>
+                <Link
+                  href="#"
+                  className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 px-4 py-2 rounded-full transition-all duration-300 border border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm"
+                >
+                  <ScanSearch className="w-5 h-5 object-contain" />{" "}
+                  <span className="text-[11px] font-bold uppercase tracking-widest">
+                    Free Website Audit
+                  </span>
+                </Link>
+              </div>
+            </MagneticButton>
+          )}
+        </div>
+      </motion.nav>
+      <FreeAuditPopup
+        setOpenAuditForm={setOpenAuditForm}
+        openAuditForm={openAuditForm}
+      />
+    </>
+  );
 };

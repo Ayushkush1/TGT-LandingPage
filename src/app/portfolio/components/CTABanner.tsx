@@ -36,10 +36,15 @@ export default function CTABanner() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="flex items-center justify-center gap-6 pt-2"
         >
-          <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex justify-center items-center gap-3 group">
+          <a
+            href="https://calendar.app.google/5nNHP69fUR5WEMvt9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex justify-center items-center gap-3 group"
+          >
             Book Free Consultation
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-          </button>
+          </a>
           <Link href={"/service/website-design-development"}>
             <button className="text-black px-6 py-4 rounded-full text-md font-medium transition-colors border border-black hover:border-[#D4AF37]">
               View All Services

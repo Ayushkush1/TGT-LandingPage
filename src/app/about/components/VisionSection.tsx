@@ -27,6 +27,7 @@ function VisionSection() {
     >
       <div className="max-w-7xl mx-auto space-y-20">
         {/* Section Header */}
+
         <motion.div
           variants={{
             hidden: { opacity: 0, y: 40, filter: "blur(6px)" },
@@ -48,10 +49,16 @@ function VisionSection() {
           </div>
 
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-            The Expertise Driving{" "}
+            The{" "}
             <span className="font-serif italic font-medium text-[#D4AF37]">
-              Innovation
+              Expertise
             </span>{" "}
+            <br />
+            Driving{" "}
+            <span className="relative inline-block z-0">
+              Innovation
+              <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
+            </span>
           </h2>
 
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
@@ -73,7 +80,7 @@ function VisionSection() {
                 hidden: { opacity: 0, x: -60 },
                 show: { opacity: 1, x: 0, transition: { duration: 0.8 } },
               }}
-              className="relative h-max"
+              className="relative h-max z-0"
             >
               {/* Side info cards */}
               <div className="absolute -top-28 left-0 z-20 flex flex-col gap-3">
@@ -119,7 +126,7 @@ function VisionSection() {
                       Our Vision
                     </span>
                     <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center shadow-lg shadow-blue-300">
-                      <Globe className="w-3.5 h-3.5 text-white" />
+                      <Eye className="w-3.5 h-3.5 text-white" />
                     </div>
                   </div>
 
@@ -142,11 +149,6 @@ function VisionSection() {
                   </div>
                 </div>
               </div>
-
-              {/* Floating vision bubble */}
-              <div className="absolute -top-36 left-8 z-30 w-11 h-11 rounded-full bg-gray-800 flex items-center justify-center shadow-lg shadow-gray-300 animate-bounce">
-                <Eye className="w-4 h-4 text-white" />
-              </div>
             </motion.div>
 
             {/* RIGHT: Text */}
@@ -157,17 +159,9 @@ function VisionSection() {
               }}
               className="space-y-4"
             >
-              <div className="inline-flex items-center gap-2 bg-white/90 drop-shadow-sm border border-white/60 rounded-full px-4 py-1.5 w-fit shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-gray-900 animate-pulse"></span>
-                <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
-                  Our Vision
-                </span>
-              </div>
               <h3 className="text-4xl font-bold text-gray-900 leading-tight">
-                Your Partner in <br /> Digital{" "}
-                <span className="font-serif italic font-medium text-[#D4AF37]">
-                  Innovation
-                </span>{" "}
+                Your Partner in <br />
+                Digital Innovation
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
                 To establish ourselves as a trusted leader in IT solutions,
@@ -204,15 +198,8 @@ function VisionSection() {
               }}
               className="flex flex-col gap-6"
             >
-              <div className="inline-flex items-center gap-2 bg-white/90 drop-shadow-sm border border-white/60 rounded-full px-4 py-1.5 w-fit shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-gray-900 animate-pulse"></span>
-                <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
-                  Our Mission
-                </span>
-              </div>
               <h3 className="text-4xl font-bold text-gray-900 leading-tight">
                 Delivering Smart <br />
-                <span className="text-[#D4AF37]">IT Solutions </span>
                 That Drive Growth
               </h3>
 
@@ -235,7 +222,7 @@ function VisionSection() {
                 hidden: { opacity: 0, x: 60 },
                 show: { opacity: 1, x: 0, transition: { duration: 0.8 } },
               }}
-              className="relative min-h-96"
+              className="relative min-h-96 z-0"
             >
               {/* Analytics Card */}
               <div className="absolute -top-6 right-4 z-20 w-64 bg-[#1E293B] rounded-3xl p-5 shadow-2xl">
@@ -291,14 +278,6 @@ function VisionSection() {
               {/* Extra Floating Badge */}
               <div className="absolute top-10 left-6 bg-[#DFBC48] text-[#1E293B] text-xs font-bold px-4 py-2 rounded-full shadow-lg">
                 Enterprise Ready
-              </div>
-
-              {/* Floating Tech Bubble */}
-              <div
-                className="absolute bottom-0 left-4 w-12 h-12 rounded-full bg-[#1E293B] flex items-center justify-center shadow-lg animate-bounce"
-                style={{ animationDelay: "0.5s" }}
-              >
-                <Globe className="w-5 h-5 text-[#DFBC48]" />
               </div>
             </motion.div>
           </div>

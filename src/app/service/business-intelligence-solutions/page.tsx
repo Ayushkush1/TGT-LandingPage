@@ -121,13 +121,9 @@ function BusinessIntelligenceSolutions() {
 
         {/* Subtle Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
-
-        {/* Content */}
-        <div className="relative z-10">
-          <Navbar />
-          <HeroSection {...businessIntelligenceHeroContent} />
-        </div>
       </div>
+      <Navbar />
+      <HeroSection {...businessIntelligenceHeroContent} />
       <TrustedBy />
       <ServicesAccordion SERVICES={SERVICES} />
       <OurReputation /> {/* Client Success */}

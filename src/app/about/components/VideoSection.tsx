@@ -9,15 +9,18 @@ function VideoSection() {
  justify-center mid:gap-[0rem] gap-[2.5rem] mid:pb-[14rem] mid:pt-[9rem] py-[4rem] mid:py-0"
       >
         {/* Heading */}
-
         <div className="text-center max-w-4xl mx-auto mb-20">
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-            Innovation Crafted <br />
-            With{" "}
+            Innovation{" "}
             <span className="font-serif italic font-medium text-[#D4AF37]">
-              Excellence
+              Crafted
             </span>{" "}
-            <span className="relative inline-block z-10"></span>.
+            <br />
+            With{" "}
+            <span className="relative inline-block z-0">
+              Excellence
+              <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
+            </span>
           </h2>
 
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
@@ -32,7 +35,7 @@ function VideoSection() {
 
         {/* Video section */}
         <section className="max-w-7xl w-full">
-          <div className=" w-[90%] h-[600px] m-auto rounded-3xl overflow-hidden">
+          <div className=" w-[90%] h-[600px] m-auto rounded-[3rem] overflow-hidden">
             <iframe
               className="w-full h-full"
               src="https://www.youtube.com/embed/Zp1fuVhlP6o?si=M7ocbQbSEnPKZ0EQ"

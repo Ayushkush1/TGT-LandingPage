@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 
-type Service = {
+export type Service = {
   number: string;
   title: string;
   category: string;

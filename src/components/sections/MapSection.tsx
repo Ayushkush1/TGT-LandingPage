@@ -17,7 +17,7 @@ export default function MapSection() {
           </span>{" "}
           <br />
           And Let's Build{" "}
-          <span className="relative inline-block z-10">
+          <span className="relative inline-block z-0">
             Something Great
             <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
           </span>

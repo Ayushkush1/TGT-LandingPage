@@ -3,9 +3,8 @@ import { motion } from "framer-motion";
 import TeamCard from "./TeamCard";
 import { AnimatedSection } from "@/components/AnimatedSection";
 
-const COLS = 5;
-
-const colOffsets = [80, 0, 140, 60, 180];
+const COLS = 7;
+const colOffsets = [-160, -240, -160, -240, -140, -200, -140, 0];
 
 interface TeamMember {
   name?: string;
@@ -24,11 +23,19 @@ export interface TeamCardProps {
 const teamMembers: TeamMember[] = [
   // Leadership Row
   {
+    col: 3,
+    isEmpty: true,
+  },
+  {
     name: "Meghna Tiwari",
     designation: "Founder & CEO",
-    col: 1,
+    col: 3,
     linkedin: "https://www.linkedin.com/in/meghna-tiwari",
     image: "/images/Meghna.jpg",
+  },
+  {
+    col: 2,
+    isEmpty: true,
   },
   {
     name: "Saubhagya R Swain",
@@ -38,14 +45,22 @@ const teamMembers: TeamMember[] = [
     image: "/images/Saubhagya.jpg",
   },
   {
+    col: 1,
+    isEmpty: true,
+  },
+  {
     name: "Chetan Saini",
     designation: "CTO",
-    col: 3,
+    col: 1,
     linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
     image: "/images/Chetan.jpg",
   },
 
   // Department Heads
+  {
+    col: 0,
+    isEmpty: true,
+  },
   {
     name: "Mitali Gulat",
     designation: "CGO",
@@ -56,57 +71,70 @@ const teamMembers: TeamMember[] = [
   {
     name: "Parusha",
     designation: "Business Growth Manager",
-    col: 0,
+    col: 1,
     linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
     image: "/images/Andrea.png",
   },
   {
     name: "Andrea",
     designation: "Business Development Head",
-    col: 1,
+    col: 0,
     linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
     image: "/images/Andrea.png",
   },
   {
+    col: 5,
+    isEmpty: true,
+  },
+  {
+    name: "Ayush Kushwaha",
+    designation: "Tech Lead- IT",
+    col: 5,
+    linkedin: "https://www.linkedin.com/in/ayush-kushwaha-b3b76915b/",
+    image: "/images/Ayush.png",
+  },
+  {
+    col: 6,
+    isEmpty: true,
+  },
+  {
     name: "Varun",
     designation: "Technical Lead- Mobile App",
-    col: 2,
+    col: 6,
     linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
     image: "/images/Varun.png",
   },
   {
     name: "Aditya",
     designation: "UI/UX Lead",
-    col: 3,
+    col: 6,
     linkedin: "https://www.linkedin.com/in/aditya-nigam-267a84261/",
     image: "/images/Varun.png",
   },
   {
-    col: 4,
+    col: 5,
     isEmpty: true,
   },
 
   // Team Members
   {
-    name: "Ayush Kushwaha",
-    designation: "Tech Lead- IT",
     col: 4,
-    linkedin: "https://www.linkedin.com/in/ayush-kushwaha-b3b76915b/",
-    image: "/images/Ayush.png",
+    isEmpty: true,
   },
+
   {
     name: "Abhishek",
     designation: "Software Developer",
-    col: 1,
+    col: 4,
     linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
     image: "/images/Abhishek.jpg",
   },
   {
-    col: 2,
+    col: 7,
     isEmpty: true,
   },
   {
-    col: 3,
+    col: 7,
     isEmpty: true,
   },
 ];
@@ -124,7 +152,7 @@ function OurTeam() {
       <div
         id="team"
         className="targeted-element bg-[#F3F4F8] light-element flex flex-col items-center -mb-24
-     justify-center mid:gap-[0rem] gap-[2.5rem] mid:pb-[14rem] mid:pt-[9rem] py-[4rem] mid:py-0"
+     justify-center mid:gap-[0rem] overflow-hidden mid:pb-[14rem] mid:pt-[9rem] py-[4rem] mid:py-0"
       >
         {/* TEAMS FOR DESKTOP */}
         <div className="max-w-7xl mx-auto">
@@ -138,7 +166,7 @@ function OurTeam() {
               <div
                 key={ci}
                 className="flex flex-col gap-6"
-                style={{ paddingTop: `${colOffsets[ci] ?? 0}px` }}
+                style={{ marginTop: `${colOffsets[ci] ?? 0}px` }}
               >
                 {columns[ci].map((member, ri) => (
                   <TeamCard
@@ -153,7 +181,7 @@ function OurTeam() {
         </div>
 
         {/* Heading */}
-        <div className="text-center max-w-4xl mx-auto mb-20">
+        <div className="text-center max-w-4xl mx-auto -mt-16 mb-4">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-8 bg-gray-400/30"></div>
             <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
@@ -163,21 +191,11 @@ function OurTeam() {
           </div>
 
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-            The People Behind{" "}
-            <span className="font-serif italic font-medium text-[#D4AF37]">
-              Our Success
-            </span>{" "}
-            <br />
-            Driving{" "}
-            <span className="relative inline-block z-10">
-              Innovation Forward
-              <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
-            </span>
-            .
+            People Behind Our <br />
+            Growth Driving Innovation
           </h2>
 
-          <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-            At{" "}
+          <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-2xl mx-auto">
             <span className="font-semibold text-gray-900">
               The Gold Technologies
             </span>

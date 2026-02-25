@@ -146,6 +146,12 @@ export const Footer = () => {
               >
                 Portfolio
               </a>
+              <a
+                href="/#BlogSection"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Blogs
+              </a>
             </div>
             <div className="flex flex-col gap-4">
               <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">

@@ -32,11 +32,11 @@ export const FreeAuditPopup = ({
             transition={{ duration: 0.4 }}
             className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
           >
-            <div className="relative w-full max-w-lg rounded-3xl bg-white border drop-shadow-md border-gray-200 shadow-2xl overflow-hidden">
+            <div className="relative w-full max-w-lg rounded-[3rem] bg-white border drop-shadow-md border-gray-200 shadow-2xl overflow-hidden">
               {/* Close */}
               <button
                 onClick={() => setOpenAuditForm(false)}
-                className="absolute right-5 top-5 text-gray-400 hover:text-black"
+                className="absolute right-10 top-10 text-gray-400 hover:text-black"
               >
                 <X />
               </button>
@@ -44,13 +44,13 @@ export const FreeAuditPopup = ({
               {/* Content */}
               <div className="p-10 text-center">
                 <h2 className="text-3xl font-semibold text-black tracking-tight">
-                  FREE Website Audit
+                  Complimentary Audit
                 </h2>
 
                 <p className="text-gray-500 mt-3 mb-8">
-                  Get expert insights to improve performance, SEO, and design.
+                  Discover opportunities to improve performance, SEO, and user
+                  experience with a comprehensive expert review.{" "}
                 </p>
-
                 {/* Form */}
                 <form className="space-y-4 text-left">
                   <input

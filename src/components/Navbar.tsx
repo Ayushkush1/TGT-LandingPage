@@ -110,14 +110,12 @@ export const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
             >
-              <MagneticButton intensity={0.3}>
-                <Link
-                  href={item === "Home" ? "/" : "/about"}
-                  className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-                >
-                  {item}
-                </Link>
-              </MagneticButton>
+              <Link
+                href={item === "Home" ? "/" : "/about"}
+                className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              >
+                {item}
+              </Link>
             </motion.div>
           ))}
           <motion.div
@@ -126,12 +124,10 @@ export const Navbar = () => {
             transition={{ delay: 0.5, duration: 0.5 }}
             className="relative group h-full flex items-center"
           >
-            <MagneticButton intensity={0.3}>
-              <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
-                <span>Services</span>
-                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
-              </div>
-            </MagneticButton>
+            <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+              <span>Services</span>
+              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+            </div>
 
             {/* Premium Dropdown */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
@@ -224,12 +220,10 @@ export const Navbar = () => {
             transition={{ delay: 0.5, duration: 0.5 }}
             className="relative group h-full flex items-center"
           >
-            <MagneticButton intensity={0.3}>
-              <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
-                <span>Products</span>
-                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
-              </div>
-            </MagneticButton>
+            <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+              <span>Products</span>
+              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+            </div>
 
             {/* Premium Dropdown */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
@@ -278,14 +272,12 @@ export const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
             >
-              <MagneticButton intensity={0.3}>
-                <Link
-                  href={item === "Products" ? "/products" : "/contactUs"}
-                  className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-                >
-                  {item}
-                </Link>
-              </MagneticButton>
+              <Link
+                href={item === "Products" ? "/products" : "/contactUs"}
+                className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              >
+                {item}
+              </Link>
             </motion.div>
           ))}
         </div>

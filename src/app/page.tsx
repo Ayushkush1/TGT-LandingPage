@@ -9,10 +9,12 @@ import { BlogSection } from "@/components/sections/BlogSection";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { EnquirySection } from "@/components/sections/EnquirySection";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <SmoothScroll />
       {/* Background Image */}
       <div className="fixed inset-0 z-0">
         <div

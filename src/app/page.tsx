@@ -27,17 +27,17 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative z-10">
-      <Navbar />
-      <HeroSection />
-      <TrustedBy />
-      <WhoWeAre /> {/* About Us */}
-      <WhatWeDo /> {/* Services */}
-      <Integrations /> {/* Tech Stack */} {/* Integrations */}
-      <BlogSection /> {/* Recent Articles */}
-      <OurReputation /> {/* Client Success */}
-      <OurPartners /> {/* Partner Logos */}
-      <EnquirySection /> {/* Contact Form */}
-      <Footer />
+        <Navbar />
+        <HeroSection />
+        <TrustedBy />
+        <WhoWeAre /> {/* About Us */}
+        <WhatWeDo /> {/* Services */}
+        <Integrations /> {/* Tech Stack */} {/* Integrations */}
+        <BlogSection /> {/* Recent Articles */}
+        <OurReputation /> {/* Client Success */}
+        <OurPartners /> {/* Partner Logos */}
+        <EnquirySection /> {/* Contact Form */}
+        <Footer />
       </div>
     </main>
   );

@@ -18,7 +18,7 @@ import Link from "next/link";
 export const WhoWeAre = () => {
   return (
     <AnimatedSection animation="fadeUp" delay={0.15}>
-      <section className="py-24 px-4 md:px-12 bg-white">
+      <section className="py-24 px-4 md:px-12 bg-white relative z-0">
         <div className="max-w-7xl mx-auto space-y-20">
           {/* Section Header */}
           <div className="text-center max-w-4xl mx-auto mb-20">
@@ -60,11 +60,11 @@ export const WhoWeAre = () => {
             <div className="relative perspective-100 z-0">
               <div className=" group rounded-[48px] p-10  min-h-[480px] flex flex-col justify-end relative overflow-hidden transition-transform duration-500">
                 {/* Floating Widget */}
-                <div className="absolute top-12 left-10 right-10 transform -rotate-3 group-hover:-rotate-1 transition-all duration-500 z-20">
+                <div className="absolute  top-12 left-10 right-10 transform -rotate-3 group-hover:-rotate-1 transition-all duration-500 z-20">
                   {/* Floating "Designer" Card */}
                   <div className="relative w-full  z-20">
                     {/* Lime Container */}
-                    <div className="bg-slate-800 rounded-[36px] p-3 shadow-2xl transform transition-all duration-500 group-hover:-translate-y-2 group-hover:rotate-1">
+                    <div className="bg-slate-800  rounded-[36px] p-3 shadow-2xl transform transition-all duration-500 group-hover:-translate-y-2 group-hover:rotate-1">
                       {/* Inner White Glass Card */}
                       <div className="bg-white/95 backdrop-blur-xl rounded-[32px] p-6 shadow-inner">
                         {/* Header */}

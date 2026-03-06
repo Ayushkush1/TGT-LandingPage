@@ -56,7 +56,7 @@ const SelectField = ({
 export const EnquirySection = () => {
   return (
     <AnimatedSection animation="fadeUp" delay={0.2}>
-      <section className="py-20 mb-20 bg-white relative" id="contactUs">
+      <section className="py-20 mb-20  relative" id="contactUs">
         <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
           {/* Left Column: Context & Contact Info */}
           <div className="lg:col-span-5 space-y-10">

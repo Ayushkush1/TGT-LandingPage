@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export const TrustedBy = () => {
   return (
-    <section className="py-10 xl:py-16 3xl:py-20 bg-gray-50/50">
+    <section className="py-10 xl:py-16 3xl:py-20">
       <div className="max-w-6xl xl:max-w-6xl 3xl:max-w-9xl mx-auto px-4 md:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Label */}

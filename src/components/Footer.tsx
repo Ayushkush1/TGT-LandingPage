@@ -44,7 +44,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className="relative bg-white pt-10 px-2 md:px-4 pb-4 z-0"
+      className="relative pt-10 px-2 md:px-4 pb-4 z-0"
       ref={containerRef}
     >
       <motion.div

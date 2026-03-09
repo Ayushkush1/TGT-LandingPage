@@ -174,6 +174,16 @@ export interface OurTeamData {
   descriptionText: string;
 }
 
+export interface MapSectionData {
+  upperTag: string;
+  headlinePart1: string;
+  headlinePart3?: string;
+  headlineHighlight: string;
+  headlinePart4?: string;
+  mainParagraph: string;
+  mapEmbedUrl: string;
+}
+
 export interface AboutData {
   AboutFirm: AboutFirmData;
   VideoSection: VideoSectionData;
@@ -193,9 +203,14 @@ export interface HomeData {
   FooterCMS: FooterCMSData;
 }
 
+export interface ContactData {
+  MapSection: MapSectionData;
+}
+
 interface CMSStoreState {
   homeData: HomeData | null;
   aboutData: AboutData | null;
+  contactData: ContactData | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -203,6 +218,7 @@ interface CMSStoreState {
 interface CMSStoreActions {
   setHomeData: (data: HomeData | null) => void;
   setAboutData: (data: AboutData | null) => void;
+  setContactData: (data: ContactData | null) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   fetchHomeData: () => Promise<void>;
@@ -213,6 +229,7 @@ interface CMSStoreActions {
 const initialState: CMSStoreState = {
   homeData: null,
   aboutData: null,
+  contactData: null,
   isLoading: false,
   error: null,
 };
@@ -223,6 +240,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   // Actions
   setHomeData: (data) => set({ homeData: data }),
   setAboutData: (data) => set({ aboutData: data }),
+  setContactData: (data) => set({ contactData: data }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
@@ -245,6 +263,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
       if (Array.isArray(pages)) {
         const homePage = pages.find((p: any) => p.slug === "home");
         const aboutPage = pages.find((p: any) => p.slug === "about");
+        const contactPage = pages.find((p: any) => p.slug === "contact");
 
         const updates: Partial<CMSStoreState> = { isLoading: false };
 
@@ -254,6 +273,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
 
         if (aboutPage?.sections) {
           updates.aboutData = transformSections(aboutPage.sections);
+        }
+        if (contactPage?.sections) {
+          updates.contactData = transformSections(contactPage.sections);
         }
 
         set(updates);

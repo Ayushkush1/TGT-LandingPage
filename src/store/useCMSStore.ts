@@ -184,6 +184,38 @@ export interface MapSectionData {
   mapEmbedUrl: string;
 }
 
+export interface ProductHeroData {
+  label: string;
+  ctaHref: string;
+  ctaText: string;
+  statSince: string;
+  paragraphs: string[];
+  headingLine: string;
+  statProjects: string;
+}
+
+export interface ProductPillarData {
+  desc: string;
+  title: string;
+  number: string;
+}
+
+export interface ProductItemData {
+  id: string;
+  link: string;
+  title: string;
+  pillars: ProductPillarData[];
+  imageUrl: any;
+  shortDesc: string;
+}
+
+export interface ProductData {
+  main: {
+    hero: ProductHeroData;
+    products: ProductItemData[];
+  };
+}
+
 export interface AboutData {
   AboutFirm: AboutFirmData;
   VideoSection: VideoSectionData;
@@ -205,12 +237,14 @@ export interface HomeData {
 
 export interface ContactData {
   MapSection: MapSectionData;
+  EnquirySection: EnquirySectionData;
 }
 
 interface CMSStoreState {
   homeData: HomeData | null;
   aboutData: AboutData | null;
   contactData: ContactData | null;
+  productData: ProductData | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -219,6 +253,7 @@ interface CMSStoreActions {
   setHomeData: (data: HomeData | null) => void;
   setAboutData: (data: AboutData | null) => void;
   setContactData: (data: ContactData | null) => void;
+  setProductData: (data: ProductData | null) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   fetchHomeData: () => Promise<void>;
@@ -230,6 +265,7 @@ const initialState: CMSStoreState = {
   homeData: null,
   aboutData: null,
   contactData: null,
+  productData: null,
   isLoading: false,
   error: null,
 };
@@ -241,6 +277,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   setHomeData: (data) => set({ homeData: data }),
   setAboutData: (data) => set({ aboutData: data }),
   setContactData: (data) => set({ contactData: data }),
+  setProductData: (data) => set({ productData: data }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
@@ -264,6 +301,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
         const homePage = pages.find((p: any) => p.slug === "home");
         const aboutPage = pages.find((p: any) => p.slug === "about");
         const contactPage = pages.find((p: any) => p.slug === "contact");
+        const productPage = pages.find((p: any) => p.slug === "products");
 
         const updates: Partial<CMSStoreState> = { isLoading: false };
 
@@ -277,7 +315,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
         if (contactPage?.sections) {
           updates.contactData = transformSections(contactPage.sections);
         }
-
+        if (productPage?.sections) {
+          updates.productData = transformSections(productPage.sections);
+        }
         set(updates);
       } else {
         set({ error: "Failed to fetch pages data", isLoading: false });

@@ -215,6 +215,7 @@ export function PillarCard({
   title: string;
   desc: string;
 }) {
+  console.log(number, title, desc, "ok");
   const [isHovered, setIsHovered] = useState(false);
 
   return (

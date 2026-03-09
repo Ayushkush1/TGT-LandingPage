@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from "react";
 import { motion, useSpring, useTransform, useInView } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { useCMSStore } from "@/store/useCMSStore";
 
 // Reusable Grid Block Component
 const GridBlock = ({
@@ -51,7 +52,7 @@ const AnimatedCounter = ({
   }, [isInView, value, spring]);
 
   return (
-    <div ref={ref} className="text-center">
+    <div ref={ref} className="text-center w-28">
       <div className="text-4xl font-extrabold text-[#D4AF37] mb-1 flex justify-center items-center">
         <motion.span>{display}</motion.span>
         {suffix}
@@ -64,6 +65,7 @@ const AnimatedCounter = ({
 };
 
 export const Integrations = () => {
+  const data = useCMSStore((state) => state.homeData?.Integrations);
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
       <section className="py-32 bg-white overflow-hidden relative font-sans z-0">
@@ -232,51 +234,47 @@ export const Integrations = () => {
 
           {/* --- CENTER CONTENT --- */}
           <div className="text-center max-w-2xl relative z-10 mx-auto lg:mx-0">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-              Home to the world's <br />
-              software teams
+            <h2 className="text-4xl md:text-5xl w-[450px] text-center m-auto font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
+              {/* Home to the world's <br />
+              software teams */}
+              {data?.headlinePart1}
             </h2>
 
             <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-xl mx-auto">
-              Meet your developers where they already are. We integrate with
-              over 50+ industry leading tools to create the perfect ecosystem.
+              {data?.mainDescription}
             </p>
 
             {/* Stats with Dynamic Counters */}
             <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16">
-              <AnimatedCounter
-                value={50}
-                label={
-                  <>
-                    Happy
-                    <br />
-                    Clients
-                  </>
-                }
-                suffix="+"
-              />
-              <AnimatedCounter
-                value={70}
-                label={
-                  <>
-                    Completed
-                    <br />
-                    Projects
-                  </>
-                }
-                suffix="+"
-              />
-              <AnimatedCounter
-                value={7}
-                label={
-                  <>
-                    Countries
-                    <br />
-                    Served
-                  </>
-                }
-                suffix="+"
-              />
+              {data?.stats?.map(
+                (
+                  stat: { value: string | number; labelLine1: string },
+                  index: number,
+                ) => {
+                  const numericValue =
+                    typeof stat.value === "string"
+                      ? parseInt(stat.value)
+                      : stat.value;
+                  const labelParts = stat.labelLine1?.split(" ") || [];
+                  return (
+                    <AnimatedCounter
+                      key={index}
+                      value={numericValue}
+                      label={
+                        <>
+                          {labelParts.map((part: string, i: number) => (
+                            <React.Fragment key={i}>
+                              {part}
+                              {i < labelParts.length - 1 && <br />}
+                            </React.Fragment>
+                          ))}
+                        </>
+                      }
+                      suffix="+"
+                    />
+                  );
+                },
+              )}
             </div>
           </div>
 

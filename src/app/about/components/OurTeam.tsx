@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import TeamCard from "./TeamCard";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { useCMSStore } from "@/store/useCMSStore";
 
 const COLS = 7;
 const colOffsets = [-160, -240, -160, -240, -140, -200, -140, 0];
@@ -21,39 +22,18 @@ export interface TeamCardProps {
 }
 
 const teamMembers: TeamMember[] = [
-  // Leadership Row
   {
     col: 3,
     isEmpty: true,
   },
-  {
-    name: "Meghna Tiwari",
-    designation: "Founder & CEO",
-    col: 3,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari",
-    image: "/images/Meghna.jpg",
-  },
+
   {
     col: 2,
     isEmpty: true,
   },
   {
-    name: "Saubhagya R Swain",
-    designation: "Co-Founder/Director",
-    col: 2,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Saubhagya.jpg",
-  },
-  {
     col: 1,
     isEmpty: true,
-  },
-  {
-    name: "Chetan Saini",
-    designation: "CTO",
-    col: 1,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Chetan.jpg",
   },
 
   // Department Heads
@@ -61,78 +41,27 @@ const teamMembers: TeamMember[] = [
     col: 0,
     isEmpty: true,
   },
-  {
-    name: "Mitali Gulat",
-    designation: "CGO",
-    col: 0,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Mitali.jpg",
-  },
-  {
-    name: "Parusha",
-    designation: "Business Growth Manager",
-    col: 1,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Andrea.png",
-  },
-  {
-    name: "Andrea",
-    designation: "Business Development Head",
-    col: 0,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Andrea.png",
-  },
-  {
-    col: 5,
-    isEmpty: true,
-  },
-  {
-    name: "Ayush Kushwaha",
-    designation: "Tech Lead- IT",
-    col: 5,
-    linkedin: "https://www.linkedin.com/in/ayush-kushwaha-b3b76915b/",
-    image: "/images/Ayush.png",
-  },
-  {
-    col: 6,
-    isEmpty: true,
-  },
-  {
-    name: "Varun",
-    designation: "Technical Lead- Mobile App",
-    col: 6,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Varun.png",
-  },
-  {
-    name: "Aditya",
-    designation: "UI/UX Lead",
-    col: 6,
-    linkedin: "https://www.linkedin.com/in/aditya-nigam-267a84261/",
-    image: "/images/Varun.png",
-  },
+
   {
     col: 5,
     isEmpty: true,
   },
 
-  // Team Members
+  {
+    col: 6,
+    isEmpty: true,
+  },
+
+  {
+    col: 5,
+    isEmpty: true,
+  },
+
   {
     col: 4,
     isEmpty: true,
   },
 
-  {
-    name: "Abhishek",
-    designation: "Software Developer",
-    col: 4,
-    linkedin: "https://www.linkedin.com/in/meghna-tiwari-9b1a7920b/",
-    image: "/images/Abhishek.jpg",
-  },
-  {
-    col: 7,
-    isEmpty: true,
-  },
   {
     col: 7,
     isEmpty: true,
@@ -140,9 +69,23 @@ const teamMembers: TeamMember[] = [
 ];
 
 function OurTeam() {
+  const data = useCMSStore((state) => state.aboutData?.OurTeam);
+
   const columns: TeamMember[][] = Array.from({ length: COLS }, () => []);
 
-  teamMembers.forEach((m) => {
+  // Combine CMS members with local empty placeholders to maintain the layout
+  const cmsMembers: TeamMember[] =
+    data?.members?.map((m) => ({
+      name: m.name,
+      designation: m.designation,
+      col: m.col,
+      linkedin: m.linkedinUrl,
+      image: m.imageUrl,
+    })) || [];
+
+  const mergedMembers = [...teamMembers, ...cmsMembers];
+
+  mergedMembers.forEach((m) => {
     if (!m || m.col === undefined || m.col < 0 || m.col >= COLS) return;
     columns[m.col].push(m);
   });
@@ -185,23 +128,29 @@ function OurTeam() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-8 bg-gray-400/30"></div>
             <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
-              Meet Our Team
+              {data?.topLabel}
             </span>
             <div className="h-px w-8 bg-gray-400/30"></div>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-            People Behind Our <br />
-            Growth Driving Innovation
+          <h2 className="text-4xl md:text-5xl w-[595px] text-center m-auto font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
+            {data?.headingLine1}
+            <br />
+            {data?.headingLine2}{" "}
           </h2>
 
           <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-2xl mx-auto">
-            <span className="font-semibold text-gray-900">
-              The Gold Technologies
-            </span>
-            , our team is made up of passionate creators, strategists, and
-            engineers committed to building impactful digital solutions and
-            delivering real value to our clients.
+            {data?.descriptionText
+              ?.split(/(The Gold Technologies)/)
+              .map((part, i) =>
+                part === "The Gold Technologies" ? (
+                  <span key={i} className="font-semibold text-gray-900">
+                    {part}
+                  </span>
+                ) : (
+                  part
+                ),
+              )}
           </p>
         </div>
       </div>

@@ -3,19 +3,18 @@ import {
   CheckCircle2,
   TrendingUp,
   Users,
-  Smartphone,
   Code2,
-  ShieldCheck,
   Zap,
-  Globe,
-  Clock,
   Server,
   ArrowRight,
 } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import Link from "next/link";
 
+import { useCMSStore } from "@/store/useCMSStore";
+
 export const WhoWeAre = () => {
+  const data = useCMSStore((state) => state.homeData?.WhoWeAre);
   return (
     <AnimatedSection animation="fadeUp" delay={0.15}>
       <section className="py-24 px-4 md:px-12 bg-white relative z-0">
@@ -25,32 +24,36 @@ export const WhoWeAre = () => {
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="h-px w-8 bg-gray-400/30"></div>
               <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
-                Who We Are
+                {data?.upperTag}
               </span>
               <div className="h-px w-8 bg-gray-400/30"></div>
             </div>
 
             <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-              We Build{" "}
+              {data?.headline}{" "}
               <span className="font-serif italic font-medium text-[#D4AF37]">
-                Digital Products
+                {data?.headlineHighlight}
               </span>{" "}
               <br />
-              That Drive{" "}
+              {data?.headlinePart3}{" "}
               <span className="relative inline-block z-0">
-                Real Growth
+                {data?.headlinePart4}
                 <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
               </span>
-              .
             </h2>
 
             <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-              At{" "}
-              <span className="font-semibold text-gray-900">
-                The Gold Technologies
-              </span>
-              , we simplify technology for businesses. We are helping you
-              succeed in the digital world.
+              {data?.mainParagraph
+                ?.split(/(The Gold Technologies)/)
+                .map((part, i) =>
+                  part === "The Gold Technologies" ? (
+                    <span key={i} className="font-semibold text-gray-900">
+                      {part}
+                    </span>
+                  ) : (
+                    part
+                  ),
+                )}
             </p>
           </div>
 
@@ -147,24 +150,14 @@ export const WhoWeAre = () => {
 
             {/* Right: Content */}
             <div className="space-y-8">
-              <h3 className="text-4xl font-bold text-gray-900 leading-tight">
-                Your Partner in <br />
-                Digital Innovation
+              <h3 className="text-4xl font-bold w-[380px] text-gray-900 leading-tight">
+                {data?.block1Headline}
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                We don't just act as a service provider; we are your partners.
-                We take the time to understand your business goals and
-                challenges, crafting solutions that truly fit your needs. From
-                small startups to established enterprises, we help everyone
-                grow.
+                {data?.block1Description}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4 pt-4">
-                {[
-                  "Transparent Communication",
-                  "On-Time Delivery",
-                  "Expert Team",
-                  "Long-Term Support",
-                ].map((item, i) => (
+                {data?.block1Bullets?.map((item, i) => (
                   <div key={i} className="flex items-center gap-3 group">
                     <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center transition-transform group-hover:scale-110">
                       <CheckCircle2 className="w-3.5 h-3.5 text-white" />
@@ -183,19 +176,19 @@ export const WhoWeAre = () => {
             {/* Left: Content */}
             <div className="space-y-8 order-2 lg:order-1">
               <h3 className="text-4xl font-bold text-gray-900 leading-tight">
-                Quality Tech Made <br />
-                <span className="text-[#D4AF37]">Simple & Accessible</span>
+                {data?.block2Headline}
+                <br />
+                <span className="text-[#D4AF37]">
+                  {data?.block2HeadlineHighlight}
+                </span>
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                Technology shouldn't be complicated. We focus on building clean,
-                user-friendly, and powerful software that just works. Whether
-                it's a mobile app or a complex system, we make the process easy
-                for you.
+                {data?.block2Description}
               </p>
               <div className="flex gap-4 pt-4">
-                <Link href={"/about#team"}>
+                <Link href={data?.block2CtaUrl ?? "/about"}>
                   <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 group">
-                    Meet Our Team{" "}
+                    {data?.block2CtaLabel}{" "}
                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                   </button>
                 </Link>

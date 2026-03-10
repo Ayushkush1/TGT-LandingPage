@@ -11,11 +11,12 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useInView } from "framer-motion";
 
-
+import { useCMSStore } from "@/store/useCMSStore";
 
 export const Footer = () => {
+  const data = useCMSStore((state) => state.homeData?.FooterCMS);
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
@@ -43,10 +44,7 @@ export const Footer = () => {
   }, []);
 
   return (
-    <footer
-      className="relative pt-10 px-2 md:px-4 pb-4 z-0"
-      ref={containerRef}
-    >
+    <footer className="relative pt-10 px-2 md:px-4 pb-4 z-0" ref={containerRef}>
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : { y: 100, opacity: 0 }}
@@ -65,20 +63,19 @@ export const Footer = () => {
                 <span className="text-[#020410] font-black text-xs">GT</span>
               </div>
               <span className="font-bold tracking-wider text-xl">
-                THE GOLD TECHNOLOGIES
+                {data?.companyName}
               </span>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 text-sm text-gray-400">
               <div className="space-y-4">
                 <p className="text-gray-400 font-light leading-relaxed max-w-md text-sm">
-                  Empowering visionaries with cutting-edge digital solutions. We
-                  turn complex challenges into elegant, scalable technology.
+                  {data?.footerDescription}
                 </p>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-gray-300">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
                   <span className="font-medium">
-                    Operating Worldwide • {time}
+                    {data?.companyInitials} • {time}
                   </span>
                 </div>
               </div>
@@ -86,23 +83,19 @@ export const Footer = () => {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
                   <div>
-                    <strong className="text-white block mb-1">INDIA</strong>
-                    <p>
-                      SD-369, D block, Shastri Nagar,
-                      <br />
-                      Ghaziabad, Uttar Pradesh, India - 201002
-                    </p>
+                    <strong className="text-white block mb-1">
+                      {data?.loc1Country}
+                    </strong>
+                    <p>{data?.loc1Address}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
                   <div>
-                    <strong className="text-white block mb-1">USA</strong>
-                    <p>
-                      Accessible minds 1309- Coffeen Avenue,
-                      <br />
-                      STE 1200 Sheridan Wyoming- 82801, USA
-                    </p>
+                    <strong className="text-white block mb-1">
+                      {data?.loc2Country}
+                    </strong>
+                    <p>{data?.loc2Address}</p>
                   </div>
                 </div>
               </div>
@@ -110,13 +103,11 @@ export const Footer = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-[#D4AF37]" />
-                  <span className="text-white">+91 8368198551</span>
+                  <span className="text-white">{data?.phoneNumber}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-[#D4AF37]" />
-                  <span className="text-white">
-                    info@thegoldtechnologies.com
-                  </span>
+                  <span className="text-white">{data?.emailAddress}</span>
                 </div>
               </div>
             </div>
@@ -179,14 +170,14 @@ export const Footer = () => {
         {/* Middle: Massive Text */}
         <div className="flex-1 flex items-center justify-center py-12 relative z-10 pointer-events-none select-none">
           <div className="relative">
-            <span className="absolute -top-2 md:top-2 left-2 md:-left-10 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
-              THE
+            <span className="absolute -top-2 uppercase md:top-2 left-2 md:-left-10 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
+              {data?.leftText ?? "THE"}
             </span>
             <h1 className="text-[13vw] leading-[0.8] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/5 text-center select-none pointer-events-none mix-blend-overlay opacity-30">
-              GOLD TECH
+              {data?.centerText}
             </h1>
-            <span className="absolute bottom-0 md:bottom-2 right-2 md:-right-36 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
-              NOLOGIES
+            <span className="absolute uppercase bottom-0 md:bottom-2 right-2 md:-right-36 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
+              {data?.rightText}
             </span>
           </div>
         </div>

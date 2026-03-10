@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { ArrowRight, Mail, Phone, MapPin } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { useCMSStore } from "@/store/useCMSStore";
 
 const InputField = ({
   label,
@@ -40,7 +41,7 @@ const SelectField = ({
         <option value="" disabled selected>
           Select an option
         </option>
-        {options.map((opt) => (
+        {options?.map((opt) => (
           <option key={opt} value={opt}>
             {opt}
           </option>
@@ -54,6 +55,8 @@ const SelectField = ({
 );
 
 export const EnquirySection = () => {
+  const data = useCMSStore((state) => state.homeData?.EnquirySection);
+
   return (
     <AnimatedSection animation="fadeUp" delay={0.2}>
       <section className="py-20 mb-20  relative" id="contactUs">
@@ -64,20 +67,19 @@ export const EnquirySection = () => {
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-8 bg-[#D4AF37]"></div>
                 <span className="text-[#D4AF37] font-bold tracking-[0.2em] text-[10px] uppercase">
-                  Contact Us
+                  {data?.upperTag}
                 </span>
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
-                Let's build <br />
+                {data?.headlinePart1} <br />
                 <span className="font-serif italic text-[#D4AF37]">
-                  something amazing
+                  {data?.headlineHighlight}
                 </span>
               </h2>
             </div>
 
             <p className="text-base text-gray-500 font-light leading-relaxed">
-              Have a project in mind? We'd love to hear about it. Send us a
-              message and we'll get back to you within 24 hours.
+              {data?.introDescription}
             </p>
 
             <div className="space-y-6 pt-4">
@@ -89,7 +91,7 @@ export const EnquirySection = () => {
                   <h4 className="font-bold text-[#0B0F29] text-sm mb-0.5">
                     Email Us
                   </h4>
-                  <p className="text-gray-500 text-sm">hello@thegoldtech.com</p>
+                  <p className="text-gray-500 text-sm">{data?.email}</p>
                 </div>
               </div>
 
@@ -101,7 +103,7 @@ export const EnquirySection = () => {
                   <h4 className="font-bold text-[#0B0F29] text-sm mb-0.5">
                     Call Us
                   </h4>
-                  <p className="text-gray-500 text-sm">+1 (555) 123-4567</p>
+                  <p className="text-gray-500 text-sm">{data?.phone}</p>
                 </div>
               </div>
 
@@ -113,9 +115,7 @@ export const EnquirySection = () => {
                   <h4 className="font-bold text-[#0B0F29] text-sm mb-0.5">
                     Visit Us
                   </h4>
-                  <p className="text-gray-500 text-sm">
-                    123 Innovation Dr, Tech City, CA
-                  </p>
+                  <p className="text-gray-500 text-sm">{data?.address}</p>
                 </div>
               </div>
             </div>
@@ -136,23 +136,11 @@ export const EnquirySection = () => {
               <div className="grid md:grid-cols-2 gap-8">
                 <SelectField
                   label="I'm interested in..."
-                  options={[
-                    "Web Development",
-                    "Mobile App",
-                    "UI/UX Design",
-                    "Consulting",
-                    "Other",
-                  ]}
+                  options={data?.interestedInOptions?.split(",") || []}
                 />
                 <SelectField
                   label="Project Budget"
-                  options={[
-                    "$5k - $10k",
-                    "$10k - $25k",
-                    "$25k - $50k",
-                    "$50k+",
-                    "Not sure yet",
-                  ]}
+                  options={data?.budgetOptions?.split(",") || []}
                 />
               </div>
 
@@ -169,7 +157,7 @@ export const EnquirySection = () => {
 
               <div className="pt-4 flex justify-end">
                 <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] flex items-center gap-3 group text-sm w-full md:w-auto justify-center">
-                  SEND MESSAGE
+                  {data?.submitButtonText}
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>

@@ -5,18 +5,23 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-    title: "FinSuite - Maximize Your Financial Potential",
-    description: "Comprehensive financial analytics dashboard and money management tool.",
+  title: "FinSuite - Maximize Your Financial Potential",
+  description:
+    "Comprehensive financial analytics dashboard and money management tool.",
 };
 
+import { CMSDataInitializer } from "@/components/CMSDataInitializer";
+
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en">
-            <body className={inter.className}>{children}</body>
-        </html>
-    );
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <CMSDataInitializer>{children}</CMSDataInitializer>
+      </body>
+    </html>
+  );
 }

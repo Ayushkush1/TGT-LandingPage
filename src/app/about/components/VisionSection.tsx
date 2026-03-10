@@ -1,16 +1,19 @@
 "use client";
-import { AnimatedSection } from "@/components/AnimatedSection";
+
 import {
   ArrowRight,
   CheckCircle2,
   Eye,
-  Globe,
   ShieldCheck,
   TrendingUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useCMSStore } from "@/store/useCMSStore";
+import Link from "next/link";
 
 function VisionSection() {
+  const data = useCMSStore((state) => state.aboutData?.VisionSection);
+
   return (
     // <AnimatedSection animation="fadeUp" delay={0.15}>
     <motion.section
@@ -43,31 +46,36 @@ function VisionSection() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-8 bg-gray-400/30"></div>
             <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
-              Our Foundation
+              {data?.topLabel}
             </span>
             <div className="h-px w-8 bg-gray-400/30"></div>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-            The{" "}
+            {data?.headingPart1}{" "}
             <span className="font-serif italic font-medium text-[#D4AF37]">
-              Expertise
+              {data?.headingHighlight1}
             </span>{" "}
             <br />
-            Driving{" "}
+            {data?.headingPart2}{" "}
             <span className="relative inline-block z-0">
-              Innovation
+              {data?.headingHighlight2}
               <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
             </span>
           </h2>
 
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-            At{" "}
-            <span className="font-semibold text-gray-900">
-              The Gold Technologies
-            </span>
-            , we combine strategy, technology, and industry insight to build
-            secure, scalable systems that power long-term business growth.
+            {data?.headerDescription
+              ?.split(/(The Gold Technologies)/)
+              .map((part, i) =>
+                part === "The Gold Technologies" ? (
+                  <span key={i} className="font-semibold text-gray-900">
+                    {part}
+                  </span>
+                ) : (
+                  part
+                ),
+              )}
           </p>
         </motion.div>
 
@@ -159,22 +167,14 @@ function VisionSection() {
               }}
               className="space-y-4"
             >
-              <h3 className="text-4xl font-bold text-gray-900 leading-tight">
-                Your Partner in <br />
-                Digital Innovation
+              <h3 className="text-4xl w-[350px] font-bold text-gray-900 leading-tight">
+                {data?.block1Heading}
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                To establish ourselves as a trusted leader in IT solutions,
-                empowering businesses to confidently embrace technology and
-                excel in a rapidly evolving digital landscape.
+                {data?.block1Description}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4 pt-4">
-                {[
-                  "Industry Leadership",
-                  "Sustainable Growth",
-                  "Future-Ready Strategy",
-                  "Innovation Driven",
-                ].map((item, i) => (
+                {data?.block1Checklist?.map((item, i) => (
                   <div key={i} className="flex items-center gap-3 group">
                     <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center transition-transform group-hover:scale-110">
                       <CheckCircle2 className="w-3.5 h-3.5 text-white" />
@@ -198,21 +198,20 @@ function VisionSection() {
               }}
               className="flex flex-col gap-6"
             >
-              <h3 className="text-4xl font-bold text-gray-900 leading-tight">
-                Delivering Smart <br />
-                That Drive Growth
+              <h3 className="text-4xl w-[350px] font-bold text-gray-900 leading-tight">
+                {data?.block2Heading}
               </h3>
 
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                To deliver innovative and scalable IT solutions that optimize
-                processes, enhance security, and inspire innovation, enabling
-                businesses to thrive in a tech- driven world
+                {data?.block2Description}
               </p>
               <div className="flex gap-4 pt-4">
-                <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 group">
-                  Learn More{" "}
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </button>
+                <Link href={data?.ctaUrl ?? "/"}>
+                  <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 group">
+                    {data?.ctaLabel}{" "}
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </Link>
               </div>
             </motion.div>
 

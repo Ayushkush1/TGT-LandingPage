@@ -32,7 +32,7 @@ export default function Home() {
         <Navbar />
         <HeroSection />
         <TrustedBy />
-        <WhoWeAre /> {/* About Us */}
+        <WhoWeAre />
         <WhatWeDo /> {/* Services */}
         <Integrations /> {/* Tech Stack */} {/* Integrations */}
         <BlogSection /> {/* Recent Articles */}

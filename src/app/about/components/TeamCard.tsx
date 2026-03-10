@@ -29,9 +29,6 @@ function TeamCard({ member, delay }: TeamCardProps) {
         transition: { duration: 0.2 },
       }}
       className="group relative overflow-hidden rounded-2xl bg-white w-full cursor-pointer"
-      // style={{
-      //   boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
-      // }}
     >
       <div className="relative overflow-hidden" style={{ height: "200px" }}>
         {member.image && (

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { ServiceHeroData } from "@/store/useCMSStore";
 
 export type Pillar = {
   number: string;
@@ -39,15 +40,10 @@ export const itemVariants = {
 };
 
 function HeroSection({
-  label = "Our Services",
-  headingLines,
-  paragraphs,
-  cta,
-  image,
-  statSince = "2015",
-  statProjects = "200",
-  pillars,
-}: HeroSectionProps) {
+  serviceData,
+}: {
+  serviceData?: ServiceHeroData | undefined;
+}) {
   return (
     <motion.section
       initial="hidden"
@@ -67,17 +63,19 @@ function HeroSection({
           <div className="flex flex-col items-center gap-4 pt-2">
             <div className="w-0.5 h-16 rounded-sm bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/10" />
             <span className="text-[10px] tracking-[0.2em] uppercase text-gray-400 font-semibold font-sans [writing-mode:vertical-rl] [text-orientation:mixed]">
-              {label}
+              {serviceData?.label}
             </span>
           </div>
 
           <div>
             {/* Big editorial heading */}
             <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
-              {headingLines.map((line, i) => (
+              {serviceData?.headingLine1?.split(" ")?.map((line, i) => (
                 <span key={i}>
                   {line}
-                  {i < headingLines.length - 1 && <br />}
+                  {i < serviceData?.headingLine1?.split(" ")?.length - 1 && (
+                    <br />
+                  )}
                 </span>
               ))}
             </h2>
@@ -90,7 +88,7 @@ function HeroSection({
           className="flex-1 flex flex-col gap-8 pt-10 font-sans"
         >
           <div className="flex flex-col gap-4">
-            {paragraphs.map((p, i) => (
+            {serviceData?.paragraphs.map((p, i) => (
               <p
                 key={i}
                 className="text-gray-500 text-lg leading-7 font-medium"
@@ -104,10 +102,10 @@ function HeroSection({
           <div className="flex flex-wrap gap-4">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link
-                href={cta.href}
+                href={serviceData?.ctaHref ?? "/contactUs"}
                 className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3.5 px-9 rounded-full font-semibold tracking-wide border border-transparent font-sans text-[15px] transition-colors hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.35)]"
               >
-                {cta.text}
+                {serviceData?.ctaText}
                 <ArrowRight />
               </Link>
             </motion.div>
@@ -126,8 +124,8 @@ function HeroSection({
           className="relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl"
         >
           <img
-            src={image.src}
-            alt={image.alt}
+            src={serviceData?.imageUrl ?? ""}
+            alt={serviceData?.label ?? ""}
             className="w-full h-full object-cover object-top absolute inset-0"
           />
 
@@ -138,7 +136,7 @@ function HeroSection({
           />
 
           {/* Stat — bottom left */}
-          {statSince && (
+          {serviceData?.statSince && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -150,14 +148,14 @@ function HeroSection({
                 Excellence since
               </p>
               <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-                {statSince}
+                {serviceData?.statSince}
               </p>
               <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
             </motion.div>
           )}
 
           {/* Stat — top right */}
-          {statProjects && (
+          {serviceData?.statProjects && (
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -169,7 +167,7 @@ function HeroSection({
                 Projects delivered
               </p>
               <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
-                {statProjects}
+                {serviceData?.statProjects}
                 <span className="text-[#D4AF37]">+</span>
               </p>
             </motion.div>
@@ -178,7 +176,7 @@ function HeroSection({
 
         {/* Pillars 2×2 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
-          {pillars.map((p) => (
+          {serviceData?.pillars.map((p) => (
             <PillarCard key={p.number} {...p} />
           ))}
         </div>
@@ -215,7 +213,6 @@ export function PillarCard({
   title: string;
   desc: string;
 }) {
-  console.log(number, title, desc, "ok");
   const [isHovered, setIsHovered] = useState(false);
 
   return (

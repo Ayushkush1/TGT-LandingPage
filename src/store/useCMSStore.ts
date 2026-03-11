@@ -56,6 +56,7 @@ export interface WhatWeDoData {
     description: string;
     image: string;
     borderColor: string;
+    link: string;
   }[];
 }
 

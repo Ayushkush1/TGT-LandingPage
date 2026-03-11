@@ -37,7 +37,7 @@ function SingleProduct() {
       </div>
       <Navbar />
       <HeroSection product={product} />
-      <ServicesAccordion SERVICES={product.SERVICES as Service[]} />
+      <ServicesAccordion serviceData={product.SERVICES as Service[]} />
       <OurReputation />
       <Integrations />
       <CTABanner />

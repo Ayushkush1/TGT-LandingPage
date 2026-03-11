@@ -7,7 +7,7 @@ import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { Integrations } from "@/components/sections/Integrations";
 
-import HeroSection, { type Pillar } from "./HeroSection";
+import HeroSection from "./HeroSection";
 import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { BlogSection } from "@/components/sections/BlogSection";
 import ServicesAccordion from "./ServiceRow";

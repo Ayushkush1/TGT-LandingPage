@@ -7,10 +7,9 @@ import VisionSection from "../about/components/VisionSection";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { Integrations } from "@/components/sections/Integrations";
-import HeroSection, {
+import {
   containerVariants,
   itemVariants,
-  Pillar,
   PillarCard,
 } from "../service/ui-ux-designing/HeroSection";
 import { BlogSection } from "@/components/sections/BlogSection";
@@ -24,8 +23,6 @@ function ProductPage() {
   const productInfo = useCMSStore(
     (state) => state?.productData?.main?.products,
   );
-
-  console.log(productInfo);
 
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">

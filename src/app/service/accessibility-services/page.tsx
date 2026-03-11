@@ -7,7 +7,7 @@ import { Integrations } from "@/components/sections/Integrations";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { TrustedBy } from "@/components/sections/TrustedBy";
-import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import HeroSection from "../ui-ux-designing/HeroSection";
 import ServicesAccordion from "../ui-ux-designing/ServiceRow";
 import { useCMSStore } from "@/store/useCMSStore";
 

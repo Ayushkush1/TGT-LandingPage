@@ -6,23 +6,6 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ServiceHeroData } from "@/store/useCMSStore";
 
-export type Pillar = {
-  number: string;
-  title: string;
-  desc: string;
-};
-
-export type HeroSectionProps = {
-  label?: string;
-  headingLines: string[];
-  paragraphs: string[];
-  cta: { text: string; href: string };
-  image: { src: string; alt: string };
-  statSince?: string;
-  statProjects?: string;
-  pillars: Pillar[];
-};
-
 export const containerVariants = {
   hidden: {},
   show: {
@@ -70,12 +53,11 @@ function HeroSection({
           <div>
             {/* Big editorial heading */}
             <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
-              {serviceData?.headingLine1?.split(" ")?.map((line, i) => (
+              {serviceData?.headingLine1?.split(" ")?.map((line, i, arr) => (
                 <span key={i}>
                   {line}
-                  {i < serviceData?.headingLine1?.split(" ")?.length - 1 && (
-                    <br />
-                  )}
+                  {i < arr.length - 1 &&
+                    (line === "&" || arr[i + 1] === "&" ? " " : <br />)}
                 </span>
               ))}
             </h2>

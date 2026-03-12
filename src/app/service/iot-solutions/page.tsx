@@ -1,3 +1,4 @@
+"use client";
 import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
@@ -6,87 +7,13 @@ import { Integrations } from "@/components/sections/Integrations";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { TrustedBy } from "@/components/sections/TrustedBy";
-import HeroSection, { type Pillar } from "../ui-ux-designing/HeroSection";
+import HeroSection from "../ui-ux-designing/HeroSection";
 import ServicesAccordion from "../ui-ux-designing/ServiceRow";
-
-const iotHeroContent = {
-  label: "Our Services",
-  headingLines: ["IoT", "Solutions"],
-  paragraphs: [
-    "We design and develop smart IoT solutions that connect devices, collect data, and automate processes in real time. From industrial automation to smart homes and connected products, we turn physical systems into intelligent digital ecosystems.",
-    "Our IoT services include device integration, cloud connectivity, data analytics, and secure infrastructure — enabling you to monitor, control, and optimize operations from anywhere. Your trusted partner for building connected technology solutions.",
-  ],
-  cta: { text: "Start your IoT project", href: "/contactUs" },
-  image: {
-    src: "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg",
-    alt: "IoT engineers working on connected devices and smart systems",
-  },
-  statSince: "2015",
-  statProjects: "200",
-  pillars: [
-    {
-      number: "01",
-      title: "Smart Device Integration",
-      desc: "Seamless connectivity between sensors, devices, and platforms.",
-    },
-    {
-      number: "02",
-      title: "Real-Time Monitoring",
-      desc: "Track performance and data instantly with intelligent dashboards.",
-    },
-    {
-      number: "03",
-      title: "Secure & Scalable Systems",
-      desc: "Reliable infrastructure built for large-scale connected environments.",
-    },
-    {
-      number: "04",
-      title: "Automation & Efficiency",
-      desc: "Optimize operations and reduce manual effort through smart automation.",
-    },
-  ] as Pillar[],
-};
-
-const SERVICES = [
-  {
-    number: "01",
-    title: "IoT Strategy & Consulting",
-    category: "Planning · Architecture",
-    description:
-      "We assess your business needs and design a scalable IoT roadmap, selecting the right hardware, connectivity, and cloud architecture.",
-    tags: ["Use-Case Mapping", "Architecture", "Tech Stack", "Roadmap"],
-    outcome: "Clear implementation plan aligned with business goals and ROI.",
-  },
-  {
-    number: "02",
-    title: "Device & Sensor Integration",
-    category: "Hardware · Connectivity",
-    description:
-      "Seamless integration of sensors, embedded systems, and gateways to enable reliable device communication.",
-    tags: ["Embedded Systems", "Gateways", "Protocols", "Edge Devices"],
-    outcome: "Connected ecosystem with stable and efficient data flow.",
-  },
-  {
-    number: "03",
-    title: "Cloud & Data Management",
-    category: "Cloud · Analytics",
-    description:
-      "Secure cloud infrastructure to collect, store, and process IoT data with real-time analytics and dashboards.",
-    tags: ["AWS IoT", "Azure IoT", "Data Pipelines", "Dashboards"],
-    outcome: "Actionable insights for smarter decision-making.",
-  },
-  {
-    number: "04",
-    title: "Automation & Monitoring",
-    category: "Operations · Intelligence",
-    description:
-      "Real-time monitoring systems with automation rules to optimize performance and reduce manual intervention.",
-    tags: ["Alerts", "Automation", "Remote Control", "Optimization"],
-    outcome: "Improved efficiency, reduced downtime, and operational savings.",
-  },
-];
+import { useCMSStore } from "@/store/useCMSStore";
 
 function IOTSolutions() {
+  const serviceData = useCMSStore((state) => state.serviceData);
+  const iotSolutions = serviceData?.["iot-solutions"];
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -104,9 +31,9 @@ function IOTSolutions() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <HeroSection {...iotHeroContent} />
+      <HeroSection serviceData={iotSolutions?.hero} />
       <TrustedBy />
-      <ServicesAccordion SERVICES={SERVICES} />
+      <ServicesAccordion serviceData={iotSolutions?.services} />
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */} {/* Integrations */}
       <PortfolioSection /> {/* PortfolioSection */}

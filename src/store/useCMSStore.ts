@@ -56,6 +56,7 @@ export interface WhatWeDoData {
     description: string;
     image: string;
     borderColor: string;
+    link: string;
   }[];
 }
 
@@ -216,6 +217,37 @@ export interface ProductData {
   };
 }
 
+export interface ServiceHeroData {
+  label: string;
+  ctaHref: string;
+  ctaText: string;
+  pillars: ProductPillarData[];
+  imageUrl: string;
+  statSince: string;
+  paragraphs: string[];
+  headingLine1: string;
+  headingLine2: string;
+  statProjects: string;
+}
+
+export interface ServiceItemData {
+  tags: string[];
+  title: string;
+  number: string;
+  outcome: string;
+  category: string;
+  description: string;
+}
+
+export interface ServiceCategoryData {
+  hero: ServiceHeroData;
+  services: ServiceItemData[];
+}
+
+export interface ServiceData {
+  [categoryKey: string]: ServiceCategoryData;
+}
+
 export interface AboutData {
   AboutFirm: AboutFirmData;
   VideoSection: VideoSectionData;
@@ -245,6 +277,7 @@ interface CMSStoreState {
   aboutData: AboutData | null;
   contactData: ContactData | null;
   productData: ProductData | null;
+  serviceData: ServiceData | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -254,6 +287,7 @@ interface CMSStoreActions {
   setAboutData: (data: AboutData | null) => void;
   setContactData: (data: ContactData | null) => void;
   setProductData: (data: ProductData | null) => void;
+  setServiceData: (data: ServiceData | null) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   fetchHomeData: () => Promise<void>;
@@ -266,6 +300,7 @@ const initialState: CMSStoreState = {
   aboutData: null,
   contactData: null,
   productData: null,
+  serviceData: null,
   isLoading: false,
   error: null,
 };
@@ -278,6 +313,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   setAboutData: (data) => set({ aboutData: data }),
   setContactData: (data) => set({ contactData: data }),
   setProductData: (data) => set({ productData: data }),
+  setServiceData: (data) => set({ serviceData: data }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
@@ -302,6 +338,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
         const aboutPage = pages.find((p: any) => p.slug === "about");
         const contactPage = pages.find((p: any) => p.slug === "contact");
         const productPage = pages.find((p: any) => p.slug === "products");
+        const servicePage = pages.find((p: any) => p.slug === "services");
 
         const updates: Partial<CMSStoreState> = { isLoading: false };
 
@@ -317,6 +354,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
         }
         if (productPage?.sections) {
           updates.productData = transformSections(productPage.sections);
+        }
+        if (servicePage?.sections) {
+          updates.serviceData = transformSections(servicePage.sections);
         }
         set(updates);
       } else {

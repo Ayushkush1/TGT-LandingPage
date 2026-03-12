@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { ServiceItemData } from "@/store/useCMSStore";
 
 export type Service = {
   number: string;
@@ -104,9 +105,9 @@ function ServiceRow({ service }: { service: Service }) {
 }
 
 export default function ServicesAccordion({
-  SERVICES,
+  serviceData,
 }: {
-  SERVICES: Service[];
+  serviceData: ServiceItemData[] | undefined;
 }) {
   return (
     <section className="max-w-7xl mx-auto px-6 py-20 bg-white">
@@ -134,7 +135,7 @@ export default function ServicesAccordion({
       </div>
 
       <ul className="border-t border-gray-200">
-        {SERVICES.map((service) => (
+        {serviceData?.map((service) => (
           <ServiceRow key={service.number} service={service} />
         ))}
       </ul>

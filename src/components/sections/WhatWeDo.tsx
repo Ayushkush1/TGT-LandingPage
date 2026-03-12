@@ -12,20 +12,12 @@ export const WhatWeDo = () => {
   const [activeService, setActiveService] = useState(0);
   const router = useRouter();
 
-  const serviceRoutes: { [key: string]: string } = {
-    web: "/service/website-design-development",
-    app: "/service/mobile-app-development",
-    ui: "/service/ui-ux-designing",
-    custom: "/service/custom-software-development",
-    iot: "/service/iot-solutions",
-  };
-
   const handleServiceClick = (serviceId: string) => {
-    router.push(serviceRoutes[serviceId]);
+    router.push(serviceId);
   };
 
   return (
-    <section className="py-20 px-4 md:px-8 ">
+    <section className="py-20 px-4 bg-[#0a0f29] md:px-8 ">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-4xl mx-auto mb-20">
@@ -43,7 +35,7 @@ export const WhatWeDo = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="h-px w-8 bg-gray-400/30"
             ></motion.div>
-            <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
+            <span className="text-[#D3AF37] font-bold tracking-[0.2em] text-xs uppercase">
               {data?.upperTag}
             </span>
             <motion.div
@@ -64,15 +56,15 @@ export const WhatWeDo = () => {
               delay: 0.3,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight"
+            className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15] mb-6 tracking-tight"
           >
             {data?.headlinePart1}{" "}
             <span className="font-serif italic font-medium text-[#D4AF37]">
               {data?.headlineHighlight}
             </span>{" "}
             <br />
-            {data?.headlinePart3}
-            <span className="relative inline-block z-0">
+            {data?.headlinePart3}{" "}
+            <span className="relative text-[#D4AF37] inline-block z-0">
               {data?.headlinePart4}
               <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
             </span>
@@ -83,7 +75,7 @@ export const WhatWeDo = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-lg text-gray-500 font-light leading-relaxed max-w-2xl mx-auto"
+            className="text-lg text-gray-300 font-light leading-relaxed max-w-2xl mx-auto"
           >
             {data?.mainDescription}
           </motion.p>
@@ -110,7 +102,7 @@ export const WhatWeDo = () => {
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
                 onMouseEnter={() => setActiveService(index)}
-                onClick={() => handleServiceClick(service.id)}
+                onClick={() => handleServiceClick(service.link)}
                 className={`relative rounded-[32px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer ${index === activeService ? `flex-[3.5] ${service.borderColor}` : "flex-[0.5] border-transparent"} group bg-[#0B0F29] shadow-lg h-full`}
               >
                 {/* Background: Image or Gradient */}

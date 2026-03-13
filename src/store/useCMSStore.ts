@@ -284,6 +284,7 @@ export interface HomeData {
   OurReputation: OurReputationData;
   OurPartners: OurPartnersData;
   EnquirySection: EnquirySectionData;
+  BlogSection?: any;
   FooterCMS: FooterCMSData;
 }
 

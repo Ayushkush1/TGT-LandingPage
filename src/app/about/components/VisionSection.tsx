@@ -11,8 +11,9 @@ import { motion } from "framer-motion";
 import { useCMSStore } from "@/store/useCMSStore";
 import Link from "next/link";
 
-function VisionSection() {
-  const data = useCMSStore((state) => state.aboutData?.VisionSection);
+function VisionSection({ data: propData }: { data?: any }) {
+  const storeData = useCMSStore((state) => state.aboutData?.VisionSection);
+  const data = propData || storeData;
 
   return (
     // <AnimatedSection animation="fadeUp" delay={0.15}>
@@ -67,7 +68,7 @@ function VisionSection() {
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
             {data?.headerDescription
               ?.split(/(The Gold Technologies)/)
-              .map((part, i) =>
+              ?.map((part: string, i: number) =>
                 part === "The Gold Technologies" ? (
                   <span key={i} className="font-semibold text-gray-900">
                     {part}
@@ -174,7 +175,7 @@ function VisionSection() {
                 {data?.block1Description}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4 pt-4">
-                {data?.block1Checklist?.map((item, i) => (
+                {data?.block1Checklist?.map((item: string, i: number) => (
                   <div key={i} className="flex items-center gap-3 group">
                     <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center transition-transform group-hover:scale-110">
                       <CheckCircle2 className="w-3.5 h-3.5 text-white" />

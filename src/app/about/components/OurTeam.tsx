@@ -68,14 +68,15 @@ const teamMembers: TeamMember[] = [
   },
 ];
 
-function OurTeam() {
-  const data = useCMSStore((state) => state.aboutData?.OurTeam);
+function OurTeam({ data: propData }: { data?: any }) {
+  const storeData = useCMSStore((state) => state.aboutData?.OurTeam);
+  const data = propData || storeData;
 
   const columns: TeamMember[][] = Array.from({ length: COLS }, () => []);
 
   // Combine CMS members with local empty placeholders to maintain the layout
   const cmsMembers: TeamMember[] =
-    data?.members?.map((m) => ({
+    data?.members?.map((m: any) => ({
       name: m.name,
       designation: m.designation,
       col: m.col,
@@ -142,7 +143,7 @@ function OurTeam() {
           <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-2xl mx-auto">
             {data?.descriptionText
               ?.split(/(The Gold Technologies)/)
-              .map((part, i) =>
+              ?.map((part: string, i: number) =>
                 part === "The Gold Technologies" ? (
                   <span key={i} className="font-semibold text-gray-900">
                     {part}

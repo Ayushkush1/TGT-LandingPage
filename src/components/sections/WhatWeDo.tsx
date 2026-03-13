@@ -177,10 +177,16 @@ export const WhatWeDo = () => {
           <div className="max-w-7xl mx-auto bg-[#F5F5F7] rounded-[2.5rem] px-8 py-10 md:px-16 md:py-14 flex flex-col md:flex-row items-center justify-between gap-10 shadow-sm border border-white/50">
             <div className="flex-1 text-center md:text-left space-y-3">
               <h3 className="text-3xl md:text-[42px] font-bold text-[#0B0F29] leading-[1.1] tracking-tight max-w-2xl">
-                {data?.ctaHeadline}
-                {/* <span className="underline decoration-[#D4AF37]/60 decoration-4 underline-offset-2">
-                  fastest
-                </span>{" "} */}
+                {data?.ctaHeadline?.split("fastest").map((part, i, arr) => (
+                  <span key={i}>
+                    {part}
+                    {i < arr.length - 1 && (
+                      <span className="underline decoration-[#D4AF37]/60 decoration-4 underline-offset-2">
+                        fastest
+                      </span>
+                    )}
+                  </span>
+                ))}
               </h3>
             </div>
 

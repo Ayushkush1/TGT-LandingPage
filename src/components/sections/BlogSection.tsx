@@ -224,7 +224,11 @@ export const blogs = [
     ],
   },
 ];
-export const BlogSection = () => {
+import { useCMSStore } from "@/store/useCMSStore";
+
+export const BlogSection = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.BlogSection);
+  const data = propData || storeData;
   return (
     <section className="py-32 bg-white relative" id="BlogSection">
       <div className="max-w-7xl mx-auto px-6">

@@ -9,15 +9,19 @@ export function CMSDataInitializer({
   children: React.ReactNode;
 }) {
   const fetchHomeData = useCMSStore((state) => state.fetchHomeData);
+  const fetchNavLinks = useCMSStore((state) => state.fetchNavLinks);
   const isLoading = useCMSStore((state) => state.isLoading);
   const homeData = useCMSStore((state) => state.homeData);
+  const navLinks = useCMSStore((state) => state.navLinks);
+  const error = useCMSStore((state) => state.error);
 
   useEffect(() => {
     fetchHomeData();
-  }, [fetchHomeData]);
+    fetchNavLinks();
+  }, [fetchHomeData, fetchNavLinks]);
 
-  // We show the loader if it's loading OR if we don't have data yet
-  const showLoader = isLoading || !homeData;
+  // We show the loader if it's loading OR if we don't have data yet (and no error)
+  const showLoader = (isLoading || !homeData || !navLinks) && !error;
 
   return (
     <>

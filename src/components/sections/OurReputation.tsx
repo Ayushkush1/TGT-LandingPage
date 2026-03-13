@@ -4,8 +4,9 @@ import { Star, ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 
-export const OurReputation = () => {
-  const data = useCMSStore((state) => state.homeData?.OurReputation);
+export const OurReputation = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.OurReputation);
+  const data = propData || storeData;
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -88,7 +89,7 @@ export const OurReputation = () => {
             {/* Fixed height container for absolute positioning */}
             <div className="relative w-full md:w-48 h-[350px] flex justify-center items-center z-0">
               {data &&
-                data?.testimonials.map((t, index) => {
+                data?.testimonials.map((t: any, index: number) => {
                   const position = getPosition(index);
 
                   // Define styles for each position

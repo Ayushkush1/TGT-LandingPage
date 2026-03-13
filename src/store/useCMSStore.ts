@@ -1,5 +1,25 @@
 import { create } from "zustand";
 
+export interface NavLink {
+  title: string;
+  link: string;
+  desc?: string;
+  type?: string;
+  dropdown?: NavLink[];
+}
+
+export interface ApiNavLink {
+  id: string;
+  label: string;
+  url: string;
+  type: string;
+  parent: string;
+  order: number;
+  description: string | null;
+  title: string | null;
+  isStatic: boolean;
+}
+
 export interface HeroSectionData {
   badgeLabel: string;
   headlineMain: string;
@@ -264,6 +284,7 @@ export interface HomeData {
   OurReputation: OurReputationData;
   OurPartners: OurPartnersData;
   EnquirySection: EnquirySectionData;
+  BlogSection?: any;
   FooterCMS: FooterCMSData;
 }
 
@@ -278,6 +299,7 @@ interface CMSStoreState {
   contactData: ContactData | null;
   productData: ProductData | null;
   serviceData: ServiceData | null;
+  navLinks: NavLink[] | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -288,10 +310,12 @@ interface CMSStoreActions {
   setContactData: (data: ContactData | null) => void;
   setProductData: (data: ProductData | null) => void;
   setServiceData: (data: ServiceData | null) => void;
+  setNavLinks: (data: NavLink[] | null) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   fetchHomeData: () => Promise<void>;
   fetchAboutData: () => Promise<void>;
+  fetchNavLinks: () => Promise<void>;
   transformSections: (sections: any[]) => any;
 }
 
@@ -301,6 +325,7 @@ const initialState: CMSStoreState = {
   contactData: null,
   productData: null,
   serviceData: null,
+  navLinks: null,
   isLoading: false,
   error: null,
 };
@@ -314,6 +339,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   setContactData: (data) => set({ contactData: data }),
   setProductData: (data) => set({ productData: data }),
   setServiceData: (data) => set({ serviceData: data }),
+  setNavLinks: (data) => set({ navLinks: data }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
@@ -372,5 +398,50 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
     // This now just calls fetchHomeData since they use the same endpoint
     // or we can keep it separate if needed, but the user asked for "all pages"
     await useCMSStore.getState().fetchHomeData();
+  },
+
+  fetchNavLinks: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await fetch("https://tgt-cms.vercel.app/api/nav-links");
+      const json = await response.json();
+      const rawLinks: ApiNavLink[] = json?.data;
+
+      if (Array.isArray(rawLinks)) {
+        const formattedLinks: NavLink[] = rawLinks
+          .filter((link) => link.parent === "-")
+          .sort((a, b) => a.order - b.order)
+          .map((mainLink) => {
+            let dropdown: NavLink[] | undefined = undefined;
+
+            if (mainLink.type === "Dropdown") {
+              // Ensure we sort dropdown items by their order
+              dropdown = rawLinks
+                .filter((child) => child.parent === mainLink.id)
+                .sort((a, b) => a.order - b.order)
+                .map((child) => ({
+                  title: child.label,
+                  link: child.url,
+                  desc: child.description || undefined,
+                }));
+            }
+
+            return {
+              title: mainLink.label,
+              link: mainLink.url,
+              desc: mainLink.description || undefined,
+              type: mainLink.type,
+              dropdown,
+            };
+          });
+
+        set({ navLinks: formattedLinks, isLoading: false });
+      } else {
+        set({ error: "Failed to fetch navigation links", isLoading: false });
+      }
+    } catch (error) {
+      set({ error: (error as Error).message, isLoading: false });
+      console.error("Error fetching navigation links:", error);
+    }
   },
 }));

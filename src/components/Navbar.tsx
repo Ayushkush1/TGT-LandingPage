@@ -20,8 +20,10 @@ import {
 import { FreeAuditPopup } from "./FreeAuditPopup";
 import Image from "next/image";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export const Navbar = () => {
+  const navLinks = useCMSStore((state) => state.navLinks);
   const [scrolled, setScrolled] = React.useState(false);
   const [isEmailHovered, setIsEmailHovered] = React.useState(false);
   const [isPhoneHovered, setIsPhoneHovered] = React.useState(false);
@@ -103,183 +105,83 @@ export const Navbar = () => {
           className={`hidden md:flex items-center 
         ${!scrolled ? "gap-10" : "gap-5"} relative z-10`}
         >
-          {["Home", "About Us"].map((item, i) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-            >
-              <Link
-                href={item === "Home" ? "/" : "/about"}
-                className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
-              >
-                {item}
-              </Link>
-            </motion.div>
-          ))}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="relative group h-full flex items-center"
-          >
-            <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
-              <span>Services</span>
-              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
-            </div>
+          {navLinks?.map((item, i) => {
+            if (item.type === "Dropdown") {
+              // Optional chaining safeguard
+              const dropdownItems = item.dropdown || [];
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+                  className="relative group h-full flex items-center"
+                >
+                  <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
+                    <span>{item.title}</span>
+                    <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
+                  </div>
 
-            {/* Premium Dropdown */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
-              <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
-                <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                  {[
-                    {
-                      title: "UI/UX Designing",
-                      desc: "Intuitive, engaging, and user-centric interfaces.",
-                      link: "/service/ui-ux-designing",
-                    },
-                    {
-                      title: "Website Design & Development",
-                      desc: "High-performance, responsive, and modern websites.",
-                      link: "/service/website-design-development",
-                    },
-                    {
-                      title: "Mobile App Development",
-                      desc: "Native and cross-platform apps for iOS & Android.",
-                      link: "/service/mobile-app-development",
-                    },
-                    {
-                      title: "Custom Software Development",
-                      desc: "Tailored software solutions for unique business needs.",
-                      link: "/service/custom-software-development",
-                    },
-                    {
-                      title: "Business Software Solutions",
-                      desc: "Scalable ERP, CRM, and enterprise management tools.",
-                      link: "/service/business-software-solutions",
-                    },
-                    {
-                      title: "Business Intelligence Solutions",
-                      desc: "Data-driven insights to spark strategic growth.",
-                      link: "/service/business-intelligence-solutions",
-                    },
-                    {
-                      title: "IOT Solutions",
-                      desc: "Smart connectivity and automation for devices.",
-                      link: "/service/iot-solutions",
-                    },
-                    {
-                      title: "AI & ML Solution",
-                      desc: "Advanced AI algorithms and predictive modeling.",
-                      link: "/service/ai-ml-solutions",
-                    },
-                    {
-                      title: "Branding",
-                      desc: "Distinctive brand identities that resonate with audiences.",
-                      link: "/service/branding",
-                    },
-                    {
-                      title: "Digital Marketing",
-                      desc: "SEO, SMM, and paid strategies to maximize reach.",
-                      link: "/service/digital-marketing",
-                    },
-                    {
-                      title: "Accessibility Services",
-                      desc: "Ensuring digital presence is accessible to everyone.",
-                      link: "/service/accessibility-services",
-                    },
-                  ].map((service, i) => (
-                    <Link
-                      key={i}
-                      href={service?.link}
-                      className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">
-                            {service.title}
-                          </span>
-                          <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">
-                            →
-                          </span>
-                        </div>
-                        <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">
-                          {service.desc}
-                        </p>
+                  {/* Dynamic Dropdown */}
+                  <div
+                    className={`absolute top-full left-1/2 -translate-x-1/2 ${
+                      dropdownItems.length > 4 ? "w-[900px]" : "w-[600px]"
+                    } pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50`}
+                  >
+                    <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
+                      <div
+                        className={`grid ${
+                          dropdownItems.length > 4
+                            ? "grid-cols-3"
+                            : "grid-cols-2"
+                        } gap-x-4 gap-y-2`}
+                      >
+                        {dropdownItems.map((sub, j) => (
+                          <Link
+                            key={j}
+                            href={sub.link}
+                            className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
+                          >
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-0.5">
+                                <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">
+                                  {sub.title}
+                                </span>
+                                <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">
+                                  →
+                                </span>
+                              </div>
+                              {sub.desc && (
+                                <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">
+                                  {sub.desc}
+                                </p>
+                              )}
+                            </div>
+                          </Link>
+                        ))}
                       </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="relative group h-full flex items-center"
-          >
-            <div className="flex items-center gap-1 cursor-pointer text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors py-4">
-              <span>Products</span>
-              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-gray-900" />
-            </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            }
 
-            {/* Premium Dropdown */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50">
-              <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                  {[
-                    {
-                      title: "IP ERP",
-                      desc: "ERP dashboard with clean interface and efficient workflows.",
-                      link: "/products",
-                    },
-                    {
-                      title: "Catfy Catalog",
-                      desc: "Modern product catalog with intuitive navigation and layout.",
-                      link: "/products",
-                    },
-                  ].map((service, i) => (
-                    <Link
-                      key={i}
-                      href={service?.link}
-                      className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[15px] font-semibold text-gray-700 group-hover/item:text-[#9A7B12] transition-colors">
-                            {service.title}
-                          </span>
-                          <span className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300 text-[#9A7B12] text-sm">
-                            →
-                          </span>
-                        </div>
-                        <p className="text-[13px] text-gray-500 font-medium leading-relaxed group-hover/item:text-gray-600">
-                          {service.desc}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-          {["Contact Us"].map((item, i) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
-            >
-              <Link
-                href={item === "Products" ? "/products" : "/contactUs"}
-                className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+            return (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
               >
-                {item}
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  href={item.link}
+                  className="text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                >
+                  {item.title}
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Right Buttons */}

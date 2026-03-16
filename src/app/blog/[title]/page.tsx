@@ -2,9 +2,9 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { BlogCard, blogs } from "@/components/sections/BlogSection";
+import { BlogCard } from "@/components/sections/BlogSection";
 import HeroSection from "./components/HeroSection";
 import Sidebar from "./components/Sidebar";
 import RelatedPosts from "./components/RelatedPosts";
@@ -12,22 +12,76 @@ import Takeaways from "./components/Takeaways";
 import AuthorCard from "./components/AuthorCard";
 import Tags from "./components/Tags";
 import { Quote } from "lucide-react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 // `toc` and `takeaways` are derived from the selected `blog` below
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BlogPage() {
   const params = useParams().title;
-  const blog =
-    blogs.find((b) => b.title.toLowerCase().replace(/\s+/g, "-") === params) ||
-    blogs[0];
+  const storeData = useCMSStore((state) => state.homeData?.BlogSection);
+
+  // Derive blog at top level but handle undefined state gracefully for hooks
+  const rawBlog = storeData?.blogs.find(
+    (b) => b.title.toLowerCase().replace(/\s+/g, "-") === params,
+  );
+
+  // Normalize blog data with memoization to avoid infinite re-render loops
+  const blog = useMemo(() => {
+    if (!rawBlog) return null;
+    return {
+      ...rawBlog,
+      author: rawBlog.authorName || (rawBlog as any).author || "Team TGT",
+      date: rawBlog.datePublished || (rawBlog as any).date || "Recently",
+      authorAvatar: rawBlog.authorAvatar || "https://i.pravatar.cc/150?img=1",
+      authorBio: rawBlog.authorBio || "Member of the TGT Team",
+      tags: rawBlog.tags || [],
+      content: rawBlog.content || [],
+      takeaways: rawBlog.takeaways || [],
+    };
+  }, [rawBlog]);
 
   const [scrollProgress, setScrollProgress] = useState(0);
   const [tocOpen, setTocOpen] = useState(true);
-  const [activeSection, setActiveSection] = useState(
-    blog.content?.[0]?.id || "intro",
-  );
+  const [activeSection, setActiveSection] = useState("intro");
   const articleRef = useRef<HTMLDivElement>(null);
+  const takeawaysList = blog?.takeaways ?? [];
+
+  // Memoize the processed HTML for rendering
+  const displayHtml = useMemo(() => {
+    if (!blog?.contentHtml) return "";
+    if (typeof window === "undefined") return blog.contentHtml;
+
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = blog.contentHtml;
+    const headings = tempDiv.querySelectorAll("h1, h2, h3, h4");
+    headings.forEach((h, i) => {
+      if (!h.id) {
+        h.id = `section-${i}`;
+      }
+    });
+    return tempDiv.innerHTML;
+  }, [blog?.contentHtml]);
+
+  // Derive ToC after blog/displayHtml is defined
+  const toc = useMemo(() => {
+    if (!blog) return [];
+
+    if (blog.content && blog.content.length > 0) {
+      return blog.content.map((s: any) => ({ id: s.id, label: s.heading }));
+    } else if (blog.contentHtml) {
+      if (typeof window === "undefined") return [];
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = displayHtml;
+      const headings = Array.from(tempDiv.querySelectorAll("h1, h2, h3, h4"));
+
+      return headings.map((h) => ({
+        id: h.id,
+        label: h.textContent || "",
+      }));
+    }
+    return [];
+  }, [blog, displayHtml]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -46,19 +100,15 @@ export default function BlogPage() {
 
   const circumference = 2 * Math.PI * 20;
 
-  const toc = blog.content?.map((s) => ({ id: s.id, label: s.heading })) ?? [];
-  const takeawaysList = blog.takeaways ?? [];
-
   useEffect(() => {
     if (!toc || toc.length === 0) return;
     const observed = toc
-      .map((t) => document.getElementById(t.id))
-      .filter((el): el is HTMLElement => el !== null);
+      .map((t: any) => document.getElementById(t.id))
+      .filter((el: HTMLElement | null): el is HTMLElement => el !== null);
     if (observed.length === 0) return;
 
     const io = new IntersectionObserver(
       (entries) => {
-        // Find the entry that's most visible
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -73,158 +123,101 @@ export default function BlogPage() {
       },
     );
 
-    observed.forEach((el) => io.observe(el));
+    observed.forEach((el: HTMLElement) => io.observe(el));
     return () => io.disconnect();
-  }, [toc, setActiveSection]);
+  }, [toc]);
+
+  // Sync active section with first item
+  useEffect(() => {
+    if (toc[0]?.id && activeSection === "intro") {
+      setActiveSection(toc[0].id);
+    }
+  }, [toc]);
+
+  if (!blog) {
+    return (
+      <main className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-brand-nav mb-4">
+            Blog Post Not Found
+          </h1>
+          <p className="text-muted-foreground">
+            The requested article could not be loaded from the CMS.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
-      {/* Unified Background Wrapper for Navbar + Hero */}
-      <div className="relative">{/* Content */}</div>
       <Navbar />
       <HeroSection blog={blog} />
-      {/* Hero Section */}
+
       <div>
-        {/* ── Two-Column Layout ── */}
         <div
           ref={articleRef}
           className="max-w-6xl mx-auto px-4 md:px-8 py-16 grid grid-cols-1 lg:grid-cols-[1fr_264px] gap-12 lg:gap-16 items-start"
         >
           {/* ── Article ── */}
           <article className="max-w-[680px] fade-up delay-250">
-            {/* Intro + dynamic content from blog data */}
-            {blog.content?.[0] && (
-              <div className="pb-8 mb-8 border-b border-border">
-                <p className="font-body text-xl leading-[1.85] text-foreground">
-                  {blog.content[0].paragraphs[0]}
-                </p>
-              </div>
+            {blog.contentHtml ? (
+              <div
+                className="prose prose-stone max-w-none 
+                  prose-headings:font-display prose-headings:text-brand-nav prose-headings:font-bold
+                  prose-p:font-body prose-p:text-[1.05rem] prose-p:leading-[1.85] prose-p:text-muted-foreground
+                  prose-blockquote:border-l-brand-gold prose-blockquote:bg-brand-gold/5 prose-blockquote:py-1 prose-blockquote:rounded-r-xl"
+                dangerouslySetInnerHTML={{ __html: displayHtml }}
+              />
+            ) : (
+              <>
+                {blog.content?.[0] && (
+                  <div className="pb-8 mb-8 border-b border-border">
+                    <p className="font-body text-xl leading-[1.85] text-foreground">
+                      {blog.content[0].paragraphs[0]}
+                    </p>
+                  </div>
+                )}
+
+                {blog.content
+                  ?.filter((s: any) => s.id !== blog.content?.[0]?.id)
+                  .map((section: any) => (
+                    <section key={section.id} className="mt-10">
+                      <h2
+                        id={section.id}
+                        className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
+                      >
+                        {section.heading}
+                      </h2>
+                      {section.paragraphs.map((p: string, i: number) => (
+                        <p
+                          key={i}
+                          className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5"
+                        >
+                          {p}
+                        </p>
+                      ))}
+                    </section>
+                  ))}
+
+                {blog.pullQuote && (
+                  <div className="my-10 pl-6 border-l-[3px] border-brand-gold bg-gradient-to-r from-brand-gold/10 to-white rounded-r-xl py-6 pr-6">
+                    <div className="text-brand-gold opacity-50 mb-3">
+                      <Quote className="rotate-180" />
+                    </div>
+                    <p className="font-display italic text-xl md:text-2xl leading-snug text-brand-nav">
+                      {blog.pullQuote}
+                    </p>
+                  </div>
+                )}
+              </>
             )}
 
-            {/* Render the rest of the content sections (skip intro if present) */}
-            {blog.content
-              ?.filter((s) => s.id !== blog.content?.[0]?.id)
-              .map((section) => (
-                <section key={section.id} className="mt-10">
-                  <h2
-                    id={section.id}
-                    className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
-                  >
-                    {section.heading}
-                  </h2>
-                  {section.paragraphs.map((p, i) => (
-                    <p
-                      key={i}
-                      className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5"
-                    >
-                      {p}
-                    </p>
-                  ))}
-                </section>
-              ))}
-
-            {/* Pull Quote */}
-            <div className="my-10 pl-6 border-l-[3px] border-brand-gold bg-gradient-to-r from-brand-gold/10 to-white rounded-r-xl py-6 pr-6">
-              <div className="text-brand-gold opacity-50 mb-3">
-                <Quote className=" rotate-180" />
-              </div>
-              <p className="font-display italic text-xl md:text-2xl leading-snug text-brand-nav">
-                {blog.pullQuote}
-              </p>
-            </div>
-
-            {/* ── Section 3 ── */}
-            <h2
-              id="ai-enters"
-              className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
-            >
-              Where AI Enters
-            </h2>
-            <p className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5">
-              Generative AI tools are beginning to address some of the chronic
-              pain points in design system maintenance. Visual regression
-              testing that once required manual review can be partially
-              automated. Component documentation, a perennial afterthought, can
-              be drafted from code analysis. Accessibility audits that took
-              hours now run in seconds.
-            </p>
-            <p className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5">
-              More experimental tools are exploring component generation —
-              describe a UI need in plain language, receive a component that
-              adheres to your existing token structure. Whether these tools are
-              ready for production workflows is debatable. That they will change
-              the shape of design systems work within five years is not.
-            </p>
-
-            {/* Key Takeaways (from blog data) */}
-            <Takeaways items={takeawaysList} />
-
-            {/* ── Section 4 ── */}
-            <h2
-              id="human-element"
-              className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
-            >
-              The Human Element
-            </h2>
-            <p className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5">
-              What AI cannot replace is the judgment required to make a design
-              system feel intentional. The micro-decisions that make a component
-              library cohesive — the exact easing curve on a modal enter
-              transition, the space between a label and its input, the moment a
-              tooltip becomes a popover — these are expressions of design
-              opinion, not engineering optimization.
-            </p>
-            <p className="font-body text-[1.05rem] leading-[1.85] text-stone-600 mb-5">
-              The teams that will benefit most from AI tooling are those with
-              strong design system governance: clear principles, documented
-              rationale, explicit ownership. AI amplifies what's already there.
-              If your system has strong foundations, AI can help you maintain
-              and extend them faster.
-            </p>
-
-            {/* Callout */}
-            <div className="my-8 border border-border rounded-xl overflow-hidden">
-              <div className="bg-stone-900 px-5 py-3 font-dm text-[0.65rem] font-semibold tracking-widest uppercase text-brand-gold">
-                📌 Practical Note
-              </div>
-              <div className="bg-white px-5 py-4">
-                <p className="font-dm text-sm leading-relaxed text-muted-foreground">
-                  Before evaluating any AI tooling for your design system, audit
-                  your token documentation first. Tokens named{" "}
-                  <code className="font-mono bg-white/5 px-1.5 py-0.5 rounded text-xs text-foreground">
-                    color-3
-                  </code>{" "}
-                  instead of{" "}
-                  <code className="font-mono bg-white/5 px-1.5 py-0.5 rounded text-xs text-foreground">
-                    surface-primary
-                  </code>{" "}
-                  will produce poor AI-generated results consistently.
-                </p>
-              </div>
-            </div>
-
-            {/* ── Section 5 ── */}
-            <h2
-              id="future"
-              className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
-            >
-              What Comes Next
-            </h2>
-            <p className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5">
-              The most durable design systems of the next decade will likely be
-              smaller and more opinionated, not larger. As AI tooling handles
-              more generation and maintenance, the strategic value of a design
-              system shifts from comprehensive coverage to clear principles.
-            </p>
-            <p className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5">
-              These are questions that require human judgment, cultural context,
-              and brand understanding. The teams that focus there — and let AI
-              handle the rest — will build systems that age well.
-            </p>
+            {takeawaysList.length > 0 && <Takeaways items={takeawaysList} />}
 
             <hr className="border-border my-8" />
 
-            <Tags tags={blog.tags} />
+            {blog.tags && <Tags tags={blog.tags} />}
 
             <AuthorCard
               author={blog.author}
@@ -233,7 +226,7 @@ export default function BlogPage() {
             />
           </article>
 
-          {/* ── Sidebar (extracted) ── */}
+          {/* ── Sidebar ── */}
           <Sidebar
             circumference={circumference}
             scrollProgress={scrollProgress}
@@ -252,14 +245,13 @@ export default function BlogPage() {
               <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] tracking-tight">
                 Continue Reading
               </h2>
-
               <p className="text-lg text-gray-500 font-light leading-relaxed">
                 More on design, engineering, and craft
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
-              {blogs.map((blog, idx) => (
+              {storeData?.blogs.map((relatedBlog, idx) => (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, y: 30 }}
@@ -271,7 +263,15 @@ export default function BlogPage() {
                   }}
                   viewport={{ once: true }}
                 >
-                  <BlogCard {...blog} />
+                  <BlogCard
+                    {...(relatedBlog as any)}
+                    author={
+                      relatedBlog.authorName || (relatedBlog as any).author
+                    }
+                    date={
+                      relatedBlog.datePublished || (relatedBlog as any).date
+                    }
+                  />
                 </motion.div>
               ))}
             </div>

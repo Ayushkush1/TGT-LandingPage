@@ -144,6 +144,40 @@ export interface FooterCMSData {
   phoneNumber: string;
 }
 
+export interface BlogItemData {
+  image: string;
+  title: string;
+  views: string;
+  excerpt: string;
+  category: string;
+  readTime: string;
+  authorName?: string;
+  author?: string;
+  isExpanded?: boolean;
+  contentHtml?: string | any;
+  datePublished?: string;
+  date?: string;
+  authorAvatar?: string;
+  authorBio?: string;
+  tags?: string[];
+  pullQuote?: string;
+  takeaways?: string[];
+  content?: {
+    id: string;
+    heading: string;
+    paragraphs: string[];
+  }[];
+}
+
+export interface BlogSectionData {
+  blogs: BlogItemData[];
+  upperTag: string;
+  viewAllUrl: string;
+  viewAllLabel: string;
+  headlinePart1: string;
+  headlineHighlight: string;
+}
+
 export interface AboutFirmData {
   ctaUrl: string;
   images: string[];
@@ -308,7 +342,7 @@ export interface HomeData {
   OurReputation: OurReputationData;
   OurPartners: OurPartnersData;
   EnquirySection: EnquirySectionData;
-  BlogSection?: any;
+  BlogSection?: BlogSectionData;
   FooterCMS: FooterCMSData;
 }
 

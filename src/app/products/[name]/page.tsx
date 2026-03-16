@@ -1,23 +1,32 @@
 "use client";
-
 import CTABanner from "@/app/portfolio/components/CTABanner";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import HeroSection from "./components/HeroSection";
-import { portfolios } from "@/app/about/components/PortfolioSection";
 import ServicesAccordion, {
   Service,
 } from "@/app/service/ui-ux-designing/ServiceRow";
 import { Integrations } from "@/components/sections/Integrations";
 import { OurReputation } from "@/components/sections/OurReputation";
+import { PortfolioItemData, useCMSStore } from "@/store/useCMSStore";
 
 function SingleProduct() {
   const slug = useParams().name;
+  const portfolios = useCMSStore((state) => state.aboutData?.Portfolio);
+
   const product =
-    portfolios.find(
+    portfolios?.find(
       (p) => p.title.toLowerCase().replace(/\s+/g, "-") === slug,
-    ) || portfolios[0];
+    ) || portfolios?.[0];
+
+  if (!product) {
+    return (
+      <main className="min-h-screen bg-white font-sans flex items-center justify-center">
+        <p className="text-gray-500 text-lg">Product not found.</p>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
@@ -36,7 +45,7 @@ function SingleProduct() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <HeroSection product={product} />
+      <HeroSection product={product as PortfolioItemData} />
       <ServicesAccordion serviceData={product.SERVICES as Service[]} />
       <OurReputation />
       <Integrations />

@@ -187,6 +187,29 @@ export interface TeamMemberData {
   linkedinUrl: string;
 }
 
+export interface PortfolioItemData {
+  id: number;
+  image: string;
+  title: string;
+  subtitle: string;
+  CTA: string;
+  link: string;
+  date: string;
+  description: string;
+  stats: {
+    label: string;
+    value: string;
+  }[];
+  SERVICES: {
+    number: string;
+    title: string;
+    category: string;
+    description: string;
+    tags: string[];
+    outcome: string;
+  }[];
+}
+
 export interface OurTeamData {
   members: TeamMemberData[];
   topLabel: string;
@@ -273,6 +296,7 @@ export interface AboutData {
   VideoSection: VideoSectionData;
   VisionSection: VisionSectionData;
   OurTeam: OurTeamData;
+  Portfolio: PortfolioItemData[];
 }
 
 export interface HomeData {

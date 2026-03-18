@@ -19,8 +19,9 @@ const LogoPlaceholder = ({
   </div>
 );
 
-export const OurPartners = () => {
-  const data = useCMSStore((state) => state.homeData?.OurPartners);
+export const OurPartners = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.OurPartners);
+  const data = propData || storeData;
   return (
     <AnimatedSection animation="fadeIn" delay={0.2}>
       <section className="py-24 my-24 bg-[#0B0F29] overflow-hidden relative border-t border-white/5 z-0">

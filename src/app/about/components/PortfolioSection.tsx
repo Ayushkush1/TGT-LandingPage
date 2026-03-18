@@ -6,6 +6,7 @@ import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
+import { useCMSStore, type PortfolioItemData } from "@/store/useCMSStore";
 
 // Swiper styles
 import "swiper/css";
@@ -13,359 +14,6 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import Link from "next/link";
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-export const portfolios = [
-  {
-    id: 1,
-    image: "/images/portfolioImg1.jpg",
-    title: "GreatWaterFilters.com.au",
-    subtitle: "Website Development",
-    CTA: "Water Purifier",
-    link: "#",
-    date: "Tue, 8 Mar 2022",
-    description:
-      "A full e-commerce and content website for Australia's water filter specialists.",
-    stats: [
-      { label: "Conversion Rate", value: "60%" },
-      { label: "Load Speed", value: "90%" },
-      { label: "User Rating", value: "60%" },
-    ],
-    SERVICES: [
-      {
-        number: "01",
-        title: "UI/UX Design",
-        category: "Design",
-        description: "Modern interface design.",
-        tags: ["design"],
-        outcome: "Better engagement",
-      },
-      {
-        number: "02",
-        title: "Web Development",
-        category: "Development",
-        description: "Full-stack build.",
-        tags: ["web"],
-        outcome: "Fast performance",
-      },
-      {
-        number: "03",
-        title: "E-commerce Setup",
-        category: "Development",
-        description: "Online store integration.",
-        tags: ["ecommerce"],
-        outcome: "Online sales",
-      },
-      {
-        number: "04",
-        title: "Payment Gateway",
-        category: "Integration",
-        description: "Secure payment methods.",
-        tags: ["payments"],
-        outcome: "Smooth checkout",
-      },
-      {
-        number: "05",
-        title: "SEO Optimization",
-        category: "Marketing",
-        description: "Search engine optimization.",
-        tags: ["seo"],
-        outcome: "Higher ranking",
-      },
-    ],
-  },
-
-  {
-    id: 2,
-    image: "/images/portfolioImg2.jpg",
-    title: "MyWeekendTrip",
-    subtitle: "Website Development",
-    CTA: "Tourism",
-    link: "#",
-    date: "Mon, 14 Nov 2023",
-    description: "A booking and discovery platform for weekend getaways.",
-    stats: [
-      { label: "Bookings", value: "20%" },
-      { label: "Markets", value: "70%" },
-      { label: "Satisfaction", value: "80%" },
-    ],
-    SERVICES: [
-      {
-        number: "01",
-        title: "Booking Engine",
-        category: "Development",
-        description: "Reservation system.",
-        tags: ["backend"],
-        outcome: "More bookings",
-      },
-      {
-        number: "02",
-        title: "Search Filters",
-        category: "Features",
-        description: "Smart trip filters.",
-        tags: ["search"],
-        outcome: "Easy discovery",
-      },
-      {
-        number: "03",
-        title: "Responsive Design",
-        category: "Design",
-        description: "Mobile-friendly UI.",
-        tags: ["responsive"],
-        outcome: "Mobile users",
-      },
-      {
-        number: "04",
-        title: "Map Integration",
-        category: "Integration",
-        description: "Location-based trips.",
-        tags: ["map"],
-        outcome: "Better planning",
-      },
-      {
-        number: "05",
-        title: "User Accounts",
-        category: "Security",
-        description: "Login & profiles.",
-        tags: ["auth"],
-        outcome: "Personalization",
-      },
-    ],
-  },
-
-  {
-    id: 3,
-    image: "/images/portfolioImg3.jpg",
-    title: "Label Corporate",
-    subtitle: "Website Development",
-    CTA: "Corporate Garments",
-    link: "#",
-    date: "Wed, 21 Jun 2023",
-    description:
-      "A professional web presence for a corporate garments company.",
-    stats: [
-      { label: "Traffic Growth", value: "12%" },
-      { label: "Reach", value: "15%" },
-      { label: "Leads", value: "89%" },
-    ],
-    SERVICES: [
-      {
-        number: "01",
-        title: "Corporate Website",
-        category: "Development",
-        description: "Company site.",
-        tags: ["enterprise"],
-        outcome: "Brand presence",
-      },
-      {
-        number: "02",
-        title: "Product Catalog",
-        category: "Features",
-        description: "Garment showcase.",
-        tags: ["catalog"],
-        outcome: "More leads",
-      },
-      {
-        number: "03",
-        title: "Contact System",
-        category: "Integration",
-        description: "Inquiry forms.",
-        tags: ["forms"],
-        outcome: "Customer reach",
-      },
-      {
-        number: "04",
-        title: "SEO Setup",
-        category: "Marketing",
-        description: "Search visibility.",
-        tags: ["seo"],
-        outcome: "Traffic growth",
-      },
-      {
-        number: "05",
-        title: "Hosting & Deployment",
-        category: "DevOps",
-        description: "Live deployment.",
-        tags: ["hosting"],
-        outcome: "Reliable uptime",
-      },
-    ],
-  },
-
-  {
-    id: 4,
-    image: "/images/portfolioImg4.png",
-    title: "Bir Credit Solution",
-    subtitle: "ERP Software",
-    CTA: "Finance Solutions",
-    link: "#",
-    date: "Thu, 12 Jan 2024",
-    description: "Custom ERP software for credit solutions provider.",
-    stats: [
-      { label: "Efficiency", value: "86%" },
-      { label: "Accuracy", value: "34%" },
-      { label: "Speed", value: "89%" },
-    ],
-    SERVICES: [
-      {
-        number: "01",
-        title: "ERP Development",
-        category: "Software",
-        description: "Custom system.",
-        tags: ["erp"],
-        outcome: "Automation",
-      },
-      {
-        number: "02",
-        title: "Dashboard",
-        category: "Analytics",
-        description: "Reports & insights.",
-        tags: ["dashboard"],
-        outcome: "Data tracking",
-      },
-      {
-        number: "03",
-        title: "User Roles",
-        category: "Security",
-        description: "Access control.",
-        tags: ["auth"],
-        outcome: "Security",
-      },
-      {
-        number: "04",
-        title: "Database Design",
-        category: "Backend",
-        description: "Structured data.",
-        tags: ["database"],
-        outcome: "Efficiency",
-      },
-      {
-        number: "05",
-        title: "API Integration",
-        category: "Integration",
-        description: "External services.",
-        tags: ["api"],
-        outcome: "Scalability",
-      },
-    ],
-  },
-
-  {
-    id: 5,
-    image: "/images/portfolioImg5.jpg",
-    title: "The Social Beacon",
-    subtitle: "Website Redesign",
-    CTA: "Digital Marketing",
-    link: "#",
-    date: "Fri, 5 Sep 2023",
-    description: "A modern redesign for a digital marketing agency.",
-    stats: [
-      { label: "Engagement", value: "86%" },
-      { label: "Retention", value: "45%" },
-      { label: "Growth", value: "76%" },
-    ],
-    SERVICES: [
-      {
-        number: "01",
-        title: "Website Redesign",
-        category: "Design",
-        description: "Modern UI.",
-        tags: ["redesign"],
-        outcome: "Fresh look",
-      },
-      {
-        number: "02",
-        title: "Performance Boost",
-        category: "Performance",
-        description: "Speed optimization.",
-        tags: ["speed"],
-        outcome: "Fast loading",
-      },
-      {
-        number: "03",
-        title: "SEO Upgrade",
-        category: "Marketing",
-        description: "Ranking improvements.",
-        tags: ["seo"],
-        outcome: "Traffic",
-      },
-      {
-        number: "04",
-        title: "Content Update",
-        category: "Content",
-        description: "New copywriting.",
-        tags: ["content"],
-        outcome: "Brand clarity",
-      },
-      {
-        number: "05",
-        title: "Analytics Setup",
-        category: "Analytics",
-        description: "Tracking tools.",
-        tags: ["analytics"],
-        outcome: "Data insights",
-      },
-    ],
-  },
-
-  {
-    id: 6,
-    image: "/images/portfolioImg6.jpg",
-    title: "The Embassy Inn",
-    subtitle: "Website & Digital Marketing",
-    CTA: "Hotels",
-    link: "#",
-    date: "Mon, 18 Dec 2023",
-    description: "Website and digital marketing for a boutique hotel.",
-    stats: [
-      { label: "Bookings", value: "69%" },
-      { label: "Reviews", value: "23%" },
-      { label: "Revenue", value: "56%" },
-    ],
-    SERVICES: [
-      {
-        number: "01",
-        title: "Hotel Website",
-        category: "Development",
-        description: "Booking site.",
-        tags: ["hotel"],
-        outcome: "Direct bookings",
-      },
-      {
-        number: "02",
-        title: "Booking Integration",
-        category: "Integration",
-        description: "Reservation system.",
-        tags: ["booking"],
-        outcome: "Automation",
-      },
-      {
-        number: "03",
-        title: "SEO & Ads",
-        category: "Marketing",
-        description: "Online promotion.",
-        tags: ["ads"],
-        outcome: "Visibility",
-      },
-      {
-        number: "04",
-        title: "Review System",
-        category: "Features",
-        description: "Guest feedback.",
-        tags: ["reviews"],
-        outcome: "Trust",
-      },
-      {
-        number: "05",
-        title: "Social Media Setup",
-        category: "Marketing",
-        description: "Online presence.",
-        tags: ["social"],
-        outcome: "Brand awareness",
-      },
-    ],
-  },
-];
 
 // ─── Stat Card ─────────────────────────────────────────────────────────────────
 function StatCard({ value, label }: { value: string; label: string }) {
@@ -386,7 +34,7 @@ function StatCard({ value, label }: { value: string; label: string }) {
 }
 
 // ─── Slide Card (mouse-follow) ───────────────────────────────────────────────────
-function SlideCard({ p }: { p: (typeof portfolios)[0] }) {
+function SlideCard({ p }: { p: PortfolioItemData }) {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -482,6 +130,7 @@ function SlideCard({ p }: { p: (typeof portfolios)[0] }) {
 const PortfolioSection = () => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const mainSwiperRef = useRef<SwiperType | null>(null);
+  const cmsPortfolios = useCMSStore((state) => state.aboutData?.Portfolio);
 
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
@@ -519,7 +168,7 @@ const PortfolioSection = () => {
             }}
             className="w-full h-full"
           >
-            {portfolios.map((p, i) => (
+            {cmsPortfolios?.map((p) => (
               <SwiperSlide key={p.id}>
                 <SlideCard p={p} />
               </SwiperSlide>
@@ -544,7 +193,7 @@ const PortfolioSection = () => {
             }}
             className="portfolio-thumbs"
           >
-            {portfolios.map((p) => (
+            {cmsPortfolios?.map((p) => (
               <SwiperSlide key={p.id} className=" p-2">
                 {/* Thumb card */}
                 <div

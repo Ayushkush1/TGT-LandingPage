@@ -54,8 +54,9 @@ const SelectField = ({
   </div>
 );
 
-export const EnquirySection = () => {
-  const data = useCMSStore((state) => state.homeData?.EnquirySection);
+export const EnquirySection = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.EnquirySection);
+  const data = propData || storeData;
 
   return (
     <AnimatedSection animation="fadeUp" delay={0.2}>

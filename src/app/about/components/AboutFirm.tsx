@@ -3,8 +3,9 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { ArrowRight } from "lucide-react";
 
-const AboutFirm = () => {
-  const data = useCMSStore((state) => state.aboutData?.AboutFirm);
+export const AboutFirm = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.aboutData?.AboutFirm);
+  const data = propData || storeData;
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">

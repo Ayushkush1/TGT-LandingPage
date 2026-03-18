@@ -64,9 +64,9 @@ const AnimatedCounter = ({
   );
 };
 
-export const Integrations = ({ data: propData }: { data?: any }) => {
+export const Integrations = () => {
   const storeData = useCMSStore((state) => state.homeData?.Integrations);
-  const data = propData || storeData;
+  const data = storeData;
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
       <section className="py-32 bg-white overflow-hidden relative font-sans z-0">

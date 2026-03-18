@@ -351,12 +351,60 @@ export interface ContactData {
   EnquirySection: EnquirySectionData;
 }
 
+export interface PortfolioHeroData {
+  ctaHref: string;
+  ctaText: string;
+  eyebrow: string;
+  description: string;
+  titlePrefix: string;
+  titleSuffix: string;
+  titleHighlight: string;
+  viewProjectsText: string;
+  viewProjectsHref: string;
+}
+
+export interface PortfolioCollageData {
+  mainImage: string[];
+  ratingText: string;
+  ratingValue: string;
+  mainImageTag: string;
+  ratingSubtext: string;
+  tertiaryImage: string[];
+  liveStatusText: string;
+  mainImageTitle: string;
+  secondaryImage: string[];
+  liveStatusSubtext: string;
+  tertiaryImageTitle: string;
+  secondaryImageTitle: string;
+}
+
+export interface PortfolioCTAData {
+  eyebrow: string;
+  titleMain: string;
+  description: string;
+  titleHighlight: string;
+  primaryButtonLink: string;
+  primaryButtonText: string;
+  secondaryButtonLink: string;
+  secondaryButtonText: string;
+  titlepart3: string;
+}
+
+export interface PortfolioPageData {
+  main: {
+    hero: PortfolioHeroData;
+    collage: PortfolioCollageData;
+    cta: PortfolioCTAData;
+  };
+}
+
 interface CMSStoreState {
   homeData: HomeData | null;
   aboutData: AboutData | null;
   contactData: ContactData | null;
   productData: ProductData | null;
   serviceData: ServiceData | null;
+  portfolioData: PortfolioPageData | null;
   navLinks: NavLink[] | null;
   isLoading: boolean;
   error: string | null;
@@ -368,6 +416,7 @@ interface CMSStoreActions {
   setContactData: (data: ContactData | null) => void;
   setProductData: (data: ProductData | null) => void;
   setServiceData: (data: ServiceData | null) => void;
+  setPortfolioData: (data: PortfolioPageData | null) => void;
   setNavLinks: (data: NavLink[] | null) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
@@ -383,6 +432,7 @@ const initialState: CMSStoreState = {
   contactData: null,
   productData: null,
   serviceData: null,
+  portfolioData: null,
   navLinks: null,
   isLoading: false,
   error: null,
@@ -397,6 +447,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   setContactData: (data) => set({ contactData: data }),
   setProductData: (data) => set({ productData: data }),
   setServiceData: (data) => set({ serviceData: data }),
+  setPortfolioData: (data) => set({ portfolioData: data }),
   setNavLinks: (data) => set({ navLinks: data }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
@@ -423,6 +474,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
         const contactPage = pages.find((p: any) => p.slug === "contact");
         const productPage = pages.find((p: any) => p.slug === "products");
         const servicePage = pages.find((p: any) => p.slug === "services");
+        const portfolioPage = pages.find((p: any) => p.slug === "portfolio");
 
         const updates: Partial<CMSStoreState> = { isLoading: false };
 
@@ -441,6 +493,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
         }
         if (servicePage?.sections) {
           updates.serviceData = transformSections(servicePage.sections);
+        }
+        if (portfolioPage?.sections) {
+          updates.portfolioData = transformSections(portfolioPage.sections);
         }
         set(updates);
       } else {

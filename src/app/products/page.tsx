@@ -54,7 +54,7 @@ function ProductPage() {
           {/* Left: Vertical accent + heading */}
           <motion.div
             variants={itemVariants}
-            className="flex gap-6 items-start flex-shrink-0 lg:w-96"
+            className="flex gap-6 items-center flex-shrink-0 lg:w-96"
           >
             {/* Vertical rule + rotated label */}
             <div className="flex flex-col items-center gap-4 pt-2">
@@ -66,7 +66,7 @@ function ProductPage() {
 
             <div>
               {/* Big editorial heading */}
-              <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
+              <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] -mt-10 tracking-tight">
                 {headerData?.headingLine
                   ?.split(" ")
                   ?.map((line: string, i: number) => (
@@ -116,7 +116,7 @@ function ProductPage() {
         </div>
 
         {/* ── Bottom Row: Image + Pillar Cards ── */}
-        <div className=" flex flex-col gap-12">
+        <div className=" flex flex-col gap-20">
           {productInfo?.map((product: ProductItemData, index: number) => {
             return (
               <motion.div

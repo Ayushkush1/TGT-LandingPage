@@ -80,26 +80,27 @@ export const Navbar = () => {
         }`}
       >
         {/* Logo */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="flex items-center gap-2.5 relative z-10"
-        >
-          <Image
-            src={"/logo.jpeg"}
-            alt="logo"
-            height={40}
-            width={40}
-            className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
-          />
-          {!scrolled && (
-            <span className="text-xl font-bold text-gray-900 tracking-tight">
-              The Gold Technologies
-            </span>
-          )}
-        </motion.div>
-
+        <Link href={"/"}>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="flex items-center gap-2.5 relative z-10"
+          >
+            <Image
+              src={"/logo.jpeg"}
+              alt="logo"
+              height={40}
+              width={40}
+              className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
+            />
+            {!scrolled && (
+              <span className="text-xl font-bold text-gray-900 tracking-tight">
+                The Gold Technologies
+              </span>
+            )}
+          </motion.div>
+        </Link>
         {/* Center Links */}
         <div
           className={`hidden md:flex items-center 

@@ -60,7 +60,7 @@ export const TrustedBy = () => {
                     key={`${logo}-${index}`}
                     className="flex items-center justify-center min-w-[120px] h-12 relative grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 px-4"
                   >
-                    <div className="relative w-20 h-8 ">
+                    <div className="relative w-24 h-12 ">
                       <Image
                         src={logo}
                         alt="Partner Logo"

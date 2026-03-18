@@ -112,7 +112,7 @@ export default function HeroSection() {
             </motion.div>
 
             {/* Headline */}
-            <motion.h2
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -150,7 +150,7 @@ export default function HeroSection() {
               </span>
               <br />
               {hero.titleSuffix}
-            </motion.h2>
+            </motion.h1>
 
             {/* Body */}
             <motion.p

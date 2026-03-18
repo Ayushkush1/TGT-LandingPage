@@ -52,7 +52,7 @@ function HeroSection({
 
           <div>
             {/* Big editorial heading */}
-            <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
+            <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
               {serviceData?.headingLine1?.split(" ")?.map((line, i, arr) => (
                 <span key={i}>
                   {line}
@@ -60,7 +60,7 @@ function HeroSection({
                     (line === "&" || arr[i + 1] === "&" ? " " : <br />)}
                 </span>
               ))}
-            </h2>
+            </h1>
           </div>
         </motion.div>
 

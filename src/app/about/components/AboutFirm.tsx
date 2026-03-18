@@ -26,9 +26,9 @@ export const AboutFirm = ({ data: propData }: { data?: any }) => {
 
               <div>
                 {/* Big editorial heading */}
-                <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black w-20 text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
+                <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black w-20 text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
                   {data?.heading}
-                </h2>
+                </h1>
               </div>
             </div>
 

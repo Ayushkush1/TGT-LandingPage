@@ -66,7 +66,7 @@ function ProductPage() {
 
             <div>
               {/* Big editorial heading */}
-              <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] -mt-10 tracking-tight">
+              <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] -mt-10 tracking-tight">
                 {headerData?.headingLine
                   ?.split(" ")
                   ?.map((line: string, i: number) => (
@@ -77,7 +77,7 @@ function ProductPage() {
                       )}
                     </span>
                   ))}
-              </h2>
+              </h1>
             </div>
           </motion.div>
 

@@ -515,19 +515,20 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
       if (Array.isArray(pages)) {
         const homePage = pages.find((p: any) => p.slug === "home");
         const aboutPage = pages.find((p: any) => p.slug === "about");
-        const contactPage = pages.find((p: any) => p.slug === "contact");
+        const contactPage = pages.find((p: any) => p.slug === "contactUs");
         const productPage = pages.find((p: any) => p.slug === "products");
         const servicePage = pages.find((p: any) => p.slug === "services");
         const portfolioPage = pages.find((p: any) => p.slug === "portfolio");
 
         const extractSEO = (p: any): PageSEO | undefined => {
           if (!p) return undefined;
+          const seo = p.seo || {};
           return {
-            metaTitle: p.metaTitle,
-            metaDescription: p.metaDescription,
-            targetKeywords: p.targetKeywords,
-            canonicalUrl: p.canonicalUrl,
-            noIndex: p.noIndex,
+            metaTitle: seo.metaTitle || p.metaTitle,
+            metaDescription: seo.metaDescription || p.metaDescription,
+            targetKeywords: seo.targetKeywords || p.targetKeywords,
+            canonicalUrl: seo.canonicalUrl || p.canonicalUrl,
+            noIndex: seo.noIndex ?? p.noIndex ?? false,
           };
         };
 

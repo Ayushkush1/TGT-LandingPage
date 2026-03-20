@@ -10,6 +10,35 @@ import VideoSection from "./components/VideoSection";
 import VisionSection from "./components/VisionSection";
 import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { BlogSection } from "@/components/sections/BlogSection";
+import { Metadata } from "next";
+import { getPageSEO } from "@/lib/cms";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSEO("about");
+  if (!seo) return {};
+
+  return {
+    title: seo.metaTitle || undefined,
+    description: seo.metaDescription || undefined,
+    keywords: seo.targetKeywords || undefined,
+    alternates: {
+      canonical: seo.canonicalUrl || undefined,
+    },
+    robots: {
+      index: !seo.noIndex,
+      follow: !seo.noIndex,
+    },
+    openGraph: {
+      title: seo.metaTitle || undefined,
+      description: seo.metaDescription || undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.metaTitle || undefined,
+      description: seo.metaDescription || undefined,
+    },
+  };
+}
 
 function AboutPage() {
   return (

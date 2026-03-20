@@ -1,17 +1,46 @@
-import { Footer } from "@/components/Footer";
+import { Metadata } from "next";
+import { getPageSEO } from "@/lib/cms";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { Integrations } from "@/components/sections/Integrations";
 import { OurReputation } from "@/components/sections/OurReputation";
 import CTABanner from "./components/CTABanner";
 import HeroSection from "./components/HeroSection";
 import PortfolioSection from "../about/components/PortfolioSection";
+import { SelectedProjects } from "@/components/sections/SelectedProjects";
+import { BlogSection } from "@/components/sections/BlogSection";
 
-function PortfolioPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSEO("portfolio");
+  if (!seo) return {};
+
+  return {
+    title: seo.metaTitle || undefined,
+    description: seo.metaDescription || undefined,
+    keywords: seo.targetKeywords || undefined,
+    alternates: {
+      canonical: seo.canonicalUrl || undefined,
+    },
+    robots: {
+      index: !seo.noIndex,
+      follow: !seo.noIndex,
+    },
+    openGraph: {
+      title: seo.metaTitle || undefined,
+      description: seo.metaDescription || undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.metaTitle || undefined,
+      description: seo.metaDescription || undefined,
+    },
+  };
+}
+
+export default function PortfolioPage() {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
-      {/* Unified Background Wrapper for Navbar + Hero */}
       <div className="relative">
-        {/* Noise Texture Background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
@@ -19,19 +48,17 @@ function PortfolioPage() {
             backgroundRepeat: "repeat",
           }}
         />
-
-        {/* Subtle Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
       <HeroSection />
-      <PortfolioSection /> {/* PortfolioSection */}
+      <PortfolioSection />
       <Integrations />
       <OurReputation />
+      <SelectedProjects />
       <CTABanner />
+      <BlogSection />
       <Footer />
     </main>
   );
 }
-
-export default PortfolioPage;

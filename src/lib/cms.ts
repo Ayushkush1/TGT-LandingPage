@@ -80,14 +80,15 @@ export async function getProductPageData(): Promise<any | null> {
   const pages = await getPages();
   const productPage = pages.find((p: any) => p.slug === "products");
   if (productPage?.sections) {
-    const hero = productPage.sections.find(
-      (s: any) => s.type === "HeroSection",
-    )?.content;
-    const ProductSection = productPage.sections.find(
-      (s: any) => s.type === "ProductSection",
+    const mainSection = productPage.sections.find(
+      (s: any) => s.type === "main",
     );
-    const products = ProductSection?.content?.products || [];
-    return { hero, products };
+    if (mainSection?.content) {
+      return {
+        hero: mainSection.content.hero,
+        products: mainSection.content.products || [],
+      };
+    }
   }
   return null;
 }

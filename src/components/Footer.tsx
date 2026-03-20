@@ -198,11 +198,33 @@ export const Footer = () => {
           </div>
 
           <div className="flex gap-4">
-            {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
+            {[
+              {
+                Icon: Facebook,
+                url: data?.facebookUrl,
+              },
+              {
+                Icon: Twitter,
+                url: data?.twitterUrl,
+              },
+              {
+                Icon: Instagram,
+                url: data?.instagramUrl,
+              },
+              {
+                Icon: Linkedin,
+                url: data?.linkedinUrl,
+              },
+            ].map(({ Icon, url }, i) => (
               <MagneticButton key={i} className="group">
-                <button className="w-14 h-14 rounded-full border border-white/10 bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#020410] transition-all duration-300">
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-full border border-white/10 bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#020410] transition-all duration-300"
+                >
                   <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
-                </button>
+                </a>
               </MagneticButton>
             ))}
           </div>

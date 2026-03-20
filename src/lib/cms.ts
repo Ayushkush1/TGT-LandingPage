@@ -2,7 +2,9 @@ import { PageSEO } from "@/store/useCMSStore";
 
 export async function getPages(): Promise<any[]> {
   try {
-    const response = await fetch("https://tgt-cms.vercel.app/api/pages");
+    const response = await fetch("https://tgt-cms.vercel.app/api/pages", {
+      cache: "no-store",
+    });
     const json = await response.json();
     return json?.data || [];
   } catch (error) {
@@ -25,6 +27,11 @@ export async function getPageSEO(slug: string): Promise<PageSEO | null> {
     };
   }
   return null;
+}
+
+export async function getPageData(slug: string): Promise<any | null> {
+  const pages = await getPages();
+  return pages.find((p: any) => p.slug === slug) || null;
 }
 
 export async function getServiceData(slug: string): Promise<any | null> {

@@ -1,33 +1,20 @@
 "use client";
-import CTABanner from "@/app/portfolio/components/CTABanner";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { useParams } from "next/navigation";
-import HeroSection from "./components/HeroSection";
-import ServicesAccordion, {
-  Service,
-} from "@/app/service/components/ServiceRow";
-import { Integrations } from "@/components/sections/Integrations";
+import { TrustedBy } from "@/components/sections/TrustedBy";
+import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
-import { PortfolioItemData, useCMSStore } from "@/store/useCMSStore";
+import { Integrations } from "@/components/sections/Integrations";
+import HeroSection from "./HeroSection";
+import PortfolioSection from "@/app/about/components/PortfolioSection";
+import { BlogSection } from "@/components/sections/BlogSection";
+import ServicesAccordion from "./ServiceRow";
 
-function SingleProduct() {
-  const slug = useParams().name;
-  const portfolios = useCMSStore((state) => state.aboutData?.Portfolio);
+interface ServiceContentProps {
+  serviceData: any;
+}
 
-  const product =
-    portfolios?.find(
-      (p) => p.title.toLowerCase().replace(/\s+/g, "-") === slug,
-    ) || portfolios?.[0];
-
-  if (!product) {
-    return (
-      <main className="min-h-screen bg-white font-sans flex items-center justify-center">
-        <p className="text-gray-500 text-lg">Product not found.</p>
-      </main>
-    );
-  }
-
+export default function ServiceContent({ serviceData }: ServiceContentProps) {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -45,14 +32,16 @@ function SingleProduct() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <HeroSection product={product as PortfolioItemData} />
-      <ServicesAccordion serviceData={product.SERVICES as Service[]} />
-      <OurReputation />
-      <Integrations />
-      <CTABanner />
+      <HeroSection serviceData={serviceData?.hero} />
+      <TrustedBy />
+      <ServicesAccordion serviceData={serviceData?.services} />
+      <OurReputation /> {/* Client Success */}
+      <Integrations /> {/* Tech Stack */}
+      <PortfolioSection /> {/* PortfolioSection */}
+      {/* Partner Logos */}
+      <OurPartners />
+      <BlogSection /> {/* Blog Section */}
       <Footer />
     </main>
   );
 }
-
-export default SingleProduct;

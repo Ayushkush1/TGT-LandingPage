@@ -11,7 +11,7 @@ import {
   containerVariants,
   itemVariants,
   PillarCard,
-} from "../service/ui-ux-designing/HeroSection";
+} from "../service/components/HeroSection";
 import { BlogSection } from "@/components/sections/BlogSection";
 import { motion } from "framer-motion";
 import Link from "next/link";

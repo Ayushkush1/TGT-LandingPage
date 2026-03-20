@@ -2,9 +2,7 @@ import { PageSEO } from "@/store/useCMSStore";
 
 export async function getPages(): Promise<any[]> {
   try {
-    const response = await fetch("https://tgt-cms.vercel.app/api/pages", {
-      next: { revalidate: 3600 },
-    });
+    const response = await fetch("https://tgt-cms.vercel.app/api/pages");
     const json = await response.json();
     return json?.data || [];
   } catch (error) {
@@ -58,10 +56,15 @@ export async function getServiceSEO(slug: string): Promise<MetadataSEO | null> {
   }
 
   return {
-    title: `${slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")} | Services`,
+    title: `${slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")} | Services`,
     description: servicePage.metaDescription || null,
     keywords: servicePage.targetKeywords || null,
-    canonical: servicePage.canonicalUrl ? `${servicePage.canonicalUrl}/${slug}` : null,
+    canonical: servicePage.canonicalUrl
+      ? `${servicePage.canonicalUrl}/${slug}`
+      : null,
     noIndex: servicePage.noIndex || false,
   };
 }
@@ -70,8 +73,12 @@ export async function getProductPageData(): Promise<any | null> {
   const pages = await getPages();
   const productPage = pages.find((p: any) => p.slug === "products");
   if (productPage?.sections) {
-    const hero = productPage.sections.find((s: any) => s.type === "HeroSection")?.content;
-    const ProductSection = productPage.sections.find((s: any) => s.type === "ProductSection");
+    const hero = productPage.sections.find(
+      (s: any) => s.type === "HeroSection",
+    )?.content;
+    const ProductSection = productPage.sections.find(
+      (s: any) => s.type === "ProductSection",
+    );
     const products = ProductSection?.content?.products || [];
     return { hero, products };
   }
@@ -82,7 +89,9 @@ export async function getPortfolioData(): Promise<any[]> {
   const pages = await getPages();
   const aboutPage = pages.find((p: any) => p.slug === "about");
   if (aboutPage?.sections) {
-    const portfolioSection = aboutPage.sections.find((s: any) => s.type === "Portfolio");
+    const portfolioSection = aboutPage.sections.find(
+      (s: any) => s.type === "Portfolio",
+    );
     return portfolioSection?.content || [];
   }
   return [];

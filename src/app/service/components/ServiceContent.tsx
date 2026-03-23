@@ -1,46 +1,20 @@
+"use client";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import AboutFirm from "./components/AboutFirm";
-import OurTeam from "./components/OurTeam";
 import { TrustedBy } from "@/components/sections/TrustedBy";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { Integrations } from "@/components/sections/Integrations";
-import VideoSection from "./components/VideoSection";
-import VisionSection from "./components/VisionSection";
+import HeroSection from "./HeroSection";
 import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { BlogSection } from "@/components/sections/BlogSection";
-import { Metadata } from "next";
-import { getPageSEO } from "@/lib/cms";
+import ServicesAccordion from "./ServiceRow";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await getPageSEO("about");
-  if (!seo) return {};
-
-  return {
-    title: seo.metaTitle || undefined,
-    description: seo.metaDescription || undefined,
-    keywords: seo.targetKeywords || undefined,
-    alternates: {
-      canonical: seo.canonicalUrl || undefined,
-    },
-    robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
-    },
-    openGraph: {
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
-    },
-  };
+interface ServiceContentProps {
+  serviceData: any;
 }
 
-function AboutPage() {
+export default function ServiceContent({ serviceData }: ServiceContentProps) {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -54,23 +28,20 @@ function AboutPage() {
           }}
         />
 
-        {/* Subtle Gradient Overlay (tokenized) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-white to-white/5 pointer-events-none" />
+        {/* Subtle Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <AboutFirm />
+      <HeroSection serviceData={serviceData?.hero} />
       <TrustedBy />
-      <VideoSection />
-      <VisionSection />
-      <OurTeam /> {/* Team section */}
-      <OurPartners /> {/* Partner Logos */}
+      <ServicesAccordion serviceData={serviceData?.services} />
       <OurReputation /> {/* Client Success */}
-      <Integrations /> {/* Tech Stack */} {/* Integrations */}
+      <Integrations /> {/* Tech Stack */}
       <PortfolioSection /> {/* PortfolioSection */}
+      {/* Partner Logos */}
+      <OurPartners />
       <BlogSection /> {/* Blog Section */}
       <Footer />
     </main>
   );
 }
-
-export default AboutPage;

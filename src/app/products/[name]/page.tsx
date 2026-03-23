@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import HeroSection from "./components/HeroSection";
 import ServicesAccordion, {
   Service,
-} from "@/app/service/ui-ux-designing/ServiceRow";
+} from "@/app/service/components/ServiceRow";
 import { Integrations } from "@/components/sections/Integrations";
 import { OurReputation } from "@/components/sections/OurReputation";
 import { PortfolioItemData, useCMSStore } from "@/store/useCMSStore";

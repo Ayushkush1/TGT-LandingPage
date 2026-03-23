@@ -54,7 +54,13 @@ const SelectField = ({
   </div>
 );
 
-export const EnquirySection = ({ data: propData }: { data?: any }) => {
+export const EnquirySection = ({
+  data: propData,
+  isMain = false,
+}: {
+  data?: any;
+  isMain?: boolean;
+}) => {
   const storeData = useCMSStore((state) => state.homeData?.EnquirySection);
   const data = propData || storeData;
 
@@ -71,12 +77,21 @@ export const EnquirySection = ({ data: propData }: { data?: any }) => {
                   {data?.upperTag}
                 </span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
-                {data?.headlinePart1} <br />
-                <span className="font-serif italic text-[#D4AF37]">
-                  {data?.headlineHighlight}
-                </span>
-              </h2>
+              {isMain ? (
+                <h1 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
+                  {data?.headlinePart1} <br />
+                  <span className="font-serif italic text-[#D4AF37]">
+                    {data?.headlineHighlight}
+                  </span>
+                </h1>
+              ) : (
+                <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
+                  {data?.headlinePart1} <br />
+                  <span className="font-serif italic text-[#D4AF37]">
+                    {data?.headlineHighlight}
+                  </span>
+                </h2>
+              )}
             </div>
 
             <p className="text-base text-gray-500 font-light leading-relaxed">

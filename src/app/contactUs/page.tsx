@@ -2,6 +2,35 @@ import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { EnquirySection } from "@/components/sections/EnquirySection";
 import MapSection from "@/components/sections/MapSection";
+import { getPageSEO } from "@/lib/cms";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSEO("contactUs");
+  if (!seo) return {};
+
+  return {
+    title: seo.metaTitle || undefined,
+    description: seo.metaDescription || undefined,
+    keywords: seo.targetKeywords || undefined,
+    alternates: {
+      canonical: seo.canonicalUrl || undefined,
+    },
+    robots: {
+      index: !seo.noIndex,
+      follow: !seo.noIndex,
+    },
+    openGraph: {
+      title: seo.metaTitle || undefined,
+      description: seo.metaDescription || undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.metaTitle || undefined,
+      description: seo.metaDescription || undefined,
+    },
+  };
+}
 
 function ContactUs() {
   return (
@@ -21,7 +50,7 @@ function ContactUs() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <EnquirySection /> {/* Contact Form */}
+      <EnquirySection isMain={true} /> {/* Contact Form */}
       <MapSection />
       <Footer />
     </main>

@@ -1,11 +1,36 @@
 import { create } from "zustand";
 
+/**
+ *
+ * OPTIMIZED: Added PageSEO interface to capture metadata
+ */
+export interface PageSEO {
+  metaTitle: string | null;
+  metaDescription: string | null;
+  targetKeywords: string | null;
+  canonicalUrl: string | null;
+  noIndex: boolean;
+}
+
 export interface NavLink {
   title: string;
   link: string;
   desc?: string;
   type?: string;
   dropdown?: NavLink[];
+}
+
+export interface GlobalSEOData {
+  siteTitle: string;
+  siteDescription: string;
+  favicon: string;
+  googleAnalyticsId: string | null;
+  gtmId: string | null;
+  searchConsoleId: string | null;
+  customHeaderScripts: string | null;
+  customFooterScripts: string | null;
+  socialLinks: { platform: string; url: string }[];
+  canonicalOrdering: string;
 }
 
 export interface ApiNavLink {
@@ -20,6 +45,9 @@ export interface ApiNavLink {
   isStatic: boolean;
 }
 
+/**
+ * OPTIMIZED: All data interfaces now include an optional 'seo' property
+ */
 export interface HeroSectionData {
   badgeLabel: string;
   headlineMain: string;
@@ -131,6 +159,8 @@ export interface FooterCMSData {
   companyName: string;
   emailAddress: string;
   facebookUrl: string;
+  twitterUrl?: string;
+  linkedinUrl?: string;
   footerDescription: string;
   instagramUrl: string;
   companyInitials: string;
@@ -288,6 +318,7 @@ export interface ProductItemData {
 }
 
 export interface ProductData {
+  seo?: PageSEO;
   main: {
     hero: ProductHeroData;
     products: ProductItemData[];
@@ -322,10 +353,12 @@ export interface ServiceCategoryData {
 }
 
 export interface ServiceData {
-  [categoryKey: string]: ServiceCategoryData;
+  seo?: PageSEO;
+  [categoryKey: string]: any; // To allow for dynamic category keys + static 'seo'
 }
 
 export interface AboutData {
+  seo?: PageSEO;
   AboutFirm: AboutFirmData;
   VideoSection: VideoSectionData;
   VisionSection: VisionSectionData;
@@ -334,6 +367,7 @@ export interface AboutData {
 }
 
 export interface HomeData {
+  seo?: PageSEO;
   HeroSection: HeroSectionData;
   TrustedBySection: TrustedBySection;
   WhoWeAre: WhoWeAreData;
@@ -347,8 +381,57 @@ export interface HomeData {
 }
 
 export interface ContactData {
+  seo?: PageSEO;
   MapSection: MapSectionData;
   EnquirySection: EnquirySectionData;
+}
+
+export interface PortfolioHeroData {
+  ctaHref: string;
+  ctaText: string;
+  eyebrow: string;
+  description: string;
+  titlePrefix: string;
+  titleSuffix: string;
+  titleHighlight: string;
+  viewProjectsText: string;
+  viewProjectsHref: string;
+}
+
+export interface PortfolioCollageData {
+  mainImage: string[];
+  ratingText: string;
+  ratingValue: string;
+  mainImageTag: string;
+  ratingSubtext: string;
+  tertiaryImage: string[];
+  liveStatusText: string;
+  mainImageTitle: string;
+  secondaryImage: string[];
+  liveStatusSubtext: string;
+  tertiaryImageTitle: string;
+  secondaryImageTitle: string;
+}
+
+export interface PortfolioCTAData {
+  eyebrow: string;
+  titleMain: string;
+  description: string;
+  titleHighlight: string;
+  primaryButtonLink: string;
+  primaryButtonText: string;
+  secondaryButtonLink: string;
+  secondaryButtonText: string;
+  titlepart3: string;
+}
+
+export interface PortfolioPageData {
+  seo?: PageSEO;
+  main: {
+    hero: PortfolioHeroData;
+    collage: PortfolioCollageData;
+    cta: PortfolioCTAData;
+  };
 }
 
 interface CMSStoreState {
@@ -357,7 +440,9 @@ interface CMSStoreState {
   contactData: ContactData | null;
   productData: ProductData | null;
   serviceData: ServiceData | null;
+  portfolioData: PortfolioPageData | null;
   navLinks: NavLink[] | null;
+  globalSEO: GlobalSEOData | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -368,12 +453,15 @@ interface CMSStoreActions {
   setContactData: (data: ContactData | null) => void;
   setProductData: (data: ProductData | null) => void;
   setServiceData: (data: ServiceData | null) => void;
+  setPortfolioData: (data: PortfolioPageData | null) => void;
   setNavLinks: (data: NavLink[] | null) => void;
+  setGlobalSEO: (data: GlobalSEOData | null) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   fetchHomeData: () => Promise<void>;
   fetchAboutData: () => Promise<void>;
   fetchNavLinks: () => Promise<void>;
+  fetchGlobalSEO: () => Promise<void>;
   transformSections: (sections: any[]) => any;
 }
 
@@ -383,7 +471,9 @@ const initialState: CMSStoreState = {
   contactData: null,
   productData: null,
   serviceData: null,
+  portfolioData: null,
   navLinks: null,
+  globalSEO: null,
   isLoading: false,
   error: null,
 };
@@ -397,7 +487,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   setContactData: (data) => set({ contactData: data }),
   setProductData: (data) => set({ productData: data }),
   setServiceData: (data) => set({ serviceData: data }),
+  setPortfolioData: (data) => set({ portfolioData: data }),
   setNavLinks: (data) => set({ navLinks: data }),
+  setGlobalSEO: (data) => set({ globalSEO: data }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
@@ -409,6 +501,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
     }, {});
   },
 
+  /**
+   * OPTIMIZED: fetchHomeData now extracts SEO fields from each page
+   */
   fetchHomeData: async () => {
     const { transformSections } = useCMSStore.getState();
     set({ isLoading: true, error: null });
@@ -420,27 +515,61 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
       if (Array.isArray(pages)) {
         const homePage = pages.find((p: any) => p.slug === "home");
         const aboutPage = pages.find((p: any) => p.slug === "about");
-        const contactPage = pages.find((p: any) => p.slug === "contact");
+        const contactPage = pages.find((p: any) => p.slug === "contactUs");
         const productPage = pages.find((p: any) => p.slug === "products");
         const servicePage = pages.find((p: any) => p.slug === "services");
+        const portfolioPage = pages.find((p: any) => p.slug === "portfolio");
+
+        const extractSEO = (p: any): PageSEO | undefined => {
+          if (!p) return undefined;
+          const seo = p.seo || {};
+          return {
+            metaTitle: seo.metaTitle || p.metaTitle,
+            metaDescription: seo.metaDescription || p.metaDescription,
+            targetKeywords: seo.targetKeywords || p.targetKeywords,
+            canonicalUrl: seo.canonicalUrl || p.canonicalUrl,
+            noIndex: seo.noIndex ?? p.noIndex ?? false,
+          };
+        };
 
         const updates: Partial<CMSStoreState> = { isLoading: false };
 
         if (homePage?.sections) {
-          updates.homeData = transformSections(homePage.sections);
+          updates.homeData = {
+            ...transformSections(homePage.sections),
+            seo: extractSEO(homePage),
+          };
         }
 
         if (aboutPage?.sections) {
-          updates.aboutData = transformSections(aboutPage.sections);
+          updates.aboutData = {
+            ...transformSections(aboutPage.sections),
+            seo: extractSEO(aboutPage),
+          };
         }
         if (contactPage?.sections) {
-          updates.contactData = transformSections(contactPage.sections);
+          updates.contactData = {
+            ...transformSections(contactPage.sections),
+            seo: extractSEO(contactPage),
+          };
         }
         if (productPage?.sections) {
-          updates.productData = transformSections(productPage.sections);
+          updates.productData = {
+            ...transformSections(productPage.sections),
+            seo: extractSEO(productPage),
+          };
         }
         if (servicePage?.sections) {
-          updates.serviceData = transformSections(servicePage.sections);
+          updates.serviceData = {
+            ...transformSections(servicePage.sections),
+            seo: extractSEO(servicePage),
+          };
+        }
+        if (portfolioPage?.sections) {
+          updates.portfolioData = {
+            ...transformSections(portfolioPage.sections),
+            seo: extractSEO(portfolioPage),
+          };
         }
         set(updates);
       } else {
@@ -453,8 +582,6 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   },
 
   fetchAboutData: async () => {
-    // This now just calls fetchHomeData since they use the same endpoint
-    // or we can keep it separate if needed, but the user asked for "all pages"
     await useCMSStore.getState().fetchHomeData();
   },
 
@@ -468,15 +595,16 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
       if (Array.isArray(rawLinks)) {
         const formattedLinks: NavLink[] = rawLinks
           .filter((link) => link.parent === "-")
-          .sort((a, b) => a.order - b.order)
+          .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label))
           .map((mainLink) => {
             let dropdown: NavLink[] | undefined = undefined;
 
             if (mainLink.type === "Dropdown") {
-              // Ensure we sort dropdown items by their order
               dropdown = rawLinks
                 .filter((child) => child.parent === mainLink.id)
-                .sort((a, b) => a.order - b.order)
+                .sort(
+                  (a, b) => a.order - b.order || a.label.localeCompare(b.label),
+                )
                 .map((child) => ({
                   title: child.label,
                   link: child.url,
@@ -500,6 +628,23 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
     } catch (error) {
       set({ error: (error as Error).message, isLoading: false });
       console.error("Error fetching navigation links:", error);
+    }
+  },
+
+  fetchGlobalSEO: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await fetch("https://tgt-cms.vercel.app/api/seo/global");
+      const json = await response.json();
+      const globalSEO = json?.data;
+      if (globalSEO) {
+        set({ globalSEO, isLoading: false });
+      } else {
+        set({ error: "Failed to fetch global SEO data", isLoading: false });
+      }
+    } catch (error) {
+      set({ error: (error as Error).message, isLoading: false });
+      console.error("Error fetching global SEO data:", error);
     }
   },
 }));

@@ -3,9 +3,9 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { ArrowRight } from "lucide-react";
 
-export const AboutFirm = ({ data: propData }: { data?: any }) => {
+export const AboutFirm = () => {
   const storeData = useCMSStore((state) => state.aboutData?.AboutFirm);
-  const data = propData || storeData;
+  const data = storeData;
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -26,9 +26,9 @@ export const AboutFirm = ({ data: propData }: { data?: any }) => {
 
               <div>
                 {/* Big editorial heading */}
-                <h2 className="text-[clamp(3rem,5vw,3.75rem)] font-black w-20 text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
+                <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black w-20 text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
                   {data?.heading}
-                </h2>
+                </h1>
               </div>
             </div>
 

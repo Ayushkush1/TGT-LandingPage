@@ -2,14 +2,9 @@
 
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useInView, useSpring, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 // ─── Animated Counter ─────────────────────────────────────────────────────────
 const AnimatedCounter = ({
@@ -69,6 +64,15 @@ function FloatingBadge({
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export default function HeroSection() {
+  const portfolioData = useCMSStore((state) => state.portfolioData?.main);
+  const data = portfolioData;
+
+  const storeData = useCMSStore((state) => state.homeData?.Integrations);
+  const stats = storeData;
+  if (!data) return null;
+
+  const { hero, collage } = data;
+
   return (
     <section className="relative overflow-hidden mb-10">
       {/* Radial glow — top left */}
@@ -103,12 +107,12 @@ export default function HeroSection() {
             >
               <div className="h-px w-8 bg-gray-300" />
               <span className="text-gray-400 font-bold tracking-[0.22em] text-[0.65rem] uppercase">
-                Our Work
+                {hero.eyebrow}
               </span>
             </motion.div>
 
             {/* Headline */}
-            <motion.h2
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -118,9 +122,9 @@ export default function HeroSection() {
               }}
               className="text-5xl md:text-6xl font-extrabold text-[#0B0F29] leading-[1.08] mb-6 tracking-tight"
             >
-              Work that{" "}
+              {hero.titlePrefix}{" "}
               <span className="font-serif italic font-medium text-[#D4AF37] relative inline-block">
-                speaks
+                {hero.titleHighlight}
                 <motion.svg
                   className="absolute -bottom-1.5 left-0 w-full overflow-visible"
                   viewBox="0 0 160 8"
@@ -145,8 +149,8 @@ export default function HeroSection() {
                 </motion.svg>
               </span>
               <br />
-              for itself
-            </motion.h2>
+              {hero.titleSuffix}
+            </motion.h1>
 
             {/* Body */}
             <motion.p
@@ -155,9 +159,7 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.25 }}
               className="text-lg text-gray-500 font-light leading-relaxed max-w-lg"
             >
-              Every project we build is a partnership — rooted in understanding
-              your goals, and executed with precision. Here's a selection of
-              what we've shipped.
+              {hero.description}
             </motion.p>
 
             {/* Buttons - Monochrome */}
@@ -167,15 +169,17 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="flex flex-wrap gap-4 pt-8"
             >
-              <Link href={"/contactUs"}>
+              <Link href={hero.ctaHref}>
                 <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex justify-center items-center gap-3 group">
-                  Start a project
+                  {hero.ctaText}
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </button>
               </Link>
-              <button className="text-black px-6 py-4 rounded-full text-md font-medium transition-colors border border-transparent hover:border-[#D4AF37]">
-                View projects
-              </button>
+              <Link href={hero?.viewProjectsHref}>
+                <button className="text-black px-6 py-4 rounded-full text-md font-medium transition-colors border border-transparent hover:border-[#D4AF37]">
+                  {hero.viewProjectsText}
+                </button>
+              </Link>
             </motion.div>
 
             {/* Divider */}
@@ -186,39 +190,35 @@ export default function HeroSection() {
               className="origin-left mt-12 h-px bg-gradient-to-r from-gray-200 via-[#D4AF37]/25 to-transparent"
             />
             <div className="flex flex-col md:flex-row items-center mt-10 gap-12 md:gap-16">
-              <AnimatedCounter
-                value={50}
-                label={
-                  <>
-                    Happy
-                    <br />
-                    Clients
-                  </>
-                }
-                suffix="+"
-              />
-              <AnimatedCounter
-                value={70}
-                label={
-                  <>
-                    Completed
-                    <br />
-                    Projects
-                  </>
-                }
-                suffix="+"
-              />
-              <AnimatedCounter
-                value={7}
-                label={
-                  <>
-                    Countries
-                    <br />
-                    Served
-                  </>
-                }
-                suffix="+"
-              />
+              {stats?.stats?.map(
+                (
+                  stat: { value: string | number; labelLine1: string },
+                  index: number,
+                ) => {
+                  const numericValue =
+                    typeof stat.value === "string"
+                      ? parseInt(stat.value)
+                      : stat.value;
+                  const labelParts = stat.labelLine1?.split(" ") || [];
+                  return (
+                    <AnimatedCounter
+                      key={index}
+                      value={numericValue}
+                      label={
+                        <>
+                          {labelParts.map((part: string, i: number) => (
+                            <React.Fragment key={i}>
+                              {part}
+                              {i < labelParts.length - 1 && <br />}
+                            </React.Fragment>
+                          ))}
+                        </>
+                      }
+                      suffix="+"
+                    />
+                  );
+                },
+              )}
             </div>
           </div>
 
@@ -252,17 +252,20 @@ export default function HeroSection() {
               }}
             >
               <img
-                src="https://picsum.photos/seed/fin1/680/900"
-                alt="Featured project"
+                src={
+                  collage.mainImage[0] ||
+                  "https://picsum.photos/seed/fin1/680/900"
+                }
+                alt={collage.mainImageTitle}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F29]/55 via-transparent to-transparent" />
               <div className="absolute bottom-5 left-5 right-5">
                 <span className="text-[0.58rem] font-bold tracking-widest uppercase text-[#D4AF37]">
-                  System Architecture
+                  {collage.mainImageTag}
                 </span>
                 <p className="text-white font-bold text-lg mt-0.5 leading-tight">
-                  FinTech Evolution
+                  {collage.mainImageTitle}
                 </p>
               </div>
             </motion.div>
@@ -276,13 +279,16 @@ export default function HeroSection() {
               style={{ boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}
             >
               <img
-                src="https://picsum.photos/seed/lux2/340/240"
-                alt="Luxe Commerce"
+                src={
+                  collage.secondaryImage[0] ||
+                  "https://picsum.photos/seed/lux2/340/240"
+                }
+                alt={collage.secondaryImageTitle}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               <p className="absolute bottom-2.5 left-3 text-white text-[0.65rem] font-bold">
-                Luxe Commerce
+                {collage.secondaryImageTitle}
               </p>
             </motion.div>
 
@@ -295,13 +301,16 @@ export default function HeroSection() {
               style={{ boxShadow: "0 12px 32px rgba(0,0,0,0.1)" }}
             >
               <img
-                src="https://picsum.photos/seed/hlt3/290/210"
-                alt="Health OS"
+                src={
+                  collage.tertiaryImage[0] ||
+                  "https://picsum.photos/seed/hlt3/290/210"
+                }
+                alt={collage.tertiaryImageTitle}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               <p className="absolute bottom-2.5 left-3 text-white text-[0.65rem] font-bold">
-                Health OS
+                {collage.tertiaryImageTitle}
               </p>
             </motion.div>
 
@@ -314,10 +323,10 @@ export default function HeroSection() {
                 </span>
                 <div>
                   <p className="text-[0.62rem] font-bold text-gray-800 leading-none">
-                    Live Project
+                    {collage.liveStatusText}
                   </p>
                   <p className="text-[0.57rem] text-gray-400 mt-0.5">
-                    Deployment ready
+                    {collage.liveStatusSubtext}
                   </p>
                 </div>
               </div>
@@ -331,29 +340,12 @@ export default function HeroSection() {
                 </div>
                 <div>
                   <p className="text-[0.62rem] font-bold text-gray-800 leading-none">
-                    5.0 Rating
+                    {collage.ratingText}
                   </p>
                   <p className="text-[0.57rem] text-gray-400 mt-0.5">
-                    50+ happy clients
+                    {collage.ratingSubtext}
                   </p>
                 </div>
-              </div>
-            </FloatingBadge>
-
-            {/* Badge — Tech */}
-            <FloatingBadge className="-bottom-1 left-10" delay={1.18}>
-              <div className="flex items-center gap-2">
-                {["TS", "⚛", "🐍"].map((icon, i) => (
-                  <span
-                    key={i}
-                    className="w-7 h-7 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-xs font-bold text-gray-600"
-                  >
-                    {icon}
-                  </span>
-                ))}
-                <span className="text-[0.58rem] text-gray-400 font-medium ml-0.5">
-                  +12 more
-                </span>
               </div>
             </FloatingBadge>
           </div>

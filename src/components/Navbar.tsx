@@ -5,6 +5,7 @@ import * as React from "react";
 import { ChevronDown, Mail, MailOpen, Phone, ScanSearch } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
@@ -17,6 +18,8 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useCMSStore } from "@/store/useCMSStore";
 
 export const Navbar = () => {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
   const navLinks = useCMSStore((state) => state.navLinks);
   const [scrolled, setScrolled] = React.useState(false);
   const [isEmailHovered, setIsEmailHovered] = React.useState(false);
@@ -70,7 +73,10 @@ export const Navbar = () => {
         className={`flex items-center sticky  z-50 transition-all duration-300 ${
           scrolled
             ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto pr-5 pl-4 py-px"
-            : " justify-between w-full py-4 px-4 md:px-8 lg:px-12 top-0 bg-black"
+            : cn(
+                "justify-between w-full py-4 px-4 md:px-8 lg:px-12 top-0",
+                isHomePage ? "bg-black" : "bg-transparent"
+              )
         }`}
       >
         {/* Logo */}
@@ -89,7 +95,10 @@ export const Navbar = () => {
               className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
             />
             {!scrolled && (
-              <span className="text-xl font-bold text-white tracking-tight">
+              <span className={cn(
+                "text-xl font-bold tracking-tight",
+                isHomePage ? "text-white" : "text-gray-900"
+              )}>
                 The Gold Technologies
               </span>
             )}
@@ -114,12 +123,16 @@ export const Navbar = () => {
                 >
                   <div className={cn(
                     "flex items-center gap-1 cursor-pointer text-[15px] font-medium transition-colors py-4",
-                    scrolled ? "text-gray-500 hover:text-gray-900" : "text-white/70 hover:text-white"
+                    scrolled 
+                      ? "text-gray-500 hover:text-gray-900" 
+                      : (isHomePage ? "text-white/70 hover:text-white" : "text-gray-500 hover:text-gray-900")
                   )}>
                     <span>{item.title}</span>
                     <ChevronDown className={cn(
                       "w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180",
-                      scrolled ? "text-gray-400 group-hover:text-gray-900" : "text-white/40 group-hover:text-white"
+                      scrolled 
+                        ? "text-gray-400 group-hover:text-gray-900" 
+                        : (isHomePage ? "text-white/40 group-hover:text-white" : "text-gray-400 group-hover:text-gray-900")
                     )} />
                   </div>
 
@@ -178,7 +191,9 @@ export const Navbar = () => {
                   href={item.link}
                   className={cn(
                     "text-[15px] font-medium transition-colors",
-                    scrolled ? "text-gray-500 hover:text-gray-900" : "text-white/70 hover:text-white"
+                    scrolled 
+                      ? "text-gray-500 hover:text-gray-900" 
+                      : (isHomePage ? "text-white/70 hover:text-white" : "text-gray-500 hover:text-gray-900")
                   )}
                 >
                   {item.title}
@@ -201,7 +216,7 @@ export const Navbar = () => {
                       "transition-colors rounded-full p-2.5 w-10 h-10 flex items-center justify-center relative overflow-hidden",
                       scrolled 
                         ? "text-gray-600 hover:text-black hover:bg-gray-100/80" 
-                        : "text-white/70 hover:text-white hover:bg-white/10"
+                        : (isHomePage ? "text-white/70 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-black hover:bg-gray-100/80")
                     )}
                     onMouseEnter={() => setIsEmailHovered(true)}
                     onMouseLeave={() => setIsEmailHovered(false)}
@@ -245,7 +260,7 @@ export const Navbar = () => {
                       "transition-colors rounded-full p-2.5 group",
                       scrolled 
                         ? "text-gray-600 hover:text-black hover:bg-gray-100/80" 
-                        : "text-white/70 hover:text-white hover:bg-white/10"
+                        : (isHomePage ? "text-white/70 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-black hover:bg-gray-100/80")
                     )}
                     onMouseEnter={() => setIsPhoneHovered(true)}
                     onMouseLeave={() => setIsPhoneHovered(false)}
@@ -279,13 +294,21 @@ export const Navbar = () => {
           </TooltipProvider>
 
           {/* Vertical Separator */}
-          {!scrolled && <div className="h-8 w-[1px] bg-white/10 mx-2"></div>}
+          {!scrolled && <div className={cn(
+            "h-8 w-[1px] mx-2",
+            isHomePage ? "bg-white/10" : "bg-gray-200"
+          )}></div>}
           {!scrolled && (
             <MagneticButton intensity={0.25} className="hidden lg:block ml-1">
               <div onClick={() => setOpenAuditForm(true)}>
                 <Link
                   href="#"
-                  className="flex items-center gap-2 text-white bg-white/5 backdrop-blur-md hover:bg-white/10 px-4 py-2 rounded-full transition-all duration-300 border border-white/10 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)] shadow-sm"
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 border shadow-sm",
+                    isHomePage 
+                      ? "text-white bg-white/5 backdrop-blur-md hover:bg-white/10 border-white/10 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)]"
+                      : "text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)]"
+                  )}
                 >
                   <ScanSearch className="w-5 h-5 object-contain" />{" "}
                   <span className="text-[11px] font-bold uppercase tracking-widest">

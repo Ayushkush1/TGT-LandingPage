@@ -7,7 +7,6 @@ import {
   Mail,
   MailOpen,
   Phone,
-  FileText,
   ScanSearch,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

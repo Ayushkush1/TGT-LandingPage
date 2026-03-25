@@ -17,7 +17,7 @@ export const WhatWeDo = () => {
   };
 
   return (
-    <section className="py-20 px-4 bg-[#0a0f29] md:px-8 ">
+    <section className="py-20 px-4 bg-black md:px-8 ">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-4xl mx-auto mb-20">

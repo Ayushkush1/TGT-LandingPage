@@ -11,21 +11,24 @@ export function CMSDataInitializer({
   const fetchHomeData = useCMSStore((state) => state.fetchHomeData);
   const fetchNavLinks = useCMSStore((state) => state.fetchNavLinks);
   const fetchGlobalSEO = useCMSStore((state) => state.fetchGlobalSEO);
+  const fetchBanners = useCMSStore((state) => state.fetchBanners);
   const isLoading = useCMSStore((state) => state.isLoading);
   const homeData = useCMSStore((state) => state.homeData);
   const globalSEO = useCMSStore((state) => state.globalSEO);
   const navLinks = useCMSStore((state) => state.navLinks);
+  const banners = useCMSStore((state) => state.banners);
   const error = useCMSStore((state) => state.error);
 
   useEffect(() => {
     fetchHomeData();
     fetchNavLinks();
     fetchGlobalSEO();
-  }, [fetchHomeData, fetchNavLinks, fetchGlobalSEO]);
+    fetchBanners();
+  }, [fetchHomeData, fetchNavLinks, fetchGlobalSEO, fetchBanners]);
 
   // We show the loader if it's loading OR if we don't have data yet (and no error)
   const showLoader =
-    (isLoading || !homeData || !navLinks || !globalSEO) && !error;
+    (isLoading || !homeData || !navLinks || !globalSEO || !banners) && !error;
 
   return (
     <>

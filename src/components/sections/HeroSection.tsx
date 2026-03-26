@@ -28,7 +28,7 @@ export const HeroSection = () => {
   }, [data?.projects?.length]);
 
   return (
-    <section className="relative py-8 overflow-hidden min-h-[90vh] flex flex-col justify-center">
+    <section className="relative py-8 overflow-hidden min-h-[90vh] flex flex-col justify-center bg-black">
       {/* 1. Header Content - Minimalist & Editorial */}
       <div className="max-w-4xl mx-auto text-center space-y-6 xl:space-y-6 3xl:space-y-10 px-4 mb-[70px] relative z-10 pt-4 xl:pt-4 3xl:pt-10">
         {/* Trust Indicator */}
@@ -36,19 +36,19 @@ export const HeroSection = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full border border-gray-100 bg-white shadow-sm"
+          className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 shadow-2xl backdrop-blur-sm"
         >
           {/* Overlapping Avatars */}
           <div className="flex items-center -space-x-2">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-brand-gold to-[#B5952F] border-2 border-white"></div>
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#F5D061] to-brand-gold border-2 border-white"></div>
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 border-2 border-white"></div>
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-white"></div>
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-brand-gold to-[#B5952F] border-2 border-black"></div>
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#F5D061] to-brand-gold border-2 border-black"></div>
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 border-2 border-black"></div>
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-black"></div>
           </div>
-          <span className="text-xs font-medium text-gray-600">
+          <span className="text-xs font-medium text-white/70">
             {data?.badgeLabel?.split(/(\d+)/).map((part, i) =>
               /\d+/.test(part) ? (
-                <strong key={i} className="font-bold text-black">
+                <strong key={i} className="font-bold text-white">
                   {part}
                 </strong>
               ) : (
@@ -67,7 +67,7 @@ export const HeroSection = () => {
             delay: 0.2,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          className="text-5xl md:text-[6rem] font-medium text-black leading-[0.95] mb-6 tracking-tighter"
+          className="text-5xl md:text-[6rem] font-medium text-white leading-[0.95] mb-6 tracking-tighter"
         >
           {data?.headlineMain} <br />
           <span className="text-[#D4AF37]/60 italic font-light">
@@ -80,7 +80,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg text-gray-500 max-w-xl mx-auto mb-6 leading-relaxed font-normal antialiased"
+          className="text-lg text-white/60 max-w-xl mx-auto mb-6 leading-relaxed font-normal antialiased"
         >
           {data?.heroSubtextDescription}
         </motion.p>
@@ -96,14 +96,14 @@ export const HeroSection = () => {
             href={data?.primaryDestinationUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex justify-center items-center gap-3 group"
+            className="bg-white text-black px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-brand-gold hover:text-white transition-all duration-300 border border-transparent hover:border-white/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex justify-center items-center gap-3 group"
           >
             {data?.primaryButtonLabel}
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </a>
 
           <Link href={data?.secondaryDestinationUrl ?? "/"}>
-            <button className="text-black px-6 py-4 rounded-full text-md font-medium transition-colors border border-transparent hover:border-[#D4AF37]">
+            <button className="text-white px-6 py-4 rounded-full text-md font-medium transition-colors border border-transparent hover:border-white/10 hover:bg-white/5">
               {data?.secondaryButtonLabel}
             </button>
           </Link>

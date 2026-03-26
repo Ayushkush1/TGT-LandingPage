@@ -2,25 +2,11 @@ import React from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DynamicSectionRenderer } from "@/components/DynamicSectionRenderer";
-import { getPageSEO } from "@/lib/cms";
+import { getPageData, getPageSEO } from "@/lib/cms";
 import { Metadata } from "next";
 
 interface PageProps {
   params: { slug: string };
-}
-
-async function getInlinePageData(slug: string) {
-  try {
-    const response = await fetch("https://tgt-cms.vercel.app/api/pages", {
-      cache: "no-store",
-    });
-    const json = await response.json();
-    const pages = json?.data || [];
-    return pages.find((p: any) => p.slug === slug) || null;
-  } catch (error) {
-    console.error("Fetch error in getInlinePageData:", error);
-    return null;
-  }
 }
 
 export async function generateMetadata({
@@ -44,8 +30,7 @@ export async function generateMetadata({
 }
 
 export default async function DynamicPage({ params }: PageProps) {
-  const slug = params.slug;
-  const pageData = await getInlinePageData(slug);
+  const pageData = await getPageData(params.slug);
 
   if (!pageData) {
     return (
@@ -53,7 +38,7 @@ export default async function DynamicPage({ params }: PageProps) {
         <Navbar />
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-gray-900">404</h1>
-          <p className="text-gray-500">Page data not found for slug: {slug}</p>
+          <p className="text-gray-500">Page not found</p>
         </div>
         <Footer />
       </main>

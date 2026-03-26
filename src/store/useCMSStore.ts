@@ -443,6 +443,7 @@ interface CMSStoreState {
   portfolioData: PortfolioPageData | null;
   navLinks: NavLink[] | null;
   globalSEO: GlobalSEOData | null;
+  banners: any[] | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -462,6 +463,7 @@ interface CMSStoreActions {
   fetchAboutData: () => Promise<void>;
   fetchNavLinks: () => Promise<void>;
   fetchGlobalSEO: () => Promise<void>;
+  fetchBanners: () => Promise<void>;
   transformSections: (sections: any[]) => any;
 }
 
@@ -474,6 +476,7 @@ const initialState: CMSStoreState = {
   portfolioData: null,
   navLinks: null,
   globalSEO: null,
+  banners: null,
   isLoading: false,
   error: null,
 };
@@ -645,6 +648,24 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
     } catch (error) {
       set({ error: (error as Error).message, isLoading: false });
       console.error("Error fetching global SEO data:", error);
+    }
+  },
+  fetchBanners: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await fetch(
+        "https://tgt-cms.vercel.app/api/ecommerce/banners",
+      );
+      const json = await response.json();
+      const banners = json?.data;
+      if (banners) {
+        set({ banners, isLoading: false });
+      } else {
+        set({ error: "Failed to fetch banners data", isLoading: false });
+      }
+    } catch (error) {
+      set({ error: (error as Error).message, isLoading: false });
+      console.error("Error fetching banners data:", error);
     }
   },
 }));

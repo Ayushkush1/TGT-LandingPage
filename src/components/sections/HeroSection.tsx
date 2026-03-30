@@ -12,23 +12,35 @@ export const HeroSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    console.log("Slider animation started"); // Debug log
     const interval = setInterval(() => {
       setActiveIndex((prev) => {
         const next = (prev + 1) % (data?.projects?.length || 1);
-        console.log("Slider transitioning to index:", next); // Debug log
         return next;
       });
     }, 5000);
 
     return () => {
-      console.log("Slider animation cleanup"); // Debug log
       clearInterval(interval);
     };
   }, [data?.projects?.length]);
 
   return (
     <section className="relative py-8 overflow-hidden min-h-[90vh] flex flex-col justify-center bg-black">
+      {/* Refined Background Golden Wash */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Soft radial wash in the center-top */}
+        <div
+          className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[120%] h-[120%] opacity-30 select-none grayscale-[0.2]"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(10, 11, 18, 0.4) 45%, rgba(0, 0, 0, 1) 100%)",
+          }}
+        ></div>
+
+        {/* Subtle bottom floor glow */}
+        <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-brand-gold/[0.03] to-transparent"></div>
+      </div>
+
       {/* 1. Header Content - Minimalist & Editorial */}
       <div className="max-w-4xl mx-auto text-center space-y-6 xl:space-y-6 3xl:space-y-10 px-4 mb-[70px] relative z-10 pt-4 xl:pt-4 3xl:pt-10">
         {/* Trust Indicator */}
@@ -67,10 +79,10 @@ export const HeroSection = () => {
             delay: 0.2,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          className="text-5xl md:text-[6rem] font-medium text-white leading-[0.95] mb-6 tracking-tighter"
+          className="text-5xl md:text-[6rem] font-medium text-white leading-[0.95] mb-6 tracking-tighter drop-shadow-[0_15px_15px_rgba(0,0,0,0.6)]"
         >
           {data?.headlineMain} <br />
-          <span className="text-[#D4AF37]/60 italic font-light">
+          <span className="text-[#D4AF37] italic font-light drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">
             {data?.headlineItalicHighlight}
           </span>
         </motion.h1>
@@ -80,7 +92,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg text-white/60 max-w-xl mx-auto mb-6 leading-relaxed font-normal antialiased"
+          className="text-lg text-white/95 max-w-xl mx-auto mb-6 leading-relaxed font-normal antialiased"
         >
           {data?.heroSubtextDescription}
         </motion.p>
@@ -179,7 +191,9 @@ export const HeroSection = () => {
                   key={project.title}
                   className={cn(
                     "absolute top-[10%] w-[400px] md:w-[450px] aspect-[16/10] rounded-[2rem] flex flex-col overflow-hidden cursor-pointer group",
-                    "shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_20px_60px_rgb(0,0,0,0.25)]",
+                    "border border-white/[0.05] shadow-[0_15px_40px_rgba(0,0,0,0.4)] transition-all duration-700 hover:-translate-y-2",
+                    isActive &&
+                      "shadow-[0_0_40px_rgba(212,175,55,0.12)] border-white/[0.12] z-50",
                   )}
                   style={{
                     transform: `translateX(${xOffset}) scale(${scale})`,
@@ -190,6 +204,8 @@ export const HeroSection = () => {
                     willChange: "transform, opacity, filter",
                   }}
                 >
+                  {/* Subtle Material Overlay */}
+                  <div className="absolute inset-0 bg-white/[0.02] mix-blend-overlay z-10 pointer-events-none"></div>
                   {/* Full Card Image Background */}
                   <img
                     src={project.image}
@@ -212,10 +228,10 @@ export const HeroSection = () => {
 
                     {/* Card Footer */}
                     <div className="transform transition-transform duration-300 group-hover:translate-y-[-4px]">
-                      <p className="text-[11px] font-normal uppercase  text-white/80 group-hover:text-white/80 transition-colors duration-300">
+                      <p className="text-[11px] font-normal uppercase text-white/90 tracking-widest group-hover:text-white transition-colors duration-300 [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
                         {project.category}
                       </p>
-                      <h3 className="text-2xl font-semibold text-white tracking-tight">
+                      <h3 className="text-2xl font-semibold text-white tracking-tight [text-shadow:0_2px_4px_rgba(0,0,0,0.4)]">
                         {project.title}
                       </h3>
                     </div>

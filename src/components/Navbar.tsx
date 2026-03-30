@@ -72,10 +72,10 @@ export const Navbar = () => {
         }}
         className={`flex items-center sticky  z-50 transition-all duration-300 ${
           scrolled
-            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto px-10 py-px"
+            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto px-6 py-px"
             : cn(
                 "justify-between w-full py-6 px-4 md:px-8 lg:px-12 top-0",
-                isHomePage ? "bg-black" : "bg-transparent"
+                isHomePage ? "bg-black" : "bg-transparent",
               )
         }`}
       >
@@ -95,10 +95,12 @@ export const Navbar = () => {
               className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
             />
             {!scrolled && (
-              <span className={cn(
-                "text-xl font-bold tracking-tight",
-                isHomePage ? "text-white" : "text-gray-900"
-              )}>
+              <span
+                className={cn(
+                  "text-xl font-bold tracking-tight",
+                  isHomePage ? "text-white" : "text-gray-900",
+                )}
+              >
                 The Gold Technologies
               </span>
             )}
@@ -121,33 +123,43 @@ export const Navbar = () => {
                   transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
                   className="relative group h-full flex items-center"
                 >
-                  <div className={cn(
-                    "flex items-center gap-1 cursor-pointer text-[15px] font-medium transition-colors py-4",
-                    scrolled 
-                      ? "text-gray-500 hover:text-gray-900" 
-                      : (isHomePage ? "text-white/70 hover:text-white" : "text-gray-500 hover:text-gray-900")
-                  )}>
+                  <div
+                    className={cn(
+                      "flex items-center gap-1 cursor-pointer text-[15px] font-medium transition-colors py-4",
+                      scrolled
+                        ? "text-gray-500 hover:text-gray-900"
+                        : isHomePage
+                          ? "text-white/70 hover:text-white"
+                          : "text-gray-500 hover:text-gray-900",
+                    )}
+                  >
                     <span>{item.title}</span>
-                    <ChevronDown className={cn(
-                      "w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180",
-                      scrolled 
-                        ? "text-gray-400 group-hover:text-gray-900" 
-                        : (isHomePage ? "text-white/40 group-hover:text-white" : "text-gray-400 group-hover:text-gray-900")
-                    )} />
+                    <ChevronDown
+                      className={cn(
+                        "w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180",
+                        scrolled
+                          ? "text-gray-400 group-hover:text-gray-900"
+                          : isHomePage
+                            ? "text-white/40 group-hover:text-white"
+                            : "text-gray-400 group-hover:text-gray-900",
+                      )}
+                    />
                   </div>
 
                   {/* Dynamic Dropdown */}
                   <div
                     className={cn(
                       "absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50",
-                      dropdownItems.length > 4 ? "w-[900px]" : "w-[600px]"
+                      dropdownItems.length > 4 ? "w-[900px]" : "w-[600px]",
                     )}
                   >
                     <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
                       <div
                         className={cn(
                           "grid gap-x-4 gap-y-2",
-                          dropdownItems.length > 4 ? "grid-cols-3" : "grid-cols-2"
+                          dropdownItems.length > 4
+                            ? "grid-cols-3"
+                            : "grid-cols-2",
                         )}
                       >
                         {dropdownItems.map((sub, j) => (
@@ -191,9 +203,11 @@ export const Navbar = () => {
                   href={item.link}
                   className={cn(
                     "text-[15px] font-medium transition-colors",
-                    scrolled 
-                      ? "text-gray-500 hover:text-gray-900" 
-                      : (isHomePage ? "text-white/70 hover:text-white" : "text-gray-500 hover:text-gray-900")
+                    scrolled
+                      ? "text-gray-500 hover:text-gray-900"
+                      : isHomePage
+                        ? "text-white/70 hover:text-white"
+                        : "text-gray-500 hover:text-gray-900",
                   )}
                 >
                   {item.title}
@@ -214,9 +228,11 @@ export const Navbar = () => {
                   <button
                     className={cn(
                       "transition-colors rounded-full p-2.5 w-10 h-10 flex items-center justify-center relative overflow-hidden",
-                      scrolled 
-                        ? "text-gray-600 hover:text-black hover:bg-gray-100/80" 
-                        : (isHomePage ? "text-white/70 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-black hover:bg-gray-100/80")
+                      scrolled
+                        ? "text-gray-600 hover:text-black hover:bg-gray-100/80"
+                        : isHomePage
+                          ? "text-white/70 hover:text-white hover:bg-white/10"
+                          : "text-gray-600 hover:text-black hover:bg-gray-100/80",
                     )}
                     onMouseEnter={() => setIsEmailHovered(true)}
                     onMouseLeave={() => setIsEmailHovered(false)}
@@ -258,9 +274,11 @@ export const Navbar = () => {
                   <button
                     className={cn(
                       "transition-colors rounded-full p-2.5 group",
-                      scrolled 
-                        ? "text-gray-600 hover:text-black hover:bg-gray-100/80" 
-                        : (isHomePage ? "text-white/70 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-black hover:bg-gray-100/80")
+                      scrolled
+                        ? "text-gray-600 hover:text-black hover:bg-gray-100/80"
+                        : isHomePage
+                          ? "text-white/70 hover:text-white hover:bg-white/10"
+                          : "text-gray-600 hover:text-black hover:bg-gray-100/80",
                     )}
                     onMouseEnter={() => setIsPhoneHovered(true)}
                     onMouseLeave={() => setIsPhoneHovered(false)}
@@ -294,10 +312,14 @@ export const Navbar = () => {
           </TooltipProvider>
 
           {/* Vertical Separator */}
-          {!scrolled && <div className={cn(
-            "h-8 w-[1px] mx-2",
-            isHomePage ? "bg-white/10" : "bg-gray-200"
-          )}></div>}
+          {!scrolled && (
+            <div
+              className={cn(
+                "h-8 w-[1px] mx-2",
+                isHomePage ? "bg-white/10" : "bg-gray-200",
+              )}
+            ></div>
+          )}
           {!scrolled && (
             <MagneticButton intensity={0.25} className="hidden lg:block ml-1">
               <div onClick={() => setOpenAuditForm(true)}>
@@ -305,9 +327,9 @@ export const Navbar = () => {
                   href="#"
                   className={cn(
                     "flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 border shadow-sm",
-                    isHomePage 
+                    isHomePage
                       ? "text-white bg-white/5 backdrop-blur-md hover:bg-white/10 border-white/10 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)]"
-                      : "text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)]"
+                      : "text-gray-700 bg-white/60 backdrop-blur-md hover:bg-white/80 border-gray-200/50 hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)]",
                   )}
                 >
                   <ScanSearch className="w-5 h-5 object-contain" />{" "}

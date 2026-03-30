@@ -7,8 +7,6 @@ import { OurReputation } from "@/components/sections/OurReputation";
 import CTABanner from "./components/CTABanner";
 import HeroSection from "./components/HeroSection";
 import PortfolioSection from "../about/components/PortfolioSection";
-import { SelectedProjects } from "@/components/sections/SelectedProjects";
-import { BlogSection } from "@/components/sections/BlogSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("portfolio");
@@ -55,9 +53,7 @@ export default function PortfolioPage() {
       <PortfolioSection />
       <Integrations />
       <OurReputation />
-      <SelectedProjects />
       <CTABanner />
-      <BlogSection />
       <Footer />
     </main>
   );

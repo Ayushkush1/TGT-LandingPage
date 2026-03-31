@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Star, Clock, Eye, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export const BlogCard = ({
   category,
@@ -104,7 +105,6 @@ export const BlogCard = ({
     </Link>
   );
 };
-import { useCMSStore } from "@/store/useCMSStore";
 
 export const BlogSection = () => {
   const storeData = useCMSStore((state) => state.homeData?.BlogSection);

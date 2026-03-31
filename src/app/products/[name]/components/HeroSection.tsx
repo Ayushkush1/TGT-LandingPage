@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface HeroSectionProps {
   product: {
@@ -7,6 +7,7 @@ interface HeroSectionProps {
     subtitle?: string;
     description?: string;
     image: string;
+    link?: string;
   };
 }
 
@@ -29,7 +30,7 @@ function HeroSection({ product }: HeroSectionProps) {
         <span className="hidden md:inline">All Products</span>
       </Link>
 
-      {/* <div className="relative z-10 px-6 md:px-12 pb-12 max-w-4xl fade-up delay-100">
+      <div className="relative z-10 px-6 md:px-12 pb-12 max-w-4xl fade-up delay-100">
         <h1 className="font-display text-3xl md:text-5xl lg:text-[3.4rem] font-bold text-white leading-[1.12] tracking-tight mb-5 max-w-3xl">
           {product.title}
         </h1>
@@ -37,11 +38,21 @@ function HeroSection({ product }: HeroSectionProps) {
           <p className="text-white/80 text-lg mb-4">{product.subtitle}</p>
         )}
         {product.description && (
-          <p className="text-white/60 text-sm max-w-lg">
+          <p className="text-white/60 text-sm max-w-lg mb-8">
             {product.description}
           </p>
         )}
-      </div> */}
+        {product.link && (
+          <a
+            href={product.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-brand-gold text-white px-8 py-3.5 rounded-full font-medium hover:bg-white hover:text-brand-nav transition-all duration-300 w-fit shadow-lg shadow-brand-gold/20"
+          >
+            Open Live App <ArrowRight size={18} className="translate-y-[1px]" />
+          </a>
+        )}
+      </div>
     </div>
   );
 }

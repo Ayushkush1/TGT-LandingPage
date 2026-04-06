@@ -21,11 +21,6 @@ export const Footer = () => {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end end"],
-  });
-
   return (
     <footer className="relative pt-10 px-2 md:px-4 pb-4 z-0" ref={containerRef}>
       <motion.div

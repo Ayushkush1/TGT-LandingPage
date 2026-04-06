@@ -18,9 +18,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductItemData } from "@/store/useCMSStore";
-import { useState } from "react";
-
-const CATFY_SECTIONS = Array.from({ length: 11 }, (_, i) => `/images/products/catfy/${String(i + 1).padStart(2, '0')}.png`);
 
 interface ProductsContentProps {
   headerData: any;
@@ -133,37 +130,13 @@ export default function ProductsContent({
                 <a
                   target="_blank"
                   href={product?.link}
-                  className={`group relative rounded-3xl overflow-hidden h-[560px] shadow-xl block ${index % 2 === 0 ? "" : "lg:order-last"}`}
+                  className={`group relative rounded-3xl overflow-hidden min-h-[560px] shadow-xl block ${index % 2 === 0 ? "" : "lg:order-last"}`}
                 >
-                  <div className="flex flex-col w-full animate-scroll-vertical hover:[animation-play-state:paused] [animation-duration:60s]">
-                    {product?.title?.toLowerCase().includes("catfy") ? (
-                      <>
-                        {[...CATFY_SECTIONS, ...CATFY_SECTIONS].map((src, i) => (
-                          <img 
-                            key={i} 
-                            src={src} 
-                            alt="Landing section" 
-                            className="w-full h-auto" 
-                            aria-hidden={i >= CATFY_SECTIONS.length}
-                          />
-                        ))}
-                      </>
-                    ) : (
-                      <>
-                        <img
-                          src={product?.imageUrl}
-                          alt={product?.title}
-                          className="w-full h-auto object-top"
-                        />
-                        <img
-                          src={product?.imageUrl}
-                          alt={product?.title}
-                          className="w-full h-auto object-top"
-                          aria-hidden="true"
-                        />
-                      </>
-                    )}
-                  </div>
+                  <img
+                    src={product?.imageUrl}
+                    alt={product?.title}
+                    className="w-full h-full object-contain object-top absolute inset-0 transition-transform duration-700 group-hover:scale-105"
+                  />
 
                   {/* Stat — bottom left */}
                   {headerData?.statSince && (

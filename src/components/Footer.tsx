@@ -14,6 +14,7 @@ import {
 import { motion, useScroll, useInView } from "framer-motion";
 
 import { useCMSStore } from "@/store/useCMSStore";
+import Link from "next/link";
 
 export const Footer = () => {
   const data = useCMSStore((state) => state.homeData?.FooterCMS);
@@ -24,24 +25,6 @@ export const Footer = () => {
     target: containerRef,
     offset: ["start end", "end end"],
   });
-
-  // Live Time
-  const [time, setTime] = useState("");
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTime(
-        now.toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZoneName: "short",
-        }),
-      );
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <footer className="relative pt-10 px-2 md:px-4 pb-4 z-0" ref={containerRef}>
@@ -74,30 +57,32 @@ export const Footer = () => {
                 </p>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-gray-300">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="font-medium">
-                    {data?.companyInitials} • {time}
-                  </span>
+                  <span className="font-medium">{data?.companyInitials}</span>
                 </div>
               </div>
               <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
-                  <div>
-                    <strong className="text-white block mb-1">
-                      {data?.loc1Country}
-                    </strong>
-                    <p>{data?.loc1Address}</p>
+                {data?.loc1Country && (
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
+                    <div>
+                      <strong className="text-white block mb-1">
+                        {data?.loc1Country}
+                      </strong>
+                      <p>{data?.loc1Address}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
-                  <div>
-                    <strong className="text-white block mb-1">
-                      {data?.loc2Country}
-                    </strong>
-                    <p>{data?.loc2Address}</p>
+                )}
+                {data?.loc2Country && (
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
+                    <div>
+                      <strong className="text-white block mb-1">
+                        {data?.loc2Country}
+                      </strong>
+                      <p>{data?.loc2Address}</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -119,30 +104,91 @@ export const Footer = () => {
               <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
                 Explore
               </h4>
-              <a
+              <Link
                 href="/about"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 About Us
-              </a>
-              <a
-                href="/service/website-design-development"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Services
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/portfolio"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Portfolio
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/#BlogSection"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Blogs
-              </a>
+              </Link>
+              <Link
+                href="/service/branding"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Branding
+              </Link>
+              <Link
+                href="/service/ai-ml-solutions"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                AI & ML
+              </Link>
+              <Link
+                href="/service/iot-solutions"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                IoT
+              </Link>
+              <Link
+                href="/service/accessibility-services"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Accessibility
+              </Link>
+            </div>
+            <div className="flex flex-col gap-3">
+              <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
+                Services
+              </h4>
+              {[
+                {
+                  title: "",
+                  link: "/service/website-design-development",
+                },
+                {
+                  title: "UI/UX Design",
+                  link: "/service/ui-ux-designing",
+                },
+                {
+                  title: "Mobile App Dev",
+                  link: "/service/mobile-app-development",
+                },
+                {
+                  title: "Digital Marketing",
+                  link: "/service/digital-marketing",
+                },
+                {
+                  title: "Custom Software",
+                  link: "/service/custom-software-development",
+                },
+                {
+                  title: "BI Solutions",
+                  link: "/service/business-intelligence-solutions",
+                },
+                {
+                  title: "Business Software",
+                  link: "/service/business-software-solutions",
+                },
+              ].map((service) => (
+                <Link
+                  key={service.link}
+                  href={service.link}
+                  className="text-gray-400 hover:text-white transition-colors text-sm"
+                >
+                  {service.title}
+                </Link>
+              ))}
             </div>
             <div className="flex flex-col gap-4">
               <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
@@ -160,9 +206,13 @@ export const Footer = () => {
               >
                 Terms of Use
               </a>
-              <span className="text-[10px] border border-gray-600 px-2 py-0.5 rounded text-gray-500 mt-2 w-fit">
+              <Link
+                target="_blank"
+                href="https://www.dmca.com/Protection/Status.aspx?ID=174176c9-e0fd-4010-b0f5-50e6ed21d715&refurl=https://thegoldtechnologies.com/"
+                className="text-[10px] border border-gray-600 px-2 py-0.5 rounded text-gray-500 mt-2 w-fit"
+              >
                 DMCA PROTECTED
-              </span>
+              </Link>
             </div>
           </div>
         </div>
@@ -190,11 +240,12 @@ export const Footer = () => {
             </p>
 
             {/* Women Owned Badge (Small) */}
-            <div className="flex items-center gap-1 opacity-70 grayscale hover:grayscale-0 transition-all">
-              <span className="text-xs font-bold text-white">
-                W<span className="text-pink-500">✿</span>MEN OWNED
-              </span>
-            </div>
+
+            <img
+              src="/images/womenowned-business.jpg"
+              alt="womenowned-business"
+              className="w-20 h-20"
+            />
           </div>
 
           <div className="flex gap-4">

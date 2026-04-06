@@ -18,6 +18,9 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductItemData } from "@/store/useCMSStore";
+import { useState } from "react";
+
+const CATFY_SECTIONS = Array.from({ length: 11 }, (_, i) => `/images/products/catfy/${String(i + 1).padStart(2, '0')}.png`);
 
 interface ProductsContentProps {
   headerData: any;
@@ -130,25 +133,36 @@ export default function ProductsContent({
                 <a
                   target="_blank"
                   href={product?.link}
-                  className={`group relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl block ${index % 2 === 0 ? "" : "lg:order-last"}`}
+                  className={`group relative rounded-3xl overflow-hidden h-[560px] shadow-xl block ${index % 2 === 0 ? "" : "lg:order-last"}`}
                 >
-                  <img
-                    src={product?.imageUrl}
-                    alt={product?.title}
-                    className="w-full h-full object-cover object-top absolute inset-0 transition-transform duration-700 group-hover:scale-105"
-                  />
-
-                  {/* Gradient overlay */}
-                  <div
-                    className="absolute inset-0 bg-gradient-to-b from-transparent from-[40%] to-[rgba(11,15,41,0.6)]"
-                    aria-hidden
-                  />
-
-                  {/* Hover Overlay CTA */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-20">
-                    <div className="bg-white text-[#0B0F29] px-8 py-3.5 rounded-full font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl">
-                      Explore Product <ArrowRight size={18} />
-                    </div>
+                  <div className="flex flex-col w-full animate-scroll-vertical hover:[animation-play-state:paused] [animation-duration:60s]">
+                    {product?.title?.toLowerCase().includes("catfy") ? (
+                      <>
+                        {[...CATFY_SECTIONS, ...CATFY_SECTIONS].map((src, i) => (
+                          <img 
+                            key={i} 
+                            src={src} 
+                            alt="Landing section" 
+                            className="w-full h-auto" 
+                            aria-hidden={i >= CATFY_SECTIONS.length}
+                          />
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src={product?.imageUrl}
+                          alt={product?.title}
+                          className="w-full h-auto object-top"
+                        />
+                        <img
+                          src={product?.imageUrl}
+                          alt={product?.title}
+                          className="w-full h-auto object-top"
+                          aria-hidden="true"
+                        />
+                      </>
+                    )}
                   </div>
 
                   {/* Stat — bottom left */}
@@ -189,11 +203,42 @@ export default function ProductsContent({
                   )}
                 </a>
 
-                {/* Pillars 2×2 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start h-fit lg:mt-0 mt-4">
-                  {product?.pillars?.map((p) => (
-                    <PillarCard key={p.number} {...p} />
-                  ))}
+                {/* Content Block: Title + Description + Pillars + Button */}
+                <div className="flex flex-col gap-8 h-fit">
+                  <div className=" flex justify-between items-center w-full">
+                    <div className="flex flex-col gap-2 w-[60%]">
+                      <h3 className="text-3xl font-black text-[#0B0F29] font-serif leading-tight tracking-tight">
+                        {product?.title}
+                      </h3>
+                      <p className="text-gray-500 text-[14px] leading-relaxed font-sans max-w-xl font-medium">
+                        {product?.shortDesc}
+                      </p>
+                      <div className="h-1 w-20 bg-gradient-to-r from-[#D4AF37] to-transparent rounded-full" />
+                    </div>
+
+                    {/* CTA Button */}
+                    <div className="pt-2">
+                      <Link
+                        href={product?.link || "#"}
+                        target="_blank"
+                        className="group/btn inline-flex items-center gap-2.5 bg-white text-[#0B0F29] py-2.5 px-4 text-sm rounded-full font-bold tracking-wide border border-[#0B0F29]/10 font-sans text-[15px]
+                         transition-all hover:bg-[#0B0F29] hover:text-white hover:border-transparent hover:shadow-[0_20px_40px_rgba(11,15,41,0.15)] shadow-sm "
+                      >
+                        View Live
+                        <ArrowRight
+                          className="transition-transform group-hover/btn:translate-x-1"
+                          size={14}
+                        />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Pillars 2×2 Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
+                    {product?.pillars?.map((p) => (
+                      <PillarCard key={p.number} {...p} />
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             );

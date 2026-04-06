@@ -98,14 +98,15 @@ function SlideCard({ p }: { p: PortfolioItemData }) {
               {p.subtitle}
             </p>
           </div>
-
           {/* Bottom: stats + date + nav arrows */}
+
           <div className="flex items-end justify-end gap-4">
             {/* Stat badges */}
             <div className="flex items-end gap-3">
-              {p.stats.map((s, si) => (
-                <StatCard key={si} value={s.value} label={s.label} />
-              ))}
+              {p.stats?.length > 2 &&
+                p.stats.map((s, si) => (
+                  <StatCard key={si} value={s.value} label={s.label} />
+                ))}
             </div>
           </div>
         </div>

@@ -7,7 +7,6 @@ import { useParams } from "next/navigation";
 import { BlogCard } from "@/components/sections/BlogSection";
 import HeroSection from "./components/HeroSection";
 import Sidebar from "./components/Sidebar";
-import RelatedPosts from "./components/RelatedPosts";
 import Takeaways from "./components/Takeaways";
 import AuthorCard from "./components/AuthorCard";
 import Tags from "./components/Tags";
@@ -19,13 +18,19 @@ import { useCMSStore } from "@/store/useCMSStore";
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BlogPage() {
   const params = useParams().title;
+  const decodedTitle =
+    typeof params === "string"
+      ? decodeURIComponent(params)
+      : Array.isArray(params)
+        ? decodeURIComponent(params[0])
+        : "";
   const storeData = useCMSStore((state) => state.homeData?.BlogSection);
 
   // Derive blog at top level but handle undefined state gracefully for hooks
   const rawBlog = storeData?.blogs.find(
-    (b) => b.title.toLowerCase().replace(/\s+/g, "-") === params,
+    (b) => b.title.toLowerCase().replace(/\s+/g, "-") === decodedTitle,
   );
-
+  console.log(rawBlog, decodedTitle, params, "rawBlog");
   // Normalize blog data with memoization to avoid infinite re-render loops
   const blog = useMemo(() => {
     if (!rawBlog) return null;
@@ -50,10 +55,15 @@ export default function BlogPage() {
   // Memoize the processed HTML for rendering
   const displayHtml = useMemo(() => {
     if (!blog?.contentHtml) return "";
-    if (typeof window === "undefined") return blog.contentHtml;
+
+    // The CMS might return text where all spaces are non-breaking spaces (&nbsp;).
+    // This prevents standard text wrapping and causes awkward breaks at hyphens.
+    const cleanHtml = blog.contentHtml.replace(/&nbsp;/g, " ");
+
+    if (typeof window === "undefined") return cleanHtml;
 
     const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = blog.contentHtml;
+    tempDiv.innerHTML = cleanHtml;
     const headings = tempDiv.querySelectorAll("h1, h2, h3, h4");
     headings.forEach((h, i) => {
       if (!h.id) {

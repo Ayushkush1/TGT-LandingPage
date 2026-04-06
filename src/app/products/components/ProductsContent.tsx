@@ -127,13 +127,15 @@ export default function ProductsContent({
                 className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center`}
               >
                 {/* Image block */}
-                <motion.div
-                  className={`relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl ${index % 2 === 0 ? "" : "lg:order-last"}`}
+                <a
+                  target="_blank"
+                  href={product?.link}
+                  className={`group relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl block ${index % 2 === 0 ? "" : "lg:order-last"}`}
                 >
                   <img
                     src={product?.imageUrl}
                     alt={product?.title}
-                    className="w-full h-full object-cover object-top absolute inset-0"
+                    className="w-full h-full object-cover object-top absolute inset-0 transition-transform duration-700 group-hover:scale-105"
                   />
 
                   {/* Gradient overlay */}
@@ -142,6 +144,13 @@ export default function ProductsContent({
                     aria-hidden
                   />
 
+                  {/* Hover Overlay CTA */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-20">
+                    <div className="bg-white text-[#0B0F29] px-8 py-3.5 rounded-full font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl">
+                      Explore Product <ArrowRight size={18} />
+                    </div>
+                  </div>
+
                   {/* Stat — bottom left */}
                   {headerData?.statSince && (
                     <motion.div
@@ -149,7 +158,7 @@ export default function ProductsContent({
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.3, duration: 0.5 }}
-                      className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+                      className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans group-hover:opacity-0 transition-opacity duration-300"
                     >
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
                         Excellence since
@@ -168,7 +177,7 @@ export default function ProductsContent({
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.3, duration: 0.5 }}
-                      className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+                      className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans group-hover:opacity-0 transition-opacity duration-300"
                     >
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
                         Projects delivered
@@ -178,10 +187,10 @@ export default function ProductsContent({
                       </p>
                     </motion.div>
                   )}
-                </motion.div>
+                </a>
 
                 {/* Pillars 2×2 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start h-fit lg:mt-0 mt-4">
                   {product?.pillars?.map((p) => (
                     <PillarCard key={p.number} {...p} />
                   ))}

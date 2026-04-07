@@ -24,7 +24,7 @@ export const OurPartners = ({ data: propData }: { data?: any }) => {
   const data = propData || storeData;
   return (
     <AnimatedSection animation="fadeIn" delay={0.2}>
-      <section className="py-24 my-24 bg-[#0B0F29] overflow-hidden relative border-t border-white/5 z-0">
+      <section className="py-24 my-24 bg-black overflow-hidden relative border-t border-white/5 z-0">
         {/* Background Texture/Noise could go here */}
 
         <div className="max-w-[1400px] mx-auto px-4 relative z-10 mb-20 text-center">
@@ -44,10 +44,10 @@ export const OurPartners = ({ data: propData }: { data?: any }) => {
         </div>
 
         {/* Tilted Marquee Container */}
-        <div className="relative w-full -rotate-2 scale-110 border-y border-white/5 bg-black/20 backdrop-blur-sm py-12">
+        <div className="relative w-full -rotate-2 scale-110 border-y border-white/5 bg-white/5 backdrop-blur-sm py-12">
           {/* Gradient Masks */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0B0F29] to-transparent z-10"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0B0F29] to-transparent z-10"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10"></div>
 
           <motion.div
             className="flex items-center"

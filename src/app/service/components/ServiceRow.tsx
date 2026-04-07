@@ -1,106 +1,50 @@
 "use client";
 
-import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { ServiceItemData } from "@/store/useCMSStore";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
-export type Service = {
-  number: string;
-  title: string;
-  category: string;
-  description: string;
-  tags: string[];
-  outcome: string;
-};
-
-function ServiceRow({ service }: { service: Service }) {
-  const [hovered, setHovered] = useState(false);
-
+function ServiceProcessCard({
+  service,
+  index,
+}: {
+  service: ServiceItemData;
+  index: number;
+}) {
   return (
-    <li
-      className="relative border-b border-gray-200 overflow-hidden transition-all duration-500 hover:bg-gray-50"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="relative overflow-hidden group rounded-[2.5rem] bg-[#0B0F29] p-8 lg:p-12 min-h-[250px] flex flex-col justify-end transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/10 border border-white/5"
     >
-      {/* Accent Bar */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r-full bg-[#D4AF37] transition-all duration-500"
+      {/* Backdrop Number */}
+      <span
+        className="absolute top-2 right-6 lg:right-10 text-[11rem] lg:text-[14rem] font-black leading-none select-none pointer-events-none transition-all duration-700 group-hover:scale-110"
         style={{
-          transform: hovered ? "scaleY(1)" : "scaleY(0)",
-          opacity: hovered ? 1 : 0,
+          color: "transparent",
+          WebkitTextStroke: "1.5px rgba(212, 175, 55, 0.15)",
+          fontFamily: "'Playfair Display', serif",
         }}
-      />
-
-      {/* Header */}
-      <div className="grid grid-cols-[80px_1fr_auto] lg:grid-cols-[120px_1fr_auto] items-center px-6 lg:px-12 py-8">
-        {/* Number */}
-        <span
-          className="font-serif text-3xl font-black tracking-tight"
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            color: hovered ? "#D4AF37" : "rgba(11,15,41,0.12)",
-          }}
-        >
-          {service.number}
-        </span>
-
-        {/* Title */}
-        <div className=" flex flex-col gap-0.5">
-          <h2 className="text-lg font-extrabold text-[#0B0F29] tracking-tight leading-tight">
-            {service.title}
-          </h2>
-          <span className="text-gray-400 text-sm leading-7 font-medium">
-            {service.category}
-          </span>
-        </div>
-
-        {/* CTA Icon */}
-        <div
-          className="w-11 h-11 group rounded-full border flex items-center justify-center transition-all duration-300"
-          style={{
-            borderColor: "#D4AF37",
-            background: hovered ? "#D4AF37" : "#ffffff",
-            transform: hovered ? "rotate(-45deg)" : "rotate(0deg)",
-          }}
-        >
-          <ArrowRight size={14} className="text-[#0B0F29]" />
-        </div>
-      </div>
-
-      {/* Expand Panel */}
-      <div
-        className="overflow-hidden transition-all duration-500"
-        style={{ maxHeight: hovered ? "300px" : "0px" }}
       >
-        <div
-          className="lg:px-10 pb-10 grid lg:grid-cols-[120px_1fr_280px] gap-8"
-          style={{
-            opacity: hovered ? 1 : 0,
-            transform: hovered ? "translateY(0)" : "translateY(10px)",
-          }}
-        >
-          <div className="hidden lg:block" />
+        {service.number}
+      </span>
 
-          {/* Description */}
-          <div>
-            <p className="text-gray-500 leading-relaxed mb-5">
-              {service.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-              {service?.tags?.map((tag, index) => (
-                <span
-                  key={tag}
-                  className="text-[10px] uppercase tracking-wider px-3 py-1 rounded-full border border-gray-200 text-gray-500"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+      {/* Content */}
+      <div className="relative z-10">
+        <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4 group-hover:text-[#D4AF37] transition-colors duration-300">
+          {service.title}
+        </h3>
+        <p className="text-gray-400 text-sm lg:text-sm leading-relaxed max-w-[90%] font-medium">
+          {service.description}
+        </p>
       </div>
-    </li>
+
+      {/* Subtle Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    </motion.div>
   );
 }
 
@@ -110,35 +54,35 @@ export default function ServicesAccordion({
   serviceData: ServiceItemData[] | undefined;
 }) {
   return (
-    <section className="max-w-7xl mx-auto px-6 py-20 bg-white">
+    <section className="max-w-7xl mx-auto px-6 py-28 bg-white font-sans">
       {/* Header Section */}
-      <div className="flex items-end justify-between mb-16 px-2">
-        <div className="max-w-xl">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[#D4AF37]"></div>
-            <span className="text-[#D4AF37] font-bold tracking-[0.2em] text-xs uppercase">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-10">
+        <div className="max-w-3xl">
+          <div className="flex items-center gap-4 mb-8">
+            <span className="text-[#D4AF37] font-bold tracking-[0.3em] text-[10px] uppercase">
               What We Do
             </span>
+            <div className="h-px w-12 bg-[#D4AF37]/30"></div>
           </div>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
+          <h2 className="text-4xl lg:text-5xl font-black text-[#0B0F29] tracking-tight leading-[1.05]">
             Services That <br />
-            <span className="font-serif italic text-[#D4AF37]">
+            <span className="font-serif italic text-[#D4AF37] font-medium">
               Drive Results
             </span>
           </h2>
         </div>
-
-        <button className="hidden md:flex items-center gap-2 text-[#0B0F29] font-bold uppercase tracking-widest hover:text-[#D4AF37] transition-colors group text-xs border-b border-[#0B0F29] pb-1 hover:border-[#D4AF37]">
-          Explore All Services
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </button>
       </div>
 
-      <ul className="border-t border-gray-200">
-        {serviceData?.map((service) => (
-          <ServiceRow key={service.number} service={service} />
+      {/* Process Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-28">
+        {serviceData?.map((service, index) => (
+          <ServiceProcessCard
+            key={service.number + index}
+            service={service}
+            index={index}
+          />
         ))}
-      </ul>
+      </div>
     </section>
   );
 }

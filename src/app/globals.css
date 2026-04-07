@@ -106,3 +106,9 @@ body {
     transform 0.2s;
   color: #fffcfc7b;
 }
+
+/* ── Animation Pausing ─────────────────────────────────────────── */
+.pause {
+  animation-play-state: paused !important;
+}
+

@@ -168,7 +168,6 @@ export const Navbar = () => {
                           <Link
                             key={j}
                             href={sub.link}
-                            target="_blank"
                             className="px-4 py-3 rounded-xl hover:bg-[#FFFBE6]/50 transition-all duration-200 group/item flex items-start gap-3"
                           >
                             <div className="flex-1">

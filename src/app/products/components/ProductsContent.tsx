@@ -127,16 +127,31 @@ export default function ProductsContent({
                 className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center`}
               >
                 {/* Image block */}
-                <a
-                  target="_blank"
-                  href={product?.link}
+                <div
                   className={`group relative rounded-3xl overflow-hidden min-h-[560px] shadow-xl block ${index % 2 === 0 ? "" : "lg:order-last"}`}
                 >
-                  <img
-                    src={product?.imageUrl}
-                    alt={product?.title}
-                    className="w-full h-full object-contain object-top absolute inset-0 transition-transform duration-700 group-hover:scale-105"
-                  />
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="flex flex-col animate-scroll-vertical group-hover:pause">
+                      <img
+                        src={product?.imageUrl}
+                        alt={product?.title}
+                        className="w-full h-auto object-cover object-top transition-all duration-700"
+                      />
+                      {/* Secondary image for seamless loop */}
+                      <img
+                        src={product?.imageUrl}
+                        alt={product?.title}
+                        aria-hidden="true"
+                        className="w-full h-auto object-cover object-top mt-6 transition-all duration-700"
+                      />
+                      <img
+                        src={product?.imageUrl}
+                        alt={product?.title}
+                        aria-hidden="true"
+                        className="w-full h-auto object-cover object-top mt-6 transition-all duration-700"
+                      />
+                    </div>
+                  </div>
 
                   {/* Stat — bottom left */}
                   {headerData?.statSince && (
@@ -174,7 +189,7 @@ export default function ProductsContent({
                       </p>
                     </motion.div>
                   )}
-                </a>
+                </div>
 
                 {/* Content Block: Title + Description + Pillars + Button */}
                 <div className="flex flex-col gap-8 h-fit">

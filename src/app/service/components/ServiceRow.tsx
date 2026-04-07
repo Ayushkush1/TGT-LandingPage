@@ -16,14 +16,14 @@ function ServiceProcessCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="relative overflow-hidden group rounded-[2.5rem] bg-[#0B0F29] p-8 lg:p-12 min-h-[250px] flex flex-col justify-end transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/10 border border-white/5"
+      className="relative overflow-hidden group rounded-[2.5rem] bg-black p-8 lg:p-12 min-h-[250px] flex flex-col justify-end transition-all duration-500 hover:shadow-2xl hover:shadow-[#D4AF37]/10 border border-white/5"
     >
       {/* Backdrop Number */}
       <span
         className="absolute top-2 right-6 lg:right-10 text-[11rem] lg:text-[14rem] font-black leading-none select-none pointer-events-none transition-all duration-700 group-hover:scale-110"
         style={{
           color: "transparent",
-          WebkitTextStroke: "1.5px rgba(212, 175, 55, 0.15)",
+          WebkitTextStroke: "1.5px rgba(212, 175, 55, 0.18)",
           fontFamily: "'Playfair Display', serif",
         }}
       >

@@ -1,9 +1,7 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
 import { ServiceItemData } from "@/store/useCMSStore";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 function ServiceProcessCard({
   service,

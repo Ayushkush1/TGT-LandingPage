@@ -13,7 +13,7 @@ interface HeroSectionProps {
 
 function HeroSection({ product }: HeroSectionProps) {
   return (
-    <div className="relative h-[72vh] min-h-[520px] flex flex-col justify-end overflow-hidden">
+    <div className="relative h-[72vh] min-h-[520px] flex flex-col justify-end overflow-hidden mx-2 rounded-3xl">
       <img
         src={product.image}
         alt={product.title}
@@ -22,7 +22,7 @@ function HeroSection({ product }: HeroSectionProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent" />
 
       <Link
-        href="/about#Portfolio"
+        href="/portfolio#Portfolio"
         aria-label="Back to all products"
         className="absolute top-6 left-6 z-10 flex items-center gap-2 text-white/90 text-sm font-dm px-3 py-1.5 rounded-lg border border-white/20 bg-black/25 backdrop-blur-sm hover:bg-black/40 focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-black/30 transition-all duration-150"
       >
@@ -31,12 +31,21 @@ function HeroSection({ product }: HeroSectionProps) {
       </Link>
 
       <div className="relative z-10 px-6 md:px-12 pb-12 max-w-4xl fade-up delay-100">
+        {product.subtitle && (
+          <div className="flex flex-wrap items-center gap-2 mb-5">
+            {product.subtitle.split(",").map((tag, i) => (
+              <span
+                key={i}
+                className="px-3.5 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold uppercase tracking-widest rounded-full"
+              >
+                {tag.trim()}
+              </span>
+            ))}
+          </div>
+        )}
         <h1 className="font-display text-3xl md:text-5xl lg:text-[3.4rem] font-bold text-white leading-[1.12] tracking-tight mb-5 max-w-3xl">
           {product.title}
         </h1>
-        {product.subtitle && (
-          <p className="text-white/80 text-lg mb-4">{product.subtitle}</p>
-        )}
         {product.description && (
           <p className="text-white/60 text-sm max-w-lg mb-8">
             {product.description}

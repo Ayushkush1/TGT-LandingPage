@@ -35,7 +35,7 @@ export const Footer = () => {
         {/* Top Section: Nav & Detailed Contact */}
         <div className="flex flex-col xl:flex-row justify-between gap-12 relative z-10">
           {/* Brand & Addresses */}
-          <div className="space-y-4 max-w-5xl">
+          <div className="space-y-4 max-w-[49rem]">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center">
                 <span className="text-[#020410] font-black text-xs">GT</span>
@@ -94,7 +94,7 @@ export const Footer = () => {
           </div>
 
           {/* Links */}
-          <div className="flex gap-16 md:gap-24">
+          <div className="flex gap-16 md:gap-10 ">
             <div className="flex flex-col gap-4">
               <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
                 Explore
@@ -142,15 +142,11 @@ export const Footer = () => {
                 Accessibility
               </Link>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4 shrink-0">
               <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
                 Services
               </h4>
               {[
-                {
-                  title: "",
-                  link: "/service/website-design-development",
-                },
                 {
                   title: "UI/UX Design",
                   link: "/service/ui-ux-designing",
@@ -206,7 +202,11 @@ export const Footer = () => {
                 href="https://www.dmca.com/Protection/Status.aspx?ID=174176c9-e0fd-4010-b0f5-50e6ed21d715&refurl=https://thegoldtechnologies.com/"
                 className="text-[10px] border border-gray-600 px-2 py-0.5 rounded text-gray-500 mt-2 w-fit"
               >
-                DMCA PROTECTED
+                <img
+                  src="/images/dmca_protected_sml_120c.png"
+                  alt="dmca"
+                  className=" w-24 object-contain"
+                />
               </Link>
             </div>
           </div>

@@ -4,9 +4,10 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Integrations } from "@/components/sections/Integrations";
 import { OurReputation } from "@/components/sections/OurReputation";
+import { TrustedBy } from "@/components/sections/TrustedBy";
 import CTABanner from "./components/CTABanner";
 import HeroSection from "./components/HeroSection";
-import PortfolioSection from "../about/components/PortfolioSection";
+import ProjectShowcase from "./components/ProjectShowcase";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("portfolio");
@@ -50,7 +51,8 @@ export default function PortfolioPage() {
       </div>
       <Navbar />
       <HeroSection />
-      <PortfolioSection />
+      <TrustedBy />
+      <ProjectShowcase />
       <Integrations />
       <OurReputation />
       <CTABanner />

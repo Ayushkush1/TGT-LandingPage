@@ -191,12 +191,36 @@ export function PillarCard({
   number,
   title,
   desc,
+  inverse = false,
 }: {
   number: string;
   title: string;
   desc: string;
+  inverse?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
+
+  const titleColor = inverse
+    ? isHovered
+      ? "#0B0F29"
+      : "#fff"
+    : isHovered
+      ? "#fff"
+      : "#0B0F29";
+
+  const descColor = inverse
+    ? isHovered
+      ? "#6b7280"
+      : "rgba(255,255,255,0.9)"
+    : isHovered
+      ? "rgba(255,255,255,0.9)"
+      : "#6b7280";
+
+  const baseClasses = inverse
+    ? "bg-[#0B0F29]"
+    : "bg-white border-[#0B0F29]/[0.08]";
+
+  const hoverFillClass = inverse ? "bg-white" : "bg-[#0B0F29]";
 
   return (
     <motion.div
@@ -206,11 +230,11 @@ export function PillarCard({
       viewport={{ once: true }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="relative overflow-hidden cursor-pointer rounded-2xl border border-[#0B0F29]/[0.08] bg-white px-6 py-7 font-sans"
+      className={`relative overflow-hidden cursor-pointer rounded-2xl border  ${baseClasses} px-6 py-7 font-sans`}
     >
       {/* Hover fill — scaleY from bottom, 0.35s cubic-bezier */}
       <motion.div
-        className="absolute inset-0 rounded-2xl bg-[#0B0F29] z-0 origin-bottom"
+        className={`absolute inset-0 rounded-2xl ${hoverFillClass} z-0 origin-bottom`}
         initial={{ scaleY: 0 }}
         animate={{ scaleY: isHovered ? 1 : 0 }}
         transition={pillarFillTransition}
@@ -231,10 +255,10 @@ export function PillarCard({
         {number}
       </motion.p>
 
-      {/* Title — white on hover */}
+      {/* Title — animated color */}
       <motion.h3
         className="relative z-10 text-[17px] font-bold leading-snug mb-2"
-        animate={{ color: isHovered ? "#fff" : "#0B0F29" }}
+        animate={{ color: titleColor }}
         transition={pillarTextTransition}
       >
         {title}
@@ -246,10 +270,10 @@ export function PillarCard({
         aria-hidden
       />
 
-      {/* Description — white on hover */}
+      {/* Description — animated color */}
       <motion.p
         className="relative z-10 text-sm leading-relaxed"
-        animate={{ color: isHovered ? "rgba(255,255,255,0.9)" : "#6b7280" }}
+        animate={{ color: descColor }}
         transition={pillarTextTransition}
       >
         {desc}

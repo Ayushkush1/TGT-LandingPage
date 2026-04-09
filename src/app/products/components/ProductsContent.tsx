@@ -224,7 +224,7 @@ export default function ProductsContent({
                   {/* Pillars 2×2 Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
                     {product?.pillars?.map((p) => (
-                      <PillarCard key={p.number} {...p} />
+                      <PillarCard key={p.number} {...p} inverse={index % 2 !== 0} />
                     ))}
                   </div>
                 </div>

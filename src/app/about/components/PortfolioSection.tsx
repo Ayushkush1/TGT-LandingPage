@@ -103,7 +103,7 @@ function SlideCard({ p }: { p: PortfolioItemData }) {
           <div className="flex items-end justify-end gap-4">
             {/* Stat badges */}
             <div className="flex items-end gap-3">
-              {p.stats?.length > 2 &&
+              {p.stats?.length > 1 &&
                 p.stats.map((s, si) => (
                   <StatCard key={si} value={s.value} label={s.label} />
                 ))}

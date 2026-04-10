@@ -1,356 +1,90 @@
 "use client";
-
-import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { ArrowRight } from "lucide-react";
 
-// ─── Animated Counter ─────────────────────────────────────────────────────────
-const AnimatedCounter = ({
-  value,
-  label,
-  suffix = "+",
-}: {
-  value: number;
-  label: React.ReactNode;
-  suffix?: string;
-}) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const spring = useSpring(0, { mass: 0.8, stiffness: 75, damping: 15 });
-  const display = useTransform(spring, (current) => Math.round(current));
-
-  useEffect(() => {
-    if (isInView) {
-      spring.set(value);
-    }
-  }, [isInView, value, spring]);
-
-  return (
-    <div ref={ref} className="text-center">
-      <div className="text-4xl font-extrabold text-[#D4AF37] mb-1 flex justify-center items-center">
-        <motion.span>{display}</motion.span>
-        {suffix}
-      </div>
-      <div className="text-sm font-medium text-gray-500 uppercase tracking-wide px-2">
-        {label}
-      </div>
-    </div>
-  );
-};
-
-// ─── Floating Badge ───────────────────────────────────────────────────────────
-function FloatingBadge({
-  children,
-  className,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.75, y: 12 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: [0.34, 1.56, 0.64, 1] }}
-      className={`absolute z-20 bg-white rounded-2xl shadow-xl border border-gray-100/80 px-4 py-3 ${className}`}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// ─── Hero ─────────────────────────────────────────────────────────────────────
-export default function HeroSection() {
+const HeroSection = () => {
   const portfolioData = useCMSStore((state) => state.portfolioData?.main);
   const data = portfolioData;
 
-  const storeData = useCMSStore((state) => state.homeData?.Integrations);
-  const stats = storeData;
-  if (!data) return null;
-
-  const { hero, collage } = data;
-
   return (
-    <section className="relative overflow-hidden mb-10">
-      {/* Radial glow — top left */}
-      <div
-        className="absolute -top-40 -left-20 w-[700px] h-[600px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse, rgba(212,175,55,0.07) 0%, transparent 65%)",
-          filter: "blur(48px)",
-        }}
-      />
-      {/* Radial glow — bottom right */}
-      <div
-        className="absolute bottom-0 right-0 w-[500px] h-[400px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at bottom right, rgba(11,15,41,0.04) 0%, transparent 70%)",
-          filter: "blur(48px)",
-        }}
-      />
+    <AnimatedSection animation="scaleIn" delay={0.2}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className=" flex flex-col gap-10">
+          {/* Left Column - Text Content */}
 
-      <div className="relative z-10 pt-20 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          {/* ── LEFT: Text ─────────────────────────────────────────── */}
-          <div>
-            {/* Eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, x: -18 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center gap-3 mb-8"
-            >
-              <div className="h-px w-8 bg-gray-300" />
-              <span className="text-gray-400 font-bold tracking-[0.22em] text-[0.65rem] uppercase">
-                {hero.eyebrow}
-              </span>
-            </motion.div>
+          {/* ── Top Row ── */}
+          <div className="flex flex-col lg:flex-row gap-20 items-center mb-16">
+            {/* Left: Vertical accent + heading */}
+            <div className="flex gap-6 items-start flex-shrink-0 lg:w-96">
+              {/* Vertical rule + rotated label */}
+              <div className="flex flex-col items-center gap-4 pt-2">
+                <div className="w-0.5 h-16 rounded-sm bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/10" />
+                <span className="text-[10px] tracking-[0.2em] uppercase text-gray-400 font-semibold font-sans [writing-mode:vertical-rl] [text-orientation:mixed]">
+                  {data?.hero?.eyebrow || "PORTFOLIO"}
+                </span>
+              </div>
 
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.7,
-                delay: 0.1,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-              className="text-5xl md:text-6xl font-extrabold text-[#0B0F29] leading-[1.08] mb-6 tracking-tight"
-            >
-              {hero.titlePrefix}{" "}
-              <span className="font-serif italic font-medium text-[#D4AF37] relative inline-block">
-                {hero.titleHighlight}
-                <motion.svg
-                  className="absolute -bottom-1.5 left-0 w-full overflow-visible"
-                  viewBox="0 0 160 8"
-                  fill="none"
-                  preserveAspectRatio="none"
-                  aria-hidden
+              <div>
+                {/* Big editorial heading */}
+                <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
+                  Our Best Work In Action
+                </h1>
+              </div>
+            </div>
+
+            {/* Right: Body text + CTAs */}
+            <div className="flex-1 flex flex-col gap-8 pt-10 font-sans">
+              <div className="flex flex-col gap-4">
+                <p className="text-gray-500 text-lg leading-7 font-medium">
+                  {data?.hero?.description ||
+                    "Explore our diverse range of successful projects and case studies."}
+                </p>
+                <p className="text-gray-500 text-lg leading-7 font-medium whitespace-pre-line">
+                  {/* Dummy data for second paragraph since it doesn't exist in PortfolioHeroData */}
+                  We combine strategic thinking with beautifully crafted design
+                  to build solutions that elevate your brand and drive actual
+                  business results. Actionable metrics and user-friendly
+                  interfaces are at the core of what we do.
+                </p>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href={data?.hero?.ctaHref || "#"}
+                  className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3.5 px-9 rounded-full font-semibold tracking-wide border border-transparent font-sans text-[15px] transition-colors hover:bg-black hover:border-[#D4AF37] hover:shadow-[0_0_20px_rgba(212,175,55,0.25)]"
                 >
-                  <motion.path
-                    d="M2 5.5 Q40 1.5 80 5.5 Q120 9.5 158 5.5"
-                    stroke="rgba(212,175,55,0.4)"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    fill="none"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{
-                      duration: 0.9,
-                      delay: 0.75,
-                      ease: "easeInOut",
-                    }}
-                  />
-                </motion.svg>
-              </span>
-              <br />
-              {hero.titleSuffix}
-            </motion.h1>
-
-            {/* Body */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="text-lg text-gray-500 font-light leading-relaxed max-w-lg"
-            >
-              {hero.description}
-            </motion.p>
-
-            {/* Buttons - Monochrome */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-wrap gap-4 pt-8"
-            >
-              <Link href={hero.ctaHref}>
-                <button className="bg-[#0B0F29] text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex justify-center items-center gap-3 group">
-                  {hero.ctaText}
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </button>
-              </Link>
-              <Link href={hero?.viewProjectsHref}>
-                <button className="text-black px-6 py-4 rounded-full text-md font-medium transition-colors border border-transparent hover:border-[#D4AF37]">
-                  {hero.viewProjectsText}
-                </button>
-              </Link>
-            </motion.div>
-
-            {/* Divider */}
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.55, ease: "easeOut" }}
-              className="origin-left mt-12 h-px bg-gradient-to-r from-gray-200 via-[#D4AF37]/25 to-transparent"
-            />
-            <div className="flex flex-col md:flex-row items-center mt-10 gap-12 md:gap-16">
-              {stats?.stats?.map(
-                (
-                  stat: { value: string | number; labelLine1: string },
-                  index: number,
-                ) => {
-                  const numericValue =
-                    typeof stat.value === "string"
-                      ? parseInt(stat.value)
-                      : stat.value;
-                  const labelParts = stat.labelLine1?.split(" ") || [];
-                  return (
-                    <AnimatedCounter
-                      key={index}
-                      value={numericValue}
-                      label={
-                        <>
-                          {labelParts.map((part: string, i: number) => (
-                            <React.Fragment key={i}>
-                              {part}
-                              {i < labelParts.length - 1 && <br />}
-                            </React.Fragment>
-                          ))}
-                        </>
-                      }
-                      suffix="+"
-                    />
-                  );
-                },
-              )}
+                  {data?.hero?.ctaText || "Start a Project"}
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </a>
+                <a
+                  href={data?.hero?.viewProjectsHref || "/projects"}
+                  className="inline-flex items-center gap-2.5 bg-transparent text-[#0B0F29] py-3.5 px-7 rounded-full font-semibold tracking-wide border border-gray-200 font-sans text-[15px] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                >
+                  {data?.hero?.viewProjectsText || "View Previous Work"}
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* ── RIGHT: Image Collage ────────────────────────────────── */}
-          <div className="relative hidden lg:flex items-center justify-center h-[580px]">
-            {/* Decorative rings */}
-            {[520, 440].map((size, i) => (
-              <motion.div
-                key={size}
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.1, delay: 0.35 + i * 0.12 }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF37]/8 pointer-events-none"
-                style={{ width: size, height: size }}
-              />
-            ))}
-
-            {/* Main image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{
-                duration: 0.9,
-                delay: 0.3,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-              className="relative w-[340px] h-[450px] rounded-3xl overflow-hidden border border-white/60"
-              style={{
-                boxShadow:
-                  "0 32px 80px -12px rgba(11,15,41,0.18), 0 0 0 1px rgba(212,175,55,0.08)",
-              }}
-            >
+          {/* Right Column - Image */}
+          <div className="relative">
+            <div className="rounded-3xl overflow-hidden shadow-lg">
               <img
                 src={
-                  collage.mainImage[0] ||
-                  "https://picsum.photos/seed/fin1/680/900"
+                  data?.collage?.mainImage?.[0] ||
+                  "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg"
                 }
-                alt={collage.mainImageTitle}
-                className="w-full h-full object-cover"
+                alt={data?.collage?.mainImageTitle || "Our Portfolio"}
+                className="w-full h-[500px] object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F29]/55 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5">
-                <span className="text-[0.58rem] font-bold tracking-widest uppercase text-[#D4AF37]">
-                  {collage.mainImageTag}
-                </span>
-                <p className="text-white font-bold text-lg mt-0.5 leading-tight">
-                  {collage.mainImageTitle}
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Secondary image — top-left */}
-            <motion.div
-              initial={{ opacity: 0, x: -28, y: -20 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.55, ease: "easeOut" }}
-              className="absolute top-8 -left-4 w-[170px] h-[120px] rounded-2xl overflow-hidden border border-white/70"
-              style={{ boxShadow: "0 16px 40px rgba(0,0,0,0.12)" }}
-            >
-              <img
-                src={
-                  collage.secondaryImage[0] ||
-                  "https://picsum.photos/seed/lux2/340/240"
-                }
-                alt={collage.secondaryImageTitle}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              <p className="absolute bottom-2.5 left-3 text-white text-[0.65rem] font-bold">
-                {collage.secondaryImageTitle}
-              </p>
-            </motion.div>
-
-            {/* Tertiary image — bottom-left */}
-            <motion.div
-              initial={{ opacity: 0, x: -24, y: 28 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.68, ease: "easeOut" }}
-              className="absolute bottom-14 -left-8 w-[145px] h-[105px] rounded-2xl overflow-hidden border border-white/70"
-              style={{ boxShadow: "0 12px 32px rgba(0,0,0,0.1)" }}
-            >
-              <img
-                src={
-                  collage.tertiaryImage[0] ||
-                  "https://picsum.photos/seed/hlt3/290/210"
-                }
-                alt={collage.tertiaryImageTitle}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              <p className="absolute bottom-2.5 left-3 text-white text-[0.65rem] font-bold">
-                {collage.tertiaryImageTitle}
-              </p>
-            </motion.div>
-
-            {/* Badge — Live Status */}
-            <FloatingBadge className="top-10 -right-4" delay={0.9}>
-              <div className="flex items-center gap-2.5">
-                <span className="relative flex h-2.5 w-2.5 flex-shrink-0">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                </span>
-                <div>
-                  <p className="text-[0.62rem] font-bold text-gray-800 leading-none">
-                    {collage.liveStatusText}
-                  </p>
-                  <p className="text-[0.57rem] text-gray-400 mt-0.5">
-                    {collage.liveStatusSubtext}
-                  </p>
-                </div>
-              </div>
-            </FloatingBadge>
-
-            {/* Badge — Rating */}
-            <FloatingBadge className="bottom-24 -right-6" delay={1.05}>
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center text-sm flex-shrink-0">
-                  ⭐
-                </div>
-                <div>
-                  <p className="text-[0.62rem] font-bold text-gray-800 leading-none">
-                    {collage.ratingText}
-                  </p>
-                  <p className="text-[0.57rem] text-gray-400 mt-0.5">
-                    {collage.ratingSubtext}
-                  </p>
-                </div>
-              </div>
-            </FloatingBadge>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </AnimatedSection>
   );
-}
+};
+
+export default HeroSection;

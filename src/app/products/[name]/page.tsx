@@ -4,12 +4,14 @@ import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import HeroSection from "./components/HeroSection";
-import ServicesAccordion, {
-  Service,
-} from "@/app/service/components/ServiceRow";
+import ServicesAccordion from "@/app/service/components/ServiceRow";
 import { Integrations } from "@/components/sections/Integrations";
 import { OurReputation } from "@/components/sections/OurReputation";
-import { PortfolioItemData, useCMSStore } from "@/store/useCMSStore";
+import {
+  PortfolioItemData,
+  ServiceItemData,
+  useCMSStore,
+} from "@/store/useCMSStore";
 
 function SingleProduct() {
   const slug = useParams().name;
@@ -46,7 +48,7 @@ function SingleProduct() {
       </div>
       <Navbar />
       <HeroSection product={product as PortfolioItemData} />
-      <ServicesAccordion serviceData={product.SERVICES as Service[]} />
+      <ServicesAccordion serviceData={product.SERVICES as ServiceItemData[]} />
       <OurReputation />
       <Integrations />
       <CTABanner />

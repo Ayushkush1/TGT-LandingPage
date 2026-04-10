@@ -123,28 +123,30 @@ export const Navbar = () => {
                   transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
                   className="relative group h-full flex items-center"
                 >
-                  <div
-                    className={cn(
-                      "flex items-center gap-1 cursor-pointer text-[15px] font-medium transition-colors py-4",
-                      scrolled
-                        ? "text-gray-500 hover:text-gray-900"
-                        : isHomePage
-                          ? "text-white/70 hover:text-white"
-                          : "text-gray-500 hover:text-gray-900",
-                    )}
-                  >
-                    <span>{item.title}</span>
-                    <ChevronDown
+                  <Link href={item.link ?? ""}>
+                    <div
                       className={cn(
-                        "w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180",
+                        "flex items-center gap-1 cursor-pointer text-[15px] font-medium transition-colors py-4",
                         scrolled
-                          ? "text-gray-400 group-hover:text-gray-900"
+                          ? "text-gray-500 hover:text-gray-900"
                           : isHomePage
-                            ? "text-white/40 group-hover:text-white"
-                            : "text-gray-400 group-hover:text-gray-900",
+                            ? "text-white/70 hover:text-white"
+                            : "text-gray-500 hover:text-gray-900",
                       )}
-                    />
-                  </div>
+                    >
+                      <span>{item.title}</span>
+                      <ChevronDown
+                        className={cn(
+                          "w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180",
+                          scrolled
+                            ? "text-gray-400 group-hover:text-gray-900"
+                            : isHomePage
+                              ? "text-white/40 group-hover:text-white"
+                              : "text-gray-400 group-hover:text-gray-900",
+                        )}
+                      />
+                    </div>
+                  </Link>
 
                   {/* Dynamic Dropdown */}
                   <div

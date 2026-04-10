@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import CeoMessage from "./components/CeoMessage";
 import CeoPhilosophy from "./components/CeoPhilosophy";
 import CeoTimeline from "./components/CeoTimeline";
+import CTABanner from "../portfolio/components/CTABanner";
 
 export const metadata: Metadata = {
   title: "CEO Message | The Gold Technologies",
@@ -29,6 +30,7 @@ export default function CeoPage() {
         <CeoMessage />
         <CeoPhilosophy />
         <CeoTimeline />
+        <CTABanner />
       </div>
       <Footer />
     </main>

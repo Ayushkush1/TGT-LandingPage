@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { DynamicSectionRenderer } from "@/components/DynamicSectionRenderer";
 import { getPageData, getPageSEO } from "@/lib/cms";
 import { Metadata } from "next";
+import NotFound from "../not-found";
 
 interface PageProps {
   params: { slug: string };
@@ -36,10 +37,7 @@ export default async function DynamicPage({ params }: PageProps) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center bg-white">
         <Navbar />
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-gray-900">404</h1>
-          <p className="text-gray-500">Page not found</p>
-        </div>
+        <NotFound />
         <Footer />
       </main>
     );

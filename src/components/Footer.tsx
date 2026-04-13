@@ -106,6 +106,12 @@ export const Footer = () => {
                 About Us
               </Link>
               <Link
+                href="/ceo"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Our CEO
+              </Link>
+              <Link
                 href="/portfolio"
                 className="text-gray-400 hover:text-white transition-colors"
               >

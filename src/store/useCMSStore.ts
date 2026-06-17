@@ -189,6 +189,7 @@ export interface BlogItemData {
   date?: string;
   authorAvatar?: string;
   authorBio?: string;
+  authorTitle?: string;
   tags?: string[];
   pullQuote?: string;
   takeaways?: string[];
@@ -206,6 +207,8 @@ export interface BlogSectionData {
   viewAllLabel: string;
   headlinePart1: string;
   headlineHighlight: string;
+  relatedTitle?: string;
+  relatedDescription?: string;
 }
 
 export interface AboutFirmData {
@@ -350,6 +353,11 @@ export interface ServiceItemData {
 export interface ServiceCategoryData {
   hero: ServiceHeroData;
   services: ServiceItemData[];
+  servicesHeader?: {
+    upperTag: string;
+    title: string;
+    titleHighlight: string;
+  };
 }
 
 export interface ServiceData {
@@ -391,6 +399,7 @@ export interface PortfolioHeroData {
   ctaText: string;
   eyebrow: string;
   description: string;
+  description2?: string;
   titlePrefix: string;
   titleSuffix: string;
   titleHighlight: string;
@@ -425,12 +434,72 @@ export interface PortfolioCTAData {
   titlepart3: string;
 }
 
+export interface PortfolioShowcaseData {
+  upperTag: string;
+  headlinePart1: string;
+  headlineHighlight: string;
+  headlinePart3: string;
+  headlinePart4: string;
+  mainDescription: string;
+}
+
 export interface PortfolioPageData {
   seo?: PageSEO;
   main: {
     hero: PortfolioHeroData;
     collage: PortfolioCollageData;
+    showcase?: PortfolioShowcaseData;
     cta: PortfolioCTAData;
+  };
+}
+
+export interface CeoMessageData {
+  name: string;
+  role: string;
+  avatar: string;
+  yearsLabel: string;
+  yearsText: string;
+  title: string;
+  titleItalic: string;
+  paragraphs: string[];
+  ctaText: string;
+  ctaLink: string;
+}
+
+export interface CeoPhilosophyItem {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface CeoPhilosophyData {
+  upperTag: string;
+  title: string;
+  titleHighlight: string;
+  description: string;
+  items: CeoPhilosophyItem[];
+}
+
+export interface CeoTimelineMilestone {
+  year: string;
+  title: string;
+  description: string;
+}
+
+export interface CeoTimelineData {
+  upperTag: string;
+  title: string;
+  titleHighlight: string;
+  description: string;
+  milestones: CeoTimelineMilestone[];
+}
+
+export interface CeoPageData {
+  seo?: PageSEO;
+  main: {
+    message: CeoMessageData;
+    philosophy: CeoPhilosophyData;
+    timeline: CeoTimelineData;
   };
 }
 
@@ -441,6 +510,7 @@ interface CMSStoreState {
   productData: ProductData | null;
   serviceData: ServiceData | null;
   portfolioData: PortfolioPageData | null;
+  ceoData: CeoPageData | null;
   navLinks: NavLink[] | null;
   globalSEO: GlobalSEOData | null;
   banners: any[] | null;
@@ -455,6 +525,7 @@ interface CMSStoreActions {
   setProductData: (data: ProductData | null) => void;
   setServiceData: (data: ServiceData | null) => void;
   setPortfolioData: (data: PortfolioPageData | null) => void;
+  setCeoData: (data: CeoPageData | null) => void;
   setNavLinks: (data: NavLink[] | null) => void;
   setGlobalSEO: (data: GlobalSEOData | null) => void;
   setLoading: (isLoading: boolean) => void;
@@ -474,6 +545,7 @@ const initialState: CMSStoreState = {
   productData: null,
   serviceData: null,
   portfolioData: null,
+  ceoData: null,
   navLinks: null,
   globalSEO: null,
   banners: null,
@@ -491,6 +563,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
   setProductData: (data) => set({ productData: data }),
   setServiceData: (data) => set({ serviceData: data }),
   setPortfolioData: (data) => set({ portfolioData: data }),
+  setCeoData: (data) => set({ ceoData: data }),
   setNavLinks: (data) => set({ navLinks: data }),
   setGlobalSEO: (data) => set({ globalSEO: data }),
   setLoading: (isLoading) => set({ isLoading }),
@@ -522,6 +595,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
         const productPage = pages.find((p: any) => p.slug === "products");
         const servicePage = pages.find((p: any) => p.slug === "services");
         const portfolioPage = pages.find((p: any) => p.slug === "portfolio");
+        const ceoPage = pages.find((p: any) => p.slug === "ceo");
 
         const extractSEO = (p: any): PageSEO | undefined => {
           if (!p) return undefined;
@@ -572,6 +646,12 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
           updates.portfolioData = {
             ...transformSections(portfolioPage.sections),
             seo: extractSEO(portfolioPage),
+          };
+        }
+        if (ceoPage?.sections) {
+          updates.ceoData = {
+            ...transformSections(ceoPage.sections),
+            seo: extractSEO(ceoPage),
           };
         }
         set(updates);

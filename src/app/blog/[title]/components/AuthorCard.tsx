@@ -5,10 +5,12 @@ export default function AuthorCard({
   author,
   avatar,
   bio,
+  title,
 }: {
   author: string;
   avatar: string;
   bio: string;
+  title?: string;
 }) {
   return (
     <div className="border border-border rounded-2xl p-6 bg-white fade-up delay-400">
@@ -23,7 +25,7 @@ export default function AuthorCard({
             {author}
           </p>
           <p className="font-dm text-xs text-muted-foreground mb-2">
-            Senior Design Engineer · Studio Volta
+            {title || "Senior Design Engineer · Studio Volta"}
           </p>
           <p className="font-dm text-sm text-muted-foreground leading-relaxed">
             {bio}

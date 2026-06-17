@@ -41,11 +41,8 @@ const HeroSection = () => {
                     "Explore our diverse range of successful projects and case studies."}
                 </p>
                 <p className="text-gray-500 text-lg leading-7 font-medium whitespace-pre-line">
-                  {/* Dummy data for second paragraph since it doesn't exist in PortfolioHeroData */}
-                  We combine strategic thinking with beautifully crafted design
-                  to build solutions that elevate your brand and drive actual
-                  business results. Actionable metrics and user-friendly
-                  interfaces are at the core of what we do.
+                  {data?.hero?.description2 ||
+                    `We combine strategic thinking with beautifully crafted design to build solutions that elevate your brand and drive actual business results. Actionable metrics and user-friendly interfaces are at the core of what we do.`}
                 </p>
               </div>
 

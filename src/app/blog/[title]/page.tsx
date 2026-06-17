@@ -31,7 +31,6 @@ export default function BlogPage() {
     (b) => b.title.toLowerCase().replace(/\s+/g, "-") === decodedTitle,
   );
   console.log(rawBlog, decodedTitle, params, "rawBlog");
-  // Normalize blog data with memoization to avoid infinite re-render loops
   const blog = useMemo(() => {
     if (!rawBlog) return null;
     return {
@@ -40,6 +39,7 @@ export default function BlogPage() {
       date: rawBlog.datePublished || (rawBlog as any).date || "Recently",
       authorAvatar: rawBlog.authorAvatar || "https://i.pravatar.cc/150?img=1",
       authorBio: rawBlog.authorBio || "Member of the TGT Team",
+      authorTitle: rawBlog.authorTitle || "Senior Design Engineer · Studio Volta",
       tags: rawBlog.tags || [],
       content: rawBlog.content || [],
       takeaways: rawBlog.takeaways || [],
@@ -233,6 +233,7 @@ export default function BlogPage() {
               author={blog.author}
               avatar={blog.authorAvatar}
               bio={blog.authorBio}
+              title={blog.authorTitle}
             />
           </article>
 
@@ -253,10 +254,10 @@ export default function BlogPage() {
           <div className="max-w-6xl mx-auto flex-col flex gap-10">
             <div className=" flex flex-col gap-4">
               <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] tracking-tight">
-                Continue Reading
+                {storeData?.relatedTitle || "Continue Reading"}
               </h2>
               <p className="text-lg text-gray-500 font-light leading-relaxed">
-                More on design, engineering, and craft
+                {storeData?.relatedDescription || "More on design, engineering, and craft"}
               </p>
             </div>
 

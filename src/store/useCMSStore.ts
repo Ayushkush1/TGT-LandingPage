@@ -353,6 +353,11 @@ export interface ServiceItemData {
 export interface ServiceCategoryData {
   hero: ServiceHeroData;
   services: ServiceItemData[];
+  servicesHeader?: {
+    upperTag: string;
+    title: string;
+    titleHighlight: string;
+  };
 }
 
 export interface ServiceData {

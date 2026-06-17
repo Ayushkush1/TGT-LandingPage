@@ -34,7 +34,10 @@ export default function ServiceContent({ serviceData }: ServiceContentProps) {
       <Navbar />
       <HeroSection serviceData={serviceData?.hero} />
       <TrustedBy />
-      <ServicesAccordion serviceData={serviceData?.services} />
+      <ServicesAccordion
+        serviceData={serviceData?.services}
+        header={serviceData?.servicesHeader}
+      />
       <OurReputation /> {/* Client Success */}
       <Integrations /> {/* Tech Stack */}
       <PortfolioSection /> {/* PortfolioSection */}

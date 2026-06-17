@@ -48,8 +48,14 @@ function ServiceProcessCard({
 
 export default function ServicesAccordion({
   serviceData,
+  header,
 }: {
   serviceData: ServiceItemData[] | undefined;
+  header?: {
+    upperTag: string;
+    title: string;
+    titleHighlight: string;
+  };
 }) {
   return (
     <section className="max-w-7xl mx-auto px-6 py-28 bg-white font-sans">
@@ -58,14 +64,14 @@ export default function ServicesAccordion({
         <div className="max-w-3xl">
           <div className="flex items-center gap-4 mb-8">
             <span className="text-[#D4AF37] font-bold tracking-[0.3em] text-[10px] uppercase">
-              What We Do
+              {header?.upperTag || "What We Do"}
             </span>
             <div className="h-px w-12 bg-[#D4AF37]/30"></div>
           </div>
           <h2 className="text-4xl lg:text-5xl font-black text-[#0B0F29] tracking-tight leading-[1.05]">
-            Services That <br />
+            {header?.title || "Services That"} <br />
             <span className="font-serif italic text-[#D4AF37] font-medium">
-              Drive Results
+              {header?.titleHighlight || "Drive Results"}
             </span>
           </h2>
         </div>

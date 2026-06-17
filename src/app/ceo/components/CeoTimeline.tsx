@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { useCMSStore } from "@/store/useCMSStore";
 
-const milestones = [
+const defaultMilestones = [
   {
     year: "2015",
     title: "The Foundation",
@@ -31,6 +32,9 @@ const milestones = [
 ];
 
 export default function CeoTimeline() {
+  const data = useCMSStore((state) => state.ceoData?.main?.timeline);
+  const milestones = data?.milestones || defaultMilestones;
+
   return (
     <section className="bg-white py-24 md:py-32 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,21 +43,21 @@ export default function CeoTimeline() {
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="h-px w-8 bg-gray-400/30"></div>
               <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
-                Milestones
+                {data?.upperTag || "Milestones"}
               </span>
               <div className="h-px w-8 bg-gray-400/30"></div>
             </div>
 
             <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-              Journey of{" "}
+              {data?.title || "Journey of"}{" "}
               <span className="font-serif italic font-medium text-[#D4AF37]">
-                Excellence
+                {data?.titleHighlight || "Excellence"}
               </span>
             </h2>
 
             <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-              Milestones that define our continuous pursuit of perfection and
-              global impact.
+              {data?.description ||
+                "Milestones that define our continuous pursuit of perfection and global impact."}
             </p>
           </div>
         </AnimatedSection>

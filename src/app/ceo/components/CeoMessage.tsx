@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Quote } from "lucide-react";
 import Link from "next/link";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function CeoMessage() {
+  const data = useCMSStore((state) => state.ceoData?.main?.message);
+
   return (
     <AnimatedSection animation="fadeIn" delay={0.1}>
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 pb-32">
@@ -17,8 +20,8 @@ export default function CeoMessage() {
 
             <div className="relative aspect-[3/4] overflow-hidden rounded-[2rem] shadow-2xl">
               <img
-                src="/images/Meghna.jpg"
-                alt="Meghna - CEO"
+                src={data?.avatar || "/images/Meghna.jpg"}
+                alt={`${data?.name || "Meghna"} - CEO`}
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-100 cursor-pointer object-top"
               />
             </div>
@@ -26,12 +29,10 @@ export default function CeoMessage() {
             {/* Experience Badge */}
             <div className="absolute -bottom-6 -right-6 lg:-right-10 bg-[#0B0F29] text-white p-6 rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(212,175,55,0.15)] flex items-center gap-4 z-20">
               <span className="text-4xl font-display font-black text-[#D4AF37] leading-none">
-                15+
+                {data?.yearsLabel || "15+"}
               </span>
-              <span className="text-[0.65rem] font-bold uppercase tracking-widest leading-tight text-white/70">
-                Years of
-                <br />
-                Excellence
+              <span className="text-[0.65rem] font-bold uppercase tracking-widest leading-tight text-white/70 whitespace-pre-line">
+                {data?.yearsText || "Years of\nExcellence"}
               </span>
             </div>
           </div>
@@ -47,27 +48,35 @@ export default function CeoMessage() {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-[clamp(2.5rem,4vw,4rem)] font-display font-black leading-[1.05] tracking-tight text-[#0B0F29] mb-8">
-                Building the Future of <br className="hidden md:block" />
+                {data?.title || "Building the Future of"} <br className="hidden md:block" />
                 <span className="font-serif italic font-medium text-[#D4AF37]">
-                  Digital Excellence.
+                  {data?.titleItalic || "Digital Excellence."}
                 </span>
               </h2>
 
               <div className="space-y-6 text-gray-600 text-lg leading-relaxed font-sans mb-12">
-                <p>
-                  At The Gold Technologies, we believe that true success is
-                  built on innovation, teamwork, and an unwavering commitment to
-                  trust. From our humble beginnings to our most remarkable
-                  achievements, our journey reflects a dedication to excellence
-                  in every single project we undertake.
-                </p>
-                <p>
-                  As we continue to expand our horizons globally, our core focus
-                  remains absolute: creating sustainable impact, delivering
-                  measurable value to our clients, and empowering our people.
-                  Together, we strive to turn every challenge into an
-                  opportunity, and every great idea into a lasting legacy.
-                </p>
+                {data?.paragraphs && data.paragraphs.length > 0 ? (
+                  data.paragraphs.map((p, idx) => (
+                    <p key={idx}>{p}</p>
+                  ))
+                ) : (
+                  <>
+                    <p>
+                      At The Gold Technologies, we believe that true success is
+                      built on innovation, teamwork, and an unwavering commitment to
+                      trust. From our humble beginnings to our most remarkable
+                      achievements, our journey reflects a dedication to excellence
+                      in every single project we undertake.
+                    </p>
+                    <p>
+                      As we continue to expand our horizons globally, our core focus
+                      remains absolute: creating sustainable impact, delivering
+                      measurable value to our clients, and empowering our people.
+                      Together, we strive to turn every challenge into an
+                      opportunity, and every great idea into a lasting legacy.
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* Signature Block */}
@@ -76,19 +85,19 @@ export default function CeoMessage() {
                   <div className="w-[2px] h-14 bg-[#D4AF37]" />
                   <div>
                     <h4 className="font-display font-bold text-2xl text-[#0B0F29] mb-1">
-                      Meghna
+                      {data?.name || "Meghna"}
                     </h4>
                     <p className="text-[#D4AF37] text-xs font-semibold tracking-wide uppercase">
-                      Chief Executive Officer
+                      {data?.role || "Chief Executive Officer"}
                     </p>
                   </div>
                 </div>
 
                 <Link
-                  href="/contact"
+                  href={data?.ctaLink || "/contact"}
                   className="group inline-flex items-center gap-3 bg-transparent text-[#0B0F29] px-8 py-3.5 rounded-full font-bold text-sm tracking-wide border border-gray-300 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-all duration-300 flex-shrink-0"
                 >
-                  Contact Us
+                  {data?.ctaText || "Contact Us"}
                   <ArrowUpRight
                     size={18}
                     className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

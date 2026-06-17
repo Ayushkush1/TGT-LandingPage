@@ -3,29 +3,39 @@
 import { motion } from "framer-motion";
 import { Lightbulb, Target, ShieldCheck } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { useCMSStore } from "@/store/useCMSStore";
 
-const philosophies = [
+const iconMap: { [key: string]: any } = {
+  Lightbulb: Lightbulb,
+  Target: Target,
+  ShieldCheck: ShieldCheck,
+};
+
+const defaultPhilosophies = [
   {
     title: "Visionary Innovation",
     description:
       "We don’t just adapt to the future; we build it. By constantly pushing boundaries, we deliver solutions that redefine digital landscapes.",
-    icon: Lightbulb,
+    icon: "Lightbulb",
   },
   {
     title: "Client-Centric Excellence",
     description:
       "Every partnership is a commitment. We measure our true success not by output, but by the tangible growth and success of our clients.",
-    icon: Target,
+    icon: "Target",
   },
   {
     title: "Unyielding Integrity",
     description:
       "Trust is our most valuable currency. We act with transparency, accountability, and a profound respect for the people we serve.",
-    icon: ShieldCheck,
+    icon: "ShieldCheck",
   },
 ];
 
 export default function CeoPhilosophy() {
+  const data = useCMSStore((state) => state.ceoData?.main?.philosophy);
+  const items = data?.items || defaultPhilosophies;
+
   return (
     <section className="relative bg-black py-24 md:py-32 overflow-hidden">
       {/* Background ambient glows */}
@@ -39,50 +49,54 @@ export default function CeoPhilosophy() {
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="h-px w-8 bg-white/20"></div>
               <span className="text-white/60 font-bold tracking-[0.2em] text-xs uppercase">
-                Core Values
+                {data?.upperTag || "Core Values"}
               </span>
               <div className="h-px w-8 bg-white/20"></div>
             </div>
 
             <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15] mb-6 tracking-tight">
-              Our Guiding{" "}
+              {data?.title || "Our Guiding"}{" "}
               <span className="font-serif italic font-medium text-[#D4AF37]">
-                Philosophy
+                {data?.titleHighlight || "Philosophy"}
               </span>
             </h2>
 
             <p className="text-lg text-white/70 font-light leading-relaxed max-w-xl mx-auto">
-              Leadership is more than pointing the way—it is about laying down
-              the unbreakable foundation upon which greatness is built.
+              {data?.description ||
+                "Leadership is more than pointing the way—it is about laying down the unbreakable foundation upon which greatness is built."}
             </p>
           </div>
         </AnimatedSection>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          {philosophies.map((item, idx) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0.1 * idx }}
-              className="group relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem] blur-xl pointer-events-none" />
-              
-              <div className="relative h-full flex flex-col p-8 md:p-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] hover:bg-white/10 transition-colors duration-500">
-                <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-8 border border-white/5 group-hover:bg-[#D4AF37]/20 group-hover:border-[#D4AF37]/50 transition-all duration-500">
-                  <item.icon className="w-8 h-8 text-[#D4AF37]" strokeWidth={1.5} />
+          {items.map((item, idx) => {
+            const IconComponent = iconMap[item.icon] || Lightbulb;
+
+            return (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, delay: 0.1 * idx }}
+                className="group relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem] blur-xl pointer-events-none" />
+                
+                <div className="relative h-full flex flex-col p-8 md:p-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] hover:bg-white/10 transition-colors duration-500">
+                  <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-8 border border-white/5 group-hover:bg-[#D4AF37]/20 group-hover:border-[#D4AF37]/50 transition-all duration-500">
+                    <IconComponent className="w-8 h-8 text-[#D4AF37]" strokeWidth={1.5} />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-4 tracking-wide">
+                    {item.title}
+                  </h3>
+                  <p className="text-white/60 leading-relaxed text-sm">
+                    {item.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-4 tracking-wide">
-                  {item.title}
-                </h3>
-                <p className="text-white/60 leading-relaxed text-sm">
-                  {item.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

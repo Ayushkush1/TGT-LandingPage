@@ -16,6 +16,7 @@ export const itemVariants = {
 
 export default function ProjectShowcase() {
   const cmsPortfolios = useCMSStore((state) => state.aboutData?.Portfolio);
+  const showcase = useCMSStore((state) => state.portfolioData?.main?.showcase);
 
   if (!cmsPortfolios || cmsPortfolios.length === 0) return null;
 
@@ -27,31 +28,27 @@ export default function ProjectShowcase() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-8 bg-gray-400/30"></div>
             <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
-              Projects
+              {showcase?.upperTag || "Projects"}
             </span>
             <div className="h-px w-8 bg-gray-400/30"></div>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
-            Discover{" "}
+            {showcase?.headlinePart1 || "Discover"}{" "}
             <span className="font-serif italic font-medium text-[#D4AF37]">
-              Industry-Defining
+              {showcase?.headlineHighlight || "Industry-Defining"}
             </span>{" "}
             <br />
-            Digital{" "}
+            {showcase?.headlinePart3 || "Digital"}{" "}
             <span className="relative inline-block z-0">
-              Masterpieces
+              {showcase?.headlinePart4 || "Masterpieces"}
               <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
             </span>
           </h2>
 
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-            Explore a curated gallery of our most impactful case studies.{" "}
-            <span className="font-semibold text-gray-900">
-              The Gold Technologies
-            </span>{" "}
-            leverages advanced engineering and design to drive measurable growth
-            for global leaders.
+            {showcase?.mainDescription ||
+              "Explore a curated gallery of our most impactful case studies. The Gold Technologies leverages advanced engineering and design to drive measurable growth for global leaders."}
           </p>
         </div>
 
@@ -135,7 +132,7 @@ function ProjectCard({ project }: { project: PortfolioItemData }) {
             className="flex items-center justify-between gap-4 px-6 py-2.5 border border-[#0B0F29]/20 text-[#0B0F29] rounded-full text-xs font-semibold tracking-wide bg-transparent
             hover:bg-[#0B0F29] hover:text-white transition-all duration-300 w-max"
           >
-            <span>Explore Case Study</span>
+            <span>{project.CTA || "Explore Case Study"}</span>
             <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
           </div>
         </Link>

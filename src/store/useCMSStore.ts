@@ -189,6 +189,7 @@ export interface BlogItemData {
   date?: string;
   authorAvatar?: string;
   authorBio?: string;
+  authorTitle?: string;
   tags?: string[];
   pullQuote?: string;
   takeaways?: string[];
@@ -206,6 +207,8 @@ export interface BlogSectionData {
   viewAllLabel: string;
   headlinePart1: string;
   headlineHighlight: string;
+  relatedTitle?: string;
+  relatedDescription?: string;
 }
 
 export interface AboutFirmData {

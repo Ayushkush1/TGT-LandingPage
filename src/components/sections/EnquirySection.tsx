@@ -89,6 +89,7 @@ export const EnquirySection = ({
 }) => {
   const storeData = useCMSStore((state) => state.homeData?.EnquirySection);
   const data = propData || storeData;
+  const Heading = (data?.headingTag || (isMain ? "h1" : "h2")) as any;
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
@@ -145,21 +146,12 @@ export const EnquirySection = ({
                   {data?.upperTag}
                 </span>
               </div>
-              {isMain ? (
-                <h1 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
-                  {data?.headlinePart1} <br />
-                  <span className="font-serif italic text-[#D4AF37]">
-                    {data?.headlineHighlight}
-                  </span>
-                </h1>
-              ) : (
-                <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
-                  {data?.headlinePart1} <br />
-                  <span className="font-serif italic text-[#D4AF37]">
-                    {data?.headlineHighlight}
-                  </span>
-                </h2>
-              )}
+              <Heading className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
+                {data?.headlinePart1} <br />
+                <span className="font-serif italic text-[#D4AF37]">
+                  {data?.headlineHighlight}
+                </span>
+              </Heading>
             </div>
 
             <p className="text-base text-gray-500 font-light leading-relaxed">

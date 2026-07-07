@@ -11,6 +11,9 @@ export const HeroSection = () => {
   const data = useCMSStore((state) => state.homeData?.HeroSection);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const headingTag = data?.headingTag || "h1";
+  const MotionHeading = (motion as any)[headingTag] || motion.h1;
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => {
@@ -71,7 +74,7 @@ export const HeroSection = () => {
         </motion.div>
 
         {/* Headline - Editorial Style */}
-        <motion.h1
+        <MotionHeading
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -85,7 +88,7 @@ export const HeroSection = () => {
           <span className="text-[#D4AF37] italic font-light drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">
             {data?.headlineItalicHighlight}
           </span>
-        </motion.h1>
+        </MotionHeading>
 
         {/* Subtext - Clean & Tight */}
         <motion.p

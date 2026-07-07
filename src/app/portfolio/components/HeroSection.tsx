@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 const HeroSection = () => {
   const portfolioData = useCMSStore((state) => state.portfolioData?.main);
   const data = portfolioData;
+  const Heading = (data?.hero?.headingTag || "h1") as any;
 
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
@@ -27,9 +28,13 @@ const HeroSection = () => {
 
               <div>
                 {/* Big editorial heading */}
-                <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
-                  Our Best Work In Action
-                </h1>
+                <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
+                  {data?.hero?.titlePrefix || "Our Best Work"} {"\n"}
+                  <span className="text-[#D4AF37]">
+                    {data?.hero?.titleHighlight || "In Action"}
+                  </span>
+                  {data?.hero?.titleSuffix && ` ${data?.hero?.titleSuffix}`}
+                </Heading>
               </div>
             </div>
 

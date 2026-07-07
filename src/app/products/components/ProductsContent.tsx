@@ -28,6 +28,7 @@ export default function ProductsContent({
   headerData,
   productInfo,
 }: ProductsContentProps) {
+  const Heading = (headerData?.headingTag || "h1") as any;
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -70,7 +71,7 @@ export default function ProductsContent({
 
             <div>
               {/* Big editorial heading */}
-              <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
+              <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
                 {headerData?.headingLine
                   ?.trim()
                   .split(/\s+/)
@@ -80,7 +81,7 @@ export default function ProductsContent({
                       {i < arr.length - 1 && <br />}
                     </span>
                   ))}
-              </h1>
+              </Heading>
             </div>
           </motion.div>
 

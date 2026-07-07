@@ -57,6 +57,7 @@ export interface HeroSectionData {
   primaryDestinationUrl: string;
   secondaryButtonLabel: string;
   secondaryDestinationUrl: string;
+  headingTag?: string;
   projects: {
     category: string;
     image: string;
@@ -153,6 +154,7 @@ export interface EnquirySectionData {
   phone: string;
   submitButtonText: string;
   interestedInOptions: string;
+  headingTag?: string;
 }
 
 export interface FooterCMSData {
@@ -215,6 +217,7 @@ export interface AboutFirmData {
   ctaUrl: string;
   images: string[];
   heading: string;
+  headingTag?: string;
   ctaLabel: string;
   topLabel: string;
   paragraph1: string;
@@ -303,6 +306,7 @@ export interface ProductHeroData {
   paragraphs: string[];
   headingLine: string;
   statProjects: string;
+  headingTag?: string;
 }
 
 export interface ProductPillarData {
@@ -339,6 +343,7 @@ export interface ServiceHeroData {
   headingLine1: string;
   headingLine2: string;
   statProjects: string;
+  headingTag?: string;
 }
 
 export interface ServiceItemData {
@@ -405,6 +410,7 @@ export interface PortfolioHeroData {
   titleHighlight: string;
   viewProjectsText: string;
   viewProjectsHref: string;
+  headingTag?: string;
 }
 
 export interface PortfolioCollageData {

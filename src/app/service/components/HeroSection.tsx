@@ -27,6 +27,7 @@ function HeroSection({
 }: {
   serviceData?: ServiceHeroData | undefined;
 }) {
+  const Heading = (serviceData?.headingTag || "h1") as any;
   return (
     <motion.section
       initial="hidden"
@@ -51,7 +52,7 @@ function HeroSection({
           </div>
 
           {/* Big editorial heading */}
-          <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
+          <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
             {serviceData?.headingLine1
               ?.trim()
               .split(/\s+/)
@@ -62,7 +63,7 @@ function HeroSection({
                     (line === "&" || arr[i + 1] === "&" ? " " : <br />)}
                 </span>
               ))}
-          </h1>
+          </Heading>
         </motion.div>
 
         {/* Right: Body text + CTAs */}

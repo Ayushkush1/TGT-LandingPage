@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import { CMSDataInitializer } from "@/components/CMSDataInitializer";
 import FooterScripts from "@/components/FooterScripts";
+import { RenderSchema } from "@/components/RenderSchema";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -101,6 +102,9 @@ export default async function RootLayout({
           <script
             dangerouslySetInnerHTML={{ __html: globalSEO.customHeaderScripts }}
           />
+        )}
+        {globalSEO?.schema && (
+          <RenderSchema schema={globalSEO.schema} id="global-schema" />
         )}
       </head>
       <body className={inter.className}>

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Integrations } from "@/components/sections/Integrations";
@@ -36,9 +37,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const seo = await getPageSEO("portfolio");
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="portfolio-schema" />
       <div className="relative">
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"

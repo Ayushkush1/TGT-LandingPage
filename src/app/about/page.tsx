@@ -12,6 +12,7 @@ import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { BlogSection } from "@/components/sections/BlogSection";
 import { Metadata } from "next";
 import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("about");
@@ -40,9 +41,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function AboutPage() {
+async function AboutPage() {
+  const seo = await getPageSEO("about");
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="about-schema" />
       {/* Unified Background Wrapper for Navbar + Hero */}
       <div className="relative">
         {/* Noise Texture Background */}

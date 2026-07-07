@@ -5,6 +5,8 @@ import CeoMessage from "./components/CeoMessage";
 import CeoPhilosophy from "./components/CeoPhilosophy";
 import CeoTimeline from "./components/CeoTimeline";
 import CTABanner from "../portfolio/components/CTABanner";
+import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
 
 export const metadata: Metadata = {
   title: "CEO Message | The Gold Technologies",
@@ -12,9 +14,11 @@ export const metadata: Metadata = {
     "A message from our CEO about our vision, passion, and commitment to excellence.",
 };
 
-export default function CeoPage() {
+export default async function CeoPage() {
+  const seo = await getPageSEO("ceo");
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="ceo-schema" />
       <div className="relative">
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"

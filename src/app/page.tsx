@@ -10,10 +10,14 @@ import { OurReputation } from "@/components/sections/OurReputation";
 import { OurPartners } from "@/components/sections/OurPartners";
 import { EnquirySection } from "@/components/sections/EnquirySection";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
 
-export default function Home() {
+export default async function Home() {
+  const seo = await getPageSEO("home");
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="home-schema" />
       <SmoothScroll />
       {/* Background Image */}
       <div className="fixed inset-0 z-0">

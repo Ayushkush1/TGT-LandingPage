@@ -9,6 +9,7 @@ import HeroSection from "./HeroSection";
 import PortfolioSection from "@/app/about/components/PortfolioSection";
 import { BlogSection } from "@/components/sections/BlogSection";
 import ServicesAccordion from "./ServiceRow";
+import { RenderSchema } from "@/components/RenderSchema";
 
 interface ServiceContentProps {
   serviceData: any;
@@ -17,6 +18,7 @@ interface ServiceContentProps {
 export default function ServiceContent({ serviceData }: ServiceContentProps) {
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={serviceData?.seo?.schema} id="service-subpage-schema" />
       {/* Unified Background Wrapper for Navbar + Hero */}
       <div className="relative">
         {/* Noise Texture Background */}

@@ -10,6 +10,7 @@ export interface PageSEO {
   targetKeywords: string | null;
   canonicalUrl: string | null;
   noIndex: boolean;
+  schema?: string | null;
 }
 
 export interface NavLink {
@@ -612,6 +613,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
             targetKeywords: seo.targetKeywords || p.targetKeywords,
             canonicalUrl: seo.canonicalUrl || p.canonicalUrl,
             noIndex: seo.noIndex ?? p.noIndex ?? false,
+            schema: seo.schema || p.schema || null,
           };
         };
 

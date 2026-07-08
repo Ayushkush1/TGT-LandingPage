@@ -6,19 +6,39 @@ import { CMSDataInitializer } from "@/components/CMSDataInitializer";
 import FooterScripts from "@/components/FooterScripts";
 import { RenderSchema } from "@/components/RenderSchema";
 import { cache } from "react";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
+// Global object caching for SEO to survive hot-reloads in Next.js dev mode
+const globalForSEO = global as unknown as {
+  serverCachedGlobalSEO: any;
+  serverCachedGlobalSEOExpiry: number;
+};
+
+if (globalForSEO.serverCachedGlobalSEO === undefined) {
+  globalForSEO.serverCachedGlobalSEO = null;
+  globalForSEO.serverCachedGlobalSEOExpiry = 0;
+}
+
 const getGlobalSEO = cache(async () => {
+  const now = Date.now();
+  if (globalForSEO.serverCachedGlobalSEO && now < globalForSEO.serverCachedGlobalSEOExpiry) {
+    return globalForSEO.serverCachedGlobalSEO;
+  }
+
   try {
     const response = await fetch("https://tgt-cms.vercel.app/api/seo/global", {
-      next: { revalidate: 10 }, // Cache for 10 seconds
+      cache: "no-store", // Bypasses Next.js cache limit
     });
     const json = await response.json();
-    return json?.data;
+    const data = json?.data || null;
+    globalForSEO.serverCachedGlobalSEO = data;
+    globalForSEO.serverCachedGlobalSEOExpiry = now + 5 * 60 * 1000; // Cache for 5 minutes
+    return data;
   } catch (error) {
     console.error("Error fetching global SEO for metadata:", error);
-    return null;
+    return globalForSEO.serverCachedGlobalSEO;
   }
 });
 
@@ -120,7 +140,9 @@ export default async function RootLayout({
             />
           </noscript>
         )}
-        <CMSDataInitializer>{children}</CMSDataInitializer>
+        <QueryProvider>
+          <CMSDataInitializer>{children}</CMSDataInitializer>
+        </QueryProvider>
         {/* Custom Footer Scripts */}
         {globalSEO?.customFooterScripts && (
           <FooterScripts html={globalSEO.customFooterScripts} />

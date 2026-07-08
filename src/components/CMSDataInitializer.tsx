@@ -1,5 +1,6 @@
 "use client";
-import { useEffect } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useCMSStore } from "@/store/useCMSStore";
 import { LoadingScreen } from "./LoadingScreen";
 
@@ -8,25 +9,76 @@ export function CMSDataInitializer({
 }: {
   children: React.ReactNode;
 }) {
-  const fetchHomeData = useCMSStore((state) => state.fetchHomeData);
-  const fetchNavLinks = useCMSStore((state) => state.fetchNavLinks);
-  const fetchGlobalSEO = useCMSStore((state) => state.fetchGlobalSEO);
-  const fetchBanners = useCMSStore((state) => state.fetchBanners);
-  const isLoading = useCMSStore((state) => state.isLoading);
   const homeData = useCMSStore((state) => state.homeData);
-  const globalSEO = useCMSStore((state) => state.globalSEO);
   const navLinks = useCMSStore((state) => state.navLinks);
+  const globalSEO = useCMSStore((state) => state.globalSEO);
   const banners = useCMSStore((state) => state.banners);
-  const error = useCMSStore((state) => state.error);
 
-  useEffect(() => {
-    fetchHomeData();
-    fetchNavLinks();
-    fetchGlobalSEO();
-    fetchBanners();
-  }, [fetchHomeData, fetchNavLinks, fetchGlobalSEO, fetchBanners]);
+  // Hook into TanStack Query to manage fetch caches
+  const homeDataQuery = useQuery({
+    queryKey: ["homeData"],
+    queryFn: async () => {
+      await useCMSStore.getState().fetchHomeData();
+      return useCMSStore.getState().homeData;
+    },
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
 
-  // We show the loader if it's loading OR if we don't have data yet (and no error)
+  const navLinksQuery = useQuery({
+    queryKey: ["navLinks"],
+    queryFn: async () => {
+      await useCMSStore.getState().fetchNavLinks();
+      return useCMSStore.getState().navLinks;
+    },
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const globalSEOQuery = useQuery({
+    queryKey: ["globalSEO"],
+    queryFn: async () => {
+      await useCMSStore.getState().fetchGlobalSEO();
+      return useCMSStore.getState().globalSEO;
+    },
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const bannersQuery = useQuery({
+    queryKey: ["banners"],
+    queryFn: async () => {
+      await useCMSStore.getState().fetchBanners();
+      return useCMSStore.getState().banners;
+    },
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const isLoading =
+    homeDataQuery.isLoading ||
+    navLinksQuery.isLoading ||
+    globalSEOQuery.isLoading ||
+    bannersQuery.isLoading;
+
+  const error =
+    homeDataQuery.error ||
+    navLinksQuery.error ||
+    globalSEOQuery.error ||
+    bannersQuery.error;
+
   const showLoader =
     (isLoading || !homeData || !navLinks || !globalSEO || !banners) && !error;
 

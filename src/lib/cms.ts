@@ -1,16 +1,35 @@
 import { PageSEO } from "@/store/useCMSStore";
 import { cache } from "react";
 
+// Global object caching to survive hot-reloads in Next.js development mode
+const globalForCMS = global as unknown as {
+  serverCachedPages: any[] | null;
+  serverCachedPagesExpiry: number;
+};
+
+if (globalForCMS.serverCachedPages === undefined) {
+  globalForCMS.serverCachedPages = null;
+  globalForCMS.serverCachedPagesExpiry = 0;
+}
+
 export const getPages = cache(async (): Promise<any[]> => {
+  const now = Date.now();
+  if (globalForCMS.serverCachedPages && now < globalForCMS.serverCachedPagesExpiry) {
+    return globalForCMS.serverCachedPages;
+  }
+
   try {
     const response = await fetch("https://tgt-cms.vercel.app/api/pages", {
-      next: { revalidate: 10 }, // Cache for 10 seconds
+      cache: "no-store", // Bypasses Next.js 2MB cache limit error
     });
     const json = await response.json();
-    return json?.data || [];
+    const data = json?.data || [];
+    globalForCMS.serverCachedPages = data;
+    globalForCMS.serverCachedPagesExpiry = now + 5 * 60 * 1000; // Cache for 5 minutes
+    return data;
   } catch (error) {
     console.error("Error fetching pages:", error);
-    return [];
+    return globalForCMS.serverCachedPages || [];
   }
 });
 

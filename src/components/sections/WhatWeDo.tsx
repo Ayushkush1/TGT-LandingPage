@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCMSStore } from "@/store/useCMSStore";
 
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
+
 export const WhatWeDo = () => {
   const data = useCMSStore((state) => state.homeData?.WhatWeDo);
   const [activeService, setActiveService] = useState(0);
@@ -107,9 +109,11 @@ export const WhatWeDo = () => {
               >
                 {/* Background: Image or Gradient */}
                 <div className="absolute inset-0 w-full h-full">
-                  <img
+                  <OptimizedImage
                     src={service.image}
                     alt={service.fullTitle}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className={`absolute w-full h-full object-cover transition-transform duration-700 ${index === activeService ? "scale-105 opacity-100" : "scale-125 grayscale-[0.5] opacity-60"}`}
                   />
 

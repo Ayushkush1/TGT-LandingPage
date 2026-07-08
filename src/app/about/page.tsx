@@ -1,18 +1,20 @@
-import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import AboutFirm from "./components/AboutFirm";
-import OurTeam from "./components/OurTeam";
-import { TrustedBy } from "@/components/sections/TrustedBy";
-import { OurPartners } from "@/components/sections/OurPartners";
-import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
-import VideoSection from "./components/VideoSection";
-import VisionSection from "./components/VisionSection";
-import PortfolioSection from "@/app/about/components/PortfolioSection";
-import { BlogSection } from "@/components/sections/BlogSection";
 import { Metadata } from "next";
 import { getPageSEO } from "@/lib/cms";
 import { RenderSchema } from "@/components/RenderSchema";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const OurTeam = dynamic(() => import("./components/OurTeam"));
+const TrustedBy = dynamic(() => import("@/components/sections/TrustedBy").then((m) => m.TrustedBy));
+const OurPartners = dynamic(() => import("@/components/sections/OurPartners").then((m) => m.OurPartners));
+const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
+const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
+const VideoSection = dynamic(() => import("./components/VideoSection"));
+const VisionSection = dynamic(() => import("./components/VisionSection"));
+const PortfolioSection = dynamic(() => import("@/app/about/components/PortfolioSection"));
+const BlogSection = dynamic(() => import("@/components/sections/BlogSection").then((m) => m.BlogSection));
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("about");

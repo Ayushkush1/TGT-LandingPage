@@ -5,13 +5,14 @@ import Script from "next/script";
 import { CMSDataInitializer } from "@/components/CMSDataInitializer";
 import FooterScripts from "@/components/FooterScripts";
 import { RenderSchema } from "@/components/RenderSchema";
+import { cache } from "react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
-async function getGlobalSEO() {
+const getGlobalSEO = cache(async () => {
   try {
     const response = await fetch("https://tgt-cms.vercel.app/api/seo/global", {
-      cache: "no-store", // Always fetch fresh — prevents stale title, description & favicon
+      next: { revalidate: 10 }, // Cache for 10 seconds
     });
     const json = await response.json();
     return json?.data;
@@ -19,7 +20,7 @@ async function getGlobalSEO() {
     console.error("Error fetching global SEO for metadata:", error);
     return null;
   }
-}
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const globalSEO = await getGlobalSEO();

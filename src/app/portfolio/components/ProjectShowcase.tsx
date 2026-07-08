@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useCMSStore, type PortfolioItemData } from "@/store/useCMSStore";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
 export const containerVariants = {
   hidden: {},
@@ -78,9 +79,11 @@ function ProjectCard({ project }: { project: PortfolioItemData }) {
     <div className="flex flex-col group cursor-pointer mb-8">
       {/* ── Background Image ── */}
       <div className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-6 md:mb-10 shadow-sm bg-gray-50">
-        <img
+        <OptimizedImage
           src={project.image}
           alt={project.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 800px"
           className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700 pointer-events-none" />

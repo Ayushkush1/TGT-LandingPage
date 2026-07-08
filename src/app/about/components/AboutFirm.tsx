@@ -2,6 +2,7 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { ArrowRight } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
 export const AboutFirm = () => {
   const storeData = useCMSStore((state) => state.aboutData?.AboutFirm);
@@ -59,14 +60,16 @@ export const AboutFirm = () => {
 
           {/* Right Column - Image */}
           <div className="relative">
-            <div className="rounded-3xl overflow-hidden shadow-lg">
-              <img
+            <div className="relative rounded-3xl overflow-hidden shadow-lg h-[450px] w-full">
+              <OptimizedImage
                 src={
                   data?.images?.[0] ||
                   "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg"
                 }
                 alt="About Us"
-                className="w-full h-[450px] object-cover object-top"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className="object-cover object-top"
               />
             </div>
           </div>

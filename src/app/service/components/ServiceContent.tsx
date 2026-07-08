@@ -1,15 +1,17 @@
 "use client";
-import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { TrustedBy } from "@/components/sections/TrustedBy";
-import { OurPartners } from "@/components/sections/OurPartners";
-import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
 import HeroSection from "./HeroSection";
-import PortfolioSection from "@/app/about/components/PortfolioSection";
-import { BlogSection } from "@/components/sections/BlogSection";
-import ServicesAccordion from "./ServiceRow";
 import { RenderSchema } from "@/components/RenderSchema";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const TrustedBy = dynamic(() => import("@/components/sections/TrustedBy").then((m) => m.TrustedBy));
+const OurPartners = dynamic(() => import("@/components/sections/OurPartners").then((m) => m.OurPartners));
+const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
+const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
+const PortfolioSection = dynamic(() => import("@/app/about/components/PortfolioSection"));
+const BlogSection = dynamic(() => import("@/components/sections/BlogSection").then((m) => m.BlogSection));
+const ServicesAccordion = dynamic(() => import("./ServiceRow"));
 
 interface ServiceContentProps {
   serviceData: any;

@@ -1,12 +1,14 @@
 import { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import CeoMessage from "./components/CeoMessage";
-import CeoPhilosophy from "./components/CeoPhilosophy";
-import CeoTimeline from "./components/CeoTimeline";
-import CTABanner from "../portfolio/components/CTABanner";
 import { getPageSEO } from "@/lib/cms";
 import { RenderSchema } from "@/components/RenderSchema";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const CeoPhilosophy = dynamic(() => import("./components/CeoPhilosophy"));
+const CeoTimeline = dynamic(() => import("./components/CeoTimeline"));
+const CTABanner = dynamic(() => import("../portfolio/components/CTABanner"));
 
 export const metadata: Metadata = {
   title: "CEO Message | The Gold Technologies",

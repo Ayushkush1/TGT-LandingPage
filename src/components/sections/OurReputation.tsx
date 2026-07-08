@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Star, ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
 export const OurReputation = ({ data: propData }: { data?: any }) => {
   const storeData = useCMSStore((state) => state.homeData?.OurReputation);
@@ -114,9 +115,11 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
                                         ${positionStyles}
                                     `}
                     >
-                      <img
+                      <OptimizedImage
                         src={t.image}
                         alt={t.clientName}
+                        fill
+                        sizes="(max-width: 768px) 96px, 128px"
                         className="w-full h-full object-cover transition-transform duration-700"
                       />
                     </button>

@@ -1,17 +1,19 @@
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { TrustedBy } from "@/components/sections/TrustedBy";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { WhoWeAre } from "@/components/sections/WhoWeAre";
-import { WhatWeDo } from "@/components/sections/WhatWeDo";
-import { Integrations } from "@/components/sections/Integrations";
-import { BlogSection } from "@/components/sections/BlogSection";
-import { OurReputation } from "@/components/sections/OurReputation";
-import { OurPartners } from "@/components/sections/OurPartners";
-import { EnquirySection } from "@/components/sections/EnquirySection";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { getPageSEO } from "@/lib/cms";
 import { RenderSchema } from "@/components/RenderSchema";
+import dynamic from "next/dynamic";
+
+const TrustedBy = dynamic(() => import("@/components/sections/TrustedBy").then((m) => m.TrustedBy));
+const WhoWeAre = dynamic(() => import("@/components/sections/WhoWeAre").then((m) => m.WhoWeAre));
+const WhatWeDo = dynamic(() => import("@/components/sections/WhatWeDo").then((m) => m.WhatWeDo));
+const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
+const BlogSection = dynamic(() => import("@/components/sections/BlogSection").then((m) => m.BlogSection));
+const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
+const OurPartners = dynamic(() => import("@/components/sections/OurPartners").then((m) => m.OurPartners));
+const EnquirySection = dynamic(() => import("@/components/sections/EnquirySection").then((m) => m.EnquirySection));
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
 
 export default async function Home() {
   const seo = await getPageSEO("home");

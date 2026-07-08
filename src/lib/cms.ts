@@ -1,9 +1,10 @@
 import { PageSEO } from "@/store/useCMSStore";
+import { cache } from "react";
 
-export async function getPages(): Promise<any[]> {
+export const getPages = cache(async (): Promise<any[]> => {
   try {
     const response = await fetch("https://tgt-cms.vercel.app/api/pages", {
-      cache: "no-store",
+      next: { revalidate: 10 }, // Cache for 10 seconds
     });
     const json = await response.json();
     return json?.data || [];
@@ -11,7 +12,7 @@ export async function getPages(): Promise<any[]> {
     console.error("Error fetching pages:", error);
     return [];
   }
-}
+});
 
 export async function getPageSEO(slug: string): Promise<PageSEO | null> {
   const pages = await getPages();

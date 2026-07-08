@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Lightbulb, Target, ShieldCheck } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 const iconMap: { [key: string]: any } = {
   Lightbulb: Lightbulb,
@@ -62,8 +63,8 @@ export default function CeoPhilosophy() {
             </h2>
 
             <p className="text-lg text-white/70 font-light leading-relaxed max-w-xl mx-auto">
-              {data?.description ||
-                "Leadership is more than pointing the way—it is about laying down the unbreakable foundation upon which greatness is built."}
+              {parseMarkdownLinks(data?.description ||
+                "Leadership is more than pointing the way—it is about laying down the unbreakable foundation upon which greatness is built.")}
             </p>
           </div>
         </AnimatedSection>
@@ -91,7 +92,7 @@ export default function CeoPhilosophy() {
                     {item.title}
                   </h3>
                   <p className="text-white/60 leading-relaxed text-sm">
-                    {item.description}
+                    {parseMarkdownLinks(item.description)}
                   </p>
                 </div>
               </motion.div>

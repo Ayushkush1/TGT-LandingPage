@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductItemData } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 import dynamic from "next/dynamic";
 
 const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
@@ -98,7 +99,7 @@ export default function ProductsContent({
                   key={i}
                   className="text-gray-500 text-lg leading-7 font-medium"
                 >
-                  {p}
+                  {parseMarkdownLinks(p)}
                 </p>
               ))}
             </div>
@@ -205,7 +206,7 @@ export default function ProductsContent({
                         {product?.title}
                       </h3>
                       <p className="text-gray-500 text-[14px] leading-relaxed font-sans max-w-xl font-medium">
-                        {product?.shortDesc}
+                        {parseMarkdownLinks(product?.shortDesc)}
                       </p>
                       <div className="h-1 w-20 bg-gradient-to-r from-[#D4AF37] to-transparent rounded-full" />
                     </div>

@@ -2,6 +2,7 @@
 
 import { ServiceItemData } from "@/store/useCMSStore";
 import { motion } from "framer-motion";
+import { parseMarkdownLinks } from "@/utils/text";
 
 function ServiceProcessCard({
   service,
@@ -36,7 +37,7 @@ function ServiceProcessCard({
           {service.title}
         </h3>
         <p className="text-gray-400 text-sm lg:text-sm leading-relaxed max-w-[90%] font-medium">
-          {service.description}
+          {parseMarkdownLinks(service.description)}
         </p>
       </div>
 

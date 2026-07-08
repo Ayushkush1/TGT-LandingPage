@@ -12,6 +12,7 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import Link from "next/link";
 
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export const WhoWeAre = () => {
   const data = useCMSStore((state) => state.homeData?.WhoWeAre);
@@ -51,7 +52,7 @@ export const WhoWeAre = () => {
                       {part}
                     </span>
                   ) : (
-                    part
+                    parseMarkdownLinks(part)
                   ),
                 )}
             </p>
@@ -154,7 +155,7 @@ export const WhoWeAre = () => {
                 {data?.block1Headline}
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                {data?.block1Description}
+                {parseMarkdownLinks(data?.block1Description)}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4 pt-4">
                 {data?.block1Bullets?.map((item, i) => (
@@ -183,7 +184,7 @@ export const WhoWeAre = () => {
                 </span>
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                {data?.block2Description}
+                {parseMarkdownLinks(data?.block2Description)}
               </p>
               <div className="flex gap-4 pt-4">
                 <Link href={data?.block2CtaUrl ?? "/about"}>

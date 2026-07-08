@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import TeamCard from "./TeamCard";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 const COLS = 7;
 const colOffsets = [-160, -240, -160, -240, -140, -200, -140, 0];
@@ -149,7 +150,7 @@ function OurTeam({ data: propData }: { data?: any }) {
                     {part}
                   </span>
                 ) : (
-                  part
+                  parseMarkdownLinks(part)
                 ),
               )}
           </p>

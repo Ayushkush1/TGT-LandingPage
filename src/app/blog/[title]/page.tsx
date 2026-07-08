@@ -8,6 +8,7 @@ import HeroSection from "./components/HeroSection";
 import { Quote } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
 import dynamic from "next/dynamic";
+import { parseMarkdownLinks } from "@/utils/text";
 
 const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
 const Sidebar = dynamic(() => import("./components/Sidebar"));
@@ -186,7 +187,7 @@ export default function BlogPage() {
                 {blog.content?.[0] && (
                   <div className="pb-8 mb-8 border-b border-border">
                     <p className="font-body text-xl leading-[1.85] text-foreground">
-                      {blog.content[0].paragraphs[0]}
+                      {parseMarkdownLinks(blog.content[0].paragraphs[0])}
                     </p>
                   </div>
                 )}
@@ -206,7 +207,7 @@ export default function BlogPage() {
                           key={i}
                           className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5"
                         >
-                          {p}
+                          {parseMarkdownLinks(p)}
                         </p>
                       ))}
                     </section>

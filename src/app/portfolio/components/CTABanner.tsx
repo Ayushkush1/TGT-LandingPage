@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export default function CTABanner() {
   const cta = useCMSStore((state) => state.portfolioData?.main.cta);
@@ -30,7 +31,7 @@ export default function CTABanner() {
           </h2>
 
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-            {cta.description}
+            {parseMarkdownLinks(cta.description)}
           </p>
         </div>
 

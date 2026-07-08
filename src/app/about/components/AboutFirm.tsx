@@ -3,6 +3,7 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export const AboutFirm = () => {
   const storeData = useCMSStore((state) => state.aboutData?.AboutFirm);
@@ -38,10 +39,10 @@ export const AboutFirm = () => {
             <div className="flex-1 flex flex-col gap-8 pt-10 font-sans">
               <div className="flex flex-col gap-4">
                 <p className="text-gray-500 text-lg leading-7 font-medium">
-                  {data?.paragraph1}
+                  {parseMarkdownLinks(data?.paragraph1)}
                 </p>
                 <p className="text-gray-500 text-lg leading-7 font-medium whitespace-pre-line">
-                  {data?.paragraph2}
+                  {parseMarkdownLinks(data?.paragraph2)}
                 </p>
               </div>
 

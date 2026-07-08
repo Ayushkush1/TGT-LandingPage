@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ServiceHeroData } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export const containerVariants = {
   hidden: {},
@@ -77,7 +78,7 @@ function HeroSection({
                 key={i}
                 className="text-gray-500 text-lg leading-7 font-medium"
               >
-                {p}
+                {parseMarkdownLinks(p)}
               </p>
             ))}
           </div>
@@ -277,7 +278,7 @@ export function PillarCard({
         animate={{ color: descColor }}
         transition={pillarTextTransition}
       >
-        {desc}
+        {parseMarkdownLinks(desc)}
       </motion.p>
     </motion.div>
   );

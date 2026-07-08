@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
@@ -79,7 +80,7 @@ export const WhatWeDo = () => {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-lg text-gray-300 font-light leading-relaxed max-w-2xl mx-auto"
           >
-            {data?.mainDescription}
+            {parseMarkdownLinks(data?.mainDescription)}
           </motion.p>
         </div>
 
@@ -152,7 +153,7 @@ export const WhatWeDo = () => {
                       {service.fullTitle}
                     </h3>
                     <p className="text-gray-300 text-sm leading-relaxed mb-6 font-medium line-clamp-2">
-                      {service.description}
+                      {parseMarkdownLinks(service.description)}
                     </p>
                     <button
                       onClick={() => handleServiceClick(service.id)}

@@ -2,6 +2,7 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { ArrowRight } from "lucide-react";
+import { parseMarkdownLinks } from "@/utils/text";
 
 const HeroSection = () => {
   const portfolioData = useCMSStore((state) => state.portfolioData?.main);
@@ -42,12 +43,12 @@ const HeroSection = () => {
             <div className="flex-1 flex flex-col gap-8 pt-10 font-sans">
               <div className="flex flex-col gap-4">
                 <p className="text-gray-500 text-lg leading-7 font-medium">
-                  {data?.hero?.description ||
-                    "Explore our diverse range of successful projects and case studies."}
+                  {parseMarkdownLinks(data?.hero?.description ||
+                    "Explore our diverse range of successful projects and case studies.")}
                 </p>
                 <p className="text-gray-500 text-lg leading-7 font-medium whitespace-pre-line">
-                  {data?.hero?.description2 ||
-                    `We combine strategic thinking with beautifully crafted design to build solutions that elevate your brand and drive actual business results. Actionable metrics and user-friendly interfaces are at the core of what we do.`}
+                  {parseMarkdownLinks(data?.hero?.description2 ||
+                    `We combine strategic thinking with beautifully crafted design to build solutions that elevate your brand and drive actual business results. Actionable metrics and user-friendly interfaces are at the core of what we do.`)}
                 </p>
               </div>
 

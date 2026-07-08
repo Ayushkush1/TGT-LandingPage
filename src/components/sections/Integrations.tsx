@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from "react";
 import { motion, useSpring, useTransform, useInView } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 // Reusable Grid Block Component
 const GridBlock = ({
@@ -242,7 +243,7 @@ export const Integrations = () => {
             </h2>
 
             <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-xl mx-auto">
-              {data?.mainDescription}
+              {parseMarkdownLinks(data?.mainDescription)}
             </p>
 
             {/* Stats with Dynamic Counters */}

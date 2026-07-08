@@ -4,6 +4,7 @@ import { Star, ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export const OurReputation = ({ data: propData }: { data?: any }) => {
   const storeData = useCMSStore((state) => state.homeData?.OurReputation);
@@ -76,7 +77,7 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
             </h2>
 
             <p className="text-lg text-gray-500 font-light leading-relaxed max-w-2xl mx-auto mt-6">
-              {data?.mainDescription}
+              {parseMarkdownLinks(data?.mainDescription)}
             </p>
           </div>
 
@@ -140,7 +141,7 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
                   key={activeIndex}
                 >
                   <p className="text-xl md:text-2xl font-medium text-gray-800 leading-relaxed text-center md:text-left">
-                    "{data?.testimonials[activeIndex]?.quote}"
+                    "{parseMarkdownLinks(data?.testimonials[activeIndex]?.quote)}"
                   </p>
 
                   <div className="pt-8 border-t border-gray-100 mt-8 flex flex-col items-center md:flex-row md:justify-between gap-4">
@@ -164,7 +165,7 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
           {/* Footer CTA */}
           <div className="text-center space-y-8 animate-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-forwards">
             <p className="text-[#0B0F29] font-serif text-2xl font-medium italic">
-              {data?.footerCtaText}
+              {parseMarkdownLinks(data?.footerCtaText)}
             </p>
             <a
               href={data?.footerButtonUrl}

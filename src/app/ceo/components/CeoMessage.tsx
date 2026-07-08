@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export default function CeoMessage() {
   const data = useCMSStore((state) => state.ceoData?.main?.message);
@@ -60,7 +61,7 @@ export default function CeoMessage() {
               <div className="space-y-6 text-gray-600 text-lg leading-relaxed font-sans mb-12">
                 {data?.paragraphs && data.paragraphs.length > 0 ? (
                   data.paragraphs.map((p, idx) => (
-                    <p key={idx}>{p}</p>
+                    <p key={idx}>{parseMarkdownLinks(p)}</p>
                   ))
                 ) : (
                   <>

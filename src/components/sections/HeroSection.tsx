@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export const HeroSection = () => {
   const data = useCMSStore((state) => state.homeData?.HeroSection);
@@ -97,7 +98,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-lg text-white/95 max-w-xl mx-auto mb-6 leading-relaxed font-normal antialiased"
         >
-          {data?.heroSubtextDescription}
+          {parseMarkdownLinks(data?.heroSubtextDescription)}
         </motion.p>
 
         {/* Buttons - Monochrome */}

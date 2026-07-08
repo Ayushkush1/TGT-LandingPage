@@ -14,8 +14,9 @@ import Link from "next/link";
 import { useCMSStore } from "@/store/useCMSStore";
 import { parseMarkdownLinks } from "@/utils/text";
 
-export const WhoWeAre = () => {
-  const data = useCMSStore((state) => state.homeData?.WhoWeAre);
+export const WhoWeAre = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.WhoWeAre);
+  const data = propData || storeData;
   return (
     <AnimatedSection animation="fadeUp" delay={0.15}>
       <section className="py-24 px-4 md:px-12 bg-white relative z-0">
@@ -46,7 +47,7 @@ export const WhoWeAre = () => {
             <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
               {data?.mainParagraph
                 ?.split(/(The Gold Technologies)/)
-                .map((part, i) =>
+                .map((part: string, i: number) =>
                   part === "The Gold Technologies" ? (
                     <span key={i} className="font-semibold text-gray-900">
                       {part}
@@ -158,7 +159,7 @@ export const WhoWeAre = () => {
                 {parseMarkdownLinks(data?.block1Description)}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4 pt-4">
-                {data?.block1Bullets?.map((item, i) => (
+                {data?.block1Bullets?.map((item: string, i: number) => (
                   <div key={i} className="flex items-center gap-3 group">
                     <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center transition-transform group-hover:scale-110">
                       <CheckCircle2 className="w-3.5 h-3.5 text-white" />

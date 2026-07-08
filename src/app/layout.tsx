@@ -23,7 +23,10 @@ if (globalForSEO.serverCachedGlobalSEO === undefined) {
 
 const getGlobalSEO = cache(async () => {
   const now = Date.now();
-  if (globalForSEO.serverCachedGlobalSEO && now < globalForSEO.serverCachedGlobalSEOExpiry) {
+  if (
+    globalForSEO.serverCachedGlobalSEO &&
+    now < globalForSEO.serverCachedGlobalSEOExpiry
+  ) {
     return globalForSEO.serverCachedGlobalSEO;
   }
 
@@ -76,8 +79,8 @@ export default async function RootLayout({
               globalSEO.favicon.match(/\.(jpg|jpeg)$/i)
                 ? "image/jpeg"
                 : globalSEO.favicon.match(/\.png$/i)
-                ? "image/png"
-                : "image/x-icon"
+                  ? "image/png"
+                  : "image/x-icon"
             }
           />
         )}

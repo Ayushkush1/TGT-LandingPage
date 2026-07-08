@@ -8,8 +8,9 @@ import Link from "next/link";
 import { useCMSStore } from "@/store/useCMSStore";
 import { parseMarkdownLinks } from "@/utils/text";
 
-export const HeroSection = () => {
-  const data = useCMSStore((state) => state.homeData?.HeroSection);
+export const HeroSection = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.HeroSection);
+  const data = propData || storeData;
   const [activeIndex, setActiveIndex] = useState(0);
 
   const headingTag = data?.headingTag || "h1";
@@ -62,7 +63,7 @@ export const HeroSection = () => {
             <div className="w-5 h-5 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-black"></div>
           </div>
           <span className="text-xs font-medium text-white/70">
-            {data?.badgeLabel?.split(/(\d+)/).map((part, i) =>
+            {data?.badgeLabel?.split(/(\d+)/).map((part: string, i: number) =>
               /\d+/.test(part) ? (
                 <strong key={i} className="font-bold text-white">
                   {part}
@@ -130,7 +131,7 @@ export const HeroSection = () => {
       <div className="relative w-full h-[370px] flex items-center justify-center mt-2 xl:mt-2 3xl:mt-6 z-0">
         <div className="relative w-full max-w-[1400px] h-full flex items-center justify-center perspective-[2000px]">
           {data &&
-            data?.projects.map((project, index) => {
+            data?.projects.map((project: any, index: number) => {
               const total = data?.projects.length;
 
               // Calculate wrapped position

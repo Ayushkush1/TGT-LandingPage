@@ -5,9 +5,9 @@ import { ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 import { parseMarkdownLinks } from "@/utils/text";
 
-export const AboutFirm = () => {
+export const AboutFirm = ({ data: propData }: { data?: any }) => {
   const storeData = useCMSStore((state) => state.aboutData?.AboutFirm);
-  const data = storeData;
+  const data = propData || storeData;
   const Heading = (data?.headingTag || "h1") as any;
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>

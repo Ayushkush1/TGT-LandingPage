@@ -2,8 +2,9 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 
-function VideoSection() {
-  const data = useCMSStore((state) => state.aboutData?.VideoSection);
+function VideoSection({ data: propData }: { data?: any }) {
+  const storeData = useCMSStore((state) => state.aboutData?.VideoSection);
+  const data = propData || storeData;
 
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
@@ -29,7 +30,7 @@ function VideoSection() {
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
             {data?.descriptionText
               ?.split(/(The Gold Technologies)/)
-              .map((part, i) =>
+              .map((part: string, i: number) =>
                 part === "The Gold Technologies" ? (
                   <span key={i} className="font-semibold text-gray-900">
                     {part}

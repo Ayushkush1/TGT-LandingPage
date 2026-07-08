@@ -10,8 +10,9 @@ import { parseMarkdownLinks } from "@/utils/text";
 
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
-export const WhatWeDo = () => {
-  const data = useCMSStore((state) => state.homeData?.WhatWeDo);
+export const WhatWeDo = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.WhatWeDo);
+  const data = propData || storeData;
   const [activeService, setActiveService] = useState(0);
   const router = useRouter();
 
@@ -93,7 +94,7 @@ export const WhatWeDo = () => {
           className="flex flex-col lg:flex-row gap-3 h-[600px] lg:h-[500px]"
         >
           {data &&
-            data?.services?.map((service, index) => (
+            data?.services?.map((service: any, index: number) => (
               <motion.div
                 key={service.fullTitle}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -182,7 +183,7 @@ export const WhatWeDo = () => {
           <div className="max-w-7xl mx-auto bg-[#F5F5F7] rounded-[2.5rem] px-8 py-10 md:px-16 md:py-14 flex flex-col md:flex-row items-center justify-between gap-10 shadow-sm border border-white/50">
             <div className="flex-1 text-center md:text-left space-y-3">
               <h3 className="text-3xl md:text-[42px] font-bold text-[#0B0F29] leading-[1.1] tracking-tight max-w-2xl">
-                {data?.ctaHeadline?.split("fastest").map((part, i, arr) => (
+                {data?.ctaHeadline?.split("fastest").map((part: string, i: number, arr: string[]) => (
                   <span key={i}>
                     {part}
                     {i < arr.length - 1 && (

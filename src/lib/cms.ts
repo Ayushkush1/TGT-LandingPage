@@ -12,9 +12,13 @@ if (globalForCMS.serverCachedPages === undefined) {
   globalForCMS.serverCachedPagesExpiry = 0;
 }
 
-export const getPages = cache(async (): Promise<any[]> => {
+export const getPages = cache(async (forceRefresh = false): Promise<any[]> => {
   const now = Date.now();
-  if (globalForCMS.serverCachedPages && now < globalForCMS.serverCachedPagesExpiry) {
+  if (
+    !forceRefresh &&
+    globalForCMS.serverCachedPages &&
+    now < globalForCMS.serverCachedPagesExpiry
+  ) {
     return globalForCMS.serverCachedPages;
   }
 
@@ -34,8 +38,13 @@ export const getPages = cache(async (): Promise<any[]> => {
 });
 
 export async function getPageSEO(slug: string): Promise<PageSEO | null> {
-  const pages = await getPages();
-  const page = pages.find((p: any) => p.slug === slug);
+  let pages = await getPages();
+  let page = pages.find((p: any) => p.slug === slug);
+  if (!page) {
+    // Self-healing fallback: refresh cache in case of new page creations
+    pages = await getPages(true);
+    page = pages.find((p: any) => p.slug === slug);
+  }
   if (page) {
     const seo = page.seo || {};
     return {
@@ -50,8 +59,14 @@ export async function getPageSEO(slug: string): Promise<PageSEO | null> {
 }
 
 export async function getPageData(slug: string): Promise<any | null> {
-  const pages = await getPages();
-  return pages.find((p: any) => p.slug === slug) || null;
+  let pages = await getPages();
+  let page = pages.find((p: any) => p.slug === slug);
+  if (!page) {
+    // Self-healing fallback: refresh cache in case of new page creations
+    pages = await getPages(true);
+    page = pages.find((p: any) => p.slug === slug);
+  }
+  return page || null;
 }
 
 export async function getServiceData(slug: string): Promise<any | null> {

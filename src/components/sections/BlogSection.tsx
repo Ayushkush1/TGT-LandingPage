@@ -109,9 +109,9 @@ export const BlogCard = ({
   );
 };
 
-export const BlogSection = () => {
+export const BlogSection = ({ data: propData }: { data?: any }) => {
   const storeData = useCMSStore((state) => state.homeData?.BlogSection);
-  const data = storeData;
+  const data = propData || storeData;
 
   return (
     <section className="py-32 bg-white relative" id="BlogSection">

@@ -10,11 +10,35 @@ const CeoPhilosophy = dynamic(() => import("./components/CeoPhilosophy"));
 const CeoTimeline = dynamic(() => import("./components/CeoTimeline"));
 const CTABanner = dynamic(() => import("../portfolio/components/CTABanner"));
 
-export const metadata: Metadata = {
-  title: "CEO Message | The Gold Technologies",
-  description:
-    "A message from our CEO about our vision, passion, and commitment to excellence.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSEO("ceo");
+  if (!seo) return {
+    title: "CEO Message | The Gold Technologies",
+    description: "A message from our CEO about our vision, passion, and commitment to excellence.",
+  };
+
+  return {
+    title: seo.metaTitle || "CEO Message | The Gold Technologies",
+    description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+    keywords: seo.targetKeywords || undefined,
+    alternates: {
+      canonical: seo.canonicalUrl || undefined,
+    },
+    robots: {
+      index: !seo.noIndex,
+      follow: !seo.noIndex,
+    },
+    openGraph: {
+      title: seo.metaTitle || "CEO Message | The Gold Technologies",
+      description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.metaTitle || "CEO Message | The Gold Technologies",
+      description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+    },
+  };
+}
 
 export default async function CeoPage() {
   const seo = await getPageSEO("ceo");

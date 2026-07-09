@@ -12,9 +12,15 @@ if (globalForCMS.serverCachedPages === undefined) {
   globalForCMS.serverCachedPagesExpiry = 0;
 }
 
+const cmsApiUrl = process.env.NEXT_PUBLIC_CMS_API_URL || "https://tgt-cms.vercel.app";
+
 export const getPages = cache(async (forceRefresh = false): Promise<any[]> => {
   const now = Date.now();
+  const isDev = process.env.NODE_ENV === "development";
+  const cacheExpiryDuration = isDev ? 0 : 5 * 60 * 1000;
+
   if (
+    !isDev &&
     !forceRefresh &&
     globalForCMS.serverCachedPages &&
     now < globalForCMS.serverCachedPagesExpiry
@@ -23,13 +29,13 @@ export const getPages = cache(async (forceRefresh = false): Promise<any[]> => {
   }
 
   try {
-    const response = await fetch("https://tgt-cms.vercel.app/api/pages", {
+    const response = await fetch(`${cmsApiUrl}/api/pages`, {
       cache: "no-store", // Bypasses Next.js 2MB cache limit error
     });
     const json = await response.json();
     const data = json?.data || [];
     globalForCMS.serverCachedPages = data;
-    globalForCMS.serverCachedPagesExpiry = now + 5 * 60 * 1000; // Cache for 5 minutes
+    globalForCMS.serverCachedPagesExpiry = now + cacheExpiryDuration;
     return data;
   } catch (error) {
     console.error("Error fetching pages:", error);
@@ -53,6 +59,7 @@ export async function getPageSEO(slug: string): Promise<PageSEO | null> {
       targetKeywords: seo.targetKeywords || page.targetKeywords || null,
       canonicalUrl: seo.canonicalUrl || page.canonicalUrl || null,
       noIndex: seo.noIndex ?? page.noIndex ?? false,
+      schema: seo.schema || page.schema || null,
     };
   }
   return null;

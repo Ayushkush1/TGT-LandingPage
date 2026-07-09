@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { DynamicSectionRenderer } from "@/components/DynamicSectionRenderer";
 import { getPageData, getPageSEO } from "@/lib/cms";
 import { Metadata } from "next";
+import { RenderSchema } from "@/components/RenderSchema";
 import NotFound from "../not-found";
 
 interface PageProps {
@@ -32,6 +33,7 @@ export async function generateMetadata({
 
 export default async function DynamicPage({ params }: PageProps) {
   const pageData = await getPageData(params.slug);
+  const seo = await getPageSEO(params.slug);
 
   if (!pageData) {
     return (
@@ -45,6 +47,7 @@ export default async function DynamicPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-white">
+      <RenderSchema schema={seo?.schema} id={`${params.slug}-schema`} />
       <Navbar />
       <DynamicSectionRenderer sections={pageData.sections} />
       <Footer />

@@ -1,23 +1,26 @@
 "use client";
 
-import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { TrustedBy } from "@/components/sections/TrustedBy";
-import VideoSection from "../../about/components/VideoSection";
-import VisionSection from "../../about/components/VisionSection";
-import { OurPartners } from "@/components/sections/OurPartners";
-import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
 import {
   containerVariants,
   itemVariants,
   PillarCard,
 } from "../../service/components/HeroSection";
-import { BlogSection } from "@/components/sections/BlogSection";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductItemData } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const TrustedBy = dynamic(() => import("@/components/sections/TrustedBy").then((m) => m.TrustedBy));
+const VideoSection = dynamic(() => import("../../about/components/VideoSection"));
+const VisionSection = dynamic(() => import("../../about/components/VisionSection"));
+const OurPartners = dynamic(() => import("@/components/sections/OurPartners").then((m) => m.OurPartners));
+const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
+const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
+const BlogSection = dynamic(() => import("@/components/sections/BlogSection").then((m) => m.BlogSection));
 
 interface ProductsContentProps {
   headerData: any;
@@ -28,6 +31,7 @@ export default function ProductsContent({
   headerData,
   productInfo,
 }: ProductsContentProps) {
+  const Heading = (headerData?.headingTag || "h1") as any;
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       {/* Unified Background Wrapper for Navbar + Hero */}
@@ -70,7 +74,7 @@ export default function ProductsContent({
 
             <div>
               {/* Big editorial heading */}
-              <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
+              <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
                 {headerData?.headingLine
                   ?.trim()
                   .split(/\s+/)
@@ -80,7 +84,7 @@ export default function ProductsContent({
                       {i < arr.length - 1 && <br />}
                     </span>
                   ))}
-              </h1>
+              </Heading>
             </div>
           </motion.div>
 
@@ -95,7 +99,7 @@ export default function ProductsContent({
                   key={i}
                   className="text-gray-500 text-lg leading-7 font-medium"
                 >
-                  {p}
+                  {parseMarkdownLinks(p)}
                 </p>
               ))}
             </div>
@@ -135,6 +139,7 @@ export default function ProductsContent({
                       <img
                         src={product?.imageUrl}
                         alt={product?.title}
+                        loading="lazy"
                         className="w-full h-auto object-cover object-top transition-all duration-700"
                       />
                       {/* Secondary image for seamless loop */}
@@ -142,12 +147,14 @@ export default function ProductsContent({
                         src={product?.imageUrl}
                         alt={product?.title}
                         aria-hidden="true"
+                        loading="lazy"
                         className="w-full h-auto object-cover object-top mt-6 transition-all duration-700"
                       />
                       <img
                         src={product?.imageUrl}
                         alt={product?.title}
                         aria-hidden="true"
+                        loading="lazy"
                         className="w-full h-auto object-cover object-top mt-6 transition-all duration-700"
                       />
                     </div>
@@ -199,7 +206,7 @@ export default function ProductsContent({
                         {product?.title}
                       </h3>
                       <p className="text-gray-500 text-[14px] leading-relaxed font-sans max-w-xl font-medium">
-                        {product?.shortDesc}
+                        {parseMarkdownLinks(product?.shortDesc)}
                       </p>
                       <div className="h-1 w-20 bg-gradient-to-r from-[#D4AF37] to-transparent rounded-full" />
                     </div>

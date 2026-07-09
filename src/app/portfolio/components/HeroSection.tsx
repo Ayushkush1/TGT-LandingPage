@@ -2,10 +2,12 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { ArrowRight } from "lucide-react";
+import { parseMarkdownLinks } from "@/utils/text";
 
 const HeroSection = () => {
   const portfolioData = useCMSStore((state) => state.portfolioData?.main);
   const data = portfolioData;
+  const Heading = (data?.hero?.headingTag || "h1") as any;
 
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
@@ -27,9 +29,13 @@ const HeroSection = () => {
 
               <div>
                 {/* Big editorial heading */}
-                <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
-                  Our Best Work In Action
-                </h1>
+                <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
+                  {data?.hero?.titlePrefix || "Our Best Work"} {"\n"}
+                  <span className="text-[#D4AF37]">
+                    {data?.hero?.titleHighlight || "In Action"}
+                  </span>
+                  {data?.hero?.titleSuffix && ` ${data?.hero?.titleSuffix}`}
+                </Heading>
               </div>
             </div>
 
@@ -37,12 +43,12 @@ const HeroSection = () => {
             <div className="flex-1 flex flex-col gap-8 pt-10 font-sans">
               <div className="flex flex-col gap-4">
                 <p className="text-gray-500 text-lg leading-7 font-medium">
-                  {data?.hero?.description ||
-                    "Explore our diverse range of successful projects and case studies."}
+                  {parseMarkdownLinks(data?.hero?.description ||
+                    "Explore our diverse range of successful projects and case studies.")}
                 </p>
                 <p className="text-gray-500 text-lg leading-7 font-medium whitespace-pre-line">
-                  {data?.hero?.description2 ||
-                    `We combine strategic thinking with beautifully crafted design to build solutions that elevate your brand and drive actual business results. Actionable metrics and user-friendly interfaces are at the core of what we do.`}
+                  {parseMarkdownLinks(data?.hero?.description2 ||
+                    `We combine strategic thinking with beautifully crafted design to build solutions that elevate your brand and drive actual business results. Actionable metrics and user-friendly interfaces are at the core of what we do.`)}
                 </p>
               </div>
 

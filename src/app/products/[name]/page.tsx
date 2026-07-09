@@ -1,12 +1,14 @@
 "use client";
-import CTABanner from "@/app/portfolio/components/CTABanner";
-import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import HeroSection from "./components/HeroSection";
-import ServicesAccordion from "@/app/service/components/ServiceRow";
-import { Integrations } from "@/components/sections/Integrations";
-import { OurReputation } from "@/components/sections/OurReputation";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const CTABanner = dynamic(() => import("@/app/portfolio/components/CTABanner"));
+const ServicesAccordion = dynamic(() => import("@/app/service/components/ServiceRow"));
+const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
+const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
 import {
   PortfolioItemData,
   ServiceItemData,

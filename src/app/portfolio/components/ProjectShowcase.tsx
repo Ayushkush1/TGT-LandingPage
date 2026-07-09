@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { useCMSStore, type PortfolioItemData } from "@/store/useCMSStore";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export const containerVariants = {
   hidden: {},
@@ -47,8 +49,8 @@ export default function ProjectShowcase() {
           </h2>
 
           <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-            {showcase?.mainDescription ||
-              "Explore a curated gallery of our most impactful case studies. The Gold Technologies leverages advanced engineering and design to drive measurable growth for global leaders."}
+            {parseMarkdownLinks(showcase?.mainDescription ||
+              "Explore a curated gallery of our most impactful case studies. The Gold Technologies leverages advanced engineering and design to drive measurable growth for global leaders.")}
           </p>
         </div>
 
@@ -78,9 +80,11 @@ function ProjectCard({ project }: { project: PortfolioItemData }) {
     <div className="flex flex-col group cursor-pointer mb-8">
       {/* ── Background Image ── */}
       <div className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-6 md:mb-10 shadow-sm bg-gray-50">
-        <img
+        <OptimizedImage
           src={project.image}
           alt={project.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 800px"
           className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700 pointer-events-none" />
@@ -122,7 +126,7 @@ function ProjectCard({ project }: { project: PortfolioItemData }) {
           </h3>
 
           <p className="text-sm text-gray-500 font-light leading-relaxed line-clamp-2 md:line-clamp-3 md:max-w-3xl">
-            {project.description}
+            {parseMarkdownLinks(project.description)}
           </p>
         </div>
 

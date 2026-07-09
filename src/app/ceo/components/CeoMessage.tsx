@@ -5,6 +5,8 @@ import { ArrowUpRight, Quote } from "lucide-react";
 import Link from "next/link";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export default function CeoMessage() {
   const data = useCMSStore((state) => state.ceoData?.main?.message);
@@ -19,9 +21,11 @@ export default function CeoMessage() {
             <div className="absolute -inset-4 bg-gradient-to-tr from-[#D4AF37]/20 to-transparent blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
             <div className="relative aspect-[3/4] overflow-hidden rounded-[2rem] shadow-2xl">
-              <img
+              <OptimizedImage
                 src={data?.avatar || "/images/Meghna.jpg"}
                 alt={`${data?.name || "Meghna"} - CEO`}
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-100 cursor-pointer object-top"
               />
             </div>
@@ -57,7 +61,7 @@ export default function CeoMessage() {
               <div className="space-y-6 text-gray-600 text-lg leading-relaxed font-sans mb-12">
                 {data?.paragraphs && data.paragraphs.length > 0 ? (
                   data.paragraphs.map((p, idx) => (
-                    <p key={idx}>{p}</p>
+                    <p key={idx}>{parseMarkdownLinks(p)}</p>
                   ))
                 ) : (
                   <>

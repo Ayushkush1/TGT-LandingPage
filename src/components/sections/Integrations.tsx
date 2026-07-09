@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from "react";
 import { motion, useSpring, useTransform, useInView } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 // Reusable Grid Block Component
 const GridBlock = ({
@@ -64,9 +65,9 @@ const AnimatedCounter = ({
   );
 };
 
-export const Integrations = () => {
+export const Integrations = ({ data: propData }: { data?: any }) => {
   const storeData = useCMSStore((state) => state.homeData?.Integrations);
-  const data = storeData;
+  const data = propData || storeData;
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
       <section className="py-32 bg-white overflow-hidden relative font-sans z-0">
@@ -242,7 +243,7 @@ export const Integrations = () => {
             </h2>
 
             <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-xl mx-auto">
-              {data?.mainDescription}
+              {parseMarkdownLinks(data?.mainDescription)}
             </p>
 
             {/* Stats with Dynamic Counters */}

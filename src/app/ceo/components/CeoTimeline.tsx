@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 const defaultMilestones = [
   {
@@ -56,8 +57,8 @@ export default function CeoTimeline() {
             </h2>
 
             <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-              {data?.description ||
-                "Milestones that define our continuous pursuit of perfection and global impact."}
+              {parseMarkdownLinks(data?.description ||
+                "Milestones that define our continuous pursuit of perfection and global impact.")}
             </p>
           </div>
         </AnimatedSection>
@@ -96,7 +97,7 @@ export default function CeoTimeline() {
                         {item.title}
                       </h3>
                       <p className="text-gray-600 leading-relaxed text-sm">
-                        {item.description}
+                        {parseMarkdownLinks(item.description)}
                       </p>
                     </div>
                   </div>

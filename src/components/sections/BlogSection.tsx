@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Star, Clock, Eye, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useCMSStore } from "@/store/useCMSStore";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
 export const BlogCard = ({
   category,
@@ -30,9 +31,11 @@ export const BlogCard = ({
       <div className="relative h-[500px] rounded-[2rem] overflow-hidden group cursor-pointer w-full shadow-2xl transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] font-sans">
         {/* Background Image */}
         <div className="absolute inset-0">
-          <img
+          <OptimizedImage
             src={image}
             alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
         </div>
@@ -106,9 +109,9 @@ export const BlogCard = ({
   );
 };
 
-export const BlogSection = () => {
+export const BlogSection = ({ data: propData }: { data?: any }) => {
   const storeData = useCMSStore((state) => state.homeData?.BlogSection);
-  const data = storeData;
+  const data = propData || storeData;
 
   return (
     <section className="py-32 bg-white relative" id="BlogSection">

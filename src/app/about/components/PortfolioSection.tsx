@@ -14,6 +14,7 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import Link from "next/link";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
 // ─── Stat Card ─────────────────────────────────────────────────────────────────
 function StatCard({ value, label }: { value: string; label: string }) {
@@ -57,9 +58,11 @@ function SlideCard({ p }: { p: PortfolioItemData }) {
         className="relative w-full h-full"
       >
         {/* Background image */}
-        <img
+        <OptimizedImage
           src={p.image}
           alt={p.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="absolute inset-0 w-full h-full object-cover"
         />
 
@@ -202,9 +205,11 @@ const PortfolioSection = () => {
                                 transition-all duration-300 group"
                   style={{ height: 70 }}
                 >
-                  <img
+                  <OptimizedImage
                     src={p.image}
                     alt={p.title}
+                    fill
+                    sizes="120px"
                     className="w-full h-full object-cover group-hover:scale-105
                                transition-transform duration-300"
                   />

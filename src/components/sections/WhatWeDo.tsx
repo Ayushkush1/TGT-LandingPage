@@ -6,9 +6,13 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCMSStore } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
-export const WhatWeDo = () => {
-  const data = useCMSStore((state) => state.homeData?.WhatWeDo);
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
+
+export const WhatWeDo = ({ data: propData }: { data?: any }) => {
+  const storeData = useCMSStore((state) => state.homeData?.WhatWeDo);
+  const data = propData || storeData;
   const [activeService, setActiveService] = useState(0);
   const router = useRouter();
 
@@ -77,7 +81,7 @@ export const WhatWeDo = () => {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-lg text-gray-300 font-light leading-relaxed max-w-2xl mx-auto"
           >
-            {data?.mainDescription}
+            {parseMarkdownLinks(data?.mainDescription)}
           </motion.p>
         </div>
 
@@ -90,7 +94,7 @@ export const WhatWeDo = () => {
           className="flex flex-col lg:flex-row gap-3 h-[600px] lg:h-[500px]"
         >
           {data &&
-            data?.services?.map((service, index) => (
+            data?.services?.map((service: any, index: number) => (
               <motion.div
                 key={service.fullTitle}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -107,9 +111,11 @@ export const WhatWeDo = () => {
               >
                 {/* Background: Image or Gradient */}
                 <div className="absolute inset-0 w-full h-full">
-                  <img
+                  <OptimizedImage
                     src={service.image}
                     alt={service.fullTitle}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className={`absolute w-full h-full object-cover transition-transform duration-700 ${index === activeService ? "scale-105 opacity-100" : "scale-125 grayscale-[0.5] opacity-60"}`}
                   />
 
@@ -148,7 +154,7 @@ export const WhatWeDo = () => {
                       {service.fullTitle}
                     </h3>
                     <p className="text-gray-300 text-sm leading-relaxed mb-6 font-medium line-clamp-2">
-                      {service.description}
+                      {parseMarkdownLinks(service.description)}
                     </p>
                     <button
                       onClick={() => handleServiceClick(service.id)}
@@ -177,7 +183,7 @@ export const WhatWeDo = () => {
           <div className="max-w-7xl mx-auto bg-[#F5F5F7] rounded-[2.5rem] px-8 py-10 md:px-16 md:py-14 flex flex-col md:flex-row items-center justify-between gap-10 shadow-sm border border-white/50">
             <div className="flex-1 text-center md:text-left space-y-3">
               <h3 className="text-3xl md:text-[42px] font-bold text-[#0B0F29] leading-[1.1] tracking-tight max-w-2xl">
-                {data?.ctaHeadline?.split("fastest").map((part, i, arr) => (
+                {data?.ctaHeadline?.split("fastest").map((part: string, i: number, arr: string[]) => (
                   <span key={i}>
                     {part}
                     {i < arr.length - 1 && (

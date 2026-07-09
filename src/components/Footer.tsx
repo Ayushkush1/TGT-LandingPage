@@ -15,6 +15,7 @@ import { motion, useScroll, useInView } from "framer-motion";
 
 import { useCMSStore } from "@/store/useCMSStore";
 import Link from "next/link";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
 export const Footer = () => {
   const data = useCMSStore((state) => state.homeData?.FooterCMS);
@@ -208,9 +209,11 @@ export const Footer = () => {
                 href="https://www.dmca.com/Protection/Status.aspx?ID=174176c9-e0fd-4010-b0f5-50e6ed21d715&refurl=https://thegoldtechnologies.com/"
                 className="text-[10px] border border-gray-600 px-2 py-0.5 rounded text-gray-500 mt-2 w-fit"
               >
-                <img
+                <OptimizedImage
                   src="/images/dmca_protected_sml_120c.png"
                   alt="dmca"
+                  width={96}
+                  height={32}
                   className=" w-24 object-contain"
                 />
               </Link>
@@ -242,9 +245,11 @@ export const Footer = () => {
 
             {/* Women Owned Badge (Small) */}
 
-            <img
+            <OptimizedImage
               src="/images/womenowned-business.jpg"
               alt="womenowned-business"
+              width={80}
+              height={80}
               className="w-20 h-20"
             />
           </div>

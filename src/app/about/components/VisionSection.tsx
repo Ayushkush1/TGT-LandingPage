@@ -10,6 +10,7 @@ import {
 import { motion } from "framer-motion";
 import { useCMSStore } from "@/store/useCMSStore";
 import Link from "next/link";
+import { parseMarkdownLinks } from "@/utils/text";
 
 function VisionSection({ data: propData }: { data?: any }) {
   const storeData = useCMSStore((state) => state.aboutData?.VisionSection);
@@ -74,7 +75,7 @@ function VisionSection({ data: propData }: { data?: any }) {
                     {part}
                   </span>
                 ) : (
-                  part
+                  parseMarkdownLinks(part)
                 ),
               )}
           </p>
@@ -172,7 +173,7 @@ function VisionSection({ data: propData }: { data?: any }) {
                 {data?.block1Heading}
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                {data?.block1Description}
+                {parseMarkdownLinks(data?.block1Description)}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-4 pt-4">
                 {data?.block1Checklist?.map((item: string, i: number) => (
@@ -204,7 +205,7 @@ function VisionSection({ data: propData }: { data?: any }) {
               </h3>
 
               <p className="text-gray-500 text-lg leading-relaxed font-medium">
-                {data?.block2Description}
+                {parseMarkdownLinks(data?.block2Description)}
               </p>
               <div className="flex gap-4 pt-4">
                 <Link href={data?.ctaUrl ?? "/"}>

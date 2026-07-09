@@ -1,20 +1,50 @@
 import { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import CeoMessage from "./components/CeoMessage";
-import CeoPhilosophy from "./components/CeoPhilosophy";
-import CeoTimeline from "./components/CeoTimeline";
-import CTABanner from "../portfolio/components/CTABanner";
+import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
+import dynamic from "next/dynamic";
 
-export const metadata: Metadata = {
-  title: "CEO Message | The Gold Technologies",
-  description:
-    "A message from our CEO about our vision, passion, and commitment to excellence.",
-};
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const CeoPhilosophy = dynamic(() => import("./components/CeoPhilosophy"));
+const CeoTimeline = dynamic(() => import("./components/CeoTimeline"));
+const CTABanner = dynamic(() => import("../portfolio/components/CTABanner"));
 
-export default function CeoPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSEO("ceo");
+  if (!seo) return {
+    title: "CEO Message | The Gold Technologies",
+    description: "A message from our CEO about our vision, passion, and commitment to excellence.",
+  };
+
+  return {
+    title: seo.metaTitle || "CEO Message | The Gold Technologies",
+    description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+    keywords: seo.targetKeywords || undefined,
+    alternates: {
+      canonical: seo.canonicalUrl || undefined,
+    },
+    robots: {
+      index: !seo.noIndex,
+      follow: !seo.noIndex,
+    },
+    openGraph: {
+      title: seo.metaTitle || "CEO Message | The Gold Technologies",
+      description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.metaTitle || "CEO Message | The Gold Technologies",
+      description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+    },
+  };
+}
+
+export default async function CeoPage() {
+  const seo = await getPageSEO("ceo");
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="ceo-schema" />
       <div className="relative">
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"

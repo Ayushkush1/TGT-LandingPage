@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { TeamCardProps } from "./OurTeam";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
 
 function TeamCard({ member, delay }: TeamCardProps) {
   if (member.isEmpty) {
@@ -32,9 +33,11 @@ function TeamCard({ member, delay }: TeamCardProps) {
     >
       <div className="relative overflow-hidden" style={{ height: "200px" }}>
         {member.image && (
-          <img
+          <OptimizedImage
             src={member.image}
             alt={member.name}
+            fill
+            sizes="(max-width: 768px) 100vw, 250px"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         )}

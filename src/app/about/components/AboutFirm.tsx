@@ -2,10 +2,13 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
 import { ArrowRight } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/OptimizedImage";
+import { parseMarkdownLinks } from "@/utils/text";
 
-export const AboutFirm = () => {
+export const AboutFirm = ({ data: propData }: { data?: any }) => {
   const storeData = useCMSStore((state) => state.aboutData?.AboutFirm);
-  const data = storeData;
+  const data = propData || storeData;
+  const Heading = (data?.headingTag || "h1") as any;
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -26,9 +29,9 @@ export const AboutFirm = () => {
 
               <div>
                 {/* Big editorial heading */}
-                <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black w-20 text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
+                <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black w-20 text-[#0B0F29] leading-[1.05] tracking-tight whitespace-pre-line">
                   {data?.heading}
-                </h1>
+                </Heading>
               </div>
             </div>
 
@@ -36,10 +39,10 @@ export const AboutFirm = () => {
             <div className="flex-1 flex flex-col gap-8 pt-10 font-sans">
               <div className="flex flex-col gap-4">
                 <p className="text-gray-500 text-lg leading-7 font-medium">
-                  {data?.paragraph1}
+                  {parseMarkdownLinks(data?.paragraph1)}
                 </p>
                 <p className="text-gray-500 text-lg leading-7 font-medium whitespace-pre-line">
-                  {data?.paragraph2}
+                  {parseMarkdownLinks(data?.paragraph2)}
                 </p>
               </div>
 
@@ -58,14 +61,16 @@ export const AboutFirm = () => {
 
           {/* Right Column - Image */}
           <div className="relative">
-            <div className="rounded-3xl overflow-hidden shadow-lg">
-              <img
+            <div className="relative rounded-3xl overflow-hidden shadow-lg h-[450px] w-full">
+              <OptimizedImage
                 src={
                   data?.images?.[0] ||
                   "https://thegoldtechnologies.com/assets/svg/brands/aboutus.jpg"
                 }
                 alt="About Us"
-                className="w-full h-[450px] object-cover object-top"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className="object-cover object-top"
               />
             </div>
           </div>

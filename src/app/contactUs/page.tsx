@@ -4,6 +4,7 @@ import { EnquirySection } from "@/components/sections/EnquirySection";
 import MapSection from "@/components/sections/MapSection";
 import { getPageSEO } from "@/lib/cms";
 import { Metadata } from "next";
+import { RenderSchema } from "@/components/RenderSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("contactUs");
@@ -32,9 +33,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function ContactUs() {
+async function ContactUs() {
+  const seo = await getPageSEO("contactUs");
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="contact-schema" />
       {/* Unified Background Wrapper for Navbar + Hero */}
       <div className="relative">
         {/* Noise Texture Background */}

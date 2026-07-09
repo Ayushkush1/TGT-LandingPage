@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ServiceHeroData } from "@/store/useCMSStore";
+import { parseMarkdownLinks } from "@/utils/text";
 
 export const containerVariants = {
   hidden: {},
@@ -27,6 +28,7 @@ function HeroSection({
 }: {
   serviceData?: ServiceHeroData | undefined;
 }) {
+  const Heading = (serviceData?.headingTag || "h1") as any;
   return (
     <motion.section
       initial="hidden"
@@ -51,7 +53,7 @@ function HeroSection({
           </div>
 
           {/* Big editorial heading */}
-          <h1 className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
+          <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
             {serviceData?.headingLine1
               ?.trim()
               .split(/\s+/)
@@ -62,7 +64,7 @@ function HeroSection({
                     (line === "&" || arr[i + 1] === "&" ? " " : <br />)}
                 </span>
               ))}
-          </h1>
+          </Heading>
         </motion.div>
 
         {/* Right: Body text + CTAs */}
@@ -76,7 +78,7 @@ function HeroSection({
                 key={i}
                 className="text-gray-500 text-lg leading-7 font-medium"
               >
-                {p}
+                {parseMarkdownLinks(p)}
               </p>
             ))}
           </div>
@@ -276,7 +278,7 @@ export function PillarCard({
         animate={{ color: descColor }}
         transition={pillarTextTransition}
       >
-        {desc}
+        {parseMarkdownLinks(desc)}
       </motion.p>
     </motion.div>
   );

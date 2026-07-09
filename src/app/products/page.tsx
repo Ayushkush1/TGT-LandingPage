@@ -1,6 +1,7 @@
 import { getPageSEO, getProductPageData } from "@/lib/cms";
 import { Metadata } from "next";
 import ProductsContent from "./components/ProductsContent";
+import { RenderSchema } from "@/components/RenderSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("products");
@@ -22,15 +23,19 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ProductPage() {
   const productData = await getProductPageData();
+  const seo = await getPageSEO("products");
 
   if (!productData) {
     return null; // Or show error
   }
 
   return (
-    <ProductsContent
-      headerData={productData.hero}
-      productInfo={productData.products}
-    />
+    <>
+      <RenderSchema schema={seo?.schema} id="products-schema" />
+      <ProductsContent
+        headerData={productData.hero}
+        productInfo={productData.products}
+      />
+    </>
   );
 }

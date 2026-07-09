@@ -4,21 +4,46 @@ import "./globals.css";
 import Script from "next/script";
 import { CMSDataInitializer } from "@/components/CMSDataInitializer";
 import FooterScripts from "@/components/FooterScripts";
+import { RenderSchema } from "@/components/RenderSchema";
+import { cache } from "react";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
-async function getGlobalSEO() {
+// Global object caching for SEO to survive hot-reloads in Next.js dev mode
+const globalForSEO = global as unknown as {
+  serverCachedGlobalSEO: any;
+  serverCachedGlobalSEOExpiry: number;
+};
+
+if (globalForSEO.serverCachedGlobalSEO === undefined) {
+  globalForSEO.serverCachedGlobalSEO = null;
+  globalForSEO.serverCachedGlobalSEOExpiry = 0;
+}
+
+const getGlobalSEO = cache(async () => {
+  const now = Date.now();
+  if (
+    globalForSEO.serverCachedGlobalSEO &&
+    now < globalForSEO.serverCachedGlobalSEOExpiry
+  ) {
+    return globalForSEO.serverCachedGlobalSEO;
+  }
+
   try {
     const response = await fetch("https://tgt-cms.vercel.app/api/seo/global", {
-      cache: "no-store", // Always fetch fresh — prevents stale title, description & favicon
+      cache: "no-store", // Bypasses Next.js cache limit
     });
     const json = await response.json();
-    return json?.data;
+    const data = json?.data || null;
+    globalForSEO.serverCachedGlobalSEO = data;
+    globalForSEO.serverCachedGlobalSEOExpiry = now + 5 * 60 * 1000; // Cache for 5 minutes
+    return data;
   } catch (error) {
     console.error("Error fetching global SEO for metadata:", error);
-    return null;
+    return globalForSEO.serverCachedGlobalSEO;
   }
-}
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const globalSEO = await getGlobalSEO();
@@ -54,8 +79,8 @@ export default async function RootLayout({
               globalSEO.favicon.match(/\.(jpg|jpeg)$/i)
                 ? "image/jpeg"
                 : globalSEO.favicon.match(/\.png$/i)
-                ? "image/png"
-                : "image/x-icon"
+                  ? "image/png"
+                  : "image/x-icon"
             }
           />
         )}
@@ -102,6 +127,9 @@ export default async function RootLayout({
             dangerouslySetInnerHTML={{ __html: globalSEO.customHeaderScripts }}
           />
         )}
+        {globalSEO?.schema && (
+          <RenderSchema schema={globalSEO.schema} id="global-schema" />
+        )}
       </head>
       <body className={inter.className}>
         {/* GTM Noscript */}
@@ -115,7 +143,9 @@ export default async function RootLayout({
             />
           </noscript>
         )}
-        <CMSDataInitializer>{children}</CMSDataInitializer>
+        <QueryProvider>
+          <CMSDataInitializer>{children}</CMSDataInitializer>
+        </QueryProvider>
         {/* Custom Footer Scripts */}
         {globalSEO?.customFooterScripts && (
           <FooterScripts html={globalSEO.customFooterScripts} />

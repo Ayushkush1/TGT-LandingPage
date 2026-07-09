@@ -1,17 +1,20 @@
 "use client";
-import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { BlogCard } from "@/components/sections/BlogSection";
 import HeroSection from "./components/HeroSection";
-import Sidebar from "./components/Sidebar";
-import Takeaways from "./components/Takeaways";
-import AuthorCard from "./components/AuthorCard";
-import Tags from "./components/Tags";
 import { Quote } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
+import dynamic from "next/dynamic";
+import { parseMarkdownLinks } from "@/utils/text";
+
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const Sidebar = dynamic(() => import("./components/Sidebar"));
+const Takeaways = dynamic(() => import("./components/Takeaways"));
+const AuthorCard = dynamic(() => import("./components/AuthorCard"));
+const Tags = dynamic(() => import("./components/Tags"));
 
 // `toc` and `takeaways` are derived from the selected `blog` below
 
@@ -184,7 +187,7 @@ export default function BlogPage() {
                 {blog.content?.[0] && (
                   <div className="pb-8 mb-8 border-b border-border">
                     <p className="font-body text-xl leading-[1.85] text-foreground">
-                      {blog.content[0].paragraphs[0]}
+                      {parseMarkdownLinks(blog.content[0].paragraphs[0])}
                     </p>
                   </div>
                 )}
@@ -204,7 +207,7 @@ export default function BlogPage() {
                           key={i}
                           className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5"
                         >
-                          {p}
+                          {parseMarkdownLinks(p)}
                         </p>
                       ))}
                     </section>

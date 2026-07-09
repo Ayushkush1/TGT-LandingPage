@@ -10,6 +10,7 @@ export interface PageSEO {
   targetKeywords: string | null;
   canonicalUrl: string | null;
   noIndex: boolean;
+  schema?: string | null;
 }
 
 export interface NavLink {
@@ -57,6 +58,7 @@ export interface HeroSectionData {
   primaryDestinationUrl: string;
   secondaryButtonLabel: string;
   secondaryDestinationUrl: string;
+  headingTag?: string;
   projects: {
     category: string;
     image: string;
@@ -153,6 +155,7 @@ export interface EnquirySectionData {
   phone: string;
   submitButtonText: string;
   interestedInOptions: string;
+  headingTag?: string;
 }
 
 export interface FooterCMSData {
@@ -215,6 +218,7 @@ export interface AboutFirmData {
   ctaUrl: string;
   images: string[];
   heading: string;
+  headingTag?: string;
   ctaLabel: string;
   topLabel: string;
   paragraph1: string;
@@ -303,6 +307,7 @@ export interface ProductHeroData {
   paragraphs: string[];
   headingLine: string;
   statProjects: string;
+  headingTag?: string;
 }
 
 export interface ProductPillarData {
@@ -339,6 +344,7 @@ export interface ServiceHeroData {
   headingLine1: string;
   headingLine2: string;
   statProjects: string;
+  headingTag?: string;
 }
 
 export interface ServiceItemData {
@@ -405,6 +411,7 @@ export interface PortfolioHeroData {
   titleHighlight: string;
   viewProjectsText: string;
   viewProjectsHref: string;
+  headingTag?: string;
 }
 
 export interface PortfolioCollageData {
@@ -606,6 +613,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
             targetKeywords: seo.targetKeywords || p.targetKeywords,
             canonicalUrl: seo.canonicalUrl || p.canonicalUrl,
             noIndex: seo.noIndex ?? p.noIndex ?? false,
+            schema: seo.schema || p.schema || null,
           };
         };
 

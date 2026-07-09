@@ -1,13 +1,16 @@
 import { Metadata } from "next";
 import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Integrations } from "@/components/sections/Integrations";
-import { OurReputation } from "@/components/sections/OurReputation";
-import { TrustedBy } from "@/components/sections/TrustedBy";
-import CTABanner from "./components/CTABanner";
 import HeroSection from "./components/HeroSection";
-import ProjectShowcase from "./components/ProjectShowcase";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
+const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
+const TrustedBy = dynamic(() => import("@/components/sections/TrustedBy").then((m) => m.TrustedBy));
+const CTABanner = dynamic(() => import("./components/CTABanner"));
+const ProjectShowcase = dynamic(() => import("./components/ProjectShowcase"));
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("portfolio");
@@ -36,9 +39,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const seo = await getPageSEO("portfolio");
   return (
     <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="portfolio-schema" />
       <div className="relative">
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"

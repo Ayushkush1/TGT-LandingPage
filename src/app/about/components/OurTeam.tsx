@@ -100,7 +100,7 @@ function OurTeam({ data: propData }: { data?: any }) {
      justify-center mid:gap-[0rem] overflow-hidden mid:pb-[14rem] mid:pt-[9rem] py-[4rem] mid:py-0"
       >
         {/* TEAMS FOR DESKTOP */}
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
           <div
             className="grid gap-6 items-start"
             style={{

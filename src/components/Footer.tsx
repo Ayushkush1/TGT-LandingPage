@@ -95,9 +95,9 @@ export const Footer = () => {
           </div>
 
           {/* Links */}
-          <div className="flex gap-16 md:gap-10 ">
-            <div className="flex flex-col gap-4">
-              <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex gap-6 sm:gap-8 md:gap-10 lg:gap-16 w-full md:w-auto">
+            <div className="flex flex-col gap-3 md:gap-4 text-xs md:text-sm">
+              <h4 className="text-[#D4AF37] font-serif italic text-base md:text-lg mb-1 md:mb-2">
                 Explore
               </h4>
               <Link
@@ -149,8 +149,8 @@ export const Footer = () => {
                 Accessibility
               </Link>
             </div>
-            <div className="flex flex-col gap-4 shrink-0">
-              <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
+            <div className="flex flex-col gap-3 md:gap-4 shrink-0 text-xs md:text-sm">
+              <h4 className="text-[#D4AF37] font-serif italic text-base md:text-lg mb-1 md:mb-2">
                 Services
               </h4>
               {[
@@ -182,14 +182,14 @@ export const Footer = () => {
                 <Link
                   key={service.link}
                   href={service.link}
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
+                  className="text-gray-400 hover:text-white transition-colors text-xs md:text-sm"
                 >
                   {service.title}
                 </Link>
               ))}
             </div>
-            <div className="flex flex-col gap-4">
-              <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
+            <div className="flex flex-col gap-3 md:gap-4 text-xs md:text-sm col-span-2 sm:col-span-1 mt-4 sm:mt-0">
+              <h4 className="text-[#D4AF37] font-serif italic text-base md:text-lg mb-1 md:mb-2">
                 Legal
               </h4>
               <a

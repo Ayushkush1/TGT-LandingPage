@@ -53,12 +53,12 @@ const AnimatedCounter = ({
   }, [isInView, value, spring]);
 
   return (
-    <div ref={ref} className="text-center w-28">
-      <div className="text-4xl font-extrabold text-[#D4AF37] mb-1 flex justify-center items-center">
+    <div ref={ref} className="text-center w-24 md:w-28">
+      <div className="text-3xl md:text-4xl font-extrabold text-[#D4AF37] mb-1 flex justify-center items-center">
         <motion.span>{display}</motion.span>
         {suffix}
       </div>
-      <div className="text-sm font-medium text-gray-500 uppercase tracking-wide px-2">
+      <div className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide px-1 md:px-2">
         {label}
       </div>
     </div>
@@ -70,7 +70,7 @@ export const Integrations = ({ data: propData }: { data?: any }) => {
   const data = propData || storeData;
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
-      <section className="py-32 bg-white overflow-hidden relative font-sans z-0">
+      <section className="py-16 md:py-32 bg-white overflow-hidden relative font-sans z-0">
         <div className="max-w-[1400px] mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-0">
           {/* --- LEFT GRID --- */}
           <div className="hidden lg:grid grid-cols-2 gap-6 opacity-100 transform -translate-x-12">
@@ -236,18 +236,18 @@ export const Integrations = ({ data: propData }: { data?: any }) => {
 
           {/* --- CENTER CONTENT --- */}
           <div className="text-center max-w-2xl relative z-10 mx-auto lg:mx-0">
-            <h2 className="text-4xl md:text-5xl w-[450px] text-center m-auto font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl w-full max-w-[450px] text-center m-auto font-extrabold text-[#0B0F29] leading-[1.2] md:leading-[1.15] mb-4 md:mb-6 tracking-tight">
               {/* Home to the world's <br />
               software teams */}
               {data?.headlinePart1}
             </h2>
 
-            <p className="text-lg text-gray-500 font-light leading-relaxed mb-12 max-w-xl mx-auto">
+            <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed mb-8 md:mb-12 max-w-xl mx-auto px-2 md:px-0">
               {parseMarkdownLinks(data?.mainDescription)}
             </p>
 
             {/* Stats with Dynamic Counters */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
               {data?.stats?.map(
                 (
                   stat: { value: string | number; labelLine1: string },

@@ -68,7 +68,7 @@ export default async function RootLayout({
   const globalSEO = await getGlobalSEO();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Dynamic Favicon — set directly to avoid browser caching old icon */}
         {globalSEO?.favicon && (
@@ -131,7 +131,7 @@ export default async function RootLayout({
           <RenderSchema schema={globalSEO.schema} id="global-schema" />
         )}
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         {/* GTM Noscript */}
         {globalSEO?.gtmId && (
           <noscript>

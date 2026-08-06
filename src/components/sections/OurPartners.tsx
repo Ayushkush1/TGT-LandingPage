@@ -24,18 +24,18 @@ export const OurPartners = ({ data: propData }: { data?: any }) => {
   const data = propData || storeData;
   return (
     <AnimatedSection animation="fadeIn" delay={0.2}>
-      <section className="py-24 my-24 bg-black overflow-hidden relative border-t border-white/5 z-0">
+      <section className="py-12 md:py-24 my-10 md:my-24 bg-black overflow-hidden relative border-t border-white/5 z-0">
         {/* Background Texture/Noise could go here */}
 
-        <div className="max-w-[1400px] mx-auto px-4 relative z-10 mb-20 text-center">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[#D4AF37]/50"></div>
-            <span className="text-[#D4AF37] font-bold tracking-[0.3em] text-xs uppercase">
+        <div className="max-w-[1400px] mx-auto px-4 relative z-10 mb-10 md:mb-20 text-center">
+          <div className="flex items-center justify-center gap-4 mb-4 md:mb-6">
+            <div className="h-px w-8 md:w-12 bg-[#D4AF37]/50"></div>
+            <span className="text-[#D4AF37] font-bold tracking-[0.3em] text-[10px] md:text-xs uppercase">
               {data?.upperTag}
             </span>
-            <div className="h-px w-12 bg-[#D4AF37]/50"></div>
+            <div className="h-px w-8 md:w-12 bg-[#D4AF37]/50"></div>
           </div>
-          <h2 className="text-4xl md:text-6xl font-medium text-white tracking-tighter">
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-medium text-white tracking-tighter">
             {data?.headlinePart1}{" "}
             <span className="font-serif italic text-[#D4AF37]">
               {data?.headlineHighlight}
@@ -44,10 +44,10 @@ export const OurPartners = ({ data: propData }: { data?: any }) => {
         </div>
 
         {/* Tilted Marquee Container */}
-        <div className="relative w-full -rotate-2 scale-110 border-y border-white/5 bg-white/5 backdrop-blur-sm py-12">
+        <div className="relative w-full -rotate-2 scale-110 border-y border-white/5 bg-white/5 backdrop-blur-sm py-6 md:py-12">
           {/* Gradient Masks */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-10"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-10"></div>
 
           <motion.div
             className="flex items-center"
@@ -61,13 +61,13 @@ export const OurPartners = ({ data: propData }: { data?: any }) => {
           >
             {[...(data?.logos || []), ...(data?.logos || [])].map(
               (logo, index) => (
-                <LogoPlaceholder key={index} className="w-48">
+                <LogoPlaceholder key={index} className="w-32 md:w-48 mx-4 sm:mx-8 md:mx-12">
                   <Image
                     src={logo}
                     width={180}
                     height={80}
                     alt={`Partner Logo ${index}`}
-                    className="object-contain max-h-16"
+                    className="object-contain max-h-10 md:max-h-16"
                   />
                 </LogoPlaceholder>
               ),

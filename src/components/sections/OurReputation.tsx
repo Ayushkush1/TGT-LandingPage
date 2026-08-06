@@ -52,44 +52,44 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
 
   return (
     <AnimatedSection animation="scaleIn" delay={0.2}>
-      <section className="py-16 px-4 bg-gray-50/50">
+      <section className="py-10 md:py-16 px-4 bg-gray-50/50">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="text-center mb-8 md:mb-16">
+            <div className="flex items-center justify-center gap-4 mb-4 md:mb-6">
               <div className="h-px w-8 bg-gray-400/30"></div>
-              <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
+              <span className="text-gray-400 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase">
                 {data?.upperTag}
               </span>
               <div className="h-px w-8 bg-gray-400/30"></div>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.2] md:leading-[1.15] mb-4 md:mb-6 tracking-tight">
               {data?.headlinePart1}{" "}
               <span className="font-serif italic font-medium text-[#D4AF37]">
                 {data?.headlineHighlight1}
               </span>{" "}
-              {data?.headlinePart2.split(" ")[0]} <br />{" "}
+              {data?.headlinePart2.split(" ")[0]} <br className="hidden sm:inline" />{" "}
               {data?.headlinePart2.split(" ").slice(1).join(" ")}{" "}
               <span className="relative inline-block z-0">
                 {data?.headlineHighlight2}
-                <span className="absolute bottom-2 left-0 w-full h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
+                <span className="absolute bottom-1 md:bottom-2 left-0 w-full h-2 md:h-3 bg-[#D4AF37] -z-10 opacity-60 transform -rotate-1 rounded-sm"></span>
               </span>
             </h2>
 
-            <p className="text-lg text-gray-500 font-light leading-relaxed max-w-2xl mx-auto mt-6">
+            <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed max-w-2xl mx-auto mt-4 md:mt-6 px-2 md:px-0">
               {parseMarkdownLinks(data?.mainDescription)}
             </p>
           </div>
 
           {/* Content Area - Compact 2 Columns */}
           <div
-            className="flex flex-col md:flex-row gap-8 lg:gap-10 items-center justify-center mb-16 z-0"
+            className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-10 items-center justify-center mb-8 md:mb-16 z-0"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
           >
             {/* Left: Vertical Carousel (Avatars) */}
             {/* Fixed height container for absolute positioning */}
-            <div className="relative w-full md:w-48 h-[350px] flex justify-center items-center z-0">
+            <div className="relative w-full md:w-48 h-[300px] md:h-[350px] flex justify-center items-center z-0">
               {data &&
                 data?.testimonials.map((t: any, index: number) => {
                   const position = getPosition(index);
@@ -98,13 +98,13 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
                   let positionStyles = "";
                   if (position === "center") {
                     positionStyles =
-                      "top-1/2 -translate-y-1/2 z-20 scale-100 opacity-100 ring-4 ring-[#D4AF37]/50 rounded-[2rem] shadow-xl bg-white h-32 md:h-36";
+                      "top-1/2 -translate-y-1/2 z-20 scale-100 opacity-100 ring-4 ring-[#D4AF37]/50 rounded-[2rem] shadow-xl bg-white h-28 md:h-36";
                   } else if (position === "top") {
                     positionStyles =
-                      "top-[15%] -translate-y-1/2 z-10 scale-90 opacity-40 grayscale blur-[1px] rounded-[1.5rem] h-16 md:h-20 w-16 md:w-[100px]";
+                      "top-[15%] -translate-y-1/2 z-10 scale-90 opacity-40 grayscale blur-[1px] rounded-[1.5rem] h-14 md:h-20 w-14 md:w-[100px]";
                   } else if (position === "bottom") {
                     positionStyles =
-                      "top-[85%] -translate-y-1/2 z-10 scale-90 opacity-40 grayscale blur-[1px] rounded-[1.5rem] h-16 md:h-20 w-16 md:w-[100px]";
+                      "top-[85%] -translate-y-1/2 z-10 scale-90 opacity-40 grayscale blur-[1px] rounded-[1.5rem] h-14 md:h-20 w-14 md:w-[100px]";
                   }
 
                   return (
@@ -112,7 +112,7 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
                       key={t.clientName}
                       onClick={() => setActiveIndex(index)}
                       className={`absolute left-1/2 -translate-x-1/2  overflow-hidden transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) cursor-pointer group 
-                                        w-24 md:w-32 object-cover block
+                                        w-20 md:w-32 object-cover block
                                         ${positionStyles}
                                     `}
                     >
@@ -129,27 +129,27 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
             </div>
 
             {/* Right: Testimonial Card */}
-            <div className="flex-1 w-full max-w-3xl bg-white rounded-[3rem] p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] relative border border-gray-100 min-h-[350px] flex flex-col justify-center overflow-hidden z-0">
+            <div className="flex-1 w-full max-w-3xl bg-white rounded-[2rem] md:rounded-[3rem] p-6 sm:p-8 md:p-12 shadow-[0_10px_40px_rgba(0,0,0,0.04)] relative border border-gray-100 min-h-[300px] md:min-h-[350px] flex flex-col justify-center overflow-hidden z-0">
               {/* Giant Quote Decoration */}
-              <div className="absolute top-1 right-6 text-[#D4AF37]/50 font-serif text-[340px] leading-none select-none pointer-events-none font-bold opacity-20 transform">
+              <div className="absolute top-1 right-6 text-[#D4AF37]/50 font-serif text-[240px] md:text-[340px] leading-none select-none pointer-events-none font-bold opacity-20 transform">
                 ”
               </div>
 
-              <div className="relative z-10 space-y-6">
+              <div className="relative z-10 space-y-4 md:space-y-6">
                 <div
                   className="animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out fill-mode-forwards"
                   key={activeIndex}
                 >
-                  <p className="text-xl md:text-2xl font-medium text-gray-800 leading-relaxed text-center md:text-left">
+                  <p className="text-base sm:text-lg md:text-2xl font-medium text-gray-800 leading-relaxed text-center md:text-left">
                     "{parseMarkdownLinks(data?.testimonials[activeIndex]?.quote)}"
                   </p>
 
-                  <div className="pt-8 border-t border-gray-100 mt-8 flex flex-col items-center md:flex-row md:justify-between gap-4">
+                  <div className="pt-4 md:pt-8 border-t border-gray-100 mt-4 md:mt-8 flex flex-col items-center md:flex-row md:justify-between gap-3 md:gap-4">
                     <div className="text-center md:text-left">
-                      <h4 className="text-xl font-bold text-[#0B0F29] font-serif mb-1">
+                      <h4 className="text-lg md:text-xl font-bold text-[#0B0F29] font-serif mb-0.5 md:mb-1">
                         {data?.testimonials[activeIndex]?.clientName}
                       </h4>
-                      <p className="text-gray-500 font-medium">
+                      <p className="text-xs md:text-base text-gray-500 font-medium">
                         {data?.testimonials[activeIndex]?.clientRole}
                       </p>
                     </div>
@@ -163,18 +163,18 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
           </div>
 
           {/* Footer CTA */}
-          <div className="text-center space-y-8 animate-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-forwards">
-            <p className="text-[#0B0F29] font-serif text-2xl font-medium italic">
+          <div className="text-center space-y-4 md:space-y-8 animate-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-forwards">
+            <p className="text-[#0B0F29] font-serif text-lg sm:text-xl md:text-2xl font-medium italic px-2">
               {parseMarkdownLinks(data?.footerCtaText)}
             </p>
             <a
               href={data?.footerButtonUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#0B0F29] w-max text-white px-10 py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 mx-auto group"
+              className="bg-[#0B0F29] w-max text-white px-8 md:px-10 py-3.5 md:py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 mx-auto group text-sm md:text-base"
             >
               {data?.footerButtonLabel}
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
             </a>
           </div>
         </div>

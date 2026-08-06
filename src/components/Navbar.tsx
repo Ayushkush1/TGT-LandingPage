@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import * as React from "react";
-import { ChevronDown, Mail, MailOpen, Phone, ScanSearch } from "lucide-react";
+import { ChevronDown, Mail, MailOpen, Menu, Phone, ScanSearch, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,63 @@ import Image from "next/image";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useCMSStore } from "@/store/useCMSStore";
 
+const MobileDropdownItem = ({
+  item,
+  dropdownItems,
+  onClose,
+}: {
+  item: any;
+  dropdownItems: any[];
+  onClose: () => void;
+}) => {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between text-gray-900 text-lg font-bold hover:text-[#9A7B12] cursor-pointer py-1.5 transition-colors"
+      >
+        <span>{item.title}</span>
+        <ChevronDown
+          className={cn(
+            "w-5 h-5 transition-transform duration-300 text-gray-500",
+            open && "rotate-180 text-[#9A7B12]",
+          )}
+        />
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="flex flex-col gap-2 pl-4 border-l-2 border-[#D4AF37] overflow-hidden"
+          >
+            {dropdownItems.map((sub, j) => (
+              <Link
+                key={j}
+                href={sub.link || "#"}
+                onClick={onClose}
+                className="py-2 text-sm font-semibold text-gray-800 hover:text-[#9A7B12] transition-colors flex flex-col"
+              >
+                <span>{sub.title}</span>
+                {sub.desc && (
+                  <span className="text-xs text-gray-500 font-normal mt-0.5">
+                    {sub.desc}
+                  </span>
+                )}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 export const Navbar = () => {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
@@ -25,11 +82,27 @@ export const Navbar = () => {
   const [isEmailHovered, setIsEmailHovered] = React.useState(false);
   const [isPhoneHovered, setIsPhoneHovered] = React.useState(false);
   const [openAuditForm, setOpenAuditForm] = React.useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const currentScrolledRef = React.useRef(scrolled);
 
   React.useEffect(() => {
     currentScrolledRef.current = scrolled;
   }, [scrolled]);
+
+  React.useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  React.useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   React.useEffect(() => {
     let ticking = false;
@@ -70,11 +143,11 @@ export const Navbar = () => {
           duration: 0.8,
           ease: [0.25, 0.46, 0.45, 0.94],
         }}
-        className={`flex items-center sticky  z-50 transition-all duration-300 ${
+        className={`flex items-center sticky z-50 transition-all duration-300 ${
           scrolled
-            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-center w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto px-6 py-px"
+            ? "backdrop-blur-xl bg-white/80 shadow-sm justify-between min-[851px]:justify-center w-[92%] max-w-[800px] min-[851px]:w-max rounded-full border border-gray-200/50 top-4 drop-shadow-md m-auto px-4 min-[851px]:px-6 py-2 min-[851px]:py-px"
             : cn(
-                "justify-between w-full py-6 px-4 md:px-8 lg:px-12 top-0",
+                "justify-between w-full py-5 min-[851px]:py-6 px-4 min-[851px]:px-8 lg:px-12 top-0",
                 isHomePage ? "bg-black" : "bg-transparent",
               )
         }`}
@@ -92,28 +165,29 @@ export const Navbar = () => {
               alt="logo"
               height={40}
               width={40}
-              className={` rounded-full ${!scrolled ? "" : " mr-8"}`}
+              className={`rounded-full ${!scrolled ? "" : "min-[851px]:mr-8"}`}
             />
-            {!scrolled && (
-              <span
-                className={cn(
-                  "text-xl font-bold tracking-tight",
-                  isHomePage ? "text-white" : "text-gray-900",
-                )}
-              >
-                The Gold Technologies
-              </span>
-            )}
+            <span
+              className={cn(
+                "text-sm sm:text-base min-[851px]:text-xl font-bold tracking-tight transition-colors",
+                !scrolled
+                  ? isHomePage
+                    ? "text-white"
+                    : "text-gray-900"
+                  : "text-gray-900 min-[851px]:hidden",
+              )}
+            >
+              The Gold Technologies
+            </span>
           </motion.div>
         </Link>
-        {/* Center Links */}
+        {/* Center Links (Desktop) */}
         <div
-          className={`hidden md:flex items-center 
+          className={`hidden min-[851px]:flex items-center 
         ${!scrolled ? "gap-10" : "gap-5"} relative z-10`}
         >
           {navLinks?.map((item, i) => {
             if (item.type === "Dropdown") {
-              // Optional chaining safeguard
               const dropdownItems = item.dropdown || [];
               return (
                 <motion.div
@@ -152,7 +226,7 @@ export const Navbar = () => {
                   <div
                     className={cn(
                       "absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-50",
-                      dropdownItems.length > 4 ? "w-[900px]" : "w-[600px]",
+                      dropdownItems.length > 4 ? "w-[800px] max-w-[800px]" : "w-[600px] max-w-[600px]",
                     )}
                   >
                     <div className="bg-white rounded-2xl shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden p-6">
@@ -219,11 +293,13 @@ export const Navbar = () => {
           })}
         </div>
 
-        {/* Right Buttons */}
+        {/* Right Buttons & Mobile Menu Toggle */}
         <div className="flex items-center gap-2 relative z-10">
           <TooltipProvider delayDuration={0}>
             <div
-              className={`flex items-center gap-1  ${!scrolled ? "" : " ml-8"}`}
+              className={`hidden sm:flex items-center gap-1 ${
+                !scrolled ? "" : "min-[851px]:ml-8"
+              }`}
             >
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -317,7 +393,7 @@ export const Navbar = () => {
           {!scrolled && (
             <div
               className={cn(
-                "h-8 w-[1px] mx-2",
+                "hidden lg:block h-8 w-[1px] mx-2",
                 isHomePage ? "bg-white/10" : "bg-gray-200",
               )}
             ></div>
@@ -342,8 +418,131 @@ export const Navbar = () => {
               </div>
             </MagneticButton>
           )}
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            className={cn(
+              "min-[851px]:hidden p-2 rounded-full transition-colors relative z-50",
+              scrolled
+                ? "text-gray-900 hover:bg-gray-100"
+                : isHomePage
+                  ? "text-white hover:bg-white/10"
+                  : "text-gray-900 hover:bg-gray-100",
+            )}
+          >
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
         </div>
       </motion.nav>
+
+      {/* Full Screen Mobile Drawer Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed inset-0 w-full h-[100dvh] bg-white text-gray-900 z-[9999] min-[851px]:hidden flex flex-col overflow-hidden shadow-2xl"
+            data-lenis-prevent
+          >
+            {/* Top Navigation Bar inside Full Screen Overlay */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 flex-shrink-0 bg-white">
+              <Link href={"/"} onClick={() => setMobileMenuOpen(false)}>
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={"/logo.jpeg"}
+                    alt="logo"
+                    height={40}
+                    width={40}
+                    className="rounded-full shadow-sm"
+                  />
+                  <span className="text-lg font-bold tracking-tight text-gray-900">
+                    The Gold Technologies
+                  </span>
+                </div>
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close navigation menu"
+                className="p-2.5 rounded-full text-gray-900 hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Scrollable Content Container */}
+            <div
+              className="flex-1 h-full min-h-0 overflow-y-auto overscroll-contain px-6 py-8 flex flex-col justify-between max-w-lg mx-auto w-full bg-white"
+              data-lenis-prevent
+            >
+              <div className="flex flex-col gap-6">
+                {navLinks?.map((item) => {
+                  if (item.type === "Dropdown") {
+                    const dropdownItems = item.dropdown || [];
+                    return (
+                      <MobileDropdownItem
+                        key={item.title}
+                        item={item}
+                        dropdownItems={dropdownItems}
+                        onClose={() => setMobileMenuOpen(false)}
+                      />
+                    );
+                  }
+                  return (
+                    <Link
+                      key={item.title}
+                      href={item.link || "#"}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-lg font-bold text-gray-900 hover:text-[#9A7B12] transition-colors py-1"
+                    >
+                      {item.title}
+                    </Link>
+                  );
+                })}
+
+                <div className="h-px bg-gray-200 my-2" />
+
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setOpenAuditForm(true);
+                  }}
+                  className="w-full flex items-center justify-center gap-2.5 py-4 px-6 rounded-full bg-[#0B0F29] text-white font-bold uppercase tracking-wider text-xs shadow-lg hover:bg-[#D4AF37] hover:text-[#0B0F29] transition-all duration-300"
+                >
+                  <ScanSearch className="w-4 h-4" />
+                  <span>Free Website Audit</span>
+                </button>
+              </div>
+
+              {/* Contact Footer inside Overlay */}
+              <div className="flex flex-col gap-3 pt-8 pb-4 border-t border-gray-200 text-gray-700 mt-6">
+                <a
+                  href="mailto:info@thegoldtechnologies.com"
+                  className="flex items-center gap-2.5 text-xs font-semibold text-gray-800 hover:text-[#9A7B12] transition-colors"
+                >
+                  <Mail className="w-4 h-4 text-[#9A7B12]" />
+                  <span>info@thegoldtechnologies.com</span>
+                </a>
+                <a
+                  href="tel:+918368198551"
+                  className="flex items-center gap-2.5 text-xs font-semibold text-gray-800 hover:text-[#9A7B12] transition-colors"
+                >
+                  <Phone className="w-4 h-4 text-[#9A7B12]" />
+                  <span>+91 8368198551</span>
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <FreeAuditPopup
         setOpenAuditForm={setOpenAuditForm}
         openAuditForm={openAuditForm}

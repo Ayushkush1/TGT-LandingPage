@@ -13,7 +13,7 @@ interface HeroSectionProps {
 
 function HeroSection({ product }: HeroSectionProps) {
   return (
-    <div className="relative h-[72vh] min-h-[520px] flex flex-col justify-end overflow-hidden mx-2 rounded-3xl">
+    <div className="relative h-[55vh] sm:h-[65vh] lg:h-[72vh] min-h-[380px] sm:min-h-[460px] lg:min-h-[520px] flex flex-col justify-end overflow-hidden mx-2 sm:mx-4 rounded-2xl sm:rounded-3xl">
       <img
         src={product.image}
         alt={product.title}
@@ -24,30 +24,30 @@ function HeroSection({ product }: HeroSectionProps) {
       <Link
         href="/portfolio#Portfolio"
         aria-label="Back to all products"
-        className="absolute top-6 left-6 z-10 flex items-center gap-2 text-white/90 text-sm font-dm px-3 py-1.5 rounded-lg border border-white/20 bg-black/25 backdrop-blur-sm hover:bg-black/40 focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-black/30 transition-all duration-150"
+        className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 flex items-center gap-2 text-white/90 text-xs sm:text-sm font-dm px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-white/20 bg-black/25 backdrop-blur-sm hover:bg-black/40 focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-black/30 transition-all duration-150"
       >
-        <ArrowLeft size={16} aria-hidden="true" />
-        <span className="hidden md:inline">All Products</span>
+        <ArrowLeft size={14} className="sm:w-4 sm:h-4" aria-hidden="true" />
+        <span className="inline">All Products</span>
       </Link>
 
-      <div className="relative z-10 px-6 md:px-12 pb-12 max-w-4xl fade-up delay-100">
+      <div className="relative z-10 px-4 sm:px-8 md:px-12 pb-6 sm:pb-10 lg:pb-12 max-w-4xl fade-up delay-100">
         {product.subtitle && (
-          <div className="flex flex-wrap items-center gap-2 mb-5">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-3 sm:mb-5">
             {product.subtitle.split(",").map((tag, i) => (
               <span
                 key={i}
-                className="px-3.5 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold uppercase tracking-widest rounded-full"
+                className="px-2.5 py-1 sm:px-3.5 sm:py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-xs font-semibold uppercase tracking-widest rounded-full"
               >
                 {tag.trim()}
               </span>
             ))}
           </div>
         )}
-        <h1 className="font-display text-3xl md:text-5xl lg:text-[3.4rem] font-bold text-white leading-[1.12] tracking-tight mb-5 max-w-3xl">
+        <h1 className="font-display text-2xl sm:text-3xl md:text-5xl lg:text-[3.4rem] font-bold text-white leading-[1.12] tracking-tight mb-3 sm:mb-5 max-w-3xl">
           {product.title}
         </h1>
         {product.description && (
-          <p className="text-white/60 text-sm max-w-lg mb-8">
+          <p className="text-white/70 text-xs sm:text-sm max-w-lg mb-4 sm:mb-8">
             {product.description}
           </p>
         )}
@@ -56,9 +56,9 @@ function HeroSection({ product }: HeroSectionProps) {
             href={product.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-brand-gold text-white px-8 py-3.5 rounded-full font-medium hover:bg-white hover:text-brand-nav transition-all duration-300 w-fit shadow-lg shadow-brand-gold/20"
+            className="inline-flex items-center gap-2 bg-brand-gold text-white px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-full text-xs sm:text-sm font-medium hover:bg-white hover:text-brand-nav transition-all duration-300 w-fit shadow-lg shadow-brand-gold/20"
           >
-            Open Live App <ArrowRight size={18} className="translate-y-[1px]" />
+            Open Live App <ArrowRight size={16} className="sm:w-[18px] sm:h-[18px] translate-y-[1px]" />
           </a>
         )}
       </div>

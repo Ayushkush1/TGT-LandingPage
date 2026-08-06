@@ -10,7 +10,9 @@ import { useCMSStore } from "@/store/useCMSStore";
 import dynamic from "next/dynamic";
 import { parseMarkdownLinks } from "@/utils/text";
 
-const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const Footer = dynamic(() =>
+  import("@/components/Footer").then((m) => m.Footer),
+);
 const Sidebar = dynamic(() => import("./components/Sidebar"));
 const Takeaways = dynamic(() => import("./components/Takeaways"));
 const AuthorCard = dynamic(() => import("./components/AuthorCard"));
@@ -33,7 +35,7 @@ export default function BlogPage() {
   const rawBlog = storeData?.blogs.find(
     (b) => b.title.toLowerCase().replace(/\s+/g, "-") === decodedTitle,
   );
-  console.log(rawBlog, decodedTitle, params, "rawBlog");
+
   const blog = useMemo(() => {
     if (!rawBlog) return null;
     return {
@@ -42,7 +44,8 @@ export default function BlogPage() {
       date: rawBlog.datePublished || (rawBlog as any).date || "Recently",
       authorAvatar: rawBlog.authorAvatar || "https://i.pravatar.cc/150?img=1",
       authorBio: rawBlog.authorBio || "Member of the TGT Team",
-      authorTitle: rawBlog.authorTitle || "Senior Design Engineer · Studio Volta",
+      authorTitle:
+        rawBlog.authorTitle || "Senior Design Engineer · Studio Volta",
       tags: rawBlog.tags || [],
       content: rawBlog.content || [],
       takeaways: rawBlog.takeaways || [],
@@ -253,18 +256,19 @@ export default function BlogPage() {
         </div>
 
         {/* ── Related Posts ── */}
-        <section className="bg-stone-100 py-16 px-4 md:px-8">
-          <div className="max-w-6xl mx-auto flex-col flex gap-10">
-            <div className=" flex flex-col gap-4">
-              <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] tracking-tight">
+        <section className="bg-stone-100 py-10 md:py-14 lg:py-16 px-4 md:px-8">
+          <div className="max-w-6xl mx-auto flex-col flex gap-6 sm:gap-8 lg:gap-10">
+            <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] tracking-tight">
                 {storeData?.relatedTitle || "Continue Reading"}
               </h2>
-              <p className="text-lg text-gray-500 font-light leading-relaxed">
-                {storeData?.relatedDescription || "More on design, engineering, and craft"}
+              <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed">
+                {storeData?.relatedDescription ||
+                  "More on design, engineering, and craft"}
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
               {storeData?.blogs.map((relatedBlog, idx) => (
                 <motion.div
                   key={idx}

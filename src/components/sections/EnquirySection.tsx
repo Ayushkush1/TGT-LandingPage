@@ -145,20 +145,20 @@ export const EnquirySection = ({
   return (
     <AnimatedSection animation="fadeUp" delay={0.2}>
       <section
-        className="py-10 md:py-20 mb-10 md:mb-20 relative"
+        className="py-6 sm:py-10 md:py-14 lg:py-20 mb-6 sm:mb-10 md:mb-14 lg:mb-20 relative"
         id="contactUs"
       >
-        <div className="max-w-[1200px] mx-auto px-4 md:px-6 grid lg:grid-cols-12 gap-8 lg:gap-20 items-start">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-6 grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-20 items-start">
           {/* Left Column: Context & Contact Info */}
-          <div className="lg:col-span-5 space-y-6 md:space-y-10">
+          <div className="lg:col-span-5 space-y-4 sm:space-y-6 md:space-y-10">
             <div>
-              <div className="flex items-center gap-3 mb-3 md:mb-4">
+              <div className="flex items-center gap-3 mb-2 sm:mb-3 md:mb-4">
                 <div className="h-px w-8 bg-[#D4AF37]"></div>
                 <span className="text-[#D4AF37] font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase">
                   {data?.upperTag}
                 </span>
               </div>
-              <Heading className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
+              <Heading className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B0F29] tracking-tight leading-tight">
                 {data?.headlinePart1} <br className="hidden sm:inline" />
                 <span className="font-serif italic text-[#D4AF37]">
                   {data?.headlineHighlight}
@@ -166,48 +166,48 @@ export const EnquirySection = ({
               </Heading>
             </div>
 
-            <p className="text-sm md:text-base text-gray-500 font-light leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-gray-500 font-light leading-relaxed">
               {data?.introDescription}
             </p>
 
-            <div className="space-y-4 md:space-y-6 pt-2 md:pt-4">
-              <div className="flex items-center gap-4 md:gap-5 group cursor-pointer transition-transform hover:translate-x-1 duration-300">
-                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-gray-100 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0B0F29] group-hover:text-white transition-all duration-300 shrink-0">
-                  <Mail className="w-4 h-4" />
+            <div className="space-y-3 sm:space-y-4 md:space-y-6 pt-1 sm:pt-2 md:pt-4">
+              <div className="flex items-center gap-3.5 sm:gap-4 md:gap-5 group cursor-pointer transition-transform hover:translate-x-1 duration-300">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full border border-gray-100 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0B0F29] group-hover:text-white transition-all duration-300 shrink-0">
+                  <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
                     Email Us
                   </h4>
-                  <p className="text-gray-500 text-xs md:text-sm">
+                  <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm">
                     {data?.email}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 md:gap-5 group cursor-pointer transition-transform hover:translate-x-1 duration-300">
-                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-gray-100 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0B0F29] group-hover:text-white transition-all duration-300 shrink-0">
-                  <Phone className="w-4 h-4" />
+              <div className="flex items-center gap-3.5 sm:gap-4 md:gap-5 group cursor-pointer transition-transform hover:translate-x-1 duration-300">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full border border-gray-100 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0B0F29] group-hover:text-white transition-all duration-300 shrink-0">
+                  <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
                     Call Us
                   </h4>
-                  <p className="text-gray-500 text-xs md:text-sm">
+                  <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm">
                     {data?.phone}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 md:gap-5 group cursor-pointer transition-transform hover:translate-x-1 duration-300">
-                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-gray-100 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0B0F29] group-hover:text-white transition-all duration-300 shrink-0">
-                  <MapPin className="w-4 h-4" />
+              <div className="flex items-center gap-3.5 sm:gap-4 md:gap-5 group cursor-pointer transition-transform hover:translate-x-1 duration-300">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full border border-gray-100 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0B0F29] group-hover:text-white transition-all duration-300 shrink-0">
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div>
                   <h4 className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
                     Visit Us
                   </h4>
-                  <p className="text-gray-500 text-xs md:text-sm">
+                  <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm">
                     {data?.address}
                   </p>
                 </div>
@@ -216,7 +216,7 @@ export const EnquirySection = ({
           </div>
 
           {/* Right Column: The Form */}
-          <div className="lg:col-span-7 bg-gray-50 rounded-[1.5rem] md:rounded-[2rem] p-5 sm:p-8 md:p-10 border border-gray-100">
+          <div className="lg:col-span-7 bg-gray-50 rounded-2xl sm:rounded-3xl lg:rounded-[2rem] p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100">
             {submitStatus === "success" ? (
               <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12 md:py-20">
                 <div className="w-16 h-16 md:w-20 md:h-20 bg-[#D4AF37]/10 rounded-full flex items-center justify-center text-[#D4AF37]">

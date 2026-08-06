@@ -158,6 +158,7 @@ export const WhatWeDo = ({ data: propData }: { data?: any }) => {
                     </p>
                     <button
                       onClick={() => handleServiceClick(service.id)}
+                      aria-label={`Explore ${service.fullTitle}`}
                       className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-bold hover:bg-white hover:text-[#0B0F29] transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
                     >
                       Explore <ArrowRight className="w-3 h-3" />
@@ -201,11 +202,10 @@ export const WhatWeDo = ({ data: propData }: { data?: any }) => {
                 href={
                   data?.ctaButtonUrl ?? "/service/website-design-development"
                 }
+                className="relative inline-flex items-center gap-2 px-8 py-3.5 lg:px-10 lg:py-4 bg-[#0B0F29] text-white rounded-full font-semibold tracking-wide transition-all duration-300 border border-transparent hover:bg-black hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] group text-sm lg:text-base"
               >
-                <button className="relative inline-flex items-center gap-2 px-8 py-3.5 lg:px-10 lg:py-4 bg-[#0B0F29] text-white rounded-full font-semibold tracking-wide transition-all duration-300 border border-transparent hover:bg-black hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] group text-sm lg:text-base">
-                  <span>{data?.ctaButtonLabel}</span>
-                  <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 transition-transform group-hover:translate-x-1" />
-                </button>
+                <span>{data?.ctaButtonLabel}</span>
+                <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>

@@ -111,6 +111,7 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
                     <button
                       key={t.clientName}
                       onClick={() => setActiveIndex(index)}
+                      aria-label={`View testimonial from ${t.clientName}`}
                       className={`absolute left-1/2 -translate-x-1/2  overflow-hidden transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) cursor-pointer group 
                                         w-20 md:w-32 object-cover block
                                         ${positionStyles}

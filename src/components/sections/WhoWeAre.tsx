@@ -189,11 +189,12 @@ export const WhoWeAre = ({ data: propData }: { data?: any }) => {
                 {parseMarkdownLinks(data?.block2Description)}
               </p>
               <div className="flex gap-4 pt-2 md:pt-4">
-                <Link href={data?.block2CtaUrl ?? "/about"}>
-                  <button className="bg-[#0B0F29] text-white px-8 md:px-10 py-3.5 md:py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 group text-sm md:text-base">
-                    {data?.block2CtaLabel}{" "}
-                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
-                  </button>
+                <Link
+                  href={data?.block2CtaUrl ?? "/about"}
+                  className="bg-[#0B0F29] text-white px-8 md:px-10 py-3.5 md:py-4 rounded-full font-semibold tracking-wide hover:bg-black transition-all duration-300 border border-transparent hover:border-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-3 group text-sm md:text-base"
+                >
+                  {data?.block2CtaLabel}{" "}
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
             </div>

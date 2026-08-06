@@ -59,6 +59,18 @@ export const FreeAuditPopup = ({
     }
   };
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenAuditForm(false);
+    };
+    if (openAuditForm) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openAuditForm, setOpenAuditForm]);
+
   return (
     <AnimatePresence>
       {openAuditForm && (
@@ -80,6 +92,9 @@ export const FreeAuditPopup = ({
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[1000] flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
             data-lenis-prevent
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="audit-modal-title"
           >
             <div
               className="relative w-full max-w-lg rounded-2xl sm:rounded-[3rem] bg-white border border-gray-200 shadow-2xl overflow-hidden max-h-[90dvh] flex flex-col my-auto"
@@ -100,7 +115,11 @@ export const FreeAuditPopup = ({
                 data-lenis-prevent
               >
                 {submitStatus === "success" ? (
-                  <div className="py-6 sm:py-10 flex flex-col items-center space-y-3 sm:space-y-4">
+                  <div
+                    className="py-6 sm:py-10 flex flex-col items-center space-y-3 sm:space-y-4"
+                    aria-live="polite"
+                    role="status"
+                  >
                     <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#D4AF37]/10 rounded-full flex items-center justify-center text-[#D4AF37]">
                       <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10" />
                     </div>
@@ -113,7 +132,10 @@ export const FreeAuditPopup = ({
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-xl sm:text-3xl font-semibold text-black tracking-tight pr-8 sm:pr-0">
+                    <h2
+                      id="audit-modal-title"
+                      className="text-xl sm:text-3xl font-semibold text-black tracking-tight pr-8 sm:pr-0"
+                    >
                       Complimentary Audit
                     </h2>
 
@@ -128,28 +150,35 @@ export const FreeAuditPopup = ({
                         {...register("name", { required: true })}
                         type="text"
                         placeholder="Your Name"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-400 focus:border-[#0B0F29] outline-none"
+                        aria-label="Your Name"
+                        autoComplete="name"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-500 focus:border-[#0B0F29] outline-none"
                       />
 
                       <input
                         {...register("email", { required: true })}
                         type="email"
                         placeholder="Your Email"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-400 focus:border-[#0B0F29] outline-none"
+                        aria-label="Your Email"
+                        autoComplete="email"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-500 focus:border-[#0B0F29] outline-none"
                       />
 
                       <input
                         {...register("webUrl", { required: true })}
                         type="url"
                         placeholder="Website URL"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-400 focus:border-[#0B0F29] outline-none"
+                        aria-label="Website URL"
+                        autoComplete="url"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-500 focus:border-[#0B0F29] outline-none"
                       />
 
                       <textarea
                         {...register("improve", { required: true })}
                         placeholder="What would you like to improve?"
+                        aria-label="What would you like to improve?"
                         rows={3}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-400 focus:border-[#0B0F29] outline-none resize-none"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-black placeholder-gray-500 focus:border-[#0B0F29] outline-none resize-none"
                       />
 
                       {submitStatus === "error" && (

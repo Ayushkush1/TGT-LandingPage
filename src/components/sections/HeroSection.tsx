@@ -119,10 +119,11 @@ export const HeroSection = ({ data: propData }: { data?: any }) => {
             <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
           </a>
 
-          <Link href={data?.secondaryDestinationUrl ?? "/"} className="shrink-0">
-            <button className="text-white px-3.5 sm:px-6 py-2.5 sm:py-4 rounded-full text-xs sm:text-md font-medium transition-colors border border-transparent hover:border-white/10 hover:bg-white/5">
-              {data?.secondaryButtonLabel}
-            </button>
+          <Link
+            href={data?.secondaryDestinationUrl ?? "/"}
+            className="shrink-0 text-white px-3.5 sm:px-6 py-2.5 sm:py-4 rounded-full text-xs sm:text-md font-medium transition-colors border border-transparent hover:border-white/10 hover:bg-white/5 inline-block text-center"
+          >
+            {data?.secondaryButtonLabel}
           </Link>
         </motion.div>
       </div>

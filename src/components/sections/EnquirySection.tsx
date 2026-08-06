@@ -27,6 +27,7 @@ const InputField = ({
   register,
   name,
   required,
+  autoComplete,
 }: {
   label: string;
   type?: string;
@@ -34,16 +35,20 @@ const InputField = ({
   register: any;
   name: keyof EnquiryFormData;
   required?: boolean;
+  autoComplete?: string;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <label className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">
+    <label htmlFor={name} className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">
       {label}
     </label>
     <input
+      id={name}
+      aria-label={label}
+      autoComplete={autoComplete || (name === "email" ? "email" : name === "name" ? "name" : undefined)}
       {...register(name, { required: required })}
       type={type}
       placeholder={placeholder}
-      className="w-full bg-transparent border-b border-gray-200 py-2 md:py-3 text-sm md:text-base text-gray-900 placeholder:text-gray-300 focus:outline-none focus:border-[#D4AF37] transition-colors"
+      className="w-full bg-transparent border-b border-gray-200 py-2 md:py-3 text-sm md:text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#D4AF37] transition-colors"
     />
   </div>
 );
@@ -62,11 +67,13 @@ const SelectField = ({
   required?: boolean;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <label className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">
+    <label htmlFor={name} className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">
       {label}
     </label>
     <div className="relative">
       <select
+        id={name}
+        aria-label={label}
         {...register(name, { required })}
         className="w-full bg-transparent border-b border-gray-200 py-2 md:py-3 text-sm md:text-base text-gray-900 focus:outline-none focus:border-[#D4AF37] transition-colors appearance-none cursor-pointer"
         defaultValue=""

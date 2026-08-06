@@ -18,27 +18,26 @@ const BlogSection = dynamic(() => import("@/components/sections/BlogSection").th
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("about");
-  if (!seo) return {};
 
   return {
-    title: seo.metaTitle || undefined,
-    description: seo.metaDescription || undefined,
-    keywords: seo.targetKeywords || undefined,
+    title: seo?.metaTitle || "About Us | The Gold Technologies",
+    description: seo?.metaDescription || "Learn about The Gold Technologies, our engineering team, mission, vision, and craftsmanship in digital solutions.",
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
     openGraph: {
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "About Us | The Gold Technologies",
+      description: seo?.metaDescription || "Learn about The Gold Technologies, our engineering team, mission, vision, and craftsmanship in digital solutions.",
     },
     twitter: {
       card: "summary_large_image",
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "About Us | The Gold Technologies",
+      description: seo?.metaDescription || "Learn about The Gold Technologies, our engineering team, mission, vision, and craftsmanship in digital solutions.",
     },
   };
 }

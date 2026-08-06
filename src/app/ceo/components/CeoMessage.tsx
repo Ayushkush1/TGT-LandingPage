@@ -10,6 +10,7 @@ import { parseMarkdownLinks } from "@/utils/text";
 
 export default function CeoMessage() {
   const data = useCMSStore((state) => state.ceoData?.main?.message);
+  const Heading = (data?.headingTag || "h1") as any;
 
   return (
     <AnimatedSection animation="fadeIn" delay={0.1}>
@@ -43,7 +44,7 @@ export default function CeoMessage() {
 
           {/* Right Column - Text & Typography */}
           <div className="lg:col-span-7 flex flex-col justify-center relative">
-            <Quote className="absolute -top-12 -left-6 sm:-top-16 sm:-left-10 text-gray-100 w-28 h-28 sm:w-40 sm:h-40 -z-10 rotate-180" />
+            <Quote className="absolute -top-10 -left-6 sm:-top-14 sm:-left-12 text-gray-200/50 w-24 h-24 sm:w-36 sm:h-36 -z-10 rotate-180 pointer-events-none select-none" />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -51,12 +52,14 @@ export default function CeoMessage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(2.5rem,4vw,3.5rem)] font-display font-black leading-[1.08] tracking-tight text-[#0B0F29] mb-4 sm:mb-6">
-                {data?.title || "Building the Future of"} <br className="hidden md:block" />
-                <span className="font-serif italic font-medium text-[#D4AF37]">
+              <Heading className="text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(2.5rem,4vw,3.5rem)] font-display font-black leading-[1.25] sm:leading-[1.22] md:leading-[1.2] tracking-tight text-[#0B0F29] mb-4 sm:mb-6 relative z-10">
+                <span className="inline sm:inline-block mr-1.5 sm:mr-2">
+                  {data?.title || "Building the Future of"}
+                </span>{" "}
+                <span className="font-serif italic font-medium text-[#D4AF37] inline sm:inline-block">
                   {data?.titleItalic || "Digital Excellence."}
                 </span>
-              </h2>
+              </Heading>
 
               <div className="space-y-4 sm:space-y-5 text-gray-600 text-base sm:text-lg leading-relaxed font-sans mb-6 sm:mb-8">
                 {data?.paragraphs && data.paragraphs.length > 0 ? (

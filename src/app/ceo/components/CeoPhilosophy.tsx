@@ -63,8 +63,10 @@ export default function CeoPhilosophy() {
             </h2>
 
             <p className="text-base md:text-lg text-white/70 font-light leading-relaxed max-w-xl mx-auto">
-              {parseMarkdownLinks(data?.description ||
-                "Leadership is more than pointing the way—it is about laying down the unbreakable foundation upon which greatness is built.")}
+              {parseMarkdownLinks(
+                data?.description ||
+                  "Leadership is more than pointing the way—it is about laying down the unbreakable foundation upon which greatness is built.",
+              )}
             </p>
           </div>
         </AnimatedSection>
@@ -83,10 +85,13 @@ export default function CeoPhilosophy() {
                 className="group relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl sm:rounded-3xl blur-xl pointer-events-none" />
-                
+
                 <div className="relative h-full flex flex-col p-6 sm:p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl hover:bg-white/10 transition-colors duration-500">
                   <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white/10 flex items-center justify-center mb-5 sm:mb-6 border border-white/5 group-hover:bg-[#D4AF37]/20 group-hover:border-[#D4AF37]/50 transition-all duration-500">
-                    <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-[#D4AF37]" strokeWidth={1.5} />
+                    <IconComponent
+                      className="w-6 h-6 sm:w-7 sm:h-7 text-[#D4AF37]"
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 tracking-wide">
                     {item.title}

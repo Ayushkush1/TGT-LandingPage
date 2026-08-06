@@ -50,10 +50,11 @@ export default function CTABanner() {
             {cta.primaryButtonText}
             <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
           </a>
-          <Link href={cta.secondaryButtonLink} className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto text-black px-6 py-3 sm:px-7 sm:py-3.5 lg:py-4 rounded-full text-sm sm:text-base lg:text-md font-medium transition-colors border border-black hover:border-[#D4AF37]">
-              {cta.secondaryButtonText}
-            </button>
+          <Link
+            href={cta.secondaryButtonLink}
+            className="w-full sm:w-auto text-black px-6 py-3 sm:px-7 sm:py-3.5 lg:py-4 rounded-full text-sm sm:text-base lg:text-md font-medium transition-colors border border-black hover:border-[#D4AF37] text-center inline-block"
+          >
+            {cta.secondaryButtonText}
           </Link>
         </motion.div>
       </div>

@@ -15,18 +15,22 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const seo = await getPageSEO(params.slug);
-  if (!seo) return {};
+  const formattedTitle = params.slug
+    ? params.slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+    : "Digital Services";
 
   return {
-    title: seo.metaTitle ?? undefined,
-    description: seo.metaDescription ?? undefined,
-    keywords: seo.targetKeywords ?? undefined,
+    title: seo?.metaTitle || `${formattedTitle} | The Gold Technologies`,
+    description:
+      seo?.metaDescription ||
+      `Explore top-tier ${formattedTitle} solutions and engineering services provided by The Gold Technologies.`,
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl ?? undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
   };
 }

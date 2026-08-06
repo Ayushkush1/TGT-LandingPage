@@ -461,6 +461,7 @@ export interface PortfolioPageData {
 }
 
 export interface CeoMessageData {
+  headingTag?: string;
   name: string;
   role: string;
   avatar: string;

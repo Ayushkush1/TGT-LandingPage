@@ -8,27 +8,26 @@ import { RenderSchema } from "@/components/RenderSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("contactUs");
-  if (!seo) return {};
 
   return {
-    title: seo.metaTitle || undefined,
-    description: seo.metaDescription || undefined,
-    keywords: seo.targetKeywords || undefined,
+    title: seo?.metaTitle || "Contact Us | The Gold Technologies",
+    description: seo?.metaDescription || "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
     openGraph: {
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "Contact Us | The Gold Technologies",
+      description: seo?.metaDescription || "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
     },
     twitter: {
       card: "summary_large_image",
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "Contact Us | The Gold Technologies",
+      description: seo?.metaDescription || "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
     },
   };
 }

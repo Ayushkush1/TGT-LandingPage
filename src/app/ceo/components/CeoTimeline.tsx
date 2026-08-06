@@ -57,8 +57,10 @@ export default function CeoTimeline() {
             </h2>
 
             <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
-              {parseMarkdownLinks(data?.description ||
-                "Milestones that define our continuous pursuit of perfection and global impact.")}
+              {parseMarkdownLinks(
+                data?.description ||
+                  "Milestones that define our continuous pursuit of perfection and global impact.",
+              )}
             </p>
           </div>
         </AnimatedSection>

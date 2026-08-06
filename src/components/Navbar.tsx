@@ -134,8 +134,26 @@ export const Navbar = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    if (mobileMenuOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:px-6 focus:py-3 focus:bg-[#0B0F29] focus:text-[#D4AF37] focus:font-bold focus:rounded-full focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+      >
+        Skip to main content
+      </a>
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -304,6 +322,7 @@ export const Navbar = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
+                    aria-label="Email info@thegoldtechnologies.com"
                     className={cn(
                       "transition-colors rounded-full p-2.5 w-10 h-10 flex items-center justify-center relative overflow-hidden",
                       scrolled
@@ -350,6 +369,7 @@ export const Navbar = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
+                    aria-label="Call +91 8368198551"
                     className={cn(
                       "transition-colors rounded-full p-2.5 group",
                       scrolled

@@ -15,6 +15,24 @@ const OurPartners = dynamic(() => import("@/components/sections/OurPartners").th
 const EnquirySection = dynamic(() => import("@/components/sections/EnquirySection").then((m) => m.EnquirySection));
 const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
 
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSEO("home");
+  return {
+    title: seo?.metaTitle || "The Gold Technologies - Software Artisans Crafting Digital Reality",
+    description: seo?.metaDescription || "Professional web development, software engineering, UI/UX design, and AI digital solutions for business growth.",
+    keywords: seo?.targetKeywords || undefined,
+    alternates: {
+      canonical: seo?.canonicalUrl || undefined,
+    },
+    robots: {
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
+    },
+  };
+}
+
 export default async function Home() {
   const seo = await getPageSEO("home");
   return (

@@ -227,9 +227,9 @@ export const Footer = () => {
             <span className="absolute -top-2 uppercase md:top-2 left-2 md:-left-10 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
               {data?.leftText ?? "THE"}
             </span>
-            <h1 className="text-[13vw] leading-[0.8] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/5 text-center select-none pointer-events-none mix-blend-overlay opacity-30">
+            <p className="text-[13vw] leading-[0.8] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/5 text-center select-none pointer-events-none mix-blend-overlay opacity-30">
               {data?.centerText}
-            </h1>
+            </p>
             <span className="absolute uppercase bottom-0 md:bottom-2 right-2 md:-right-36 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
               {data?.rightText}
             </span>
@@ -239,7 +239,7 @@ export const Footer = () => {
         {/* Bottom: Magnetic Buttons & Copyright */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10 pt-8 border-t border-white/5">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-400 text-sm">
               © 2026 The Gold Technologies.
             </p>
 
@@ -259,25 +259,30 @@ export const Footer = () => {
               {
                 Icon: Facebook,
                 url: data?.facebookUrl,
+                label: "Facebook",
               },
               {
                 Icon: Twitter,
                 url: data?.twitterUrl,
+                label: "Twitter",
               },
               {
                 Icon: Instagram,
                 url: data?.instagramUrl,
+                label: "Instagram",
               },
               {
                 Icon: Linkedin,
                 url: data?.linkedinUrl,
+                label: "LinkedIn",
               },
-            ].map(({ Icon, url }, i) => (
+            ].map(({ Icon, url, label }, i) => (
               <MagneticButton key={i} className="group">
                 <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Follow us on ${label}`}
                   className="w-14 h-14 rounded-full border border-white/10 bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#020410] transition-all duration-300"
                 >
                   <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
@@ -288,6 +293,7 @@ export const Footer = () => {
 
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            aria-label="Back to top"
             className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#D4AF37] hover:text-white transition-colors group"
           >
             Back to Top

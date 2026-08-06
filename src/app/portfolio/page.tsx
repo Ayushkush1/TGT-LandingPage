@@ -14,27 +14,26 @@ const ProjectShowcase = dynamic(() => import("./components/ProjectShowcase"));
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("portfolio");
-  if (!seo) return {};
 
   return {
-    title: seo.metaTitle || undefined,
-    description: seo.metaDescription || undefined,
-    keywords: seo.targetKeywords || undefined,
+    title: seo?.metaTitle || "Portfolio & Case Studies | The Gold Technologies",
+    description: seo?.metaDescription || "Explore a curated showcase of our most impactful digital projects and client success stories.",
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
     openGraph: {
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "Portfolio & Case Studies | The Gold Technologies",
+      description: seo?.metaDescription || "Explore a curated showcase of our most impactful digital projects and client success stories.",
     },
     twitter: {
       card: "summary_large_image",
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "Portfolio & Case Studies | The Gold Technologies",
+      description: seo?.metaDescription || "Explore a curated showcase of our most impactful digital projects and client success stories.",
     },
   };
 }

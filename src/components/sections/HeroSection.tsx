@@ -237,9 +237,9 @@ export const HeroSection = ({ data: propData }: { data?: any }) => {
                       <p className="text-[10px] sm:text-[11px] font-normal uppercase text-white/90 tracking-widest group-hover:text-white transition-colors duration-300 [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
                         {project.category}
                       </p>
-                      <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white tracking-tight [text-shadow:0_2px_4px_rgba(0,0,0,0.4)]">
+                      <p className="text-lg sm:text-xl md:text-2xl font-semibold text-white tracking-tight [text-shadow:0_2px_4px_rgba(0,0,0,0.4)]">
                         {project.title}
-                      </h3>
+                      </p>
                     </div>
                   </div>
                 </div>

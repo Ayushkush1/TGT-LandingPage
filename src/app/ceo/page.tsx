@@ -5,21 +5,27 @@ import { getPageSEO } from "@/lib/cms";
 import { RenderSchema } from "@/components/RenderSchema";
 import dynamic from "next/dynamic";
 
-const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const Footer = dynamic(() =>
+  import("@/components/Footer").then((m) => m.Footer),
+);
 const CeoPhilosophy = dynamic(() => import("./components/CeoPhilosophy"));
 const CeoTimeline = dynamic(() => import("./components/CeoTimeline"));
 const CTABanner = dynamic(() => import("../portfolio/components/CTABanner"));
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("ceo");
-  if (!seo) return {
-    title: "CEO Message | The Gold Technologies",
-    description: "A message from our CEO about our vision, passion, and commitment to excellence.",
-  };
+  if (!seo)
+    return {
+      title: "CEO Message | The Gold Technologies",
+      description:
+        "A message from our CEO about our vision, passion, and commitment to excellence.",
+    };
 
   return {
     title: seo.metaTitle || "CEO Message | The Gold Technologies",
-    description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+    description:
+      seo.metaDescription ||
+      "A message from our CEO about our vision, passion, and commitment to excellence.",
     keywords: seo.targetKeywords || undefined,
     alternates: {
       canonical: seo.canonicalUrl || undefined,
@@ -30,12 +36,16 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     openGraph: {
       title: seo.metaTitle || "CEO Message | The Gold Technologies",
-      description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+      description:
+        seo.metaDescription ||
+        "A message from our CEO about our vision, passion, and commitment to excellence.",
     },
     twitter: {
       card: "summary_large_image",
       title: seo.metaTitle || "CEO Message | The Gold Technologies",
-      description: seo.metaDescription || "A message from our CEO about our vision, passion, and commitment to excellence.",
+      description:
+        seo.metaDescription ||
+        "A message from our CEO about our vision, passion, and commitment to excellence.",
     },
   };
 }
@@ -43,9 +53,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CeoPage() {
   const seo = await getPageSEO("ceo");
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       <RenderSchema schema={seo?.schema} id="ceo-schema" />
-      <div className="relative">
+      <div className="relative" aria-hidden="true">
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
@@ -56,13 +66,17 @@ export default async function CeoPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <div className="relative z-10">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 focus:outline-none"
+      >
         <CeoMessage />
         <CeoPhilosophy />
         <CeoTimeline />
         <CTABanner />
-      </div>
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

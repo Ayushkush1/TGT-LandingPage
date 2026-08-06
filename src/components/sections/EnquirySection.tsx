@@ -38,13 +38,19 @@ const InputField = ({
   autoComplete?: string;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <label htmlFor={name} className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">
+    <label
+      htmlFor={name}
+      className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest"
+    >
       {label}
     </label>
     <input
       id={name}
       aria-label={label}
-      autoComplete={autoComplete || (name === "email" ? "email" : name === "name" ? "name" : undefined)}
+      autoComplete={
+        autoComplete ||
+        (name === "email" ? "email" : name === "name" ? "name" : undefined)
+      }
       {...register(name, { required: required })}
       type={type}
       placeholder={placeholder}
@@ -67,7 +73,10 @@ const SelectField = ({
   required?: boolean;
 }) => (
   <div className="flex flex-col gap-1.5">
-    <label htmlFor={name} className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">
+    <label
+      htmlFor={name}
+      className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest"
+    >
       {label}
     </label>
     <div className="relative">
@@ -183,9 +192,9 @@ export const EnquirySection = ({
                   <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
+                  <p className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
                     Email Us
-                  </h4>
+                  </p>
                   <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm">
                     {data?.email}
                   </p>
@@ -197,9 +206,9 @@ export const EnquirySection = ({
                   <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
+                  <p className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
                     Call Us
-                  </h4>
+                  </p>
                   <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm">
                     {data?.phone}
                   </p>
@@ -211,9 +220,9 @@ export const EnquirySection = ({
                   <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
+                  <p className="font-bold text-[#0B0F29] text-xs md:text-sm mb-0.5">
                     Visit Us
-                  </h4>
+                  </p>
                   <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm">
                     {data?.address}
                   </p>
@@ -229,9 +238,9 @@ export const EnquirySection = ({
                 <div className="w-16 h-16 md:w-20 md:h-20 bg-[#D4AF37]/10 rounded-full flex items-center justify-center text-[#D4AF37]">
                   <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-[#0B0F29]">
+                <h2 className="text-xl md:text-2xl font-bold text-[#0B0F29]">
                   Thank You!
-                </h3>
+                </h2>
                 <p className="text-gray-500 text-xs md:text-base max-w-sm">
                   Your enquiry has been submitted successfully. We will get back
                   to you shortly.

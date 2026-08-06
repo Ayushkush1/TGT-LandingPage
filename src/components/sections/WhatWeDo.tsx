@@ -134,9 +134,9 @@ export const WhatWeDo = ({ data: propData }: { data?: any }) => {
                 <div
                   className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${index === activeService ? "opacity-0 scale-90 pointer-events-none" : "opacity-100 scale-100 delay-100"}`}
                 >
-                  <h3 className="text-base md:text-lg font-bold text-white/90 whitespace-nowrap -rotate-90 tracking-[0.2em] uppercase">
+                  <p className="text-base md:text-lg font-bold text-white/90 whitespace-nowrap -rotate-90 tracking-[0.2em] uppercase">
                     {service.shortTitle}
-                  </h3>
+                  </p>
                 </div>
 
                 {/* Expanded Content */}
@@ -183,18 +183,20 @@ export const WhatWeDo = ({ data: propData }: { data?: any }) => {
         >
           <div className="max-w-7xl mx-auto bg-[#F5F5F7] rounded-[2rem] md:rounded-[2.5rem] px-6 py-8 sm:px-10 sm:py-10 lg:px-16 lg:py-14 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10 shadow-sm border border-white/50">
             <div className="flex-1 text-center lg:text-left space-y-3">
-              <h3 className="text-2xl sm:text-3xl lg:text-[42px] font-bold text-[#0B0F29] leading-[1.15] lg:leading-[1.1] tracking-tight max-w-2xl">
-                {data?.ctaHeadline?.split("fastest").map((part: string, i: number, arr: string[]) => (
-                  <span key={i}>
-                    {part}
-                    {i < arr.length - 1 && (
-                      <span className="underline decoration-[#D4AF37]/60 decoration-4 underline-offset-2">
-                        fastest
-                      </span>
-                    )}
-                  </span>
-                ))}
-              </h3>
+              <h2 className="text-2xl sm:text-3xl lg:text-[42px] font-bold text-[#0B0F29] leading-[1.15] lg:leading-[1.1] tracking-tight max-w-2xl">
+                {data?.ctaHeadline
+                  ?.split("fastest")
+                  .map((part: string, i: number, arr: string[]) => (
+                    <span key={i}>
+                      {part}
+                      {i < arr.length - 1 && (
+                        <span className="underline decoration-[#D4AF37]/60 decoration-4 underline-offset-2">
+                          fastest
+                        </span>
+                      )}
+                    </span>
+                  ))}
+              </h2>
             </div>
 
             <div className="shrink-0 relative group">

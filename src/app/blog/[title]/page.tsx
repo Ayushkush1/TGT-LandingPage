@@ -152,152 +152,161 @@ export default function BlogPage() {
 
   if (!blog) {
     return (
-      <main className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-brand-nav mb-4">
-            Blog Post Not Found
-          </h1>
-          <p className="text-muted-foreground">
-            The requested article could not be loaded from the CMS.
-          </p>
-        </div>
-      </main>
+      <div className="min-h-screen bg-white flex flex-col">
+        <Navbar />
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 flex items-center justify-center focus:outline-none"
+        >
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-brand-nav mb-4">
+              Blog Post Not Found
+            </h1>
+            <p className="text-muted-foreground">
+              The requested article could not be loaded from the CMS.
+            </p>
+          </div>
+        </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       <Navbar />
-      <HeroSection blog={blog} />
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <HeroSection blog={blog} />
 
-      <div>
-        <div
-          ref={articleRef}
-          className="max-w-6xl mx-auto px-4 md:px-8 py-16 grid grid-cols-1 lg:grid-cols-[1fr_264px] gap-12 lg:gap-16 items-start"
-        >
-          {/* ── Article ── */}
-          <article className="max-w-[680px] fade-up delay-250">
-            {blog.contentHtml ? (
-              <div
-                className="prose prose-stone max-w-none 
+        <div>
+          <div
+            ref={articleRef}
+            className="max-w-6xl mx-auto px-4 md:px-8 py-16 grid grid-cols-1 lg:grid-cols-[1fr_264px] gap-12 lg:gap-16 items-start"
+          >
+            {/* ── Article ── */}
+            <article className="max-w-[680px] fade-up delay-250">
+              {blog.contentHtml ? (
+                <div
+                  className="prose prose-stone max-w-none 
                   prose-headings:font-display prose-headings:text-brand-nav prose-headings:font-bold
                   prose-p:font-body prose-p:text-[1.05rem] prose-p:leading-[1.85] prose-p:text-muted-foreground
                   prose-blockquote:border-l-brand-gold prose-blockquote:bg-brand-gold/5 prose-blockquote:py-1 prose-blockquote:rounded-r-xl"
-                dangerouslySetInnerHTML={{ __html: displayHtml }}
-              />
-            ) : (
-              <>
-                {blog.content?.[0] && (
-                  <div className="pb-8 mb-8 border-b border-border">
-                    <p className="font-body text-xl leading-[1.85] text-foreground">
-                      {parseMarkdownLinks(blog.content[0].paragraphs[0])}
-                    </p>
-                  </div>
-                )}
-
-                {blog.content
-                  ?.filter((s: any) => s.id !== blog.content?.[0]?.id)
-                  .map((section: any) => (
-                    <section key={section.id} className="mt-10">
-                      <h2
-                        id={section.id}
-                        className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
-                      >
-                        {section.heading}
-                      </h2>
-                      {section.paragraphs.map((p: string, i: number) => (
-                        <p
-                          key={i}
-                          className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5"
-                        >
-                          {parseMarkdownLinks(p)}
-                        </p>
-                      ))}
-                    </section>
-                  ))}
-
-                {blog.pullQuote && (
-                  <div className="my-10 pl-6 border-l-[3px] border-brand-gold bg-gradient-to-r from-brand-gold/10 to-white rounded-r-xl py-6 pr-6">
-                    <div className="text-brand-gold opacity-50 mb-3">
-                      <Quote className="rotate-180" />
+                  dangerouslySetInnerHTML={{ __html: displayHtml }}
+                />
+              ) : (
+                <>
+                  {blog.content?.[0] && (
+                    <div className="pb-8 mb-8 border-b border-border">
+                      <p className="font-body text-xl leading-[1.85] text-foreground">
+                        {parseMarkdownLinks(blog.content[0].paragraphs[0])}
+                      </p>
                     </div>
-                    <p className="font-display italic text-xl md:text-2xl leading-snug text-brand-nav">
-                      {blog.pullQuote}
-                    </p>
-                  </div>
-                )}
-              </>
-            )}
+                  )}
 
-            {takeawaysList.length > 0 && <Takeaways items={takeawaysList} />}
+                  {blog.content
+                    ?.filter((s: any) => s.id !== blog.content?.[0]?.id)
+                    .map((section: any) => (
+                      <section key={section.id} className="mt-10">
+                        <h2
+                          id={section.id}
+                          className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
+                        >
+                          {section.heading}
+                        </h2>
+                        {section.paragraphs.map((p: string, i: number) => (
+                          <p
+                            key={i}
+                            className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5"
+                          >
+                            {parseMarkdownLinks(p)}
+                          </p>
+                        ))}
+                      </section>
+                    ))}
 
-            <hr className="border-border my-8" />
+                  {blog.pullQuote && (
+                    <div className="my-10 pl-6 border-l-[3px] border-brand-gold bg-gradient-to-r from-brand-gold/10 to-white rounded-r-xl py-6 pr-6">
+                      <div className="text-brand-gold opacity-50 mb-3">
+                        <Quote className="rotate-180" />
+                      </div>
+                      <p className="font-display italic text-xl md:text-2xl leading-snug text-brand-nav">
+                        {blog.pullQuote}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
 
-            {blog.tags && <Tags tags={blog.tags} />}
+              {takeawaysList.length > 0 && <Takeaways items={takeawaysList} />}
 
-            <AuthorCard
-              author={blog.author}
-              avatar={blog.authorAvatar}
-              bio={blog.authorBio}
-              title={blog.authorTitle}
+              <hr className="border-border my-8" />
+
+              {blog.tags && <Tags tags={blog.tags} />}
+
+              <AuthorCard
+                author={blog.author}
+                avatar={blog.authorAvatar}
+                bio={blog.authorBio}
+                title={blog.authorTitle}
+              />
+            </article>
+
+            {/* ── Sidebar ── */}
+            <Sidebar
+              circumference={circumference}
+              scrollProgress={scrollProgress}
+              tocOpen={tocOpen}
+              setTocOpen={setTocOpen}
+              toc={toc}
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
             />
-          </article>
+          </div>
 
-          {/* ── Sidebar ── */}
-          <Sidebar
-            circumference={circumference}
-            scrollProgress={scrollProgress}
-            tocOpen={tocOpen}
-            setTocOpen={setTocOpen}
-            toc={toc}
-            activeSection={activeSection}
-            setActiveSection={setActiveSection}
-          />
+          {/* ── Related Posts ── */}
+          <section className="bg-stone-100 py-10 md:py-14 lg:py-16 px-4 md:px-8">
+            <div className="max-w-6xl mx-auto flex-col flex gap-6 sm:gap-8 lg:gap-10">
+              <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] tracking-tight">
+                  {storeData?.relatedTitle || "Continue Reading"}
+                </h2>
+                <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed">
+                  {storeData?.relatedDescription ||
+                    "More on design, engineering, and craft"}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
+                {storeData?.blogs.map((relatedBlog, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: idx * 0.15,
+                      duration: 0.6,
+                      ease: "easeOut",
+                    }}
+                    viewport={{ once: true }}
+                  >
+                    <BlogCard
+                      {...(relatedBlog as any)}
+                      author={
+                        relatedBlog.authorName || (relatedBlog as any).author
+                      }
+                      date={
+                        relatedBlog.datePublished || (relatedBlog as any).date
+                      }
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
 
-        {/* ── Related Posts ── */}
-        <section className="bg-stone-100 py-10 md:py-14 lg:py-16 px-4 md:px-8">
-          <div className="max-w-6xl mx-auto flex-col flex gap-6 sm:gap-8 lg:gap-10">
-            <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] tracking-tight">
-                {storeData?.relatedTitle || "Continue Reading"}
-              </h2>
-              <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed">
-                {storeData?.relatedDescription ||
-                  "More on design, engineering, and craft"}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
-              {storeData?.blogs.map((relatedBlog, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: idx * 0.15,
-                    duration: 0.6,
-                    ease: "easeOut",
-                  }}
-                  viewport={{ once: true }}
-                >
-                  <BlogCard
-                    {...(relatedBlog as any)}
-                    author={
-                      relatedBlog.authorName || (relatedBlog as any).author
-                    }
-                    date={
-                      relatedBlog.datePublished || (relatedBlog as any).date
-                    }
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </div>
   );
 }

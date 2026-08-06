@@ -26,7 +26,7 @@ export const WhoWeAre = ({ data: propData }: { data?: any }) => {
           <div className="text-center max-w-4xl mx-auto mb-10 md:mb-20">
             <div className="flex items-center justify-center gap-4 mb-4 md:mb-6">
               <div className="h-px w-8 bg-gray-400/30"></div>
-              <span className="text-gray-400 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase">
+              <span className="text-gray-600 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase">
                 {data?.upperTag}
               </span>
               <div className="h-px w-8 bg-gray-400/30"></div>

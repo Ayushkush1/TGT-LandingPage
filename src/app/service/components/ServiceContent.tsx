@@ -4,13 +4,27 @@ import HeroSection from "./HeroSection";
 import { RenderSchema } from "@/components/RenderSchema";
 import dynamic from "next/dynamic";
 
-const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
-const TrustedBy = dynamic(() => import("@/components/sections/TrustedBy").then((m) => m.TrustedBy));
-const OurPartners = dynamic(() => import("@/components/sections/OurPartners").then((m) => m.OurPartners));
-const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
-const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
-const PortfolioSection = dynamic(() => import("@/app/about/components/PortfolioSection"));
-const BlogSection = dynamic(() => import("@/components/sections/BlogSection").then((m) => m.BlogSection));
+const Footer = dynamic(() =>
+  import("@/components/Footer").then((m) => m.Footer),
+);
+const TrustedBy = dynamic(() =>
+  import("@/components/sections/TrustedBy").then((m) => m.TrustedBy),
+);
+const OurPartners = dynamic(() =>
+  import("@/components/sections/OurPartners").then((m) => m.OurPartners),
+);
+const OurReputation = dynamic(() =>
+  import("@/components/sections/OurReputation").then((m) => m.OurReputation),
+);
+const Integrations = dynamic(() =>
+  import("@/components/sections/Integrations").then((m) => m.Integrations),
+);
+const PortfolioSection = dynamic(
+  () => import("@/app/about/components/PortfolioSection"),
+);
+const BlogSection = dynamic(() =>
+  import("@/components/sections/BlogSection").then((m) => m.BlogSection),
+);
 const ServicesAccordion = dynamic(() => import("./ServiceRow"));
 
 interface ServiceContentProps {
@@ -19,10 +33,13 @@ interface ServiceContentProps {
 
 export default function ServiceContent({ serviceData }: ServiceContentProps) {
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
-      <RenderSchema schema={serviceData?.seo?.schema} id="service-subpage-schema" />
-      {/* Unified Background Wrapper for Navbar + Hero */}
-      <div className="relative">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema
+        schema={serviceData?.seo?.schema}
+        id="service-subpage-schema"
+      />
+      {/* Unified Background Wrapper */}
+      <div className="relative" aria-hidden="true">
         {/* Noise Texture Background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -36,19 +53,20 @@ export default function ServiceContent({ serviceData }: ServiceContentProps) {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <HeroSection serviceData={serviceData?.hero} />
-      <TrustedBy />
-      <ServicesAccordion
-        serviceData={serviceData?.services}
-        header={serviceData?.servicesHeader}
-      />
-      <OurReputation /> {/* Client Success */}
-      <Integrations /> {/* Tech Stack */}
-      <PortfolioSection /> {/* PortfolioSection */}
-      {/* Partner Logos */}
-      <OurPartners />
-      <BlogSection /> {/* Blog Section */}
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <HeroSection serviceData={serviceData?.hero} />
+        <TrustedBy />
+        <ServicesAccordion
+          serviceData={serviceData?.services}
+          header={serviceData?.servicesHeader}
+        />
+        <OurReputation />
+        <Integrations />
+        <PortfolioSection />
+        <OurPartners />
+        <BlogSection />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

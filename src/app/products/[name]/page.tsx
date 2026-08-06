@@ -4,11 +4,19 @@ import { useParams } from "next/navigation";
 import HeroSection from "./components/HeroSection";
 import dynamic from "next/dynamic";
 
-const Footer = dynamic(() => import("@/components/Footer").then((m) => m.Footer));
+const Footer = dynamic(() =>
+  import("@/components/Footer").then((m) => m.Footer),
+);
 const CTABanner = dynamic(() => import("@/app/portfolio/components/CTABanner"));
-const ServicesAccordion = dynamic(() => import("@/app/service/components/ServiceRow"));
-const Integrations = dynamic(() => import("@/components/sections/Integrations").then((m) => m.Integrations));
-const OurReputation = dynamic(() => import("@/components/sections/OurReputation").then((m) => m.OurReputation));
+const ServicesAccordion = dynamic(
+  () => import("@/app/service/components/ServiceRow"),
+);
+const Integrations = dynamic(() =>
+  import("@/components/sections/Integrations").then((m) => m.Integrations),
+);
+const OurReputation = dynamic(() =>
+  import("@/components/sections/OurReputation").then((m) => m.OurReputation),
+);
 import {
   PortfolioItemData,
   ServiceItemData,
@@ -26,16 +34,22 @@ function SingleProduct() {
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-white font-sans flex items-center justify-center">
-        <p className="text-gray-500 text-lg">Product not found.</p>
-      </main>
+      <div className="min-h-screen bg-white font-sans flex flex-col">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 flex items-center justify-center focus:outline-none"
+        >
+          <p className="text-gray-500 text-lg">Product not found.</p>
+        </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
-      {/* Unified Background Wrapper for Navbar + Hero */}
-      <div className="relative">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      {/* Unified Background Wrapper */}
+      <div className="relative" aria-hidden="true">
         {/* Noise Texture Background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -49,13 +63,17 @@ function SingleProduct() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <HeroSection product={product as PortfolioItemData} />
-      <ServicesAccordion serviceData={product.SERVICES as ServiceItemData[]} />
-      <OurReputation />
-      <Integrations />
-      <CTABanner />
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <HeroSection product={product as PortfolioItemData} />
+        <ServicesAccordion
+          serviceData={product.SERVICES as ServiceItemData[]}
+        />
+        <OurReputation />
+        <Integrations />
+        <CTABanner />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }
 

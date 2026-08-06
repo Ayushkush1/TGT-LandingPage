@@ -11,7 +11,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: seo?.metaTitle || "Contact Us | The Gold Technologies",
-    description: seo?.metaDescription || "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
+    description:
+      seo?.metaDescription ||
+      "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
     keywords: seo?.targetKeywords || undefined,
     alternates: {
       canonical: seo?.canonicalUrl || undefined,
@@ -22,12 +24,16 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     openGraph: {
       title: seo?.metaTitle || "Contact Us | The Gold Technologies",
-      description: seo?.metaDescription || "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
+      description:
+        seo?.metaDescription ||
+        "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
     },
     twitter: {
       card: "summary_large_image",
       title: seo?.metaTitle || "Contact Us | The Gold Technologies",
-      description: seo?.metaDescription || "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
+      description:
+        seo?.metaDescription ||
+        "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
     },
   };
 }
@@ -35,10 +41,10 @@ export async function generateMetadata(): Promise<Metadata> {
 async function ContactUs() {
   const seo = await getPageSEO("contactUs");
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
       <RenderSchema schema={seo?.schema} id="contact-schema" />
-      {/* Unified Background Wrapper for Navbar + Hero */}
-      <div className="relative">
+      {/* Unified Background Wrapper */}
+      <div className="relative" aria-hidden="true">
         {/* Noise Texture Background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -52,10 +58,16 @@ async function ContactUs() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <EnquirySection isMain={true} /> {/* Contact Form */}
-      <MapSection />
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 focus:outline-none"
+      >
+        <EnquirySection isMain={true} />
+        <MapSection />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }
 

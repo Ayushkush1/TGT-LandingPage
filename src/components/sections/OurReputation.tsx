@@ -68,7 +68,8 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
               <span className="font-serif italic font-medium text-[#D4AF37]">
                 {data?.headlineHighlight1}
               </span>{" "}
-              {data?.headlinePart2.split(" ")[0]} <br className="hidden sm:inline" />{" "}
+              {data?.headlinePart2.split(" ")[0]}{" "}
+              <br className="hidden sm:inline" />{" "}
               {data?.headlinePart2.split(" ").slice(1).join(" ")}{" "}
               <span className="relative inline-block z-0">
                 {data?.headlineHighlight2}
@@ -142,14 +143,16 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
                   key={activeIndex}
                 >
                   <p className="text-base sm:text-lg md:text-2xl font-medium text-gray-800 leading-relaxed text-center md:text-left">
-                    "{parseMarkdownLinks(data?.testimonials[activeIndex]?.quote)}"
+                    "
+                    {parseMarkdownLinks(data?.testimonials[activeIndex]?.quote)}
+                    "
                   </p>
 
                   <div className="pt-4 md:pt-8 border-t border-gray-100 mt-4 md:mt-8 flex flex-col items-center md:flex-row md:justify-between gap-3 md:gap-4">
                     <div className="text-center md:text-left">
-                      <h4 className="text-lg md:text-xl font-bold text-[#0B0F29] font-serif mb-0.5 md:mb-1">
+                      <p className="text-lg md:text-xl font-bold text-[#0B0F29] font-serif mb-0.5 md:mb-1">
                         {data?.testimonials[activeIndex]?.clientName}
-                      </h4>
+                      </p>
                       <p className="text-xs md:text-base text-gray-500 font-medium">
                         {data?.testimonials[activeIndex]?.clientRole}
                       </p>

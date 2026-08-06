@@ -41,20 +41,28 @@ export default async function DynamicPage({ params }: PageProps) {
 
   if (!pageData) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center bg-white">
+      <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
-        <NotFound />
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 flex flex-col items-center justify-center focus:outline-none"
+        >
+          <NotFound />
+        </main>
         <Footer />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
       <RenderSchema schema={seo?.schema} id={`${params.slug}-schema`} />
       <Navbar />
-      <DynamicSectionRenderer sections={pageData.sections} />
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <DynamicSectionRenderer sections={pageData.sections} />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

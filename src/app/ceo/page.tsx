@@ -56,7 +56,7 @@ export default async function CeoPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <div className="pt-24 relative z-10">
+      <div className="relative z-10">
         <CeoMessage />
         <CeoPhilosophy />
         <CeoTimeline />

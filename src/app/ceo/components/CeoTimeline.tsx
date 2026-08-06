@@ -37,26 +37,26 @@ export default function CeoTimeline() {
   const milestones = data?.milestones || defaultMilestones;
 
   return (
-    <section className="bg-white py-24 md:py-32 relative">
+    <section className="bg-white py-12 md:py-20 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection animation="fadeUp">
-          <div className="text-center max-w-4xl mx-auto mb-20 md:mb-32">
-            <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="text-center max-w-4xl mx-auto mb-10 md:mb-16">
+            <div className="flex items-center justify-center gap-4 mb-3 md:mb-5">
               <div className="h-px w-8 bg-gray-400/30"></div>
-              <span className="text-gray-400 font-bold tracking-[0.2em] text-xs uppercase">
+              <span className="text-gray-400 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase">
                 {data?.upperTag || "Milestones"}
               </span>
               <div className="h-px w-8 bg-gray-400/30"></div>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0B0F29] leading-[1.15] mb-3 md:mb-5 tracking-tight">
               {data?.title || "Journey of"}{" "}
               <span className="font-serif italic font-medium text-[#D4AF37]">
                 {data?.titleHighlight || "Excellence"}
               </span>
             </h2>
 
-            <p className="text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
+            <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed max-w-xl mx-auto">
               {parseMarkdownLinks(data?.description ||
                 "Milestones that define our continuous pursuit of perfection and global impact.")}
             </p>
@@ -67,7 +67,7 @@ export default function CeoTimeline() {
           {/* Vertical Line */}
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-gray-100 via-[#D4AF37]/30 to-gray-100 transform md:-translate-x-1/2" />
 
-          <div className="space-y-16 pt-8">
+          <div className="space-y-8 md:space-y-12 pt-4 md:pt-6">
             {milestones.map((item, idx) => {
               const isEven = idx % 2 === 0;
 
@@ -89,14 +89,14 @@ export default function CeoTimeline() {
                   <div
                     className={`w-full md:w-5/12 pl-12 md:pl-0 md:text-left md:pr-12`}
                   >
-                    <div className="group bg-gray-50/50 hover:bg-white border border-transparent hover:border-[#D4AF37]/20 p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500">
-                      <span className="inline-block text-[#D4AF37] font-extrabold text-lg mb-2 tracking-widest bg-[#D4AF37]/10 px-4 py-1 rounded-full">
+                    <div className="group bg-gray-50/50 hover:bg-white border border-transparent hover:border-[#D4AF37]/20 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500">
+                      <span className="inline-block text-[#D4AF37] font-extrabold text-sm sm:text-base mb-2 tracking-widest bg-[#D4AF37]/10 px-3 py-0.5 sm:px-4 sm:py-1 rounded-full">
                         {item.year}
                       </span>
-                      <h3 className="text-2xl font-bold text-[#0B0F29] mb-4">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0B0F29] mb-2 sm:mb-3">
                         {item.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed text-sm">
+                      <p className="text-gray-600 leading-relaxed text-xs sm:text-sm">
                         {parseMarkdownLinks(item.description)}
                       </p>
                     </div>

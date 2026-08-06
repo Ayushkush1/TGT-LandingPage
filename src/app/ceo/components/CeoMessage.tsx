@@ -13,14 +13,14 @@ export default function CeoMessage() {
 
   return (
     <AnimatedSection animation="fadeIn" delay={0.1}>
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 pb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-8 md:py-12 pb-12 md:pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 lg:gap-16 items-center">
           {/* Left Column - Image */}
           <div className="lg:col-span-5 relative w-full group">
             {/* Abstract gold glow behind image */}
             <div className="absolute -inset-4 bg-gradient-to-tr from-[#D4AF37]/20 to-transparent blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-            <div className="relative aspect-[3/4] overflow-hidden rounded-[2rem] shadow-2xl">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl">
               <OptimizedImage
                 src={data?.avatar || "/images/Meghna.jpg"}
                 alt={`${data?.name || "Meghna"} - CEO`}
@@ -31,11 +31,11 @@ export default function CeoMessage() {
             </div>
 
             {/* Experience Badge */}
-            <div className="absolute -bottom-6 -right-6 lg:-right-10 bg-[#0B0F29] text-white p-6 rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(212,175,55,0.15)] flex items-center gap-4 z-20">
-              <span className="text-4xl font-display font-black text-[#D4AF37] leading-none">
+            <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-[#0B0F29] text-white p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(11,15,41,0.5)] flex items-center gap-3 z-20">
+              <span className="text-2xl sm:text-3xl font-display font-black text-[#D4AF37] leading-none">
                 {data?.yearsLabel || "15+"}
               </span>
-              <span className="text-[0.65rem] font-bold uppercase tracking-widest leading-tight text-white/70 whitespace-pre-line">
+              <span className="text-[0.6rem] sm:text-[0.65rem] font-bold uppercase tracking-widest leading-tight text-white/80 whitespace-pre-line">
                 {data?.yearsText || "Years of\nExcellence"}
               </span>
             </div>
@@ -43,7 +43,7 @@ export default function CeoMessage() {
 
           {/* Right Column - Text & Typography */}
           <div className="lg:col-span-7 flex flex-col justify-center relative">
-            <Quote className="absolute -top-16 -left-10 text-gray-100 w-40 h-40 -z-10 rotate-180" />
+            <Quote className="absolute -top-12 -left-6 sm:-top-16 sm:-left-10 text-gray-100 w-28 h-28 sm:w-40 sm:h-40 -z-10 rotate-180" />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -51,14 +51,14 @@ export default function CeoMessage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-[clamp(2.5rem,4vw,4rem)] font-display font-black leading-[1.05] tracking-tight text-[#0B0F29] mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(2.5rem,4vw,3.5rem)] font-display font-black leading-[1.08] tracking-tight text-[#0B0F29] mb-4 sm:mb-6">
                 {data?.title || "Building the Future of"} <br className="hidden md:block" />
                 <span className="font-serif italic font-medium text-[#D4AF37]">
                   {data?.titleItalic || "Digital Excellence."}
                 </span>
               </h2>
 
-              <div className="space-y-6 text-gray-600 text-lg leading-relaxed font-sans mb-12">
+              <div className="space-y-4 sm:space-y-5 text-gray-600 text-base sm:text-lg leading-relaxed font-sans mb-6 sm:mb-8">
                 {data?.paragraphs && data.paragraphs.length > 0 ? (
                   data.paragraphs.map((p, idx) => (
                     <p key={idx}>{parseMarkdownLinks(p)}</p>
@@ -84,14 +84,14 @@ export default function CeoMessage() {
               </div>
 
               {/* Signature Block */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 pt-8">
-                <div className="flex items-center gap-6">
-                  <div className="w-[2px] h-14 bg-[#D4AF37]" />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 pt-4 sm:pt-6">
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <div className="w-[2px] h-10 sm:h-14 bg-[#D4AF37]" />
                   <div>
-                    <h4 className="font-display font-bold text-2xl text-[#0B0F29] mb-1">
+                    <h4 className="font-display font-bold text-xl sm:text-2xl text-[#0B0F29] mb-0.5">
                       {data?.name || "Meghna"}
                     </h4>
-                    <p className="text-[#D4AF37] text-xs font-semibold tracking-wide uppercase">
+                    <p className="text-[#D4AF37] text-[10px] sm:text-xs font-semibold tracking-wide uppercase">
                       {data?.role || "Chief Executive Officer"}
                     </p>
                   </div>
@@ -99,11 +99,11 @@ export default function CeoMessage() {
 
                 <Link
                   href={data?.ctaLink || "/contact"}
-                  className="group inline-flex items-center gap-3 bg-transparent text-[#0B0F29] px-8 py-3.5 rounded-full font-bold text-sm tracking-wide border border-gray-300 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-all duration-300 flex-shrink-0"
+                  className="group inline-flex items-center gap-2.5 bg-transparent text-[#0B0F29] px-6 py-2.5 sm:px-8 sm:py-3 rounded-full font-bold text-xs sm:text-sm tracking-wide border border-gray-300 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-all duration-300 flex-shrink-0"
                 >
                   {data?.ctaText || "Contact Us"}
                   <ArrowUpRight
-                    size={18}
+                    size={16}
                     className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   />
                 </Link>

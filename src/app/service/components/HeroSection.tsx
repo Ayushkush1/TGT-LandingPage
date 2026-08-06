@@ -35,48 +35,50 @@ function HeroSection({
       whileInView="show"
       viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-white font-serif"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-14 bg-white font-serif"
     >
       {/* ── Top Row ── */}
-      <div className="flex flex-col lg:flex-row gap-20 items-center mb-16">
+      <div className="flex flex-col lg:flex-row gap-6 md:gap-10 lg:gap-20 items-start lg:items-center mb-8 md:mb-12 lg:mb-16">
         {/* Left: Vertical accent + heading */}
         <motion.div
           variants={itemVariants}
-          className="flex gap-6 items-start flex-shrink-0 lg:w-96"
+          className="flex gap-4 sm:gap-6 items-center flex-shrink-0 lg:w-96"
         >
           {/* Vertical rule + rotated label */}
-          <div className="flex flex-col items-center gap-4 pt-2">
-            <div className="w-0.5 h-16 rounded-sm bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/10" />
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
+            <div className="w-0.5 h-12 sm:h-16 rounded-sm bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/10" />
             <span className="text-[10px] tracking-[0.2em] uppercase text-gray-400 font-semibold font-sans [writing-mode:vertical-rl] [text-orientation:mixed]">
               {serviceData?.label}
             </span>
           </div>
 
-          {/* Big editorial heading */}
-          <Heading className="text-[clamp(3rem,5vw,3.75rem)] font-black text-[#0B0F29] leading-[1.05] tracking-tight">
-            {serviceData?.headingLine1
-              ?.trim()
-              .split(/\s+/)
-              .map((line, i, arr) => (
-                <span key={i}>
-                  {line}
-                  {i < arr.length - 1 &&
-                    (line === "&" || arr[i + 1] === "&" ? " " : <br />)}
-                </span>
-              ))}
-          </Heading>
+          <div className="max-w-[240px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[300px]">
+            {/* Big editorial heading */}
+            <Heading className="text-3xl sm:text-4xl md:text-5xl lg:text-[clamp(3rem,5vw,3.75rem)] font-extrabold text-[#0B0F29] leading-[1.08] lg:leading-[1.05] tracking-tight whitespace-pre-line">
+              {serviceData?.headingLine1
+                ?.trim()
+                .split(/\s+/)
+                .map((line, i, arr) => (
+                  <span key={i}>
+                    {line}
+                    {i < arr.length - 1 &&
+                      (line === "&" || arr[i + 1] === "&" ? " " : <br />)}
+                  </span>
+                ))}
+            </Heading>
+          </div>
         </motion.div>
 
         {/* Right: Body text + CTAs */}
         <motion.div
           variants={itemVariants}
-          className="flex-1 flex flex-col gap-8 pt-10 font-sans"
+          className="flex-1 flex flex-col gap-5 lg:gap-8 pt-0 lg:pt-10 font-sans"
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
             {serviceData?.paragraphs.map((p, i) => (
               <p
                 key={i}
-                className="text-gray-500 text-lg leading-7 font-medium"
+                className="text-gray-500 text-base sm:text-lg leading-6 sm:leading-7 font-medium"
               >
                 {parseMarkdownLinks(p)}
               </p>
@@ -88,10 +90,10 @@ function HeroSection({
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href={serviceData?.ctaHref ?? "/contactUs"}
-                className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3.5 px-9 rounded-full font-semibold tracking-wide border border-transparent font-sans text-[15px] transition-colors hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.35)]"
+                className="group/btn inline-flex items-center gap-2.5 bg-[#0B0F29] text-white py-3 px-7 sm:py-3.5 sm:px-9 rounded-full font-semibold tracking-wide border border-transparent font-sans text-sm sm:text-[15px] transition-colors hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.35)]"
               >
                 {serviceData?.ctaText}
-                <ArrowRight />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/btn:translate-x-1" />
               </Link>
             </motion.div>
           </div>
@@ -101,12 +103,12 @@ function HeroSection({
       {/* ── Bottom Row: Image + Pillar Cards ── */}
       <motion.div
         variants={containerVariants}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center"
       >
         {/* Image block */}
         <motion.div
           variants={itemVariants}
-          className="relative rounded-3xl overflow-hidden min-h-[460px] shadow-xl"
+          className="relative rounded-2xl sm:rounded-3xl overflow-hidden h-[260px] sm:h-[360px] lg:h-[460px] shadow-xl w-full"
         >
           <img
             src={serviceData?.imageUrl ?? ""}
@@ -127,15 +129,15 @@ function HeroSection({
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="absolute bottom-7 left-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+              className="absolute bottom-4 left-4 sm:bottom-7 sm:left-7 z-10 bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
             >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+              <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-0.5 sm:mb-1">
                 Excellence since
               </p>
-              <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+              <p className="text-2xl sm:text-3xl font-black leading-none text-[#0B0F29] font-serif">
                 {serviceData?.statSince}
               </p>
-              <div className="mt-2 h-0.5 w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
+              <div className="mt-1.5 sm:mt-2 h-0.5 w-10 sm:w-12 bg-gradient-to-r from-[#D4AF37] to-transparent" />
             </motion.div>
           )}
 
@@ -146,12 +148,12 @@ function HeroSection({
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="absolute top-7 right-7 z-10 bg-white rounded-2xl p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
+              className="absolute top-4 right-4 sm:top-7 sm:right-7 z-10 bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-[0_20px_60px_rgba(11,15,41,0.15)] border border-[#D4AF37]/20 font-sans"
             >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-1">
+              <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-0.5 sm:mb-1">
                 Projects delivered
               </p>
-              <p className="text-3xl font-black leading-none text-[#0B0F29] font-serif">
+              <p className="text-2xl sm:text-3xl font-black leading-none text-[#0B0F29] font-serif">
                 {serviceData?.statProjects}
                 <span className="text-[#D4AF37]">+</span>
               </p>
@@ -160,7 +162,7 @@ function HeroSection({
         </motion.div>
 
         {/* Pillars 2×2 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 content-start">
           {serviceData?.pillars.map((p) => (
             <PillarCard key={p.number} {...p} />
           ))}

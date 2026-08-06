@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, Fragment } from "react";
 import { motion, useSpring, useTransform, useInView } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCMSStore } from "@/store/useCMSStore";
@@ -265,10 +265,10 @@ export const Integrations = ({ data: propData }: { data?: any }) => {
                       label={
                         <>
                           {labelParts.map((part: string, i: number) => (
-                            <React.Fragment key={i}>
+                            <Fragment key={i}>
                               {part}
                               {i < labelParts.length - 1 && <br />}
-                            </React.Fragment>
+                            </Fragment>
                           ))}
                         </>
                       }

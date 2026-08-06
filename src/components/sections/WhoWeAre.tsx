@@ -1,4 +1,5 @@
 "use client";
+import React, { Fragment } from "react";
 import {
   CheckCircle2,
   TrendingUp,
@@ -53,7 +54,7 @@ export const WhoWeAre = ({ data: propData }: { data?: any }) => {
                       {part}
                     </span>
                   ) : (
-                    parseMarkdownLinks(part)
+                    <Fragment key={i}>{parseMarkdownLinks(part)}</Fragment>
                   ),
                 )}
             </p>
@@ -231,12 +232,20 @@ export const WhoWeAre = ({ data: propData }: { data?: any }) => {
 
                     <div className="grid grid-cols-2 gap-2 md:gap-3">
                       <div className="bg-white/10 rounded-xl p-2.5 md:p-3">
-                        <div className="text-[10px] md:text-xs opacity-70 mb-0.5 md:mb-1">Load Time</div>
-                        <div className="text-base md:text-lg font-bold">0.4s</div>
+                        <div className="text-[10px] md:text-xs opacity-70 mb-0.5 md:mb-1">
+                          Load Time
+                        </div>
+                        <div className="text-base md:text-lg font-bold">
+                          0.4s
+                        </div>
                       </div>
                       <div className="bg-white/10 rounded-xl p-2.5 md:p-3">
-                        <div className="text-[10px] md:text-xs opacity-70 mb-0.5 md:mb-1">Uptime</div>
-                        <div className="text-base md:text-lg font-bold">99.9%</div>
+                        <div className="text-[10px] md:text-xs opacity-70 mb-0.5 md:mb-1">
+                          Uptime
+                        </div>
+                        <div className="text-base md:text-lg font-bold">
+                          99.9%
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -290,7 +299,10 @@ export const WhoWeAre = ({ data: propData }: { data?: any }) => {
                       </div>
                       <div className="flex gap-1 mb-1 md:mb-2">
                         {[1, 2, 3, 4, 5].map((s) => (
-                          <span key={s} className="text-[#FFB800] text-xs md:text-sm">
+                          <span
+                            key={s}
+                            className="text-[#FFB800] text-xs md:text-sm"
+                          >
                             ★
                           </span>
                         ))}

@@ -4,39 +4,47 @@ import { EnquirySection } from "@/components/sections/EnquirySection";
 import MapSection from "@/components/sections/MapSection";
 import { getPageSEO } from "@/lib/cms";
 import { Metadata } from "next";
+import { RenderSchema } from "@/components/RenderSchema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("contactUs");
-  if (!seo) return {};
 
   return {
-    title: seo.metaTitle || undefined,
-    description: seo.metaDescription || undefined,
-    keywords: seo.targetKeywords || undefined,
+    title: seo?.metaTitle || "Contact Us | The Gold Technologies",
+    description:
+      seo?.metaDescription ||
+      "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
     openGraph: {
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "Contact Us | The Gold Technologies",
+      description:
+        seo?.metaDescription ||
+        "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
     },
     twitter: {
       card: "summary_large_image",
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "Contact Us | The Gold Technologies",
+      description:
+        seo?.metaDescription ||
+        "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
     },
   };
 }
 
-function ContactUs() {
+async function ContactUs() {
+  const seo = await getPageSEO("contactUs");
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
-      {/* Unified Background Wrapper for Navbar + Hero */}
-      <div className="relative">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="contact-schema" />
+      {/* Unified Background Wrapper */}
+      <div className="relative" aria-hidden="true">
         {/* Noise Texture Background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -50,10 +58,16 @@ function ContactUs() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <EnquirySection isMain={true} /> {/* Contact Form */}
-      <MapSection />
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 focus:outline-none"
+      >
+        <EnquirySection isMain={true} />
+        <MapSection />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }
 

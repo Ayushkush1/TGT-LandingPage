@@ -1,50 +1,74 @@
-import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import AboutFirm from "./components/AboutFirm";
-import OurTeam from "./components/OurTeam";
-import { TrustedBy } from "@/components/sections/TrustedBy";
-import { OurPartners } from "@/components/sections/OurPartners";
-import { OurReputation } from "@/components/sections/OurReputation";
-import { Integrations } from "@/components/sections/Integrations";
-import VideoSection from "./components/VideoSection";
-import VisionSection from "./components/VisionSection";
-import PortfolioSection from "@/app/about/components/PortfolioSection";
-import { BlogSection } from "@/components/sections/BlogSection";
 import { Metadata } from "next";
 import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() =>
+  import("@/components/Footer").then((m) => m.Footer),
+);
+const OurTeam = dynamic(() => import("./components/OurTeam"));
+const TrustedBy = dynamic(() =>
+  import("@/components/sections/TrustedBy").then((m) => m.TrustedBy),
+);
+const OurPartners = dynamic(() =>
+  import("@/components/sections/OurPartners").then((m) => m.OurPartners),
+);
+const OurReputation = dynamic(() =>
+  import("@/components/sections/OurReputation").then((m) => m.OurReputation),
+);
+const Integrations = dynamic(() =>
+  import("@/components/sections/Integrations").then((m) => m.Integrations),
+);
+const VideoSection = dynamic(() => import("./components/VideoSection"));
+const VisionSection = dynamic(() => import("./components/VisionSection"));
+const PortfolioSection = dynamic(
+  () => import("@/app/about/components/PortfolioSection"),
+);
+const BlogSection = dynamic(() =>
+  import("@/components/sections/BlogSection").then((m) => m.BlogSection),
+);
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("about");
-  if (!seo) return {};
 
   return {
-    title: seo.metaTitle || undefined,
-    description: seo.metaDescription || undefined,
-    keywords: seo.targetKeywords || undefined,
+    title: seo?.metaTitle || "About Us | The Gold Technologies",
+    description:
+      seo?.metaDescription ||
+      "Learn about The Gold Technologies, our engineering team, mission, vision, and craftsmanship in digital solutions.",
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
     openGraph: {
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "About Us | The Gold Technologies",
+      description:
+        seo?.metaDescription ||
+        "Learn about The Gold Technologies, our engineering team, mission, vision, and craftsmanship in digital solutions.",
     },
     twitter: {
       card: "summary_large_image",
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title: seo?.metaTitle || "About Us | The Gold Technologies",
+      description:
+        seo?.metaDescription ||
+        "Learn about The Gold Technologies, our engineering team, mission, vision, and craftsmanship in digital solutions.",
     },
   };
 }
 
-function AboutPage() {
+async function AboutPage() {
+  const seo = await getPageSEO("about");
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
-      {/* Unified Background Wrapper for Navbar + Hero */}
-      <div className="relative">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="about-schema" />
+      {/* Unified Background Wrapper */}
+      <div className="relative" aria-hidden="true">
         {/* Noise Texture Background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -54,22 +78,28 @@ function AboutPage() {
           }}
         />
 
-        {/* Subtle Gradient Overlay (tokenized) */}
+        {/* Subtle Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-white to-white/5 pointer-events-none" />
       </div>
       <Navbar />
-      <AboutFirm />
-      <TrustedBy />
-      <VideoSection />
-      <VisionSection />
-      <OurTeam /> {/* Team section */}
-      <OurPartners /> {/* Partner Logos */}
-      <OurReputation /> {/* Client Success */}
-      <Integrations /> {/* Tech Stack */} {/* Integrations */}
-      <PortfolioSection /> {/* PortfolioSection */}
-      <BlogSection /> {/* Blog Section */}
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 focus:outline-none"
+      >
+        <AboutFirm />
+        <TrustedBy />
+        <VideoSection />
+        <VisionSection />
+        <OurTeam />
+        <OurPartners />
+        <OurReputation />
+        <Integrations />
+        <PortfolioSection />
+        <BlogSection />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }
 

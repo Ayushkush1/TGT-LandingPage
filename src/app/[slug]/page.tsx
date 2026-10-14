@@ -4,6 +4,8 @@ import { Footer } from "@/components/Footer";
 import { DynamicSectionRenderer } from "@/components/DynamicSectionRenderer";
 import { getPageData, getPageSEO } from "@/lib/cms";
 import { Metadata } from "next";
+import { RenderSchema } from "@/components/RenderSchema";
+import NotFound from "../not-found";
 
 interface PageProps {
   params: { slug: string };
@@ -13,43 +15,54 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const seo = await getPageSEO(params.slug);
-  if (!seo) return {};
+  const formattedTitle = params.slug
+    ? params.slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+    : "Digital Services";
 
   return {
-    title: seo.metaTitle ?? undefined,
-    description: seo.metaDescription ?? undefined,
-    keywords: seo.targetKeywords ?? undefined,
+    title: seo?.metaTitle || `${formattedTitle} | The Gold Technologies`,
+    description:
+      seo?.metaDescription ||
+      `Explore top-tier ${formattedTitle} solutions and engineering services provided by The Gold Technologies.`,
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl ?? undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
   };
 }
 
 export default async function DynamicPage({ params }: PageProps) {
   const pageData = await getPageData(params.slug);
+  const seo = await getPageSEO(params.slug);
 
   if (!pageData) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center bg-white">
+      <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-gray-900">404</h1>
-          <p className="text-gray-500">Page not found</p>
-        </div>
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 flex flex-col items-center justify-center focus:outline-none"
+        >
+          <NotFound />
+        </main>
         <Footer />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
+      <RenderSchema schema={seo?.schema} id={`${params.slug}-schema`} />
       <Navbar />
-      <DynamicSectionRenderer sections={pageData.sections} />
+      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <DynamicSectionRenderer sections={pageData.sections} />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

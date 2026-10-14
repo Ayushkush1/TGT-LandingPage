@@ -7,6 +7,14 @@ const nextConfig = {
         hostname: "jrltxuhcmvqxuwukacju.supabase.co",
         pathname: "/storage/v1/object/public/uploadsFiles/**",
       },
+      {
+        protocol: "https",
+        hostname: "thegoldtechnologies.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.pravatar.cc",
+      },
     ],
   },
 };

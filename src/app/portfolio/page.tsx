@@ -1,45 +1,64 @@
 import { Metadata } from "next";
 import { getPageSEO } from "@/lib/cms";
+import { RenderSchema } from "@/components/RenderSchema";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Integrations } from "@/components/sections/Integrations";
-import { OurReputation } from "@/components/sections/OurReputation";
-import CTABanner from "./components/CTABanner";
 import HeroSection from "./components/HeroSection";
-import PortfolioSection from "../about/components/PortfolioSection";
-import { SelectedProjects } from "@/components/sections/SelectedProjects";
-import { BlogSection } from "@/components/sections/BlogSection";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() =>
+  import("@/components/Footer").then((m) => m.Footer),
+);
+const Integrations = dynamic(() =>
+  import("@/components/sections/Integrations").then((m) => m.Integrations),
+);
+const OurReputation = dynamic(() =>
+  import("@/components/sections/OurReputation").then((m) => m.OurReputation),
+);
+const TrustedBy = dynamic(() =>
+  import("@/components/sections/TrustedBy").then((m) => m.TrustedBy),
+);
+const CTABanner = dynamic(() => import("./components/CTABanner"));
+const ProjectShowcase = dynamic(() => import("./components/ProjectShowcase"));
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("portfolio");
-  if (!seo) return {};
 
   return {
-    title: seo.metaTitle || undefined,
-    description: seo.metaDescription || undefined,
-    keywords: seo.targetKeywords || undefined,
+    title: seo?.metaTitle || "Portfolio & Case Studies | The Gold Technologies",
+    description:
+      seo?.metaDescription ||
+      "Explore a curated showcase of our most impactful digital projects and client success stories.",
+    keywords: seo?.targetKeywords || undefined,
     alternates: {
-      canonical: seo.canonicalUrl || undefined,
+      canonical: seo?.canonicalUrl || undefined,
     },
     robots: {
-      index: !seo.noIndex,
-      follow: !seo.noIndex,
+      index: !seo?.noIndex,
+      follow: !seo?.noIndex,
     },
     openGraph: {
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title:
+        seo?.metaTitle || "Portfolio & Case Studies | The Gold Technologies",
+      description:
+        seo?.metaDescription ||
+        "Explore a curated showcase of our most impactful digital projects and client success stories.",
     },
     twitter: {
       card: "summary_large_image",
-      title: seo.metaTitle || undefined,
-      description: seo.metaDescription || undefined,
+      title:
+        seo?.metaTitle || "Portfolio & Case Studies | The Gold Technologies",
+      description:
+        seo?.metaDescription ||
+        "Explore a curated showcase of our most impactful digital projects and client success stories.",
     },
   };
 }
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const seo = await getPageSEO("portfolio");
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+      <RenderSchema schema={seo?.schema} id="portfolio-schema" />
       <div className="relative">
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -51,14 +70,19 @@ export default function PortfolioPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       </div>
       <Navbar />
-      <HeroSection />
-      <PortfolioSection />
-      <Integrations />
-      <OurReputation />
-      <SelectedProjects />
-      <CTABanner />
-      <BlogSection />
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 focus:outline-none"
+      >
+        <HeroSection />
+        <TrustedBy />
+        <ProjectShowcase />
+        <Integrations />
+        <OurReputation />
+        <CTABanner />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

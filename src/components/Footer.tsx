@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowUp,
@@ -136,45 +137,58 @@ export const Footer = () => {
         {/* Closing call to action */}
         <div className="relative grid lg:grid-cols-12 gap-12 items-end">
           <div className="lg:col-span-8">
-            <h2 className="text-5xl md:text-6xl lg:text-[5rem] font-semibold tracking-[-0.05em] leading-[0.92]">
-              {copy.headlineMain}
-              <br />
-              <span className="font-serif italic font-normal text-[#D4AF37]">
-                {copy.headlineHighlight}
+            {/* Brand */}
+            <Link href="/" className="inline-flex items-center gap-3" aria-label="The Gold Technologies home page">
+              <Image
+                src="/logo.jpeg"
+                alt=""
+                width={44}
+                height={44}
+                className="w-10 h-10 md:w-11 md:h-11 rounded-full ring-1 ring-[#D4AF37]/40"
+              />
+              <span className="text-xl md:text-2xl font-semibold tracking-[-0.02em] leading-none">
+                The Gold Technologies
               </span>
-            </h2>
-            {data?.emailAddress && (
-              <a
-                href={`mailto:${data.emailAddress}`}
-                className="group mt-6 inline-flex items-center gap-3 text-xl md:text-2xl font-medium text-white/80 hover:text-white"
-              >
-                <span className="relative">
-                  {data.emailAddress}
-                  <span className="absolute left-0 -bottom-1 h-px w-full bg-[#D4AF37] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
-                </span>
-                <ArrowUpRight className="w-6 h-6 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
-              </a>
-            )}
-            {offices.length > 0 && (
-              <div className="mt-8 grid sm:grid-cols-2 gap-6 max-w-3xl">
-                {offices.map((office) => (
-                  <div key={office.country}>
-                    <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
-                      {office.country}
-                      {office.time && (
-                        <span className="flex items-center gap-1.5 tracking-normal text-white/70 tabular-nums">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                          {office.time}
-                        </span>
-                      )}
-                    </p>
-                    <p className="mt-2 text-sm text-white/55 leading-relaxed">
-                      {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
-                    </p>
-                  </div>
-                ))}
+            </Link>
+            {/* Contact: three matching columns (email/phone, India, UAE) */}
+            <div className="mt-8 grid sm:grid-cols-3 gap-8 md:gap-10 max-w-4xl">
+              <div>
+                <p className="h-4 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
+                {data?.emailAddress && (
+                  <a
+                    href={`mailto:${data.emailAddress}`}
+                    className="group mt-3 inline-flex items-center gap-1.5 text-[15px] text-white/80 hover:text-white break-all"
+                  >
+                    <span className="border-b border-transparent group-hover:border-[#D4AF37]">{data.emailAddress}</span>
+                    <ArrowUpRight className="w-4 h-4 shrink-0 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
+                  </a>
+                )}
+                {data?.phoneNumber && (
+                  <a
+                    href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`}
+                    className="mt-1.5 block text-[15px] text-white/55 hover:text-white transition-colors"
+                  >
+                    {data.phoneNumber.trim()}
+                  </a>
+                )}
               </div>
-            )}
+              {offices.map((office) => (
+                <div key={office.country}>
+                  <p className="h-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
+                    {office.country}
+                    {office.time && (
+                      <span className="flex items-center gap-1.5 tracking-normal text-white/70 tabular-nums">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        {office.time}
+                      </span>
+                    )}
+                  </p>
+                  <p className="mt-3 text-[15px] text-white/55 leading-relaxed">
+                    {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Rotating booking badge */}
@@ -250,13 +264,6 @@ export const Footer = () => {
                   </a>
                 </li>
               ))}
-              {data?.phoneNumber && (
-                <li>
-                  <a href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`} className="text-white/70 hover:text-[#D4AF37] transition-colors">
-                    {data.phoneNumber.trim()}
-                  </a>
-                </li>
-              )}
             </ul>
           </div>
         </div>

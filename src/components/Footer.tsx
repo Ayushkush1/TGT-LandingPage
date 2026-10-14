@@ -1,240 +1,318 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { MagneticButton } from "@/components/ui/MagneticButton";
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
+  ArrowUp,
   ArrowUpRight,
   Facebook,
-  Twitter,
   Instagram,
   Linkedin,
-  Mail,
-  Phone,
-  MapPin,
+  Twitter,
 } from "lucide-react";
-import { motion, useScroll, useInView } from "framer-motion";
-
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { MagneticButton } from "@/components/ui/MagneticButton";
+import { useSectionContent } from "@/content/useSectionContent";
 import { useCMSStore } from "@/store/useCMSStore";
+
+// Official DMCA badge and status page for thegoldtechnologies.com.
+const DMCA_ID = "174176c9-e0fd-4010-b0f5-50e6ed21d715";
+
+/** Original "Women Owned" and DMCA badges, shown after the legal links. */
+const TrustBadges = () => (
+  <div className="flex items-center gap-3">
+    <span className="inline-flex items-center h-9 rounded-md bg-white px-2.5" title="Women owned business">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/images/women-owned-logo.png" alt="Women Owned business" className="h-7 w-auto" />
+    </span>
+    <a
+      href={`https://www.dmca.com/Protection/Status.aspx?ID=${DMCA_ID}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="DMCA.com Protection Status"
+      className="inline-flex items-center h-9 rounded-md bg-white px-2.5"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={`https://images.dmca.com/Badges/dmca_protected_sml_120c.png?ID=${DMCA_ID}`}
+        alt="DMCA.com Protection Status"
+        width={120}
+        height={21}
+        className="h-[21px] w-auto"
+      />
+    </a>
+  </div>
+);
+
+const OFFICE_TIME_ZONES = ["Asia/Kolkata", "Asia/Dubai"];
+
+/** Letter of the giant wordmark that rises into place as the footer scrolls in. */
+const WordmarkLetter = ({
+  char,
+  index,
+  total,
+  progress,
+}: {
+  char: string;
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+}) => {
+  const start = 0.35 + (index / total) * 0.3;
+  const y = useTransform(progress, [start, start + 0.35], ["105%", "0%"]);
+  return (
+    <motion.span
+      style={{ y }}
+      className="inline-block will-change-transform bg-gradient-to-b from-white to-white/10 bg-clip-text text-transparent"
+    >
+      {char === " " ? " " : char}
+    </motion.span>
+  );
+};
+
+function useOfficeTimes() {
+  const [times, setTimes] = useState<string[]>([]);
+  useEffect(() => {
+    const update = () =>
+      setTimes(
+        OFFICE_TIME_ZONES.map((timeZone) =>
+          new Intl.DateTimeFormat("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone,
+          }).format(new Date()),
+        ),
+      );
+    update();
+    const id = setInterval(update, 30_000);
+    return () => clearInterval(id);
+  }, []);
+  return times;
+}
 
 export const Footer = () => {
   const data = useCMSStore((state) => state.homeData?.FooterCMS);
-  const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+  const copy = useSectionContent("GrowthFooter");
+  const times = useOfficeTimes();
 
+  const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end end"],
   });
+  // The card rises and settles as it scrolls in; the badge turns with scroll.
+  const cardY = useTransform(scrollYProgress, [0, 0.6], [120, 0]);
+  const badgeRotate = useTransform(scrollYProgress, [0, 1], [-90, 90]);
 
-  // Live Time
-  const [time, setTime] = useState("");
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTime(
-        now.toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZoneName: "short",
-        }),
-      );
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  // Company name split as written in the CMS: "THE" · "GOLD TECH" · "NOLOGIES".
+  const wordmarkLeft = (data?.leftText || copy.wordmarkLeft).trim();
+  const wordmark = (data?.centerText || copy.wordmark).trim();
+  const wordmarkRight = (data?.rightText || copy.wordmarkRight).trim();
+  const fullName = `${wordmarkLeft} ${wordmark}${wordmarkRight}`;
+  const labelOpacity = useTransform(scrollYProgress, [0.65, 0.95], [0, 1]);
+  const labelY = useTransform(scrollYProgress, [0.65, 0.95], [20, 0]);
+  const offices = [
+    { country: data?.loc1Country, address: data?.loc1Address, time: times[0] },
+    { country: data?.loc2Country, address: data?.loc2Address, time: times[1] },
+  ].filter((o) => o.country);
+  const pillars = useSectionContent("ServicePillars").pillars;
+  const socials = [
+    { Icon: Linkedin, url: data?.linkedinUrl, label: "LinkedIn" },
+    { Icon: Instagram, url: data?.instagramUrl, label: "Instagram" },
+    { Icon: Twitter, url: data?.twitterUrl, label: "X" },
+    { Icon: Facebook, url: data?.facebookUrl, label: "Facebook" },
+  ].filter((s) => s.url);
 
   return (
-    <footer className="relative pt-10 px-2 md:px-4 pb-4 z-0" ref={containerRef}>
+    <footer ref={containerRef} data-hide-sticky-cta className="relative px-2 md:px-4 pt-10 pb-2 md:pb-4 z-0 overflow-hidden">
       <motion.div
-        initial={{ y: 100, opacity: 0 }}
-        animate={isInView ? { y: 0, opacity: 1 } : { y: 100, opacity: 0 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="bg-[#020410] rounded-[3rem] md:rounded-[4rem] text-white overflow-hidden relative min-h-[85vh] flex flex-col justify-between p-8 md:p-16"
+        style={{ y: cardY }}
+        className="relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem] bg-[#0A0A0A] text-white px-6 md:px-14 pt-12 md:pt-16 pb-6 will-change-transform"
       >
-        {/* Background Noise/Gradient */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_50%_-20%,#D4AF37,transparent_50%)]"></div>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-1/3 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full opacity-25 bg-[radial-gradient(closest-side,#D4AF37,transparent)]"
+        />
 
-        {/* Top Section: Nav & Detailed Contact */}
-        <div className="flex flex-col xl:flex-row justify-between gap-12 relative z-10">
-          {/* Brand & Addresses */}
-          <div className="space-y-4 max-w-5xl">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center">
-                <span className="text-[#020410] font-black text-xs">GT</span>
-              </div>
-              <span className="font-bold tracking-wider text-xl">
-                {data?.companyName}
+        {/* Closing call to action */}
+        <div className="relative grid lg:grid-cols-12 gap-12 items-end">
+          <div className="lg:col-span-8">
+            <h2 className="text-5xl md:text-6xl lg:text-[5rem] font-semibold tracking-[-0.05em] leading-[0.92]">
+              {copy.headlineMain}
+              <br />
+              <span className="font-serif italic font-normal text-[#D4AF37]">
+                {copy.headlineHighlight}
               </span>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 text-sm text-gray-400">
-              <div className="space-y-4">
-                <p className="text-gray-400 font-light leading-relaxed max-w-md text-sm">
-                  {data?.footerDescription}
-                </p>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-gray-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="font-medium">
-                    {data?.companyInitials} • {time}
-                  </span>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
-                  <div>
-                    <strong className="text-white block mb-1">
-                      {data?.loc1Country}
-                    </strong>
-                    <p>{data?.loc1Address}</p>
+            </h2>
+            {data?.emailAddress && (
+              <a
+                href={`mailto:${data.emailAddress}`}
+                className="group mt-6 inline-flex items-center gap-3 text-xl md:text-2xl font-medium text-white/80 hover:text-white"
+              >
+                <span className="relative">
+                  {data.emailAddress}
+                  <span className="absolute left-0 -bottom-1 h-px w-full bg-[#D4AF37] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+                </span>
+                <ArrowUpRight className="w-6 h-6 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
+              </a>
+            )}
+            {offices.length > 0 && (
+              <div className="mt-8 grid sm:grid-cols-2 gap-6 max-w-3xl">
+                {offices.map((office) => (
+                  <div key={office.country}>
+                    <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
+                      {office.country}
+                      {office.time && (
+                        <span className="flex items-center gap-1.5 tracking-normal text-white/70 tabular-nums">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                          {office.time}
+                        </span>
+                      )}
+                    </p>
+                    <p className="mt-2 text-sm text-white/55 leading-relaxed">
+                      {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
+                    </p>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
-                  <div>
-                    <strong className="text-white block mb-1">
-                      {data?.loc2Country}
-                    </strong>
-                    <p>{data?.loc2Address}</p>
-                  </div>
-                </div>
+                ))}
               </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-[#D4AF37]" />
-                  <span className="text-white">{data?.phoneNumber}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-[#D4AF37]" />
-                  <span className="text-white">{data?.emailAddress}</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Links */}
-          <div className="flex gap-16 md:gap-24">
-            <div className="flex flex-col gap-4">
-              <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
-                Explore
-              </h4>
+          {/* Rotating booking badge */}
+          <div className="lg:col-span-4 flex lg:justify-end">
+            <MagneticButton intensity={0.3}>
               <a
-                href="/about"
-                className="text-gray-400 hover:text-white transition-colors"
+                href={copy.ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={copy.ctaLabel}
+                className="group relative block w-36 h-36 md:w-44 md:h-44"
               >
-                About Us
-              </a>
-              <a
-                href="/service/website-design-development"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Services
-              </a>
-              <a
-                href="/portfolio"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Portfolio
-              </a>
-              <a
-                href="/#BlogSection"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Blogs
-              </a>
-            </div>
-            <div className="flex flex-col gap-4">
-              <h4 className="text-[#D4AF37] font-serif italic text-lg mb-2">
-                Legal
-              </h4>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Terms of Use
-              </a>
-              <span className="text-[10px] border border-gray-600 px-2 py-0.5 rounded text-gray-500 mt-2 w-fit">
-                DMCA PROTECTED
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Middle: Massive Text */}
-        <div className="flex-1 flex items-center justify-center py-12 relative z-10 pointer-events-none select-none">
-          <div className="relative">
-            <span className="absolute -top-2 uppercase md:top-2 left-2 md:-left-10 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
-              {data?.leftText ?? "THE"}
-            </span>
-            <h1 className="text-[13vw] leading-[0.8] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/5 text-center select-none pointer-events-none mix-blend-overlay opacity-30">
-              {data?.centerText}
-            </h1>
-            <span className="absolute uppercase bottom-0 md:bottom-2 right-2 md:-right-36 text-sm font-bold tracking-[0.5em] text-white/20 mix-blend-overlay">
-              {data?.rightText}
-            </span>
-          </div>
-        </div>
-
-        {/* Bottom: Magnetic Buttons & Copyright */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10 pt-8 border-t border-white/5">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <p className="text-gray-500 text-sm">
-              © 2026 The Gold Technologies.
-            </p>
-
-            {/* Women Owned Badge (Small) */}
-            <div className="flex items-center gap-1 opacity-70 grayscale hover:grayscale-0 transition-all">
-              <span className="text-xs font-bold text-white">
-                W<span className="text-pink-500">✿</span>MEN OWNED
-              </span>
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            {[
-              {
-                Icon: Facebook,
-                url: data?.facebookUrl,
-              },
-              {
-                Icon: Twitter,
-                url: data?.twitterUrl,
-              },
-              {
-                Icon: Instagram,
-                url: data?.instagramUrl,
-              },
-              {
-                Icon: Linkedin,
-                url: data?.linkedinUrl,
-              },
-            ].map(({ Icon, url }, i) => (
-              <MagneticButton key={i} className="group">
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-14 h-14 rounded-full border border-white/10 bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#020410] transition-all duration-300"
+                <motion.svg
+                  viewBox="0 0 200 200"
+                  style={{ rotate: badgeRotate }}
+                  className="absolute inset-0 w-full h-full will-change-transform"
                 >
-                  <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
-                </a>
-              </MagneticButton>
-            ))}
+                  <defs>
+                    <path id="footer-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+                  </defs>
+                  <text className="fill-white/70 text-[15px] uppercase tracking-[0.3em]">
+                    <textPath href="#footer-badge-circle">
+                      {`${copy.ctaLabel} • ${copy.ctaLabel} • `}
+                    </textPath>
+                  </text>
+                </motion.svg>
+                <span className="absolute inset-[26%] rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                  <ArrowUpRight className="w-7 h-7 transition-transform duration-500 group-hover:rotate-45" />
+                </span>
+              </a>
+            </MagneticButton>
           </div>
+        </div>
 
+        {/* Links, grouped like the service categories above */}
+        <div className="relative mt-12 md:mt-16 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-10">
+          {pillars.map((pillar) => (
+            <div key={pillar.id}>
+              <p className="h-5 flex items-end gap-2 text-[11px] uppercase tracking-[0.25em] text-white/40">
+                <span className="font-serif italic normal-case tracking-normal text-sm leading-none text-[#D4AF37]">{pillar.number}</span>
+                {pillar.name}
+              </p>
+              <ul className="mt-4 space-y-2.5 text-sm">
+                {pillar.services.map((service) => (
+                  <li key={service.name}>
+                    <Link href={service.href} className="text-white/70 hover:text-[#D4AF37] transition-colors">
+                      {service.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          <div>
+            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Company</p>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {copy.companyLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-white/70 hover:text-[#D4AF37] transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Connect</p>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {socials.map(({ url, label }) => (
+                <li key={label}>
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-[#D4AF37] transition-colors">
+                    {label}
+                  </a>
+                </li>
+              ))}
+              {data?.phoneNumber && (
+                <li>
+                  <a href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`} className="text-white/70 hover:text-[#D4AF37] transition-colors">
+                    {data.phoneNumber.trim()}
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+
+        {/* Giant wordmark: "GOLD TECH" rises letter by letter, flanked by THE / NOLOGIES */}
+        <div
+          role="img"
+          aria-label={fullName}
+          className="relative mt-10 md:mt-14 flex flex-col md:flex-row md:items-stretch md:justify-center gap-2 md:gap-[1.2vw] select-none uppercase"
+        >
+          <motion.span
+            aria-hidden
+            style={{ opacity: labelOpacity, y: labelY }}
+            className="self-start md:mt-[1.2vw] text-[clamp(11px,1.5vw,22px)] font-bold tracking-[0.5em] text-white/40"
+          >
+            {wordmarkLeft}
+          </motion.span>
+          <p
+            aria-hidden
+            className="overflow-hidden whitespace-nowrap text-[14vw] md:text-[12.5vw] font-semibold tracking-[-0.07em] leading-[0.82] pb-[0.04em]"
+          >
+            {Array.from(wordmark).map((char, i, all) => (
+              <WordmarkLetter
+                key={i}
+                char={char}
+                index={i}
+                total={all.length}
+                progress={scrollYProgress}
+              />
+            ))}
+          </p>
+          <motion.span
+            aria-hidden
+            style={{ opacity: labelOpacity, y: labelY }}
+            className="self-end md:mb-[1.4vw] text-[clamp(11px,1.5vw,22px)] font-bold tracking-[0.5em] text-[#D4AF37]/80"
+          >
+            {wordmarkRight}
+          </motion.span>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="relative mt-6 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-5 text-sm text-white/50">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <span>© {new Date().getFullYear()} The Gold Technologies</span>
+            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
+            <TrustBadges />
+          </div>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#D4AF37] hover:text-white transition-colors group"
+            className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] hover:text-white transition-colors"
           >
-            Back to Top
-            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
+            Back to top
+            <span className="w-8 h-8 rounded-full border border-current flex items-center justify-center transition-transform group-hover:-translate-y-1">
+              <ArrowUp className="w-3.5 h-3.5" />
+            </span>
           </button>
         </div>
       </motion.div>

@@ -1,16 +1,9 @@
 import { PageSEO } from "@/store/useCMSStore";
+import { getRawPages } from "./cmsServer";
 
+/** All CMS pages, from the shared server-side cache (see cmsServer.ts). */
 export async function getPages(): Promise<any[]> {
-  try {
-    const response = await fetch("https://tgt-cms.vercel.app/api/pages", {
-      cache: "no-store",
-    });
-    const json = await response.json();
-    return json?.data || [];
-  } catch (error) {
-    console.error("Error fetching pages:", error);
-    return [];
-  }
+  return getRawPages();
 }
 
 export async function getPageSEO(slug: string): Promise<PageSEO | null> {

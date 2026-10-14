@@ -1,15 +1,16 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { TrustedBy } from "@/components/sections/TrustedBy";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { WhoWeAre } from "@/components/sections/WhoWeAre";
-import { WhatWeDo } from "@/components/sections/WhatWeDo";
-import { Integrations } from "@/components/sections/Integrations";
-import { BlogSection } from "@/components/sections/BlogSection";
-import { OurReputation } from "@/components/sections/OurReputation";
-import { OurPartners } from "@/components/sections/OurPartners";
-import { EnquirySection } from "@/components/sections/EnquirySection";
+import { GrowthHero } from "@/components/sections/GrowthHero";
+import { Showreel } from "@/components/sections/Showreel";
+import { Manifesto } from "@/components/sections/Manifesto";
+import { ServicePillars } from "@/components/sections/ServicePillars";
+import { WorkShowcase } from "@/components/sections/WorkShowcase";
+import { GrowthProcess } from "@/components/sections/GrowthProcess";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { Insights } from "@/components/sections/Insights";
+import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { StickyCTA } from "@/components/StickyCTA";
 
 export default function Home() {
   return (
@@ -30,17 +31,22 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10">
         <Navbar />
-        <HeroSection />
-        <TrustedBy />
-        <WhoWeAre />
-        <WhatWeDo /> {/* Services */}
-        <Integrations /> {/* Tech Stack */} {/* Integrations */}
-        <BlogSection /> {/* Recent Articles */}
-        <OurReputation /> {/* Client Success */}
-        <OurPartners /> {/* Partner Logos */}
-        <EnquirySection /> {/* Contact Form */}
-        <Footer />
+        <GrowthHero /> {/* Positioning + proof */}
+        <Showreel /> {/* Scroll-expanding wall of work */}
+        <div className="bg-[#F4F1EA]">
+          <Manifesto /> {/* Scroll-lit positioning statement */}
+        </div>
+        <ServicePillars /> {/* Brand / Build / Grow / Scale stacking cards */}
+        <WorkShowcase /> {/* Horizontal case-study track */}
+        <GrowthProcess /> {/* How we work */}
+        <Testimonials /> {/* Client stories */}
+        <Insights /> {/* Articles with cursor preview */}
+        <GrowthCTA /> {/* Let's talk: book a call or send a brief */}
+        <div className="bg-[#F4F1EA]">
+          <Footer />
+        </div>
       </div>
+      <StickyCTA />
     </main>
   );
 }

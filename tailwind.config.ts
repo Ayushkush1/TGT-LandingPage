@@ -75,6 +75,11 @@ const config: Config = {
 				sans: [
 					'var(--font-inter)',
 					'sans-serif'
+				],
+				serif: [
+					'var(--font-serif-display)',
+					'Georgia',
+					'serif'
 				]
 			},
 			borderRadius: {
@@ -85,6 +90,8 @@ const config: Config = {
 		},
 		animation: {
 			marquee: 'marquee 40s linear infinite',
+			'marquee-slow': 'marquee 70s linear infinite',
+			'marquee-reverse': 'marquee 70s linear infinite reverse',
 			'scroll-vertical': 'scroll-vertical 20s linear infinite',
 		},
 		keyframes: {

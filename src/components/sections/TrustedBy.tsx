@@ -9,7 +9,7 @@ export const TrustedBy = () => {
   const data = useCMSStore((state) => state.homeData?.TrustedBySection);
   const logos = data?.images || [];
   return (
-    <section className="py-10 xl:py-16 3xl:py-20">
+    <section className="py-10 xl:py-16 3xl:py-20 overflow-hidden">
       <div className="max-w-6xl xl:max-w-6xl 3xl:max-w-9xl mx-auto px-4 md:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Label */}
@@ -45,7 +45,7 @@ export const TrustedBy = () => {
               delay: 0.3,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            className="flex-1 overflow-hidden relative"
+            className="flex-1 w-full min-w-0 overflow-hidden relative"
             style={{
               maskImage:
                 "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",

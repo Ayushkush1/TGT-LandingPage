@@ -1,24 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import { CMSDataInitializer } from "@/components/CMSDataInitializer";
 import FooterScripts from "@/components/FooterScripts";
+import { getGlobalSEOData, getInitialCMSState } from "@/lib/cmsServer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-serif-display",
+});
 
-async function getGlobalSEO() {
-  try {
-    const response = await fetch("https://tgt-cms.vercel.app/api/seo/global", {
-      cache: "no-store", // Always fetch fresh — prevents stale title, description & favicon
-    });
-    const json = await response.json();
-    return json?.data;
-  } catch (error) {
-    console.error("Error fetching global SEO for metadata:", error);
-    return null;
-  }
-}
+// Cached for 60s (see cmsServer.ts) so title, description & favicon stay fresh
+// without a CMS round-trip on every request.
+const getGlobalSEO = getGlobalSEOData;
 
 export async function generateMetadata(): Promise<Metadata> {
   const globalSEO = await getGlobalSEO();
@@ -40,7 +37,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const globalSEO = await getGlobalSEO();
+  const [globalSEO, initialCMSState] = await Promise.all([
+    getGlobalSEO(),
+    getInitialCMSState(),
+  ]);
 
   return (
     <html lang="en">
@@ -103,7 +103,7 @@ export default async function RootLayout({
           />
         )}
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${playfair.variable}`}>
         {/* GTM Noscript */}
         {globalSEO?.gtmId && (
           <noscript>
@@ -115,7 +115,9 @@ export default async function RootLayout({
             />
           </noscript>
         )}
-        <CMSDataInitializer>{children}</CMSDataInitializer>
+        <CMSDataInitializer initialState={initialCMSState}>
+          {children}
+        </CMSDataInitializer>
         {/* Custom Footer Scripts */}
         {globalSEO?.customFooterScripts && (
           <FooterScripts html={globalSEO.customFooterScripts} />

@@ -106,3 +106,54 @@ body {
     transform 0.2s;
   color: #fffcfc7b;
 }
+
+/* ── Landing page utilities ─────────────────────────────────────── */
+@layer utilities {
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes float-glow {
+  0%, 100% { transform: translate3d(-50%, 0, 0) scale(1); }
+  50% { transform: translate3d(-44%, 40px, 0) scale(1.08); }
+}
+
+/* Recommended Lenis styles: native smooth scrolling must not fight Lenis. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@keyframes progress-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Hero headline pills: gold light circling the border (transform only) ── */
+@keyframes pill-comet {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.pill-comet {
+  transform: translate(-50%, -50%);
+  animation: pill-comet 4.5s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pill-comet { animation: none; }
+}

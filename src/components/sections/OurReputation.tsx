@@ -137,7 +137,12 @@ export const OurReputation = ({ data: propData }: { data?: any }) => {
                   key={activeIndex}
                 >
                   <p className="text-xl md:text-2xl font-medium text-gray-800 leading-relaxed text-center md:text-left">
-                    "{data?.testimonials[activeIndex]?.quote}"
+                    {/* CMS quotes often include their own quote marks */}
+                    "
+                    {data?.testimonials[activeIndex]?.quote
+                      ?.trim()
+                      .replace(/^["“]+|["”]+$/g, "")}
+                    "
                   </p>
 
                   <div className="pt-8 border-t border-gray-100 mt-8 flex flex-col items-center md:flex-row md:justify-between gap-4">

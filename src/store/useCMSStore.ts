@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { createStore, useStore } from "zustand";
 
 /**
  *
@@ -481,7 +481,9 @@ const initialState: CMSStoreState = {
   error: null,
 };
 
-export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
+type CMSState = CMSStoreState & CMSStoreActions;
+
+const cmsStore = createStore<CMSState>()((set) => ({
   ...initialState,
 
   // Actions
@@ -669,3 +671,13 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set) => ({
     }
   },
 }));
+
+// Zustand renders from getInitialState() on the server and during hydration.
+// Point it at the live state so data seeded by CMSDataInitializer (fetched on
+// the server) is part of the first HTML instead of appearing after load.
+cmsStore.getInitialState = cmsStore.getState;
+
+export const useCMSStore = Object.assign(
+  <T>(selector: (state: CMSState) => T): T => useStore(cmsStore, selector),
+  cmsStore,
+);

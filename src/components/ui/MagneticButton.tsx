@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export const MagneticButton = ({
     children,
@@ -13,18 +13,21 @@ export const MagneticButton = ({
     intensity?: number;
 }) => {
     const ref = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+    // Motion values update the transform directly, without re-rendering React.
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
+    const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
     const handleMouse = (e: React.MouseEvent) => {
-        const { clientX, clientY } = e;
         const { left, top, width, height } = ref.current!.getBoundingClientRect();
-        const middleX = clientX - (left + width / 2);
-        const middleY = clientY - (top + height / 2);
-        setPosition({ x: middleX * intensity, y: middleY * intensity });
+        x.set((e.clientX - (left + width / 2)) * intensity);
+        y.set((e.clientY - (top + height / 2)) * intensity);
     };
 
     const reset = () => {
-        setPosition({ x: 0, y: 0 });
+        x.set(0);
+        y.set(0);
     };
 
     return (
@@ -32,8 +35,7 @@ export const MagneticButton = ({
             ref={ref}
             onMouseMove={handleMouse}
             onMouseLeave={reset}
-            animate={{ x: position.x, y: position.y }}
-            transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+            style={{ x: springX, y: springY }}
             className={className}
         >
             {children}

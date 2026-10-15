@@ -29,6 +29,7 @@ const PAGE_KEYS = {
   products: "productData",
   services: "serviceData",
   portfolio: "portfolioData",
+  ceo: "ceoData",
 } as const;
 
 /** Maps the CMS pages array onto homeData / aboutData / … store fields. */

@@ -24,6 +24,9 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useCMSStore, type NavLink } from "@/store/useCMSStore";
 import { useSectionContent } from "@/content/useSectionContent";
+import { aboutLinks } from "@/content/about";
+
+const DARK_HERO_ROUTES = ["/", "/about"];
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -604,8 +607,17 @@ const SiteMenu = ({
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
-  const navLinks = useCMSStore((state) => state.navLinks);
+  // Pages whose hero is dark: the bar starts with white text and needs no spacer.
+  const isHomePage = DARK_HERO_ROUTES.includes(pathname);
+  const cmsNavLinks = useCMSStore((state) => state.navLinks);
+  // "About" opens a small panel (About us / Leadership / Our journey).
+  const navLinks = React.useMemo(
+    () =>
+      cmsNavLinks?.map((l) =>
+        l.title.trim() === "About" ? { ...l, type: "Dropdown", dropdown: aboutLinks } : l,
+      ),
+    [cmsNavLinks],
+  );
 
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
@@ -761,7 +773,13 @@ export const Navbar = () => {
                 scrolled ? "pt-3" : "-mt-3 pt-2",
               )}
             >
-              <div className="min-h-[22rem] rounded-[2rem] bg-[#0A0A0A] border border-white/10 p-8 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)]">
+              <div
+                className={cn(
+                  "rounded-[2rem] bg-[#0A0A0A] border border-white/10 p-8 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)]",
+                  // Services and Products share one height; small link panels (About) stay compact.
+                  activePanel.dropdown && activePanel.dropdown.length > 3 && "min-h-[22rem]",
+                )}
+              >
                 {isServicesDropdown(activePanel) ? (
                   <ServicesPanel onAudit={openAudit} />
                 ) : (activePanel.dropdown ?? []).some((d) => productImages.has(normalise(d.title))) ? (

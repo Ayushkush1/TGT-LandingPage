@@ -334,6 +334,7 @@ export const growthFooter = {
   ],
   companyLinks: [
     { label: "About", href: "/about" },
+    { label: "Leadership", href: "/ceo" },
     { label: "Portfolio", href: "/portfolio" },
     { label: "Products", href: "/products" },
     { label: "Insights", href: "/#BlogSection" },
@@ -364,6 +365,7 @@ export const siteMenu = {
     { label: "Work", href: "/portfolio" },
     { label: "Products", href: "/products" },
     { label: "About", href: "/about" },
+    { label: "Leadership", href: "/ceo" },
     { label: "Insights", href: "/#BlogSection" },
     { label: "Contact", href: "/#contactUs" },
   ],

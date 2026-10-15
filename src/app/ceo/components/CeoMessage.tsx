@@ -101,7 +101,8 @@ export default function CeoMessage() {
                 </div>
 
                 <Link
-                  href={data?.ctaLink || "/contact"}
+                  // CMS stores "/contact"; the contact page lives at /contactUs.
+                  href={!data?.ctaLink || data.ctaLink === "/contact" ? "/contactUs" : data.ctaLink}
                   className="group inline-flex items-center gap-2.5 bg-transparent text-[#0B0F29] px-6 py-2.5 sm:px-8 sm:py-3 rounded-full font-bold text-xs sm:text-sm tracking-wide border border-gray-300 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-all duration-300 flex-shrink-0"
                 >
                   {data?.ctaText || "Contact Us"}

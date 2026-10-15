@@ -662,11 +662,12 @@ export const Navbar = () => {
       {!isHomePage && <div aria-hidden className="h-[88px]" />}
 
       <motion.header
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: hidden && !menuOpen && !panel ? -120 : 0, opacity: 1 }}
+        // Visible from first paint (CSS fade-in) instead of waiting for JS.
+        initial={false}
+        animate={{ y: hidden && !menuOpen && !panel ? -120 : 0 }}
         transition={{ duration: 0.5, ease }}
         onMouseLeave={() => setPanel(null)}
-        className="fixed top-0 inset-x-0 z-[60] px-3 md:px-5"
+        className="nav-fade fixed top-0 inset-x-0 z-[60] px-3 md:px-5"
       >
         <div
           className={cn(

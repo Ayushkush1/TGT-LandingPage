@@ -73,7 +73,7 @@ const LogoStack = ({
               transition={{ duration: 0.6, ease, delay: slot * 0.08 }}
               className="absolute inset-x-[0.06em] inset-y-[0.035em]"
             >
-              <Image src={src} alt="" fill sizes="96px" priority className="object-contain" />
+              <Image src={src} alt="" fill sizes="96px" className="object-contain" />
             </motion.span>
           </AnimatePresence>
         </motion.span>
@@ -153,8 +153,10 @@ export const RevealPill = ({
 
   const logos = variant === "logos";
   const ready = items.length > 0;
+  // Pills only change width on hover. No automatic open on load: a width
+  // change there pushes the headline around (a big layout shift / CLS hit).
   // The product pill stays put on hover so its card fan can anchor to it.
-  const open = phase === "intro" || (hover && logos);
+  const open = hover && logos;
   const fanOpen = !logos && hover && canHover && ready && products.length > 0;
   const widths = WIDTHS[variant];
 
@@ -256,7 +258,7 @@ export const RevealPill = ({
                         transition={{ duration: 0.7, ease }}
                         className="absolute inset-0"
                       >
-                        <Image src={items[index]} alt="" fill sizes="200px" priority className="object-cover object-top" />
+                        <Image src={items[index]} alt="" fill sizes="200px" className="object-cover object-top" />
                         <span className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                       </motion.span>
                     )}

@@ -177,7 +177,7 @@ export const WorkShowcase = () => {
         >
           {/* Intro panel */}
           <div className="snap-start shrink-0 w-[85vw] sm:w-[60vw] lg:w-[34vw] flex flex-col justify-between lg:h-[70svh] lg:pr-6">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/50">
+            <p className="text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">
               {data.label} · {String(work.length).padStart(2, "0")}
             </p>
             <div className="mt-8 lg:mt-0">

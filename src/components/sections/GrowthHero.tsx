@@ -10,19 +10,17 @@ import { RevealPill } from "./HeroPills";
 import { useWorkItems } from "@/content/useWorkItems";
 import { useCMSStore } from "@/store/useCMSStore";
 
-const ease = [0.22, 1, 0.36, 1] as const;
 
-/** One headline line that slides up from behind a mask. */
+/**
+ * One headline line that slides up from behind a mask. Pure CSS (see
+ * `.hero-rise` in globals.css) so it plays on first paint, without waiting
+ * for JavaScript — the hero is the page's LCP.
+ */
 const Line = ({ children, delay }: { children: ReactNode; delay: number }) => (
   <span className="block overflow-hidden pb-[0.1em] -mb-[0.1em]">
-    <motion.span
-      className="block"
-      initial={{ y: "110%" }}
-      animate={{ y: 0 }}
-      transition={{ duration: 1.1, delay, ease }}
-    >
+    <span className="hero-rise block" style={{ animationDelay: `${delay}s` }}>
       {children}
-    </motion.span>
+    </span>
   </span>
 );
 
@@ -120,12 +118,7 @@ export const GrowthHero = () => {
         </motion.h1>
 
         <div className="mt-auto pt-12 lg:pt-8 pb-12 md:pb-16 grid lg:grid-cols-12 gap-10 items-end">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.7, ease }}
-            className="lg:col-span-6"
-          >
+          <div className="hero-fade lg:col-span-6" style={{ animationDelay: "0.35s" }}>
             <p className="text-base md:text-lg text-white/60 leading-relaxed max-w-md">
               {data.description}
             </p>
@@ -154,14 +147,12 @@ export const GrowthHero = () => {
                 <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
               </Link>
             </div>
-          </motion.div>
+          </div>
 
           {/* Proof card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.85, ease }}
-            className="lg:col-span-4 lg:col-start-9 w-full max-w-sm lg:max-w-none lg:justify-self-end rounded-3xl border border-white/10 bg-[#141414] p-5"
+          <div
+            style={{ animationDelay: "0.5s" }}
+            className="hero-fade lg:col-span-4 lg:col-start-9 w-full max-w-sm lg:max-w-none lg:justify-self-end rounded-3xl border border-white/10 bg-[#141414] p-5"
           >
             {/* Client logos already live in the headline pill; the rating leads here */}
             <div className="flex items-center gap-4">
@@ -184,7 +175,7 @@ export const GrowthHero = () => {
                 {data.responseLine}
               </span>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 

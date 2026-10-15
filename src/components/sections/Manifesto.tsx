@@ -45,7 +45,7 @@ export const Manifesto = () => {
   return (
     <section className="px-5 md:px-10 pt-16 md:pt-24 pb-16 md:pb-24">
       <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-10">
-        <p className="lg:col-span-3 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/50">
+        <p className="lg:col-span-3 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">
           {data.label}
         </p>
         <div className="lg:col-span-9">

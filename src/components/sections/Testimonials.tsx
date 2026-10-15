@@ -31,7 +31,7 @@ export const Testimonials = () => {
     <section className="bg-[#F4F1EA] px-5 md:px-10 py-16 md:py-24">
       <div className="max-w-[1600px] mx-auto">
         <div className="grid lg:grid-cols-12 gap-10 items-end">
-          <p className="lg:col-span-3 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/50">
+          <p className="lg:col-span-3 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">
             {data.label}
           </p>
           <h2 className="lg:col-span-6 text-5xl md:text-7xl lg:text-[5.5rem] font-semibold tracking-[-0.045em] leading-[0.95] text-[#0B0F29]">

@@ -25,7 +25,7 @@ const TrustBadges = () => (
   <div className="flex items-center gap-3">
     <span className="inline-flex items-center h-9 rounded-md bg-white px-2.5" title="Women owned business">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/women-owned-logo.png" alt="Women Owned business" className="h-7 w-auto" />
+      <img src="/images/women-owned-logo.webp" alt="Women Owned business" width={61} height={28} loading="lazy" decoding="async" className="h-7 w-auto" />
     </span>
     <a
       href={`https://www.dmca.com/Protection/Status.aspx?ID=${DMCA_ID}`}
@@ -40,6 +40,8 @@ const TrustBadges = () => (
         alt="DMCA.com Protection Status"
         width={120}
         height={21}
+        loading="lazy"
+        decoding="async"
         className="h-[21px] w-auto"
       />
     </a>
@@ -204,6 +206,7 @@ export const Footer = () => {
                 className="group relative block w-36 h-36 md:w-44 md:h-44"
               >
                 <motion.svg
+                  aria-hidden
                   viewBox="0 0 200 200"
                   style={{ rotate: badgeRotate }}
                   className="absolute inset-0 w-full h-full will-change-transform"

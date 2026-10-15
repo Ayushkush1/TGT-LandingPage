@@ -52,7 +52,7 @@ export const GrowthCTA = () => {
       <div className="relative max-w-[1600px] mx-auto">
         {/* Global clocks */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-          <p className="text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/50">{data.label}</p>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">{data.label}</p>
           <div>
             <dl className="flex flex-wrap gap-x-10 gap-y-4">
               {data.clocks.map((clock) => (

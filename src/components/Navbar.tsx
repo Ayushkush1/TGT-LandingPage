@@ -20,25 +20,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { RollText } from "@/components/ui/RollText";
+import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useCMSStore, type NavLink } from "@/store/useCMSStore";
 import { useSectionContent } from "@/content/useSectionContent";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-/** Text that rolls up to reveal a gold copy of itself on hover. */
-const RollText = ({ children }: { children: React.ReactNode }) => (
-  <span className="relative block overflow-hidden">
-    <span className="block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/roll:-translate-y-full">
-      {children}
-    </span>
-    <span
-      aria-hidden
-      className="absolute inset-0 block translate-y-full text-[#D4AF37] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/roll:translate-y-0"
-    >
-      {children}
-    </span>
-  </span>
-);
 
 const Logo = ({ light }: { light: boolean }) => (
   <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="The Gold Technologies home page">
@@ -204,7 +191,7 @@ const ServicesPanel = ({ onAudit }: { onAudit: () => void }) => {
                     className="group/roll flex items-center justify-between gap-3 rounded-lg -mx-2 px-2 py-3 text-sm text-white/75 hover:bg-white/[0.04]"
                   >
                     <RollText>{service.name}</RollText>
-                    <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-white/30 transition-all group-hover/roll:rotate-45 group-hover/roll:text-[#D4AF37]" />
+                    <HoverArrow />
                   </Link>
                 </li>
               ))}
@@ -246,7 +233,7 @@ const LinksPanel = ({ items }: { items: NavLink[] }) => (
         >
           <span className="flex items-center justify-between gap-2 font-semibold text-white">
             <RollText>{item.title}</RollText>
-            <ArrowUpRight className="w-4 h-4 shrink-0 text-white/30 transition-all group-hover/roll:rotate-45 group-hover/roll:text-[#D4AF37]" />
+            <HoverArrow className="[&>svg]:w-4 [&>svg]:h-4" />
           </span>
           {item.desc && (
             <span className="mt-1 block text-xs text-white/45 leading-relaxed line-clamp-2">
@@ -358,12 +345,7 @@ const ProductsPanel = ({ items, images }: { items: NavLink[]; images: Map<string
                   )}
                 >
                   <RollText>{item.title}</RollText>
-                  <ArrowUpRight
-                    className={cn(
-                      "w-3.5 h-3.5 shrink-0 transition-all group-hover/roll:rotate-45 group-hover/roll:text-[#D4AF37]",
-                      isActive ? "rotate-45 text-[#D4AF37]" : "text-white/30",
-                    )}
-                  />
+                  <HoverArrow active={isActive} />
                 </a>
               </li>
             );

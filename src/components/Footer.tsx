@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { RollText } from "@/components/ui/RollText";
+import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useSectionContent } from "@/content/useSectionContent";
 import { useCMSStore } from "@/store/useCMSStore";
 
@@ -151,7 +153,7 @@ export const Footer = () => {
               </span>
             </Link>
             {/* Contact: three matching columns (email/phone, India, UAE) */}
-            <div className="mt-8 grid sm:grid-cols-3 gap-8 md:gap-10 max-w-4xl">
+            <div className="mt-8 grid sm:grid-cols-3 gap-8 md:gap-10 max-w-6xl">
               <div>
                 <p className="h-4 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
                 {data?.emailAddress && (
@@ -224,18 +226,19 @@ export const Footer = () => {
         </div>
 
         {/* Links, grouped like the service categories above */}
-        <div className="relative mt-12 md:mt-16 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-10">
+        <div className="relative mt-14 md:mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-10">
           {pillars.map((pillar) => (
             <div key={pillar.id}>
               <p className="h-5 flex items-end gap-2 text-[11px] uppercase tracking-[0.25em] text-white/40">
                 <span className="font-serif italic normal-case tracking-normal text-sm leading-none text-[#D4AF37]">{pillar.number}</span>
                 {pillar.name}
               </p>
-              <ul className="mt-4 space-y-2.5 text-sm">
+              <ul className="mt-3 text-sm">
                 {pillar.services.map((service) => (
                   <li key={service.name}>
-                    <Link href={service.href} className="text-white/70 hover:text-[#D4AF37] transition-colors">
-                      {service.name}
+                    <Link href={service.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70">
+                      <RollText>{service.name}</RollText>
+                      <HoverArrow />
                     </Link>
                   </li>
                 ))}
@@ -244,11 +247,12 @@ export const Footer = () => {
           ))}
           <div>
             <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Company</p>
-            <ul className="mt-4 space-y-2.5 text-sm">
+            <ul className="mt-3 text-sm">
               {copy.companyLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-white/70 hover:text-[#D4AF37] transition-colors">
-                    {link.label}
+                  <Link href={link.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70">
+                    <RollText>{link.label}</RollText>
+                    <HoverArrow />
                   </Link>
                 </li>
               ))}
@@ -256,11 +260,12 @@ export const Footer = () => {
           </div>
           <div>
             <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Connect</p>
-            <ul className="mt-4 space-y-2.5 text-sm">
+            <ul className="mt-3 text-sm">
               {socials.map(({ url, label }) => (
                 <li key={label}>
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-[#D4AF37] transition-colors">
-                    {label}
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70">
+                    <RollText>{label}</RollText>
+                    <HoverArrow />
                   </a>
                 </li>
               ))}
@@ -305,7 +310,7 @@ export const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="relative mt-6 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-5 text-sm text-white/50">
+        <div className="relative mt-8 flex flex-col md:flex-row items-center justify-between gap-5 text-sm text-white/50">
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             <span>© {new Date().getFullYear()} The Gold Technologies</span>
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

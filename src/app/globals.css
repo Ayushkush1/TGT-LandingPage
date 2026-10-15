@@ -157,3 +157,11 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .pill-comet { animation: none; }
 }
+
+/* ── Rotating arrow icons: keep them on their own GPU layer so the hover
+      rotation is smooth instead of pixel-snapping (which looks like jitter). */
+svg.lucide-arrow-up-right {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-origin: 50% 50%;
+}

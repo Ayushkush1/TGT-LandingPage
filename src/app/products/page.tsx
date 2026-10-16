@@ -1,7 +1,10 @@
 import { getPageSEO, getProductPageData } from "@/lib/cms";
 import { Metadata } from "next";
-import ProductsContent from "./components/ProductsContent";
 import { RenderSchema } from "@/components/RenderSchema";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { ProductsView } from "./sections/ProductsView";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("products");
@@ -24,17 +27,17 @@ export default async function ProductPage() {
   const productData = await getProductPageData();
   const seo = await getPageSEO("products");
 
-  if (!productData) {
-    return null; // Or show error
-  }
-
   return (
-    <>
+    <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
       <RenderSchema schema={seo?.schema} id="products-schema" />
-      <ProductsContent
-        headerData={productData.hero}
-        productInfo={productData.products}
-      />
-    </>
+      <SmoothScroll />
+      <Navbar />
+      <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
+        <ProductsView products={productData?.products ?? []} />
+      </main>
+      <div className="bg-[#F4F1EA]">
+        <Footer />
+      </div>
+    </div>
   );
 }

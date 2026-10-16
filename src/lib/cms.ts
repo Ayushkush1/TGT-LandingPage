@@ -22,11 +22,6 @@ export async function getPageSEO(slug: string): Promise<PageSEO | null> {
   return null;
 }
 
-export async function getPageData(slug: string): Promise<any | null> {
-  const pages = await getPages();
-  return pages.find((p: any) => p.slug === slug) || null;
-}
-
 export async function getServiceData(slug: string): Promise<any | null> {
   const pages = await getPages();
   const servicePage = pages.find((p: any) => p.slug === "services");
@@ -84,18 +79,6 @@ export async function getProductPageData(): Promise<any | null> {
     }
   }
   return null;
-}
-
-export async function getPortfolioData(): Promise<any[]> {
-  const pages = await getPages();
-  const aboutPage = pages.find((p: any) => p.slug === "about");
-  if (aboutPage?.sections) {
-    const portfolioSection = aboutPage.sections.find(
-      (s: any) => s.type === "Portfolio",
-    );
-    return portfolioSection?.content || [];
-  }
-  return [];
 }
 
 export interface MetadataSEO {

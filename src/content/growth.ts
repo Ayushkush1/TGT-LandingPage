@@ -149,12 +149,12 @@ export const servicePillars = {
       services: [
         {
           name: "Search & Content Marketing",
-          href: "/service/digital-marketing",
+          href: "/service/search-content-marketing",
           items: ["SEO", "Content strategy", "Email automation"],
         },
         {
           name: "Social & Performance Marketing",
-          href: "/service/digital-marketing",
+          href: "/service/social-performance-marketing",
           items: ["Social media", "Paid ads", "Conversion optimisation"],
         },
       ],
@@ -180,8 +180,7 @@ export const servicePillars = {
         },
         {
           name: "Staff Augmentation",
-          // No dedicated page yet — routes to the "Let's talk" enquiry section.
-          href: "/#contactUs",
+          href: "/service/staff-augmentation",
           items: ["Dedicated developers", "Designers", "Flexible contracts"],
         },
       ],
@@ -286,7 +285,9 @@ export const growthCTA = {
   budgets: ["$5k to $10k", "$10k to $25k", "$25k to $50k", "$50k+", "Not sure yet"],
   submitLabel: "Send my brief",
   privacyNote: "No spam. We never share your details.",
-  sentNote: "Your email app has opened with the brief. Just hit send.",
+  sentNote: "Thanks, your brief is in. We'll reply within 24 hours.",
+  sendingNote: "Sending your brief...",
+  fallbackNote: "We couldn't reach our server, so your email app has opened with the brief. Just hit send.",
   assurances: [
     "Free 30-minute strategy call",
     "No obligation",
@@ -328,13 +329,13 @@ export const growthFooter = {
     { label: "Website Development", href: "/service/website-design-development" },
     { label: "Mobile Apps", href: "/service/mobile-app-development" },
     { label: "Custom Software", href: "/service/custom-software-development" },
-    { label: "Digital Marketing", href: "/service/digital-marketing" },
+    { label: "Search & Content Marketing", href: "/service/search-content-marketing" },
+    { label: "Social & Performance Marketing", href: "/service/social-performance-marketing" },
     { label: "AI & ML Solutions", href: "/service/ai-ml-solutions" },
     { label: "Business Intelligence", href: "/service/business-intelligence-solutions" },
   ],
   companyLinks: [
     { label: "About", href: "/about" },
-    { label: "Leadership", href: "/ceo" },
     { label: "Portfolio", href: "/portfolio" },
     { label: "Products", href: "/products" },
     { label: "Insights", href: "/#BlogSection" },
@@ -365,7 +366,6 @@ export const siteMenu = {
     { label: "Work", href: "/portfolio" },
     { label: "Products", href: "/products" },
     { label: "About", href: "/about" },
-    { label: "Leadership", href: "/ceo" },
     { label: "Insights", href: "/#BlogSection" },
     { label: "Contact", href: "/#contactUs" },
   ],

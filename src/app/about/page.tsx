@@ -56,7 +56,7 @@ async function AboutPage() {
         <AboutHero /> {/* Who we are, at a glance */}
         <AboutStory /> {/* Scroll-lit story + numbers */}
         <AboutPurpose /> {/* Mission & vision */}
-        <FounderNote /> {/* CEO teaser -> /ceo */}
+        <FounderNote /> {/* Short note from the founder */}
         <Journey /> {/* 2015 -> today */}
         <Team /> {/* The people */}
         <AboutFilm /> {/* Company video (click to load) */}

@@ -1,7 +1,7 @@
 /**
  * About page copy for the "all-in-one growth partner" positioning.
- * Team, images, video, milestones and the CEO note come from the CMS;
- * this file holds the narrative copy around them.
+ * Images, video and milestones come from the CMS; this file holds the
+ * narrative copy around them, including the founder's note.
  */
 
 const BOOKING_URL = "https://calendar.app.google/5nNHP69fUR5WEMvt9";
@@ -50,8 +50,19 @@ export const aboutContent = {
   },
   founder: {
     label: "(A note from our founder)",
-    linkLabel: "Read the full message",
-    linkUrl: "/ceo",
+    // Pull quote, shown large; `quoteHighlight` is set in gold italic at the end.
+    quote: "Every business we take on deserves a team that treats it",
+    quoteHighlight: "like its own.",
+    note: [
+      "When I started The Gold Technologies in 2015, the idea was simple: build one senior team that handles brand, product and growth together, so founders never have to juggle vendors again.",
+      "A decade and 50+ businesses later, that is still how we work. If you are building something that matters, I would love to hear about it.",
+    ],
+    name: "Meghna Tiwari",
+    role: "Founder & CEO",
+    photo: "/images/founder/meghna-portrait.webp",
+    backdrop: "Founder's note",
+    ctaLabel: "Book a free strategy call",
+    ctaUrl: BOOKING_URL,
   },
   journey: {
     label: "(Our journey)",
@@ -87,20 +98,13 @@ export const team: {
   photo?: string;
   linkedin?: string;
 }[] = [
-  { name: "Meghna Tiwari", photo: "/images/team/meghna.webp", role: "Founder & CEO", bio: "The fuel that powers the company's vision, growth and innovation." },
-  { name: "Saubhagya R Swain", photo: "/images/team/saubhagya.webp", role: "Co-Founder & Director", bio: "The powerhouse of the company." },
-  { name: "Mitali Gulati", photo: "/images/team/mitali.webp", role: "CGO", bio: "The driving force that makes sure the business grows consistently." },
-  { name: "Ayush", photo: "/images/team/ayush.webp", role: "Tech Lead, IT", bio: "Leads end-to-end technical architecture and development to accelerate project success." },
-  { name: "Kushal", photo: "/images/team/kushal.webp", role: "Lead, Digital Marketing", bio: "Drives operational excellence, strategic growth and performance-focused digital marketing." },
-  { name: "Parusha", photo: "/images/team/parusha.webp", role: "Manager, Pre-Sales", bio: "Bridges client needs with strategic solutions and drives business growth." },
-  { name: "Sudeesh", photo: "/images/team/sudeesh.webp", role: "Full-Stack Developer", bio: "Builds scalable, high-performance web applications." },
-  { name: "Himanshu", photo: "/images/team/himanshu.webp", role: "DevOps", bio: "Specialises in cloud infrastructure, CI/CD automation and scalable, secure systems." },
-  { name: "Sejal", photo: "/images/team/sejal.webp", role: "LinkedIn Manager", bio: "Manages LinkedIn strategy, content and engagement to strengthen clients' online presence." },
-];
-
-/** Links for the navbar "About" dropdown and the footer. */
-export const aboutLinks = [
-  { title: "About us", link: "/about", desc: "Our story, mission and the team behind the work." },
-  { title: "Leadership & CEO message", link: "/ceo", desc: "A note from our founder on where we're headed." },
-  { title: "Our journey", link: "/about#journey", desc: "Milestones from 2015 to today." },
+  { name: "Meghna Tiwari", photo: "/images/team/meghna-studio.webp", role: "Founder & CEO", bio: "The fuel that powers the company's vision, growth and innovation." },
+  { name: "Saubhagya R Swain", photo: "/images/team/saubhagya-studio.webp", role: "Co-Founder & Director", bio: "The powerhouse of the company." },
+  { name: "Mitali Gulati", photo: "/images/team/mitali-studio.webp", role: "CGO", bio: "The driving force that makes sure the business grows consistently." },
+  { name: "Ayush", photo: "/images/team/ayush-full.webp", role: "Tech Lead, IT", bio: "Leads end-to-end technical architecture and development to accelerate project success." },
+  { name: "Kushal", photo: "/images/team/kushal-studio.webp", role: "Lead, Digital Marketing", bio: "Drives operational excellence, strategic growth and performance-focused digital marketing." },
+  { name: "Pranay", photo: "/images/team/pranay.webp", role: "Strategic Technical Partner", bio: "Shapes technology strategy and architecture so every product we build is ready to scale." },
+  { name: "Sudeesh", photo: "/images/team/sudeesh-studio.webp", role: "Full-Stack Developer", bio: "Builds scalable, high-performance web applications." },
+  { name: "Himanshu", photo: "/images/team/himanshu-studio.webp", role: "DevOps", bio: "Specialises in cloud infrastructure, CI/CD automation and scalable, secure systems." },
+  { name: "Sejal", photo: "/images/team/sejal-studio.webp", role: "LinkedIn Manager", bio: "Manages LinkedIn strategy, content and engagement to strengthen clients' online presence." },
 ];

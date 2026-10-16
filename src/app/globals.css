@@ -90,23 +90,6 @@ body {
   }
 }
 
-/* ── Swiper thumb active styles ─────────────────────────────────── */
-.portfolio-thumbs .swiper-slide-thumb-active .thumb-overlay {
-  opacity: 0 !important;
-}
-.portfolio-thumbs .swiper-slide-thumb-active > div {
-  outline: 2px solid #d4af37;
-  box-shadow: 0 0 18px rgba(212, 175, 55, 0.45);
-  color: #f2f2f2 !important;
-}
-.portfolio-thumbs .swiper-slide > div {
-  transition:
-    outline 0.2s,
-    box-shadow 0.2s,
-    transform 0.2s;
-  color: #fffcfc7b;
-}
-
 /* ── Landing page utilities ─────────────────────────────────────── */
 @layer utilities {
   .text-outline {
@@ -138,10 +121,6 @@ html.lenis body {
 @keyframes progress-fill {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
-}
-
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
 }
 
 /* ── Hero headline pills: gold light circling the border (transform only) ── */
@@ -177,9 +156,16 @@ svg.lucide-arrow-up-right {
 }
 .hero-rise { animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .hero-fade { animation: hero-fade 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+/* Inner-page hero: the cinematic image settles in. */
+@keyframes hero-settle {
+  from { transform: scale(1.18); }
+  to { transform: scale(1.04); }
+}
+.hero-settle { animation: hero-settle 2.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
 @media (prefers-reduced-motion: reduce) {
   .hero-rise,
-  .hero-fade { animation: none; }
+  .hero-fade,
+  .hero-settle { animation: none; }
 }
 @keyframes nav-fade { from { opacity: 0; } to { opacity: 1; } }
 .nav-fade { animation: nav-fade 0.6s ease-out both; }

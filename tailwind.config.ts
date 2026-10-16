@@ -91,20 +91,14 @@ const config: Config = {
 		animation: {
 			marquee: 'marquee 40s linear infinite',
 			'marquee-slow': 'marquee 70s linear infinite',
-			'marquee-reverse': 'marquee 70s linear infinite reverse',
-			'scroll-vertical': 'scroll-vertical 20s linear infinite',
 		},
 		keyframes: {
 			marquee: {
 				'0%': { transform: 'translateX(0)' },
 				'100%': { transform: 'translateX(-50%)' },
-			},
-			'scroll-vertical': {
-				'0%': { transform: 'translateY(0)' },
-				'100%': { transform: 'translateY(-50%)' },
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };
 export default config;

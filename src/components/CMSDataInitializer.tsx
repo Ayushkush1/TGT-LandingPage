@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import { useCMSStore } from "@/store/useCMSStore";
 import { TopProgressBar } from "./TopProgressBar";
+import { NavigationProgress } from "./NavigationProgress";
 
 type InitialCMSState = Partial<ReturnType<typeof useCMSStore.getState>>;
 
@@ -49,6 +50,7 @@ export function CMSDataInitializer({
   return (
     <>
       <TopProgressBar active={loading} />
+      <NavigationProgress />
       {children}
     </>
   );

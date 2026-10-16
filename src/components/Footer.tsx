@@ -48,6 +48,24 @@ const TrustBadges = () => (
   </div>
 );
 
+/** Short footer labels so every link fits on one line in its column. */
+const SHORT_SERVICE_LABELS: Record<string, string> = {
+  "Website Design & Development": "Websites",
+  "Mobile App Development": "Mobile Apps",
+  "Custom Software Development": "Custom Software",
+  "Business Software Solutions": "Business Software",
+  "Search & Content Marketing": "SEO & Content",
+  "Social & Performance Marketing": "Social & Paid Ads",
+  "Business Intelligence": "BI & Analytics",
+  "Branding & Identity": "Branding",
+  "AI & ML Solutions": "AI & ML",
+};
+
+const FOOTER_PRODUCT_COUNT = 5;
+const SHORT_PRODUCT_LABELS: Record<string, string> = {
+  "Quick Commerce App": "Quick Commerce",
+  "Office Book App": "Office Book",
+};
 const OFFICE_TIME_ZONES = ["Asia/Kolkata", "Asia/Dubai"];
 
 /** Letter of the giant wordmark that rises into place as the footer scrolls in. */
@@ -120,6 +138,10 @@ export const Footer = () => {
     { country: data?.loc2Country, address: data?.loc2Address, time: times[1] },
   ].filter((o) => o.country);
   const pillars = useSectionContent("ServicePillars").pillars;
+  // A few featured products (not the whole catalogue)
+  const products = (useCMSStore((state) => state.productData?.main?.products) ?? [])
+    .filter((p) => p.title && p.link)
+    .slice(0, FOOTER_PRODUCT_COUNT);
   const socials = [
     { Icon: Linkedin, url: data?.linkedinUrl, label: "LinkedIn" },
     { Icon: Instagram, url: data?.instagramUrl, label: "Instagram" },
@@ -138,10 +160,8 @@ export const Footer = () => {
           className="pointer-events-none absolute -top-1/3 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full opacity-25 bg-[radial-gradient(closest-side,#D4AF37,transparent)]"
         />
 
-        {/* Closing call to action */}
-        <div className="relative grid lg:grid-cols-12 gap-12 items-end">
-          <div className="lg:col-span-8">
-            {/* Brand */}
+        {/* Brand + booking badge */}
+        <div className="relative flex items-center justify-between gap-6">
             <Link href="/" className="inline-flex items-center gap-3" aria-label="The Gold Technologies home page">
               <Image
                 src="/logo.jpeg"
@@ -154,56 +174,13 @@ export const Footer = () => {
                 The Gold Technologies
               </span>
             </Link>
-            {/* Contact: three matching columns (email/phone, India, UAE) */}
-            <div className="mt-8 grid sm:grid-cols-3 gap-8 md:gap-10 max-w-6xl">
-              <div>
-                <p className="h-4 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
-                {data?.emailAddress && (
-                  <a
-                    href={`mailto:${data.emailAddress}`}
-                    className="group mt-3 inline-flex items-center gap-1.5 text-[15px] text-white/80 hover:text-white break-all"
-                  >
-                    <span className="border-b border-transparent group-hover:border-[#D4AF37]">{data.emailAddress}</span>
-                    <ArrowUpRight className="w-4 h-4 shrink-0 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
-                  </a>
-                )}
-                {data?.phoneNumber && (
-                  <a
-                    href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`}
-                    className="mt-1.5 block text-[15px] text-white/55 hover:text-white transition-colors"
-                  >
-                    {data.phoneNumber.trim()}
-                  </a>
-                )}
-              </div>
-              {offices.map((office) => (
-                <div key={office.country}>
-                  <p className="h-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
-                    {office.country}
-                    {office.time && (
-                      <span className="flex items-center gap-1.5 tracking-normal text-white/70 tabular-nums">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        {office.time}
-                      </span>
-                    )}
-                  </p>
-                  <p className="mt-3 text-[15px] text-white/55 leading-relaxed">
-                    {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Rotating booking badge */}
-          <div className="lg:col-span-4 flex lg:justify-end">
             <MagneticButton intensity={0.3}>
               <a
                 href={copy.ctaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={copy.ctaLabel}
-                className="group relative block w-36 h-36 md:w-44 md:h-44"
+                className="group relative block w-28 h-28 md:w-32 md:h-32"
               >
                 <motion.svg
                   aria-hidden
@@ -225,35 +202,104 @@ export const Footer = () => {
                 </span>
               </a>
             </MagneticButton>
-          </div>
         </div>
 
-        {/* Links, grouped like the service categories above */}
-        <div className="relative mt-14 md:mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-10">
-          {pillars.map((pillar) => (
-            <div key={pillar.id}>
-              <p className="h-5 flex items-end gap-2 text-[11px] uppercase tracking-[0.25em] text-white/40">
-                <span className="font-serif italic normal-case tracking-normal text-sm leading-none text-[#D4AF37]">{pillar.number}</span>
-                {pillar.name}
-              </p>
-              <ul className="mt-3 text-sm">
-                {pillar.services.map((service) => (
-                  <li key={service.name}>
-                    <Link href={service.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70">
-                      <RollText>{service.name}</RollText>
-                      <HoverArrow />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+        {/* One row: contact details, then every link group */}
+        <div className="relative mt-10 md:mt-12 grid xl:grid-cols-12 gap-x-10 gap-y-12">
+          <div className="xl:col-span-3 grid sm:grid-cols-3 xl:grid-cols-1 gap-6 content-start">
+
+              <div>
+                <p className="h-4 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
+                {data?.emailAddress && (
+                  <a
+                    href={`mailto:${data.emailAddress}`}
+                    className="group mt-2 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white break-all"
+                  >
+                    <span className="border-b border-transparent group-hover:border-[#D4AF37]">{data.emailAddress}</span>
+                    <ArrowUpRight className="w-4 h-4 shrink-0 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
+                  </a>
+                )}
+                {data?.phoneNumber && (
+                  <a
+                    href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`}
+                    className="mt-1.5 block text-sm text-white/55 hover:text-white transition-colors"
+                  >
+                    {data.phoneNumber.trim()}
+                  </a>
+                )}
+              </div>
+              {offices.map((office) => (
+                <div key={office.country}>
+                  <p className="h-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
+                    {office.country}
+                    {office.time && (
+                      <span className="flex items-center gap-1.5 tracking-normal text-white/70 tabular-nums">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        {office.time}
+                      </span>
+                    )}
+                  </p>
+                  <p className="mt-2 text-sm text-white/55 leading-relaxed">
+                    {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
+                  </p>
+                </div>
+              ))}
+          </div>
+
+          {/* Links: services in two columns, then company and connect */}
+          <div className="xl:col-span-9 grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10">
+          <div className="col-span-2">
+            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Services</p>
+            {/* The four growth stages: 01 above 02 in the first column, 03 above 04 in the second */}
+            <div className="mt-3 grid grid-cols-2 gap-x-6">
+              {[pillars.slice(0, 2), pillars.slice(2, 4)].map((column, c) => (
+                <div key={c} className="space-y-5">
+                  {column.map((pillar) => (
+                    <div key={pillar.id}>
+                      <p className="flex items-baseline gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                        <span className="font-serif italic normal-case tracking-normal text-sm font-normal text-[#D4AF37]">{pillar.number}</span>
+                        {pillar.name}
+                      </p>
+                      <ul className="mt-1.5 text-sm">
+                        {pillar.services.map((service) => (
+                          <li key={service.name}>
+                            <Link href={service.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
+                              <RollText>{SHORT_SERVICE_LABELS[service.name] ?? service.name}</RollText>
+                              <HoverArrow />
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div>
+            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Products</p>
+            <ul className="mt-3 text-sm">
+              {products.map((product) => (
+                <li key={product.title}>
+                  <a
+                    href={product.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap"
+                  >
+                    <RollText>{SHORT_PRODUCT_LABELS[product.title.trim()] ?? product.title.trim()}</RollText>
+                    <HoverArrow />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div>
             <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Company</p>
             <ul className="mt-3 text-sm">
               {copy.companyLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70">
+                  <Link href={link.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
                     <RollText>{link.label}</RollText>
                     <HoverArrow />
                   </Link>
@@ -266,7 +312,7 @@ export const Footer = () => {
             <ul className="mt-3 text-sm">
               {socials.map(({ url, label }) => (
                 <li key={label}>
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70">
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
                     <RollText>{label}</RollText>
                     <HoverArrow />
                   </a>
@@ -274,6 +320,7 @@ export const Footer = () => {
               ))}
             </ul>
           </div>
+        </div>
         </div>
 
         {/* Giant wordmark: "GOLD TECH" rises letter by letter, flanked by THE / NOLOGIES */}

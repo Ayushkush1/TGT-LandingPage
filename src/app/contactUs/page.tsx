@@ -1,10 +1,10 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { EnquirySection } from "@/components/sections/EnquirySection";
-import MapSection from "@/components/sections/MapSection";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { getPageSEO } from "@/lib/cms";
 import { Metadata } from "next";
 import { RenderSchema } from "@/components/RenderSchema";
+import { ContactView } from "./ContactView";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("contactUs");
@@ -41,32 +41,16 @@ export async function generateMetadata(): Promise<Metadata> {
 async function ContactUs() {
   const seo = await getPageSEO("contactUs");
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+    <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
       <RenderSchema schema={seo?.schema} id="contact-schema" />
-      {/* Unified Background Wrapper */}
-      <div className="relative" aria-hidden="true">
-        {/* Noise Texture Background */}
-        <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-            backgroundRepeat: "repeat",
-          }}
-        />
-
-        {/* Subtle Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
-      </div>
+      <SmoothScroll />
       <Navbar />
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="relative z-10 focus:outline-none"
-      >
-        <EnquirySection isMain={true} />
-        <MapSection />
+      <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
+        <ContactView />
       </main>
-      <Footer />
+      <div className="bg-[#F4F1EA]">
+        <Footer />
+      </div>
     </div>
   );
 }

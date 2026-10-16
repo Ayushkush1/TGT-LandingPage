@@ -1,312 +1,264 @@
 "use client";
-import { Navbar } from "@/components/Navbar";
-import { motion } from "framer-motion";
-import { useState, useEffect, useRef, useMemo } from "react";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
-import { BlogCard } from "@/components/sections/BlogSection";
-import HeroSection from "./components/HeroSection";
-import { Quote } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
-import dynamic from "next/dynamic";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { PageHero } from "@/components/sections/PageHero";
+import { GrowthCTA } from "@/components/sections/GrowthCTA";
+import { useCMSStore, type BlogItemData } from "@/store/useCMSStore";
 import { parseMarkdownLinks } from "@/utils/text";
 
-const Footer = dynamic(() =>
-  import("@/components/Footer").then((m) => m.Footer),
-);
-const Sidebar = dynamic(() => import("./components/Sidebar"));
-const Takeaways = dynamic(() => import("./components/Takeaways"));
-const AuthorCard = dynamic(() => import("./components/AuthorCard"));
-const Tags = dynamic(() => import("./components/Tags"));
+const ease = [0.22, 1, 0.36, 1] as const;
+const blogSlug = (title: string) => title.toLowerCase().replace(/\s+/g, "-");
 
-// `toc` and `takeaways` are derived from the selected `blog` below
+/** "Main title: subtitle" becomes two headline lines; otherwise the last words go gold. */
+const splitTitle = (title: string): [string, string] => {
+  const colon = title.indexOf(":");
+  if (colon > 0) return [title.slice(0, colon).trim(), `${title.slice(colon + 1).trim()}.`];
+  const words = title.trim().split(/\s+/);
+  const cut = Math.max(1, words.length - 3);
+  return [words.slice(0, cut).join(" "), words.slice(cut).join(" ")];
+};
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-export default function BlogPage() {
-  const params = useParams().title;
-  const decodedTitle =
-    typeof params === "string"
-      ? decodeURIComponent(params)
-      : Array.isArray(params)
-        ? decodeURIComponent(params[0])
-        : "";
-  const storeData = useCMSStore((state) => state.homeData?.BlogSection);
-
-  // Derive blog at top level but handle undefined state gracefully for hooks
-  const rawBlog = storeData?.blogs.find(
-    (b) => b.title.toLowerCase().replace(/\s+/g, "-") === decodedTitle,
-  );
-
-  const blog = useMemo(() => {
-    if (!rawBlog) return null;
-    return {
-      ...rawBlog,
-      author: rawBlog.authorName || (rawBlog as any).author || "Team TGT",
-      date: rawBlog.datePublished || (rawBlog as any).date || "Recently",
-      authorAvatar: rawBlog.authorAvatar || "https://i.pravatar.cc/150?img=1",
-      authorBio: rawBlog.authorBio || "Member of the TGT Team",
-      authorTitle:
-        rawBlog.authorTitle || "Senior Design Engineer · Studio Volta",
-      tags: rawBlog.tags || [],
-      content: rawBlog.content || [],
-      takeaways: rawBlog.takeaways || [],
-    };
-  }, [rawBlog]);
-
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [tocOpen, setTocOpen] = useState(true);
-  const [activeSection, setActiveSection] = useState("intro");
-  const articleRef = useRef<HTMLDivElement>(null);
-  const takeawaysList = blog?.takeaways ?? [];
-
-  // Memoize the processed HTML for rendering
-  const displayHtml = useMemo(() => {
-    if (!blog?.contentHtml) return "";
-
-    // The CMS might return text where all spaces are non-breaking spaces (&nbsp;).
-    // This prevents standard text wrapping and causes awkward breaks at hyphens.
-    const cleanHtml = blog.contentHtml.replace(/&nbsp;/g, " ");
-
-    if (typeof window === "undefined") return cleanHtml;
-
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = cleanHtml;
-    const headings = tempDiv.querySelectorAll("h1, h2, h3, h4");
-    headings.forEach((h, i) => {
-      if (!h.id) {
-        h.id = `section-${i}`;
-      }
-    });
-    return tempDiv.innerHTML;
-  }, [blog?.contentHtml]);
-
-  // Derive ToC after blog/displayHtml is defined
-  const toc = useMemo(() => {
-    if (!blog) return [];
-
-    if (blog.content && blog.content.length > 0) {
-      return blog.content.map((s: any) => ({ id: s.id, label: s.heading }));
-    } else if (blog.contentHtml) {
-      if (typeof window === "undefined") return [];
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = displayHtml;
-      const headings = Array.from(tempDiv.querySelectorAll("h1, h2, h3, h4"));
-
-      return headings.map((h) => ({
-        id: h.id,
-        label: h.textContent || "",
-      }));
-    }
-    return [];
-  }, [blog, displayHtml]);
+/**
+ * Adds ids to the article's headings after mount (so server and client HTML match)
+ * and tracks which one is being read.
+ */
+function useArticleToc(ref: React.RefObject<HTMLElement>, html: string) {
+  const [toc, setToc] = useState<{ id: string; label: string }[]>([]);
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
+    const headings = Array.from(ref.current?.querySelectorAll<HTMLElement>("h2, h3") ?? []);
+    headings.forEach((h, i) => {
+      if (!h.id) h.id = `section-${i + 1}`;
+    });
+    setToc(headings.map((h) => ({ id: h.id, label: h.textContent?.trim() ?? "" })).filter((t) => t.label));
+  }, [ref, html]);
+
+  useEffect(() => {
+    if (!toc.length) return;
     const onScroll = () => {
-      const el = articleRef.current;
-      if (!el) return;
-      const { top, height } = el.getBoundingClientRect();
-      const progress = Math.min(
-        Math.max(-top / (height - window.innerHeight), 0),
-        1,
-      );
-      setScrollProgress(progress);
+      let current: string | null = null;
+      for (const t of toc) {
+        const el = document.getElementById(t.id);
+        if (el && el.getBoundingClientRect().top < 160) current = t.id;
+      }
+      setActive(current ?? toc[0].id);
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const circumference = 2 * Math.PI * 20;
-
-  useEffect(() => {
-    if (!toc || toc.length === 0) return;
-    const observed = toc
-      .map((t: any) => document.getElementById(t.id))
-      .filter((el: HTMLElement | null): el is HTMLElement => el !== null);
-    if (observed.length === 0) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) {
-          setActiveSection(visible.target.id);
-        }
-      },
-      {
-        root: null,
-        rootMargin: "0px 0px -60% 0px",
-        threshold: [0.1, 0.25, 0.5],
-      },
-    );
-
-    observed.forEach((el: HTMLElement) => io.observe(el));
-    return () => io.disconnect();
   }, [toc]);
 
-  // Sync active section with first item
-  useEffect(() => {
-    if (toc[0]?.id && activeSection === "intro") {
-      setActiveSection(toc[0].id);
-    }
-  }, [toc]);
+  return { toc, active };
+}
 
-  if (!blog) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col">
-        <Navbar />
-        <main
-          id="main-content"
-          tabIndex={-1}
-          className="flex-1 flex items-center justify-center focus:outline-none"
-        >
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-brand-nav mb-4">
-              Blog Post Not Found
-            </h1>
-            <p className="text-muted-foreground">
-              The requested article could not be loaded from the CMS.
-            </p>
-          </div>
-        </main>
+const RelatedCard = ({ blog, index }: { blog: BlogItemData; index: number }) => (
+  <motion.li
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-60px" }}
+    transition={{ duration: 0.8, ease, delay: index * 0.08 }}
+  >
+    <Link href={`/blog/${blogSlug(blog.title)}`} className="group block">
+      <div className="relative aspect-[16/10] rounded-[1.5rem] overflow-hidden bg-[#141414]">
+        {blog.image && (
+          <Image
+            src={blog.image}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+          />
+        )}
       </div>
-    );
-  }
+      <p className="mt-5 text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
+        {blog.category} · {blog.readTime}
+      </p>
+      <div className="mt-2 flex items-start justify-between gap-6">
+        <h3 className="text-xl md:text-2xl font-semibold tracking-[-0.025em] leading-snug">{blog.title}</h3>
+        <span className="shrink-0 w-10 h-10 rounded-full border border-white/15 flex items-center justify-center transition-[transform,background-color,color] duration-500 group-hover:rotate-45 group-hover:bg-[#D4AF37] group-hover:text-black">
+          <ArrowUpRight className="w-4 h-4" />
+        </span>
+      </div>
+    </Link>
+  </motion.li>
+);
+
+export default function BlogPostPage() {
+  const param = useParams().title;
+  const slug = decodeURIComponent(Array.isArray(param) ? param[0] : param ?? "");
+  const section = useCMSStore((s) => s.homeData?.BlogSection);
+  const blog = section?.blogs.find((b) => blogSlug(b.title) === slug);
+  const related = (section?.blogs ?? []).filter((b) => b !== blog);
+
+  // The CMS stores spaces as &nbsp;, which stops normal wrapping.
+  const html = (blog?.contentHtml ?? "").replace(/&nbsp;/g, " ");
+  const articleRef = useRef<HTMLDivElement>(null);
+  const { toc, active } = useArticleToc(articleRef, html);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+
+  const author = blog?.authorName || blog?.author || "Team TGT";
+  const date = blog?.datePublished || blog?.date;
+  const [top, highlight] = splitTitle(blog?.title ?? "");
 
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+    <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
+      <SmoothScroll />
       <Navbar />
-      <main id="main-content" tabIndex={-1} className="focus:outline-none">
-        <HeroSection blog={blog} />
+      {/* Reading progress */}
+      <motion.div aria-hidden style={{ scaleX: progress }} className="fixed top-0 inset-x-0 z-[70] h-[3px] origin-left bg-[#D4AF37]" />
 
-        <div>
-          <div
-            ref={articleRef}
-            className="max-w-6xl mx-auto px-4 md:px-8 py-16 grid grid-cols-1 lg:grid-cols-[1fr_264px] gap-12 lg:gap-16 items-start"
-          >
-            {/* ── Article ── */}
-            <article className="max-w-[680px] fade-up delay-250">
-              {blog.contentHtml ? (
-                <div
-                  className="prose prose-stone max-w-none 
-                  prose-headings:font-display prose-headings:text-brand-nav prose-headings:font-bold
-                  prose-p:font-body prose-p:text-[1.05rem] prose-p:leading-[1.85] prose-p:text-muted-foreground
-                  prose-blockquote:border-l-brand-gold prose-blockquote:bg-brand-gold/5 prose-blockquote:py-1 prose-blockquote:rounded-r-xl"
-                  dangerouslySetInnerHTML={{ __html: displayHtml }}
-                />
-              ) : (
+      <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
+        {blog ? (
+          <>
+            <PageHero
+              compact
+              label={
+                <p className="flex flex-wrap items-center gap-3">
+                  <Link href="/#BlogSection" className="inline-flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors">
+                    <ArrowLeft className="w-3.5 h-3.5" /> All articles
+                  </Link>
+                  <span className="w-6 h-px bg-white/20" />
+                  <span className="text-[#D4AF37]">{blog.category}</span>
+                </p>
+              }
+              top={top}
+              highlight={highlight}
+              description={
                 <>
-                  {blog.content?.[0] && (
-                    <div className="pb-8 mb-8 border-b border-border">
-                      <p className="font-body text-xl leading-[1.85] text-foreground">
-                        {parseMarkdownLinks(blog.content[0].paragraphs[0])}
-                      </p>
-                    </div>
-                  )}
+                  {blog.excerpt && <p>{blog.excerpt}</p>}
+                  <p className="mt-5 text-sm text-white/45">
+                    By <span className="text-white/80">{author}</span>
+                    {date && <> · {date}</>}
+                    {blog.readTime && <> · {blog.readTime}</>}
+                  </p>
+                </>
+              }
+              secondary={{ label: "Start reading", href: "#article" }}
+              image={blog.image ? { src: blog.image, alt: blog.title } : undefined}
+              facts={[blog.category, blog.readTime].filter(Boolean)}
+            />
 
-                  {blog.content
-                    ?.filter((s: any) => s.id !== blog.content?.[0]?.id)
-                    .map((section: any) => (
-                      <section key={section.id} className="mt-10">
-                        <h2
-                          id={section.id}
-                          className="font-display text-2xl md:text-[1.75rem] font-bold text-brand-nav tracking-tight mb-4 mt-10"
-                        >
-                          {section.heading}
+            <section id="article" className="bg-[#F4F1EA] text-[#0B0F29] px-5 md:px-10 py-16 md:py-24 scroll-mt-20">
+              <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-10 lg:gap-16">
+                <aside className="hidden lg:block lg:col-span-3">
+                  {toc.length > 0 && (
+                    <nav className="sticky top-28" aria-label="In this article">
+                      <p className="text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">(In this article)</p>
+                      <ol className="mt-6 border-l border-[#0B0F29]/10">
+                        {toc.map((t, i) => (
+                          <li key={t.id}>
+                            <a
+                              href={`#${t.id}`}
+                              className={
+                                active === t.id
+                                  ? "-ml-px flex gap-3 border-l-2 border-[#B8932A] pl-4 py-2 text-sm font-medium text-[#0B0F29]"
+                                  : "-ml-px flex gap-3 border-l-2 border-transparent pl-4 py-2 text-sm text-[#0B0F29]/55 hover:text-[#0B0F29] transition-colors"
+                              }
+                            >
+                              <span className="font-serif italic text-xs text-[#B8932A] pt-0.5">{String(i + 1).padStart(2, "0")}</span>
+                              {t.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ol>
+                    </nav>
+                  )}
+                </aside>
+
+                <article className="lg:col-span-8 xl:col-span-7 min-w-0">
+                  {html ? (
+                    <div
+                      ref={articleRef}
+                      className="prose prose-lg max-w-none prose-headings:font-semibold prose-headings:tracking-[-0.03em] prose-headings:text-[#0B0F29] prose-headings:scroll-mt-28 prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h3:text-2xl prose-p:text-[#0B0F29]/75 prose-p:leading-[1.8] prose-li:text-[#0B0F29]/75 prose-strong:text-[#0B0F29] prose-a:text-[#0B0F29] prose-a:decoration-[#D4AF37] prose-a:underline-offset-4 hover:prose-a:text-[#B8932A] prose-blockquote:border-l-[#D4AF37] prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:font-normal prose-blockquote:text-2xl prose-blockquote:text-[#0B0F29] prose-img:rounded-[1.25rem] prose-hr:border-[#0B0F29]/10 marker:text-[#B8932A]"
+                      dangerouslySetInnerHTML={{ __html: html }}
+                    />
+                  ) : (
+                    <div ref={articleRef}>
+                    {blog.content?.map((s) => (
+                      <section key={s.id} className="mt-12 first:mt-0">
+                        <h2 id={s.id} className="text-3xl md:text-4xl font-semibold tracking-[-0.03em] scroll-mt-28">
+                          {s.heading}
                         </h2>
-                        {section.paragraphs.map((p: string, i: number) => (
-                          <p
-                            key={i}
-                            className="font-body text-[1.05rem] leading-[1.85] text-muted-foreground mb-5"
-                          >
+                        {s.paragraphs.map((p, i) => (
+                          <p key={i} className="mt-5 text-lg leading-[1.8] text-[#0B0F29]/75">
                             {parseMarkdownLinks(p)}
                           </p>
                         ))}
                       </section>
                     ))}
-
-                  {blog.pullQuote && (
-                    <div className="my-10 pl-6 border-l-[3px] border-brand-gold bg-gradient-to-r from-brand-gold/10 to-white rounded-r-xl py-6 pr-6">
-                      <div className="text-brand-gold opacity-50 mb-3">
-                        <Quote className="rotate-180" />
-                      </div>
-                      <p className="font-display italic text-xl md:text-2xl leading-snug text-brand-nav">
-                        {blog.pullQuote}
-                      </p>
                     </div>
                   )}
-                </>
-              )}
 
-              {takeawaysList.length > 0 && <Takeaways items={takeawaysList} />}
+                  {blog.takeaways && blog.takeaways.length > 0 && (
+                    <div className="mt-14 rounded-[1.75rem] bg-[#0B0F29] text-white p-8 md:p-10">
+                      <p className="text-[11px] uppercase tracking-[0.25em] text-[#D4AF37]">(Key takeaways)</p>
+                      <ol className="mt-6 space-y-4">
+                        {blog.takeaways.map((t, i) => (
+                          <li key={i} className="flex gap-4 text-white/80 leading-relaxed">
+                            <span className="font-serif italic text-[#D4AF37]">{String(i + 1).padStart(2, "0")}</span>
+                            {t}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
 
-              <hr className="border-border my-8" />
-
-              {blog.tags && <Tags tags={blog.tags} />}
-
-              <AuthorCard
-                author={blog.author}
-                avatar={blog.authorAvatar}
-                bio={blog.authorBio}
-                title={blog.authorTitle}
-              />
-            </article>
-
-            {/* ── Sidebar ── */}
-            <Sidebar
-              circumference={circumference}
-              scrollProgress={scrollProgress}
-              tocOpen={tocOpen}
-              setTocOpen={setTocOpen}
-              toc={toc}
-              activeSection={activeSection}
-              setActiveSection={setActiveSection}
-            />
-          </div>
-
-          {/* ── Related Posts ── */}
-          <section className="bg-stone-100 py-10 md:py-14 lg:py-16 px-4 md:px-8">
-            <div className="max-w-6xl mx-auto flex-col flex gap-6 sm:gap-8 lg:gap-10">
-              <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B0F29] leading-[1.15] tracking-tight">
-                  {storeData?.relatedTitle || "Continue Reading"}
-                </h2>
-                <p className="text-base md:text-lg text-gray-500 font-light leading-relaxed">
-                  {storeData?.relatedDescription ||
-                    "More on design, engineering, and craft"}
-                </p>
+                  <div className="mt-14 pt-8 border-t border-[#0B0F29]/10 flex flex-wrap items-center justify-between gap-6">
+                    <p className="text-sm text-[#0B0F29]/60">
+                      Written by <span className="font-semibold text-[#0B0F29]">{author}</span>
+                      {date && <> · {date}</>}
+                    </p>
+                    {blog.tags && blog.tags.length > 0 && (
+                      <ul className="flex flex-wrap gap-2">
+                        {blog.tags.map((t) => (
+                          <li key={t} className="rounded-full border border-[#0B0F29]/15 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-[#0B0F29]/65">
+                            {t}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </article>
               </div>
+            </section>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
-                {storeData?.blogs.map((relatedBlog, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: idx * 0.15,
-                      duration: 0.6,
-                      ease: "easeOut",
-                    }}
-                    viewport={{ once: true }}
-                  >
-                    <BlogCard
-                      {...(relatedBlog as any)}
-                      author={
-                        relatedBlog.authorName || (relatedBlog as any).author
-                      }
-                      date={
-                        relatedBlog.datePublished || (relatedBlog as any).date
-                      }
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-        </div>
+            {related.length > 0 && (
+              <section className="bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24">
+                <div className="max-w-[1600px] mx-auto">
+                  <div className="grid lg:grid-cols-12 gap-10 items-end">
+                    <p className="lg:col-span-3 text-[11px] uppercase tracking-[0.25em] text-white/50">(Keep reading)</p>
+                    <h2 className="lg:col-span-9 text-5xl md:text-7xl font-semibold tracking-[-0.045em] leading-[0.95]">
+                      More on <span className="font-serif italic font-normal text-[#D4AF37]">growth.</span>
+                    </h2>
+                  </div>
+                  <ul className="mt-12 md:mt-16 grid md:grid-cols-2 gap-x-8 gap-y-14">
+                    {related.slice(0, 2).map((b, i) => (
+                      <RelatedCard key={b.title} blog={b} index={i} />
+                    ))}
+                  </ul>
+                </div>
+              </section>
+            )}
 
-        <Footer />
+            <GrowthCTA />
+          </>
+        ) : (
+          <div className="min-h-[70svh]" />
+        )}
       </main>
+      <div className="bg-[#F4F1EA]">
+        <Footer />
+      </div>
     </div>
   );
 }

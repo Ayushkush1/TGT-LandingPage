@@ -24,9 +24,6 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useCMSStore, type NavLink } from "@/store/useCMSStore";
 import { useSectionContent } from "@/content/useSectionContent";
-import { aboutLinks } from "@/content/about";
-
-const DARK_HERO_ROUTES = ["/", "/about"];
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -607,17 +604,7 @@ const SiteMenu = ({
 
 export const Navbar = () => {
   const pathname = usePathname();
-  // Pages whose hero is dark: the bar starts with white text and needs no spacer.
-  const isHomePage = DARK_HERO_ROUTES.includes(pathname);
-  const cmsNavLinks = useCMSStore((state) => state.navLinks);
-  // "About" opens a small panel (About us / Leadership / Our journey).
-  const navLinks = React.useMemo(
-    () =>
-      cmsNavLinks?.map((l) =>
-        l.title.trim() === "About" ? { ...l, type: "Dropdown", dropdown: aboutLinks } : l,
-      ),
-    [cmsNavLinks],
-  );
+  const navLinks = useCMSStore((state) => state.navLinks);
 
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
@@ -663,16 +650,13 @@ export const Navbar = () => {
     setOpenAuditForm(true);
   };
 
-  // White text over the dark home hero, the open menu, or the floating pill.
-  const light = menuOpen || scrolled || isHomePage;
+  // Every page opens on a dark hero, so the bar always uses white text.
+  const light = true;
   const activePanel = navLinks?.find((l) => l.title === panel && l.dropdown?.length);
   const productImages = useProductImages();
 
   return (
     <>
-      {/* Keeps page content clear of the fixed bar on pages without a dark hero */}
-      {!isHomePage && <div aria-hidden className="h-[88px]" />}
-
       <motion.header
         // Visible from first paint (CSS fade-in) instead of waiting for JS.
         initial={false}
@@ -685,7 +669,7 @@ export const Navbar = () => {
           className={cn(
             "mx-auto flex items-center justify-between gap-4 transition-[max-width,margin,padding,background-color,border-color,border-radius] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border",
             scrolled && !menuOpen
-              ? "max-w-[1180px] mt-3 rounded-full bg-[#0A0A0A]/95 border-white/10 pl-2.5 pr-1.5 py-1.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)]"
+              ? "max-w-[1180px] mt-3 rounded-full bg-[#0A0A0A]/95 border-white/10 pl-4 pr-2.5 py-2.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)]"
               : "max-w-[1600px] mt-0 rounded-none bg-transparent border-transparent px-2 md:px-5 py-5",
           )}
         >
@@ -701,7 +685,27 @@ export const Navbar = () => {
                 panel === item.title &&
                   (light ? "bg-white/10 text-white" : "bg-[#0B0F29]/5 text-[#0B0F29]"),
               );
-              return hasPanel ? (
+              const chevron = (
+                <ChevronDown
+                  className={cn("w-3.5 h-3.5 transition-transform duration-300", panel === item.title && "rotate-180")}
+                />
+              );
+              // A dropdown with its own page (e.g. Products) opens that page on click
+              // and shows its panel on hover; one without a page only toggles the panel.
+              return hasPanel && item.link ? (
+                <Link
+                  key={item.title}
+                  href={item.link}
+                  onMouseEnter={() => setPanel(item.title)}
+                  onFocus={() => setPanel(item.title)}
+                  onClick={() => setPanel(null)}
+                  aria-expanded={panel === item.title}
+                  className={linkClass}
+                >
+                  <RollText>{navLabel(item.title)}</RollText>
+                  {chevron}
+                </Link>
+              ) : hasPanel ? (
                 <button
                   key={item.title}
                   onMouseEnter={() => setPanel(item.title)}
@@ -710,12 +714,7 @@ export const Navbar = () => {
                   className={linkClass}
                 >
                   <RollText>{navLabel(item.title)}</RollText>
-                  <ChevronDown
-                    className={cn(
-                      "w-3.5 h-3.5 transition-transform duration-300",
-                      panel === item.title && "rotate-180",
-                    )}
-                  />
+                  {chevron}
                 </button>
               ) : (
                 <Link

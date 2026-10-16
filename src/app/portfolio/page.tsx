@@ -2,23 +2,13 @@ import { Metadata } from "next";
 import { getPageSEO } from "@/lib/cms";
 import { RenderSchema } from "@/components/RenderSchema";
 import { Navbar } from "@/components/Navbar";
-import HeroSection from "./components/HeroSection";
-import dynamic from "next/dynamic";
-
-const Footer = dynamic(() =>
-  import("@/components/Footer").then((m) => m.Footer),
-);
-const Integrations = dynamic(() =>
-  import("@/components/sections/Integrations").then((m) => m.Integrations),
-);
-const OurReputation = dynamic(() =>
-  import("@/components/sections/OurReputation").then((m) => m.OurReputation),
-);
-const TrustedBy = dynamic(() =>
-  import("@/components/sections/TrustedBy").then((m) => m.TrustedBy),
-);
-const CTABanner = dynamic(() => import("./components/CTABanner"));
-const ProjectShowcase = dynamic(() => import("./components/ProjectShowcase"));
+import { Footer } from "@/components/Footer";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { GrowthCTA } from "@/components/sections/GrowthCTA";
+import { PortfolioHero } from "./sections/PortfolioHero";
+import { WorkIndex } from "./sections/WorkIndex";
+import { Results } from "./sections/Results";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSEO("portfolio");
@@ -57,32 +47,20 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PortfolioPage() {
   const seo = await getPageSEO("portfolio");
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+    <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
       <RenderSchema schema={seo?.schema} id="portfolio-schema" />
-      <div className="relative">
-        <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-            backgroundRepeat: "repeat",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
-      </div>
+      <SmoothScroll />
       <Navbar />
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="relative z-10 focus:outline-none"
-      >
-        <HeroSection />
-        <TrustedBy />
-        <ProjectShowcase />
-        <Integrations />
-        <OurReputation />
-        <CTABanner />
+      <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
+        <PortfolioHero /> {/* Positioning + featured case study */}
+        <WorkIndex /> {/* Filterable case studies */}
+        <Results /> {/* Headline numbers */}
+        <Testimonials /> {/* Client stories */}
+        <GrowthCTA /> {/* Let's talk + brief modal */}
       </main>
-      <Footer />
+      <div className="bg-[#F4F1EA]">
+        <Footer />
+      </div>
     </div>
   );
 }

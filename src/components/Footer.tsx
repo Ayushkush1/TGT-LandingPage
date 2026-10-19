@@ -8,7 +8,6 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  Twitter,
 } from "lucide-react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -46,6 +45,41 @@ const TrustBadges = () => (
       />
     </a>
   </div>
+);
+
+type IconProps = { className?: string };
+
+/** Line icon of the Taj Mahal, for the India office. */
+const TajMahalIcon = ({ className }: IconProps) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden className={className}>
+    <path d="M2 21h20" />
+    <path d="M6 21v-6h12v6" />
+    <path d="M10.5 21v-2.6a1.5 1.5 0 0 1 3 0V21" />
+    <path d="M7.6 15c0-2.9 2-4.6 4.4-6 2.4 1.4 4.4 3.1 4.4 6" />
+    <path d="M12 9V6.2" />
+    <circle cx="12" cy="5.6" r="0.5" fill="currentColor" />
+    <path d="M3.5 21v-9.5M20.5 21v-9.5" />
+    <path d="M2.9 11.5h1.2M19.9 11.5h1.2" />
+    <path d="M3.5 11.5V10M20.5 11.5V10" />
+  </svg>
+);
+
+/** Line icon of the Burj Khalifa, for the UAE office. */
+const BurjKhalifaIcon = ({ className }: IconProps) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden className={className}>
+    <path d="M5 21h14" />
+    <path d="M12 1.5v3.5" />
+    <path d="M10.6 21l.6-12 .5-4h.6l.5 4 .6 12" />
+    <path d="M9.2 21l.4-7.5h1.5M14.8 21l-.4-7.5h-1.5" />
+    <path d="M7.6 21l.4-4.5h1.4M16.4 21l-.4-4.5h-1.4" />
+  </svg>
+);
+
+/** X (formerly Twitter) logo. */
+const XIcon = ({ className }: IconProps) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+    <path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93zm-1.29 19.5h2.04L6.49 3.24H4.3z" />
+  </svg>
 );
 
 /** Short footer labels so every link fits on one line in its column. */
@@ -145,7 +179,7 @@ export const Footer = () => {
   const socials = [
     { Icon: Linkedin, url: data?.linkedinUrl, label: "LinkedIn" },
     { Icon: Instagram, url: data?.instagramUrl, label: "Instagram" },
-    { Icon: Twitter, url: data?.twitterUrl, label: "X" },
+    { Icon: XIcon, url: data?.twitterUrl, label: "X" },
     { Icon: Facebook, url: data?.facebookUrl, label: "Facebook" },
   ].filter((s) => s.url);
 
@@ -160,8 +194,9 @@ export const Footer = () => {
           className="pointer-events-none absolute -top-1/3 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full opacity-25 bg-[radial-gradient(closest-side,#D4AF37,transparent)]"
         />
 
-        {/* Brand + booking badge */}
-        <div className="relative flex items-center justify-between gap-6">
+        {/* First line: brand (with socials), email, offices, booking badge */}
+        <div className="relative grid md:grid-cols-2 xl:grid-cols-[auto_auto_minmax(0,1fr)_minmax(0,1.3fr)_auto] gap-x-10 gap-y-10 items-start">
+          <div>
             <Link href="/" className="inline-flex items-center gap-3" aria-label="The Gold Technologies home page">
               <Image
                 src="/logo.jpeg"
@@ -170,108 +205,104 @@ export const Footer = () => {
                 height={44}
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full ring-1 ring-[#D4AF37]/40"
               />
-              <span className="text-xl md:text-2xl font-semibold tracking-[-0.02em] leading-none">
-                The Gold Technologies
-              </span>
+              <span className="text-xl md:text-2xl font-semibold tracking-[-0.02em] leading-none whitespace-nowrap">The Gold Technologies</span>
             </Link>
-            <MagneticButton intensity={0.3}>
-              <a
-                href={copy.ctaUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={copy.ctaLabel}
-                className="group relative block w-28 h-28 md:w-32 md:h-32"
-              >
-                <motion.svg
-                  aria-hidden
-                  viewBox="0 0 200 200"
-                  style={{ rotate: badgeRotate }}
-                  className="absolute inset-0 w-full h-full will-change-transform"
-                >
-                  <defs>
-                    <path id="footer-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
-                  </defs>
-                  <text className="fill-white/70 text-[15px] uppercase tracking-[0.3em]">
-                    <textPath href="#footer-badge-circle">
-                      {`${copy.ctaLabel} • ${copy.ctaLabel} • `}
-                    </textPath>
-                  </text>
-                </motion.svg>
-                <span className="absolute inset-[26%] rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-                  <ArrowUpRight className="w-7 h-7 transition-transform duration-500 group-hover:rotate-45" />
-                </span>
-              </a>
-            </MagneticButton>
-        </div>
-
-        {/* One row: contact details, then every link group */}
-        <div className="relative mt-10 md:mt-12 grid xl:grid-cols-12 gap-x-10 gap-y-12">
-          <div className="xl:col-span-3 grid sm:grid-cols-3 xl:grid-cols-1 gap-6 content-start">
-
-              <div>
-                <p className="h-4 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
-                {data?.emailAddress && (
-                  <a
-                    href={`mailto:${data.emailAddress}`}
-                    className="group mt-2 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white break-all"
-                  >
-                    <span className="border-b border-transparent group-hover:border-[#D4AF37]">{data.emailAddress}</span>
-                    <ArrowUpRight className="w-4 h-4 shrink-0 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
-                  </a>
-                )}
-                {data?.phoneNumber && (
-                  <a
-                    href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`}
-                    className="mt-1.5 block text-sm text-white/55 hover:text-white transition-colors"
-                  >
-                    {data.phoneNumber.trim()}
-                  </a>
-                )}
-              </div>
-              {offices.map((office) => (
-                <div key={office.country}>
-                  <p className="h-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
-                    {office.country}
-                    {office.time && (
-                      <span className="flex items-center gap-1.5 tracking-normal text-white/70 tabular-nums">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        {office.time}
-                      </span>
-                    )}
-                  </p>
-                  <p className="mt-2 text-sm text-white/55 leading-relaxed">
-                    {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
-                  </p>
-                </div>
-              ))}
+            {socials.length > 0 && (
+              <ul className="mt-6 flex gap-2.5">
+                {socials.map(({ Icon, url, label }) => (
+                  <li key={label}>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="w-10 h-10 rounded-full border border-white/15 text-white/70 flex items-center justify-center transition-colors duration-300 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-black"
+                    >
+                      <Icon className="w-4 h-4" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
-          {/* Links: services in two columns, then company and connect */}
-          <div className="xl:col-span-9 grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10">
-          <div className="col-span-2">
+          <div>
+            <p className="h-5 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
+            {data?.emailAddress && (
+              <a
+                href={`mailto:${data.emailAddress}`}
+                className="group mt-2 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white break-all xl:break-normal xl:whitespace-nowrap"
+              >
+                <span className="border-b border-transparent group-hover:border-[#D4AF37]">{data.emailAddress}</span>
+                <ArrowUpRight className="w-4 h-4 shrink-0 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
+              </a>
+            )}
+            {data?.phoneNumber && (
+              <a href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`} className="mt-1.5 block text-sm text-white/55 hover:text-white transition-colors">
+                {data.phoneNumber.trim()}
+              </a>
+            )}
+          </div>
+
+          {offices.map((office, i) => {
+            const Landmark = i === 0 ? TajMahalIcon : BurjKhalifaIcon;
+            return (
+              <div key={office.country}>
+                <p className="h-5 flex items-center gap-2.5 text-[11px] uppercase tracking-[0.25em] text-white/40">
+                  <Landmark className="w-5 h-5 text-[#D4AF37]" />
+                  {office.country}
+                  {office.time && (
+                    <span className="flex items-center gap-1.5 tracking-normal text-white/70 tabular-nums">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      {office.time}
+                    </span>
+                  )}
+                </p>
+                <p className="mt-2 text-sm text-white/55 leading-relaxed">
+                  {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
+                </p>
+              </div>
+            );
+          })}
+
+          <MagneticButton intensity={0.3} className="hidden xl:block justify-self-end -mt-4">
+            <a href={copy.ctaUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.ctaLabel} className="group relative block w-28 h-28 md:w-32 md:h-32">
+              <motion.svg aria-hidden viewBox="0 0 200 200" style={{ rotate: badgeRotate }} className="absolute inset-0 w-full h-full will-change-transform">
+                <defs>
+                  <path id="footer-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+                </defs>
+                <text className="fill-white/70 text-[15px] uppercase tracking-[0.3em]">
+                  <textPath href="#footer-badge-circle">{`${copy.ctaLabel} • ${copy.ctaLabel} • `}</textPath>
+                </text>
+              </motion.svg>
+              <span className="absolute inset-[26%] rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                <ArrowUpRight className="w-7 h-7 transition-transform duration-500 group-hover:rotate-45" />
+              </span>
+            </a>
+          </MagneticButton>
+        </div>
+
+        {/* Links: the four service stages side by side, then products and company */}
+        <div className="relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-10">
+          <div className="col-span-2 md:col-span-4">
             <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Services</p>
-            {/* The four growth stages: 01 above 02 in the first column, 03 above 04 in the second */}
-            <div className="mt-3 grid grid-cols-2 gap-x-6">
-              {[pillars.slice(0, 2), pillars.slice(2, 4)].map((column, c) => (
-                <div key={c} className="space-y-5">
-                  {column.map((pillar) => (
-                    <div key={pillar.id}>
-                      <p className="flex items-baseline gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
-                        <span className="font-serif italic normal-case tracking-normal text-sm font-normal text-[#D4AF37]">{pillar.number}</span>
-                        {pillar.name}
-                      </p>
-                      <ul className="mt-1.5 text-sm">
-                        {pillar.services.map((service) => (
-                          <li key={service.name}>
-                            <Link href={service.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
-                              <RollText>{SHORT_SERVICE_LABELS[service.name] ?? service.name}</RollText>
-                              <HoverArrow />
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+            <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6">
+              {pillars.map((pillar) => (
+                <div key={pillar.id}>
+                  <p className="flex items-baseline gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                    <span className="font-serif italic normal-case tracking-normal text-sm font-normal text-[#D4AF37]">{pillar.number}</span>
+                    {pillar.name}
+                  </p>
+                  <ul className="mt-1.5 text-sm">
+                    {pillar.services.map((service) => (
+                      <li key={service.name}>
+                        <Link href={service.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
+                          <RollText>{SHORT_SERVICE_LABELS[service.name] ?? service.name}</RollText>
+                          <HoverArrow />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
@@ -307,20 +338,6 @@ export const Footer = () => {
               ))}
             </ul>
           </div>
-          <div>
-            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Connect</p>
-            <ul className="mt-3 text-sm">
-              {socials.map(({ url, label }) => (
-                <li key={label}>
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
-                    <RollText>{label}</RollText>
-                    <HoverArrow />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
         </div>
 
         {/* Giant wordmark: "GOLD TECH" rises letter by letter, flanked by THE / NOLOGIES */}

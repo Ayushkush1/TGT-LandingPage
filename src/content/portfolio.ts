@@ -35,7 +35,7 @@ export const portfolioContent = {
       { value: "70+", label: "Launches shipped" },
       { value: "50+", label: "Businesses grown" },
       { value: "7+", label: "Countries served" },
-      { value: "2015", label: "Building since" },
+      { value: "2023", label: "Founded" },
     ],
   },
 };

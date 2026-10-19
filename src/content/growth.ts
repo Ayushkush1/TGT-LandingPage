@@ -311,6 +311,22 @@ export const testimonials = {
   ctaUrl: BOOKING_URL,
 };
 
+/**
+ * PLACEHOLDER testimonials so the wall can be designed full. Fictional people:
+ * replace with real, approved client quotes (or move them into the CMS) before launch.
+ */
+export const placeholderTestimonials = [
+  { quote: "They rebuilt our website in six weeks and enquiries doubled in the first month. Communication was clear the whole way.", clientName: "Priya Sharma", clientRole: "Founder, Retail brand" },
+  { quote: "Our ERP finally matches how we actually work. The team asked the right questions before writing a single line of code.", clientName: "James Whitfield", clientRole: "Operations Director, Logistics" },
+  { quote: "From logo to launch campaign, one team handled everything. It saved us months of coordinating agencies.", clientName: "Aisha Rahman", clientRole: "Co-founder, D2C startup" },
+  { quote: "The app is fast, stable and our customers rate it highly. Support after launch has been just as good.", clientName: "Daniel Okafor", clientRole: "Product Manager, Fintech" },
+  { quote: "Our Google rankings climbed steadily and the leads are better quality. Monthly reports are simple to follow.", clientName: "Emma Laurent", clientRole: "Marketing Head, Hospitality" },
+  { quote: "They felt like part of our team, not a vendor. Deadlines were met and nothing was ever lost in translation.", clientName: "Rohan Mehta", clientRole: "CTO, SaaS company" },
+  { quote: "The dashboards changed how we make decisions. We now see in minutes what used to take a week of spreadsheets.", clientName: "Sofia Martinez", clientRole: "CFO, Manufacturing" },
+  { quote: "Senior developers who slotted straight into our sprints. Scaling the team up and down was effortless.", clientName: "Oliver Grant", clientRole: "Engineering Lead, E-commerce" },
+  { quote: "A thoughtful redesign that our users noticed immediately. Bounce rate dropped and time on site went up.", clientName: "Hana Kobayashi", clientRole: "Digital Lead, Education" },
+];
+
 export const insights = {
   label: "(Insights)",
   headlineMain: "Ideas that",

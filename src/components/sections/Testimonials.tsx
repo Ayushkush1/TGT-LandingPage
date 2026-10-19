@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSectionContent } from "@/content/useSectionContent";
 import { useCMSStore } from "@/store/useCMSStore";
+import { placeholderTestimonials } from "@/content/growth";
 
-const SLIDE_MS = 7000;
+interface Story {
+  quote: string;
+  clientName: string;
+  clientRole: string;
+  image?: string;
+}
 
 // CMS quotes often include their own quote marks and trailing blank lines.
 const cleanQuote = (quote = "") =>
@@ -18,32 +23,147 @@ const cleanQuote = (quote = "") =>
     .replace(/(\w)[-–—](\w)/g, "$1 $2")
     .trim();
 
-/** Editorial testimonial: one large quote, with an auto-advancing client list. */
+/** Client photo, falling back to gold initials if there is none or it fails to load. */
+const Avatar = ({ src, name }: { src?: string; name: string }) => {
+  const [failed, setFailed] = useState(false);
+  const initials = name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("");
+  return (
+    <span className="relative shrink-0 w-9 h-9 rounded-full overflow-hidden ring-1 ring-[#B8932A]/30 bg-[#B8932A]/10 text-[#B8932A] flex items-center justify-center font-serif italic text-sm">
+      {src && !failed ? <Image src={src} alt="" fill sizes="36px" className="object-cover" onError={() => setFailed(true)} /> : initials}
+    </span>
+  );
+};
+
+type Variant = "light" | "dark" | "pull";
+
+/** Cards cycle through three styles so a row reads like a magazine spread, not a grid of boxes. */
+const VARIANTS: Variant[] = ["light", "dark", "light", "pull"];
+const WIDTHS: Record<Variant, string> = {
+  light: "w-[300px] md:w-[370px]",
+  dark: "w-[320px] md:w-[440px]",
+  pull: "w-[280px] md:w-[330px]",
+};
+
+/** First sentence of a quote, for the large pull-quote cards. */
+const firstSentence = (text: string) => {
+  const m = text.match(/^.*?[.!?](\s|$)/);
+  return (m ? m[0] : text).trim();
+};
+
+const Stars = ({ gold }: { gold: string }) => (
+  <span className="flex gap-0.5">
+    {[0, 1, 2, 3, 4].map((s) => (
+      <Star key={s} className={cn("w-3 h-3", gold)} />
+    ))}
+  </span>
+);
+
+const Card = ({ story, variant, number }: { story: Story; variant: Variant; number: number }) => {
+  const quote = cleanQuote(story.quote);
+  const dark = variant === "dark";
+  const pull = variant === "pull";
+
+  return (
+    <figure
+      className={cn(
+        "group/card relative w-full h-full overflow-hidden flex flex-col rounded-[1.5rem] p-5 md:p-6 transition-[transform,box-shadow,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5",
+        dark && "bg-[#0B0F29] text-white hover:shadow-[0_30px_60px_-30px_rgba(11,15,41,0.7)]",
+        pull && "bg-[#E9E2D2] text-[#0B0F29] hover:shadow-[0_30px_60px_-32px_rgba(11,15,41,0.35)]",
+        variant === "light" && "bg-white/70 text-[#0B0F29] ring-1 ring-[#0B0F29]/[0.06] hover:bg-white hover:shadow-[0_30px_60px_-32px_rgba(11,15,41,0.3)]",
+      )}
+    >
+      {dark && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -bottom-1/2 -right-1/3 w-[120%] h-full rounded-full bg-[radial-gradient(closest-side,rgba(212,175,55,0.22),transparent)] transition-opacity duration-500 opacity-70 group-hover/card:opacity-100"
+        />
+      )}
+      {/* Oversized quote mark that warms to gold on hover */}
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute -bottom-16 right-4 font-serif text-[9rem] leading-none select-none transition-colors duration-500",
+          dark ? "text-white/[0.07] group-hover/card:text-[#D4AF37]/40" : "text-[#0B0F29]/[0.06] group-hover/card:text-[#B8932A]/35",
+        )}
+      >
+        ”
+      </span>
+
+      <div className="relative flex items-center justify-between gap-4">
+        <span className={cn("font-serif italic text-sm", dark ? "text-[#D4AF37]" : "text-[#B8932A]")}>{String(number).padStart(2, "0")}</span>
+        <Stars gold={dark ? "fill-[#D4AF37] text-[#D4AF37]" : "fill-[#B8932A] text-[#B8932A]"} />
+      </div>
+
+      <blockquote
+        className={cn(
+          "relative mt-4 mb-5",
+          pull
+            ? "font-serif italic text-xl md:text-2xl leading-[1.25] tracking-[-0.01em] line-clamp-4"
+            : dark
+              ? "text-base md:text-lg leading-relaxed tracking-[-0.01em] text-white/90"
+              : "text-[15px] md:text-base leading-relaxed text-[#0B0F29]/80",
+        )}
+      >
+        {pull ? firstSentence(quote) : quote}
+      </blockquote>
+
+      <figcaption className={cn("relative mt-auto pt-4 flex items-center gap-3 border-t", dark ? "border-white/10" : "border-[#0B0F29]/10")}>
+        <Avatar src={story.image} name={story.clientName} />
+        <span className="min-w-0">
+          <span className="block text-sm font-semibold truncate">{story.clientName}</span>
+          <span className={cn("block text-xs truncate", dark ? "text-white/50" : "text-[#0B0F29]/55")}>{story.clientRole}</span>
+        </span>
+      </figcaption>
+    </figure>
+  );
+};
+
+/**
+ * One endlessly gliding row of cards. The list is doubled (and spaced with padding,
+ * not gap) so shifting by exactly half loops seamlessly.
+ */
+const Row = ({ stories, duration, reverse, offset }: { stories: Story[]; duration: number; reverse?: boolean; offset: number }) => (
+  <div className="overflow-hidden py-2">
+    <div
+      className="flex w-max items-stretch animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none"
+      style={{ animationDuration: `${duration}s`, animationDirection: reverse ? "reverse" : "normal" }}
+    >
+      {[0, 1].map((copy) =>
+        stories.map((s, i) => {
+          const variant = VARIANTS[(i + offset) % VARIANTS.length];
+          return (
+            <div key={`${copy}-${i}`} aria-hidden={copy === 1} className={cn(WIDTHS[variant], "shrink-0 pr-4 flex")}>
+              <Card story={s} variant={variant} number={i + 1 + offset} />
+            </div>
+          );
+        }),
+      )}
+    </div>
+  </div>
+);
+
+/** Client stories: header like every section, then two rows of quotes gliding in opposite directions. */
 export const Testimonials = () => {
   const data = useSectionContent("Testimonials");
   const cms = useCMSStore((s) => s.homeData?.OurReputation);
-  const items = cms?.testimonials ?? [];
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const current = items[active];
+  const stories: Story[] = [...(cms?.testimonials ?? []), ...placeholderTestimonials];
+  const half = Math.ceil(stories.length / 2);
+  const rows = [stories.slice(0, half), stories.slice(half)];
 
   return (
-    <section className="bg-[#F4F1EA] px-5 md:px-10 py-16 md:py-24">
-      <div className="max-w-[1600px] mx-auto">
-        <div className="grid lg:grid-cols-12 gap-10 items-end">
-          <p className="lg:col-span-3 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">
-            {data.label}
-          </p>
-          <h2 className="lg:col-span-6 text-5xl md:text-7xl lg:text-[5.5rem] font-semibold tracking-[-0.045em] leading-[0.95] text-[#0B0F29]">
-            {data.headlineMain}{" "}
-            <span className="font-serif italic font-normal text-[#B8932A]">
-              {data.headlineHighlight}
-            </span>
+    <section className="bg-[#F4F1EA] text-[#0B0F29] py-16 md:py-24 overflow-hidden">
+      <div className="px-5 md:px-10">
+        <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-10 items-end">
+          <p className="lg:col-span-3 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">{data.label}</p>
+          <h2 className="lg:col-span-6 text-5xl md:text-7xl lg:text-[5.5rem] font-semibold tracking-[-0.045em] leading-[0.95]">
+            {data.headlineMain} <span className="font-serif italic font-normal text-[#B8932A]">{data.headlineHighlight}</span>
           </h2>
           <div className="lg:col-span-3 lg:text-right">
-            <div className="text-6xl md:text-7xl font-semibold tracking-[-0.05em] text-[#0B0F29]">
-              {data.rating}
-            </div>
+            <div className="text-6xl md:text-7xl font-semibold tracking-[-0.05em]">{data.rating}</div>
             <div className="mt-2 flex lg:justify-end gap-1">
               {[0, 1, 2, 3, 4].map((i) => (
                 <Star key={i} className="w-4 h-4 fill-[#B8932A] text-[#B8932A]" />
@@ -52,103 +172,17 @@ export const Testimonials = () => {
             <p className="mt-2 text-sm text-[#0B0F29]/55">{data.ratingLabel}</p>
           </div>
         </div>
+      </div>
 
-        {current && (
-          <div
-            className="mt-16 md:mt-24 grid lg:grid-cols-12 gap-12 lg:gap-10"
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
-          >
-            <div className="lg:col-span-8 relative">
-              <span
-                aria-hidden
-                className="absolute -top-10 md:-top-16 -left-2 font-serif text-[8rem] md:text-[12rem] leading-none text-[#B8932A]/25 select-none"
-              >
-                “
-              </span>
-              {/* Every quote sits in the same grid cell, so the box always has the
-                  height of the longest one and the page below never shifts. */}
-              <div className="grid">
-                {items.map((t, i) => {
-                  const isActive = i === active;
-                  return (
-                    <motion.figure
-                      key={t.clientName}
-                      aria-hidden={!isActive}
-                      initial={false}
-                      animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: isActive ? 0.15 : 0 }}
-                      className={cn(
-                        "relative [grid-area:1/1] flex flex-col",
-                        !isActive && "pointer-events-none",
-                      )}
-                    >
-                      <blockquote className="text-3xl md:text-5xl lg:text-[3.5rem] font-medium tracking-[-0.035em] leading-[1.12] text-[#0B0F29]">
-                        {cleanQuote(t.quote)}
-                      </blockquote>
-                      <figcaption className="mt-auto pt-10 flex items-center gap-4">
-                        {t.image && (
-                          <span className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#B8932A]/40">
-                            <Image src={t.image} alt="" fill sizes="56px" className="object-cover" />
-                          </span>
-                        )}
-                        <span>
-                          <span className="block font-semibold text-[#0B0F29]">{t.clientName}</span>
-                          <span className="block text-sm text-[#0B0F29]/55">{t.clientRole}</span>
-                        </span>
-                      </figcaption>
-                    </motion.figure>
-                  );
-                })}
-              </div>
-            </div>
+      {/* Full-width rows; hovering pauses both so a quote can be read */}
+      <div className="group mt-12 md:mt-16 space-y-2" aria-label="Client testimonials">
+        <Row stories={rows[0]} duration={75} offset={0} />
+        {rows[1].length > 0 && <Row stories={rows[1]} duration={85} reverse offset={rows[0].length} />}
+      </div>
 
-            {/* Client list with autoplay progress */}
-            <ol className="lg:col-span-4 lg:col-start-9 self-end border-b border-[#0B0F29]/15">
-              {items.map((t, i) => (
-                <li key={t.clientName}>
-                  <button
-                    onClick={() => setActive(i)}
-                    aria-current={i === active}
-                    className="group relative w-full text-left border-t border-[#0B0F29]/15 py-5 flex items-center gap-5"
-                  >
-                    <span className="font-serif italic text-[#B8932A]">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="flex-1">
-                      <span
-                        className={cn(
-                          "block font-semibold transition-colors",
-                          i === active ? "text-[#0B0F29]" : "text-[#0B0F29]/40 group-hover:text-[#0B0F29]/70",
-                        )}
-                      >
-                        {t.clientName}
-                      </span>
-                      <span className="block text-xs text-[#0B0F29]/45">{t.clientRole}</span>
-                    </span>
-                    {i === active && (
-                      <span
-                        key={active}
-                        aria-hidden
-                        onAnimationEnd={() => setActive((active + 1) % items.length)}
-                        className="absolute left-0 right-0 -top-px h-0.5 bg-[#B8932A] origin-left motion-reduce:hidden"
-                        style={{
-                          animation: `progress-fill ${SLIDE_MS}ms linear forwards`,
-                          animationPlayState: paused ? "paused" : "running",
-                        }}
-                      />
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ol>
-          </div>
-        )}
-
-        <div className="mt-20 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t border-[#0B0F29]/15 pt-8">
-          <p className="font-serif italic text-2xl md:text-3xl text-[#0B0F29]">
-            {cms?.footerCtaText}
-          </p>
+      <div className="px-5 md:px-10">
+        <div className="max-w-[1600px] mx-auto mt-12 md:mt-16 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t border-[#0B0F29]/15 pt-8">
+          {cms?.footerCtaText && <p className="font-serif italic text-2xl md:text-3xl">{cms.footerCtaText}</p>}
           <a
             href={data.ctaUrl}
             target="_blank"

@@ -75,7 +75,7 @@ export const servicePage = {
   why: {
     label: "Why global businesses choose us",
     stats: [
-      { value: "10+", label: "Years of industry experience" },
+      { value: "10+", label: "Years of team expertise" },
       { value: "40+", label: "Technologies mastered" },
       { value: "7+", label: "Countries served" },
       { value: "24h", label: "Response time" },

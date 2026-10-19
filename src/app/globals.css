@@ -118,11 +118,6 @@ html.lenis body {
   overflow: hidden;
 }
 
-@keyframes progress-fill {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
 /* ── Hero headline pills: gold light circling the border (transform only) ── */
 @keyframes pill-comet {
   from { transform: translate(-50%, -50%) rotate(0deg); }

@@ -12,8 +12,8 @@ export const aboutContent = {
     headlineTop: "The team behind",
     headlineHighlight: "brands that grow.",
     description:
-      "Since 2015 we've helped founders and teams across 7+ countries brand, build and grow their businesses, with one team that stays long after launch.",
-    meta: ["Since 2015", "Noida · Dubai", "50+ businesses grown"],
+      "Since 2023, our senior team, with 10+ years of experience behind it, has helped founders across 7+ countries brand, build and grow their businesses, and stayed long after launch.",
+    meta: ["Since 2023", "Noida · Dubai", "10+ years of expertise"],
     primaryLabel: "Book a free strategy call",
     primaryUrl: BOOKING_URL,
     secondaryLabel: "Meet the team",
@@ -24,7 +24,7 @@ export const aboutContent = {
     text: "We started as engineers who cared about craft. Today we're one team of strategists, designers, developers and marketers who treat your growth as our own, measured not by what we ship, but by what it does for your business.",
     highlights: ["craft.", "growth", "business."],
     stats: [
-      { value: "2015", label: "Founded" },
+      { value: "2023", label: "Founded" },
       { value: "70+", label: "Launches" },
       { value: "50+", label: "Businesses grown" },
       { value: "7+", label: "Countries served" },
@@ -54,8 +54,8 @@ export const aboutContent = {
     quote: "Every business we take on deserves a team that treats it",
     quoteHighlight: "like its own.",
     note: [
-      "When I started The Gold Technologies in 2015, the idea was simple: build one senior team that handles brand, product and growth together, so founders never have to juggle vendors again.",
-      "A decade and 50+ businesses later, that is still how we work. If you are building something that matters, I would love to hear about it.",
+      "When I started The Gold Technologies in 2023, the idea was simple: bring together a senior team with more than a decade of experience to handle brand, product and growth as one, so founders never have to juggle vendors again.",
+      "50+ businesses later, that is still how we work. If you are building something that matters, I would love to hear about it.",
     ],
     name: "Meghna Tiwari",
     role: "Founder & CEO",
@@ -66,8 +66,8 @@ export const aboutContent = {
   },
   journey: {
     label: "(Our journey)",
-    headlineMain: "A decade of",
-    headlineHighlight: "building.",
+    headlineMain: "Founded in 2023,",
+    headlineHighlight: "built on a decade.",
   },
   team: {
     label: "(The team)",

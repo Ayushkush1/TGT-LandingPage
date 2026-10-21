@@ -11,10 +11,11 @@ import {
   type MotionValue,
 } from "framer-motion";
 import {
-  Accessibility, AppWindow, ArrowUpRight, BarChart3, Bot, Boxes, Brain, Bug, Building2, Cable, Cloud, Code2, Compass, Cpu,
-  Database, FileText, Images, Layers, LayoutTemplate, Lightbulb, LineChart, Mail, MailCheck, Megaphone, MessageCircle,
-  MessageSquareQuote, Mic, Monitor, MousePointerClick, Package, Palette, PenLine, PenTool, PieChart, Plus, Repeat, Search,
-  Settings2, Share2, ShieldCheck, ShoppingBag, Smartphone, Sparkles, TrendingUp, UserRound, Users, Video, Wallet, Workflow,
+  Accessibility, AppWindow, ArrowUpRight, BarChart3, Bot, Boxes, Brain, Bug, Building2, Cable, Cloud, Code2, Compass,
+  Contrast, Cpu, CreditCard, Database, Eye, FileText, Gauge, Images, Layers, LayoutTemplate, Lightbulb, LineChart, Mail,
+  MailCheck, Megaphone, MessageCircle, MessageSquareQuote, Mic, Monitor, MousePointerClick, Package, Palette, PenLine,
+  PenTool, PieChart, Plug, Plus, Printer, RefreshCw, Repeat, Rocket, Search, Share2, ShieldCheck, ShoppingCart, Smartphone,
+  Sparkles, Target, TrendingUp, UserRound, Users, Video, Wallet, Wand2, Workflow, Wrench,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -174,44 +175,61 @@ const Approach = ({ text, points }: { text?: string; points: { title: string; de
 };
 
 /* ── 3. What we deliver: list on the right, pinned detail card on the left ── */
-/** An icon for a CMS category such as "Development · Solutions", picked by keyword. */
-const categoryIcons: [RegExp, LucideIcon][] = [
-  [/secur|defen|integrity|complian|legal|audit/i, ShieldCheck],
-  [/\bai\b|machine|algorithm|llm|linguistic|neural/i, Brain],
-  [/cloud|infrastructure|ci\/cd/i, Cloud],
-  [/data|analytic|metric|kpi|insight/i, BarChart3],
-  [/mobile|apple|google ecosystem|hybrid/i, Smartphone],
-  [/commerce|retail|paid|conversion|b2c/i, ShoppingBag],
-  [/search|organic|inbound/i, Search],
-  [/brand|aesthetic|visual|design|layout|interface|print/i, Palette],
-  [/content|copy|subtitle/i, PenLine],
-  [/support|engagement|retention|conversational/i, MessageCircle],
-  [/automation|operations|manufactur|maintenance|management|logistic|hr\b/i, Settings2],
-  [/connectivity|hardware|physical|home/i, Cpu],
-  [/develop|refactor|evolution|code/i, Code2],
-  [/strategy|planning|research|launch|corporate/i, Compass],
+/** An icon for a CMS tag such as "Micro-interactions" or "SEO", picked by keyword. */
+const tagIcons: [RegExp, LucideIcon][] = [
+  [/micro|interaction|gesture|click|focus state|thumb/i, MousePointerClick],
+  [/motion graphic|video|voiceover|caption|transcript/i, Video],
+  [/motion|animat|transition/i, Wand2],
+  [/feedback|interview|survey|guest|communication|collaboration/i, MessageCircle],
+  [/accessib|aria|wcag|nvda|skip link|tab order|keyboard|semantic|inclusive/i, Accessibility],
+  [/contrast|colou?r/i, Contrast],
+  [/typograph|copy|tone|messaging|writ|blog|content|script|whitepaper|letterhead/i, PenLine],
+  [/print|business card|statio|packag|retail graphic|pitch deck/i, Printer],
+  [/logo|brand|identity|core value/i, Palette],
+  [/proto|fidelity|wirefram|layout|design system|\bui\b|\bux\b|^design$|spatial|physical/i, LayoutTemplate],
+  [/showcase|media/i, Images],
+  [/cms|wiki|document/i, FileText],
+  [/user flow|journey|persona|card sort|usability|user/i, Users],
+  [/heatmap/i, Eye],
+  [/seo|keyword|search|site map|link building|on-page/i, Search],
+  [/\bads\b|ppc|retarget|conversion|\broi\b|upsell|a\/b/i, Target],
+  [/social|community|inbound|engagement/i, Share2],
+  [/email|drip|newsletter|nurtur|lead|klaviyo/i, Mail],
+  [/\bai\b|recommendation|llm|neural|nlp|machine|learning|predict|classification|sentiment|prompt|generative|chatbot|assistant|conversational|vision|recognition|ocr|parsing|extraction|algorithm/i, Brain],
+  [/analytic|powerbi|dashboard|kpi|report|metric|tracking|trend|visuali|forecast/i, BarChart3],
+  [/data|warehous|lake|etl|storage|cleansing|governance|mining/i, Database],
+  [/\bapi|webhook|integration|middleware|soap|graphql|plugin/i, Plug],
+  [/cloud|devops|ci\/cd|edge|server|microservice|multitenan/i, Cloud],
+  [/secur|encrypt|ssl|login|defen|endpoint|complian|audit|disaster|backup|continuity/i, ShieldCheck],
+  [/payment|invoic|payroll|fintech|billing/i, CreditCard],
+  [/commerce|shop|store|checkout|monetiz|sales|b2b|b2c/i, ShoppingCart],
+  [/mobile|objective-c|app store|play|ios|android|aso|single codebase|tablet/i, Smartphone],
+  [/iot|sensor|hardware|firmware|mqtt|appliance|home automation|telemetry|\bota\b/i, Cpu],
+  [/automation|rpa|bpm|workflow/i, Workflow],
+  [/erp|crm|hrms|inventory|supply|logistic|manufactur|resource|enterprise|corporate/i, Boxes],
+  [/performance|speed|optimi|scalab|efficien|accuracy/i, Gauge],
+  [/migrat|legacy|moderni|refactor|tech debt|upgrade|revision/i, RefreshCw],
+  [/launch|mvp|onboard/i, Rocket],
+  [/strateg|research|discovery|competitor|market|planning|roadmap|position/i, Compass],
+  [/support|\bsla\b|maintenance|monitor|training/i, Wrench],
+  [/testing|\bqa\b/i, Bug],
+  [/architecture|aggregation|portal|saas|single page/i, Layers],
+  [/scraping|code/i, Code2],
 ];
-const categoryIcon = (category?: string) => categoryIcons.find(([re]) => re.test(category ?? ""))?.[1] ?? Sparkles;
 
-/** The item's tech logos when its tags name tools we have logos for, otherwise an icon for its category. */
-const DetailVisual = ({ item }: { item: CmsItem }) => {
-  const logos = (item.tags ?? []).map(techLogo).filter((src): src is string => !!src);
-  const unique = Array.from(new Set(logos)).slice(0, 4);
-  if (unique.length > 0)
-    return (
-      <ul className="flex -space-x-2.5">
-        {unique.map((src) => (
-          <li key={src} className="flex w-14 h-14 items-center justify-center rounded-full bg-[#141a45] ring-1 ring-white/15 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)]">
-            <Image src={src} alt="" width={26} height={26} unoptimized className="w-[26px] h-[26px]" />
-          </li>
-        ))}
-      </ul>
-    );
-  const Icon = categoryIcon(item.category);
+/** A tag as a small visual tile: the tool's logo when we have one, otherwise a matching icon. */
+const TagTile = ({ tag }: { tag: string }) => {
+  const logo = techLogo(tag);
+  const Icon = tagIcons.find(([re]) => re.test(tag))?.[1] ?? Sparkles;
   return (
-    <span className="flex w-16 h-16 items-center justify-center rounded-2xl bg-[#D4AF37]/10 ring-1 ring-[#D4AF37]/30 text-[#D4AF37]">
-      <Icon className="w-7 h-7" strokeWidth={1.5} />
-    </span>
+    <li className="flex flex-col items-center justify-center gap-2.5 rounded-2xl bg-white/[0.04] ring-1 ring-white/10 px-2 py-4 text-center transition-colors duration-500 hover:bg-white/[0.07] hover:ring-[#D4AF37]/40">
+      {logo ? (
+        <Image src={logo} alt="" width={24} height={24} unoptimized className="w-6 h-6" />
+      ) : (
+        <Icon className="w-6 h-6 text-[#D4AF37]" strokeWidth={1.5} />
+      )}
+      <span className="text-[9.5px] font-medium uppercase tracking-[0.12em] leading-tight text-white/60 line-clamp-2">{tag}</span>
+    </li>
   );
 };
 
@@ -222,34 +240,19 @@ const Detail = ({ item, index, total, compact }: { item: CmsItem; index: number;
       <span className="text-[7rem] xl:text-[9rem] leading-[0.8] font-semibold tracking-[-0.06em] text-transparent [-webkit-text-stroke:1.5px_#D4AF37]">
         {pad(index + 1)}
       </span>
-      <div className="flex flex-col items-end gap-5">
-        <span className="text-xs text-white/40 tabular-nums">
-          {pad(index + 1)} / {pad(total)}
-        </span>
-        <DetailVisual item={item} />
-      </div>
+      <span className="text-xs text-white/40 tabular-nums">
+        {pad(index + 1)} / {pad(total)}
+      </span>
     </div>
     )}
     <p className={cn("text-[11px] uppercase tracking-[0.25em] text-[#D4AF37]", !compact && "mt-8")}>{clean(item.category)}</p>
     {!compact && <p className="mt-2 text-3xl font-semibold tracking-[-0.03em] leading-tight">{item.title}</p>}
     <p className={cn("text-white/65 leading-relaxed", compact ? "mt-3" : "mt-4")}>{clean(item.description)}</p>
     {item.tags && item.tags.length > 0 && (
-      <ul className="mt-5 flex flex-wrap gap-2">
-        {item.tags.map((tag) => {
-          const logo = techLogo(tag);
-          return (
-            <li
-              key={tag}
-              className={cn(
-                "flex items-center gap-1.5 rounded-full border border-white/15 py-1 pr-3 text-[11px] uppercase tracking-[0.15em] text-white/70",
-                logo ? "pl-2" : "pl-3",
-              )}
-            >
-              {logo && <Image src={logo} alt="" width={14} height={14} unoptimized className="w-3.5 h-3.5" />}
-              {tag}
-            </li>
-          );
-        })}
+      <ul className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2">
+        {item.tags.map((tag) => (
+          <TagTile key={tag} tag={tag} />
+        ))}
       </ul>
     )}
     {item.outcome && (

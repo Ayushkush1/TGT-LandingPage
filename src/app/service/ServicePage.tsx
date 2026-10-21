@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   AnimatePresence,
   motion,
@@ -9,13 +10,21 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { ArrowUpRight, Plus } from "lucide-react";
+import {
+  Accessibility, AppWindow, ArrowUpRight, BarChart3, Bot, Boxes, Brain, Bug, Building2, Cable, Cloud, Code2, Compass, Cpu,
+  Database, FileText, Images, Layers, LayoutTemplate, Lightbulb, LineChart, Mail, MailCheck, Megaphone, MessageCircle,
+  MessageSquareQuote, Mic, Monitor, MousePointerClick, Package, Palette, PenLine, PenTool, PieChart, Plus, Repeat, Search,
+  Settings2, Share2, ShieldCheck, ShoppingBag, Smartphone, Sparkles, TrendingUp, UserRound, Users, Video, Wallet, Workflow,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PageHero } from "@/components/sections/PageHero";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { servicePillars } from "@/content/growth";
 import { serviceExtras, servicePage, type ServiceExtra, type ServiceSlug } from "@/content/services";
+import { clientLogos } from "@/content/clients";
+import { techLogo } from "@/content/tech";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -165,6 +174,47 @@ const Approach = ({ text, points }: { text?: string; points: { title: string; de
 };
 
 /* ── 3. What we deliver: list on the right, pinned detail card on the left ── */
+/** An icon for a CMS category such as "Development · Solutions", picked by keyword. */
+const categoryIcons: [RegExp, LucideIcon][] = [
+  [/secur|defen|integrity|complian|legal|audit/i, ShieldCheck],
+  [/\bai\b|machine|algorithm|llm|linguistic|neural/i, Brain],
+  [/cloud|infrastructure|ci\/cd/i, Cloud],
+  [/data|analytic|metric|kpi|insight/i, BarChart3],
+  [/mobile|apple|google ecosystem|hybrid/i, Smartphone],
+  [/commerce|retail|paid|conversion|b2c/i, ShoppingBag],
+  [/search|organic|inbound/i, Search],
+  [/brand|aesthetic|visual|design|layout|interface|print/i, Palette],
+  [/content|copy|subtitle/i, PenLine],
+  [/support|engagement|retention|conversational/i, MessageCircle],
+  [/automation|operations|manufactur|maintenance|management|logistic|hr\b/i, Settings2],
+  [/connectivity|hardware|physical|home/i, Cpu],
+  [/develop|refactor|evolution|code/i, Code2],
+  [/strategy|planning|research|launch|corporate/i, Compass],
+];
+const categoryIcon = (category?: string) => categoryIcons.find(([re]) => re.test(category ?? ""))?.[1] ?? Sparkles;
+
+/** The item's tech logos when its tags name tools we have logos for, otherwise an icon for its category. */
+const DetailVisual = ({ item }: { item: CmsItem }) => {
+  const logos = (item.tags ?? []).map(techLogo).filter((src): src is string => !!src);
+  const unique = Array.from(new Set(logos)).slice(0, 4);
+  if (unique.length > 0)
+    return (
+      <ul className="flex -space-x-2.5">
+        {unique.map((src) => (
+          <li key={src} className="flex w-14 h-14 items-center justify-center rounded-full bg-[#141a45] ring-1 ring-white/15 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)]">
+            <Image src={src} alt="" width={26} height={26} unoptimized className="w-[26px] h-[26px]" />
+          </li>
+        ))}
+      </ul>
+    );
+  const Icon = categoryIcon(item.category);
+  return (
+    <span className="flex w-16 h-16 items-center justify-center rounded-2xl bg-[#D4AF37]/10 ring-1 ring-[#D4AF37]/30 text-[#D4AF37]">
+      <Icon className="w-7 h-7" strokeWidth={1.5} />
+    </span>
+  );
+};
+
 const Detail = ({ item, index, total, compact }: { item: CmsItem; index: number; total: number; compact?: boolean }) => (
   <>
     {!compact && (
@@ -172,9 +222,12 @@ const Detail = ({ item, index, total, compact }: { item: CmsItem; index: number;
       <span className="text-[7rem] xl:text-[9rem] leading-[0.8] font-semibold tracking-[-0.06em] text-transparent [-webkit-text-stroke:1.5px_#D4AF37]">
         {pad(index + 1)}
       </span>
-      <span className="text-xs text-white/40 tabular-nums">
-        {pad(index + 1)} / {pad(total)}
-      </span>
+      <div className="flex flex-col items-end gap-5">
+        <span className="text-xs text-white/40 tabular-nums">
+          {pad(index + 1)} / {pad(total)}
+        </span>
+        <DetailVisual item={item} />
+      </div>
     </div>
     )}
     <p className={cn("text-[11px] uppercase tracking-[0.25em] text-[#D4AF37]", !compact && "mt-8")}>{clean(item.category)}</p>
@@ -182,11 +235,21 @@ const Detail = ({ item, index, total, compact }: { item: CmsItem; index: number;
     <p className={cn("text-white/65 leading-relaxed", compact ? "mt-3" : "mt-4")}>{clean(item.description)}</p>
     {item.tags && item.tags.length > 0 && (
       <ul className="mt-5 flex flex-wrap gap-2">
-        {item.tags.map((tag) => (
-          <li key={tag} className="rounded-full border border-white/15 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">
-            {tag}
-          </li>
-        ))}
+        {item.tags.map((tag) => {
+          const logo = techLogo(tag);
+          return (
+            <li
+              key={tag}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full border border-white/15 py-1 pr-3 text-[11px] uppercase tracking-[0.15em] text-white/70",
+                logo ? "pl-2" : "pl-3",
+              )}
+            >
+              {logo && <Image src={logo} alt="" width={14} height={14} unoptimized className="w-3.5 h-3.5" />}
+              {tag}
+            </li>
+          );
+        })}
       </ul>
     )}
     {item.outcome && (
@@ -303,9 +366,34 @@ const Deliver = ({ items }: { items: CmsItem[] }) => {
 };
 
 /* ── 4. Proof ────────────────────────────────────────────────────────── */
+/**
+ * A client's logo straight on the page: muted to the palette, in full colour on hover.
+ * Height follows the logo's shape so square marks and wide wordmarks carry similar weight.
+ * Clients without a logo yet show their name instead.
+ */
+const ClientMark = ({ name }: { name: string }) => {
+  const logo = clientLogos[name];
+  if (!logo) return <span className="whitespace-nowrap text-3xl md:text-5xl font-semibold tracking-[-0.04em] text-[#0B0F29]/55">{name}</span>;
+  const height = Math.round(Math.min(76, Math.max(32, 52 * Math.sqrt(2.5 / (logo.width / logo.height)))));
+  return (
+    <Image
+      src={logo.src}
+      alt={name}
+      width={logo.width}
+      height={logo.height}
+      style={{ "--h": `${height}px` } as CSSProperties}
+      className={cn(
+        "h-[calc(var(--h)*0.7)] md:h-[var(--h)] w-auto max-w-none object-contain transition-[filter,opacity] duration-500",
+        logo.dark ? "invert grayscale opacity-80 hover:opacity-100" : "grayscale opacity-75 hover:grayscale-0 hover:opacity-100",
+      )}
+    />
+  );
+};
+
 const Proof = ({ extra }: { extra: ServiceExtra }) => {
   const proof = extra.proof ?? [];
   const work = extra.work ?? [];
+  const hasLogos = work.some((w) => clientLogos[w]);
   // No case results yet: lead with global reach instead of an empty "results" block.
   const hasResults = proof.length > 0 || work.length > 0;
   const headline = hasResults ? servicePage.proofHeadline : servicePage.reachHeadline;
@@ -389,9 +477,22 @@ const Proof = ({ extra }: { extra: ServiceExtra }) => {
         {work.length > 0 && <p className="mt-14 md:mt-20 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">{servicePage.workLabel}</p>}
       </div>
 
-      {/* Client names: big editorial marquee (or a static row when there are few) */}
+      {/* Clients: logo marquee when we have their logos, otherwise big editorial names (or a static row when there are few) */}
       {work.length > 0 &&
-        (marquee.length > 0 ? (
+        (hasLogos ? (
+          <div className="mt-8 md:mt-10 flex w-max animate-marquee-slow hover:[animation-play-state:paused] motion-reduce:animate-none">
+            {[0, 1].map((k) => (
+              <ul key={k} aria-hidden={k === 1} className="flex shrink-0 items-center">
+                {(work.length >= 4 ? work : [...work, ...work, ...work]).map((w, i) => (
+                  <li key={i} className="flex shrink-0 items-center gap-10 md:gap-16 pr-10 md:pr-16">
+                    <ClientMark name={w} />
+                    <span aria-hidden className="text-lg text-[#0B0F29]/20">✦</span>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        ) : marquee.length > 0 ? (
           <div className="mt-6 flex w-max animate-marquee-slow hover:[animation-play-state:paused]">
             {[0, 1].map((k) => (
               <ul key={k} aria-hidden={k === 1} className="flex shrink-0 items-center">
@@ -459,6 +560,57 @@ const Proof = ({ extra }: { extra: ServiceExtra }) => {
 };
 
 /* ── 5. Stack + related ──────────────────────────────────────────────── */
+/** Icons for stack entries that are disciplines rather than tools with a logo. */
+const stackIcons: Record<string, LucideIcon> = {
+  "Brand strategy": Compass,
+  "Logo & visual identity": PenTool,
+  "Personal branding": UserRound,
+  "Company branding": Building2,
+  "Brand voice": MessageSquareQuote,
+  "Social creatives": Images,
+  Wireframing: LayoutTemplate,
+  Prototyping: MousePointerClick,
+  "Website UI": Monitor,
+  "App UI": Smartphone,
+  "Software UI": AppWindow,
+  "Accessibility design": Accessibility,
+  "Cross-platform": Layers,
+  "App testing & QA": Bug,
+  ERP: Boxes,
+  CRM: Users,
+  "Inventory management": Package,
+  "HR & payroll": Wallet,
+  "Workflow automation": Workflow,
+  "Document management": FileText,
+  SEO: Search,
+  "AEO, AIO & GEO": Sparkles,
+  "Technical SEO": Code2,
+  "Content marketing": PenLine,
+  "Email automation": Mail,
+  Klaviyo: MailCheck,
+  "Podcast management": Mic,
+  "Social media management": Share2,
+  "Performance marketing": TrendingUp,
+  "Influencer marketing": Megaphone,
+  "Video marketing": Video,
+  Retargeting: Repeat,
+  "AI & machine learning": Brain,
+  "AI chatbots": Bot,
+  Recommendations: Lightbulb,
+  "Power BI": BarChart3,
+  "Data warehousing": Database,
+  "Data engineering": Cable,
+  "Data visualisation": PieChart,
+  "Advanced analytics": LineChart,
+};
+
+const StackMark = ({ name }: { name: string }) => {
+  const logo = techLogo(name);
+  if (logo) return <Image src={logo} alt="" width={36} height={36} unoptimized className="w-8 h-8 md:w-9 md:h-9" />;
+  const Icon = stackIcons[name] ?? Sparkles;
+  return <Icon className="w-8 h-8 md:w-9 md:h-9 text-[#D4AF37]" strokeWidth={1.25} />;
+};
+
 const Stack = ({ extra }: { extra: ServiceExtra }) => (
   <section className="relative overflow-hidden bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24">
     <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-12 lg:gap-10">
@@ -486,9 +638,11 @@ const Stack = ({ extra }: { extra: ServiceExtra }) => (
             transition={{ duration: 0.6, ease, delay: Math.min(i, 12) * 0.04 }}
             className="group relative bg-[#0A0A0A] p-5 md:p-7 min-h-[120px] md:min-h-[150px] flex flex-col justify-between transition-colors duration-500 hover:bg-[#15130c]"
           >
-            <span className="flex items-center justify-between text-xs text-white/30 tabular-nums">
+            <span className="flex items-start justify-between text-xs text-white/30 tabular-nums">
+              <span className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:scale-110">
+                <StackMark name={s} />
+              </span>
               {pad(i + 1)}
-              <span className="w-1.5 h-1.5 rotate-45 bg-white/20 transition-colors duration-500 group-hover:bg-[#D4AF37]" />
             </span>
             <span className="text-lg md:text-2xl font-semibold tracking-[-0.03em] leading-tight transition-colors duration-500 group-hover:text-[#D4AF37]">{s}</span>
           </motion.li>

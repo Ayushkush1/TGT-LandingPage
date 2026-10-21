@@ -132,7 +132,7 @@ export const serviceExtras: Record<ServiceSlug, ServiceExtra> = {
     work: [
       "PCT Suite", "Himalyanagro", "Encotec Energy", "LFCS Schools", "Cinemac Animation", "Fee-Fam", "D;Space",
       "UnivDatos", "Kumar Power", "Bir Credit Solution", "Indian Vastu Experts", "Kokalachi", "The Social Beacon",
-      "The Embassy Inn", "Seven Star Counsel India", "Label", "VCARE InfoTech",
+      "The Embassy Inn", "The Seven Stars", "Counsel India", "Label", "VCARE InfoTech",
     ],
     related: ["ui-ux-designing", "search-content-marketing", "custom-software-development"],
   },

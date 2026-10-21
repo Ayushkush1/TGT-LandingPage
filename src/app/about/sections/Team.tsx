@@ -18,6 +18,7 @@ interface Person {
   role: string;
   bio: string;
   photo?: string;
+  tag?: string;
   linkedin?: string;
 }
 
@@ -80,6 +81,11 @@ const MemberCard = ({ person, index, lead }: { person: Person; index: number; le
           )}
         >
           {person.name}
+          {person.tag && (
+            <span className="ml-2 align-middle font-serif italic font-normal tracking-normal text-sm text-[#B8932A]">
+              {person.tag}
+            </span>
+          )}
         </p>
         <p className="mt-2 text-[13px] md:text-sm text-[#0B0F29]/60 leading-relaxed line-clamp-2 md:line-clamp-3">{person.bio}</p>
         {person.linkedin && (
@@ -123,7 +129,7 @@ export const Team = () => {
 
         {[
           { label: "Leadership", list: leadership, lead: true },
-          { label: "Core team", list: crew, lead: false },
+          { label: "Our Pillars", list: crew, lead: false },
         ].map((group) => (
           <div key={group.label} className="mt-10 md:mt-16">
             <p className="flex items-center gap-4 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">

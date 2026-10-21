@@ -96,14 +96,16 @@ export const team: {
   role: string;
   bio: string;
   photo?: string;
+  /** Small side label shown next to the name, e.g. "Global". */
+  tag?: string;
   linkedin?: string;
 }[] = [
   { name: "Meghna Tiwari", photo: "/images/team/meghna-studio.webp", role: "Founder & CEO", bio: "The fuel that powers the company's vision, growth and innovation." },
   { name: "Saubhagya R Swain", photo: "/images/team/saubhagya-studio.webp", role: "Co-Founder & Director", bio: "The powerhouse of the company." },
   { name: "Mitali Gulati", photo: "/images/team/mitali-studio.webp", role: "CGO", bio: "The driving force that makes sure the business grows consistently." },
+  { name: "Pranay", tag: "Global", photo: "/images/team/pranay.webp", role: "Strategic Technical Partner", bio: "Shapes technology strategy and architecture so every product we build is ready to scale." },
   { name: "Ayush", photo: "/images/team/ayush-full.webp", role: "Tech Lead, IT", bio: "Leads end-to-end technical architecture and development to accelerate project success." },
   { name: "Kushal", photo: "/images/team/kushal-studio.webp", role: "Lead, Digital Marketing", bio: "Drives operational excellence, strategic growth and performance-focused digital marketing." },
-  { name: "Pranay", photo: "/images/team/pranay.webp", role: "Strategic Technical Partner", bio: "Shapes technology strategy and architecture so every product we build is ready to scale." },
   { name: "Sudeesh", photo: "/images/team/sudeesh-studio.webp", role: "Full-Stack Developer", bio: "Builds scalable, high-performance web applications." },
   { name: "Himanshu", photo: "/images/team/himanshu-studio.webp", role: "DevOps", bio: "Specialises in cloud infrastructure, CI/CD automation and scalable, secure systems." },
   { name: "Sejal", photo: "/images/team/sejal-studio.webp", role: "LinkedIn Manager", bio: "Manages LinkedIn strategy, content and engagement to strengthen clients' online presence." },

@@ -24,8 +24,20 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useCMSStore, type NavLink } from "@/store/useCMSStore";
 import { useSectionContent } from "@/content/useSectionContent";
+import { insightsNav } from "@/content/insights";
+import { Cover } from "@/components/sections/Insights";
+import { blogSlug } from "@/lib/cmsData";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+
+/** Adds the Insights dropdown (before Contact) when the CMS nav doesn't have one yet. */
+const withInsights = (links: NavLink[] | null): NavLink[] | null => {
+  if (!links || links.some((l) => l.title.trim().toLowerCase() === "insights")) return links;
+  const insights: NavLink = { title: insightsNav.title, link: insightsNav.dropdown[0].link, type: "Dropdown", dropdown: insightsNav.dropdown };
+  const contact = links.findIndex((l) => /contact/i.test(l.title));
+  const at = contact === -1 ? links.length : contact;
+  return [...links.slice(0, at), insights, ...links.slice(at)];
+};
 
 const Logo = ({ light }: { light: boolean }) => (
   <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="The Gold Technologies home page">
@@ -220,7 +232,7 @@ const ServicesPanel = ({ onAudit }: { onAudit: () => void }) => {
 
 /** Generic dropdown panel (e.g. Products) for CMS dropdown links. */
 const LinksPanel = ({ items }: { items: NavLink[] }) => (
-  <div className="grid grid-cols-3 gap-2">
+  <div className={cn("grid gap-2", items.length === 2 ? "grid-cols-2" : "grid-cols-3")}>
     {items.map((item) => {
       const external = /^https?:\/\//.test(item.link);
       return (
@@ -441,6 +453,65 @@ const ProductsPanel = ({ items, images }: { items: NavLink[]; images: Map<string
   );
 };
 
+/**
+ * Insights dropdown: the sections on the left (same link style as Services),
+ * the latest blog posts with their cover images on the right.
+ */
+const InsightsPanel = ({ items }: { items: NavLink[] }) => {
+  const blogs = (useCMSStore((s) => s.homeData?.BlogSection?.blogs) ?? []).slice(0, 3);
+  return (
+    <div className="grid grid-cols-12 gap-10">
+      <div className="col-span-4 flex flex-col">
+        <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">({insightsNav.title})</p>
+        <ul className="mt-3">
+          {items.map((item, i) => (
+            <li key={item.title} className="border-b border-white/10">
+              <Link href={item.link} className="group/roll flex items-start gap-4 rounded-lg -mx-2 px-2 py-4 hover:bg-white/[0.04]">
+                <span className="font-serif italic text-sm text-[#D4AF37] pt-1">{String(i + 1).padStart(2, "0")}</span>
+                <span className="flex-1 min-w-0">
+                  <span className="flex items-center justify-between gap-3 text-xl font-semibold tracking-tight text-white">
+                    <RollText>{item.title}</RollText>
+                    <HoverArrow />
+                  </span>
+                  {item.desc && <span className="mt-1 block text-xs text-white/45 leading-relaxed">{item.desc}</span>}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="col-span-8">
+        <p className="flex items-baseline justify-between text-[11px] uppercase tracking-[0.25em] text-white/40">
+          <span>(Latest from the blog)</span>
+          <Link href="/blog" className="group/roll inline-flex items-center gap-1.5 font-serif italic normal-case tracking-normal text-sm text-[#D4AF37]">
+            <RollText>All articles</RollText>
+            <HoverArrow className="!text-[#D4AF37]" />
+          </Link>
+        </p>
+        <ul className="mt-4 grid grid-cols-3 gap-4">
+          {blogs.map((blog) => (
+            <li key={blog.title}>
+              <Link href={`/blog/${blogSlug(blog.title)}`} className="group block">
+                <span className="relative block aspect-[16/10] rounded-xl overflow-hidden bg-[#141414] ring-1 ring-white/10">
+                  <Cover blog={blog} sizes="260px" />
+                </span>
+                <span className="mt-3 block text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] truncate">
+                  {blog.category?.split("/")[0]?.trim()}
+                  {blog.readTime && <span className="text-white/40"> · {blog.readTime}</span>}
+                </span>
+                <span className="mt-1.5 block text-sm font-semibold leading-snug text-white/85 line-clamp-2 transition-colors group-hover:text-white">
+                  {blog.title}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 /** Display label for a CMS nav link ("Service" reads as "Services"). */
 const navLabel = (title: string) => (title.trim() === "Service" ? "Services" : title);
 
@@ -550,6 +621,19 @@ const SiteMenu = ({
               </div>
 
               <div>
+                <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">({insightsNav.title})</p>
+                <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                  {insightsNav.dropdown.map((item) => (
+                    <li key={item.link}>
+                      <Link href={item.link} onClick={onClose} className="text-white/60 hover:text-white transition-colors">
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
                 <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">(Say hello)</p>
                 <a
                   href={`mailto:${email}`}
@@ -604,7 +688,8 @@ const SiteMenu = ({
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const navLinks = useCMSStore((state) => state.navLinks);
+  const cmsNavLinks = useCMSStore((state) => state.navLinks);
+  const navLinks = React.useMemo(() => withInsights(cmsNavLinks), [cmsNavLinks]);
 
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
@@ -654,6 +739,15 @@ export const Navbar = () => {
   const light = true;
   const activePanel = navLinks?.find((l) => l.title === panel && l.dropdown?.length);
   const productImages = useProductImages();
+  const panelKind = !activePanel
+    ? null
+    : isServicesDropdown(activePanel)
+      ? "services"
+      : activePanel.title === insightsNav.title
+        ? "insights"
+        : (activePanel.dropdown ?? []).some((d) => productImages.has(normalise(d.title)))
+          ? "products"
+          : "links";
 
   return (
     <>
@@ -669,18 +763,18 @@ export const Navbar = () => {
           className={cn(
             "mx-auto flex items-center justify-between gap-4 transition-[max-width,margin,padding,background-color,border-color,border-radius] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] border",
             scrolled && !menuOpen
-              ? "max-w-[1180px] mt-3 rounded-full bg-[#0A0A0A]/95 border-white/10 pl-4 pr-2.5 py-2.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)]"
+              ? "max-w-[1240px] mt-3 rounded-full bg-[#0A0A0A]/95 border-white/10 pl-3.5 lg:pl-2.5 pr-2.5 py-2.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)]"
               : "max-w-[1600px] mt-0 rounded-none bg-transparent border-transparent px-2 md:px-5 py-5",
           )}
         >
           <Logo light={light} />
 
           {/* Desktop links */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Main">
+          <nav className="hidden lg:flex items-center" aria-label="Main">
             {navLinks?.map((item) => {
               const hasPanel = item.type === "Dropdown" && !!item.dropdown?.length;
               const linkClass = cn(
-                "group/roll flex items-center gap-1 rounded-full px-4 py-2 text-[14px] font-medium transition-colors",
+                "group/roll flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 xl:px-3 2xl:px-4 py-2 text-[14px] font-medium transition-colors",
                 light ? "text-white/80" : "text-[#0B0F29]/80",
                 panel === item.title &&
                   (light ? "bg-white/10 text-white" : "bg-[#0B0F29]/5 text-[#0B0F29]"),
@@ -730,18 +824,23 @@ export const Navbar = () => {
           </nav>
 
           <div className="flex items-center gap-2 md:gap-3">
-            <ContactIcons light={light} />
+            {/* Mail and phone make room for the links on mid-size desktops */}
+            <div className="lg:hidden 2xl:block">
+              <ContactIcons light={light} />
+            </div>
             <span
               aria-hidden
-              className={cn("hidden lg:block h-8 w-px mx-1", light ? "bg-white/10" : "bg-[#0B0F29]/10")}
+              className={cn("hidden 2xl:block h-8 w-px mx-1", light ? "bg-white/10" : "bg-[#0B0F29]/10")}
             />
             <MagneticButton intensity={0.25} className="hidden lg:block">
               <button
                 onClick={openAudit}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#D4AF37] text-black transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)]"
+                className="flex h-10 items-center gap-2 px-4 rounded-full bg-[#D4AF37] text-black transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)]"
               >
                 <ScanSearch className="w-5 h-5" />
-                <span className="text-[11px] font-bold uppercase tracking-widest">Free website audit</span>
+                <span className="whitespace-nowrap text-[11px] font-bold uppercase tracking-widest">
+                  Free <span className="hidden xl:inline">website </span>audit
+                </span>
               </button>
             </MagneticButton>
             <MenuToggle
@@ -766,7 +865,7 @@ export const Navbar = () => {
               exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
               transition={{ duration: 0.35, ease }}
               className={cn(
-                "hidden lg:block absolute inset-x-0 top-full mx-auto max-w-[1180px]",
+                "hidden lg:block absolute inset-x-0 top-full mx-auto max-w-[1240px]",
                 // The full-width bar has tall padding; tuck the panel up into it
                 // so it sits close to the links. The pill bar needs no offset.
                 scrolled ? "pt-3" : "-mt-3 pt-2",
@@ -775,13 +874,15 @@ export const Navbar = () => {
               <div
                 className={cn(
                   "rounded-[2rem] bg-[#0A0A0A] border border-white/10 p-8 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)]",
-                  // Services and Products share one height; small link panels (About) stay compact.
-                  activePanel.dropdown && activePanel.dropdown.length > 3 && "min-h-[22rem]",
+                  // Services, Products and Insights share one height; small link panels stay compact.
+                  panelKind !== "links" && "min-h-[22rem]",
                 )}
               >
-                {isServicesDropdown(activePanel) ? (
+                {panelKind === "services" ? (
                   <ServicesPanel onAudit={openAudit} />
-                ) : (activePanel.dropdown ?? []).some((d) => productImages.has(normalise(d.title))) ? (
+                ) : panelKind === "insights" ? (
+                  <InsightsPanel items={activePanel.dropdown ?? []} />
+                ) : panelKind === "products" ? (
                   <ProductsPanel items={activePanel.dropdown ?? []} images={productImages} />
                 ) : (
                   <LinksPanel items={activePanel.dropdown ?? []} />

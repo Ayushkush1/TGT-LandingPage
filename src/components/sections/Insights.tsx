@@ -18,7 +18,7 @@ const blogSlug = (title: string) => title.toLowerCase().replace(/\s+/g, "-");
 const topic = (blog: BlogItemData) => blog.category?.split("/")[0]?.trim();
 
 /** Article image; if it is missing or fails to load, a dark editorial tile with the topic. */
-const Cover = ({ blog, sizes }: { blog: BlogItemData; sizes: string }) => {
+export const Cover = ({ blog, sizes }: { blog: BlogItemData; sizes: string }) => {
   const [failed, setFailed] = useState(false);
   return blog.image && !failed ? (
     <Image
@@ -63,7 +63,7 @@ const Arrow = ({ size = "w-12 h-12" }: { size?: string }) => (
 );
 
 /* ── A. Cinematic: the latest article full-bleed with its headline over the image ── */
-const CinematicLayout = ({ blogs }: { blogs: BlogItemData[] }) => {
+export const CinematicLayout = ({ blogs }: { blogs: BlogItemData[] }) => {
   const [lead, ...rest] = blogs;
   return (
     <>
@@ -140,8 +140,8 @@ export const Insights = () => {
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-semibold tracking-[-0.045em] leading-[0.95]">
               {data.headlineMain} <span className="font-serif italic font-normal text-[#D4AF37]">{data.headlineHighlight}</span>
             </h2>
-            {cms?.viewAllUrl && cms.viewAllUrl !== "#" && (
-              <Link href={cms.viewAllUrl} className="group/roll inline-flex items-center gap-2 self-start md:self-auto text-sm font-medium">
+            {blogs.length > 0 && (
+              <Link href={cms?.viewAllUrl && cms.viewAllUrl !== "#" ? cms.viewAllUrl : "/blog"} className="group/roll inline-flex items-center gap-2 self-start md:self-auto text-sm font-medium">
                 <RollText>{data.viewAllLabel}</RollText>
                 <HoverArrow />
               </Link>

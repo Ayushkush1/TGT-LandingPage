@@ -354,7 +354,7 @@ export const growthFooter = {
     { label: "About", href: "/about" },
     { label: "Portfolio", href: "/portfolio" },
     { label: "Products", href: "/products" },
-    { label: "Insights", href: "/#BlogSection" },
+    { label: "Insights", href: "/blog" },
     { label: "Contact", href: "/contactUs" },
   ],
   wordmarkLeft: "THE",
@@ -382,7 +382,7 @@ export const siteMenu = {
     { label: "Work", href: "/portfolio" },
     { label: "Products", href: "/products" },
     { label: "About", href: "/about" },
-    { label: "Insights", href: "/#BlogSection" },
+    { label: "Insights", href: "/blog" },
     { label: "Contact", href: "/#contactUs" },
   ],
 };

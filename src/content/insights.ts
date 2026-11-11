@@ -1,6 +1,7 @@
 /**
  * Insights: the navbar dropdown, the /blog index and the /media press page.
- * Blog posts come from the CMS; press coverage is listed here in `mediaItems`.
+ * Defaults for where the CMS (Static pages → Blog / Media) has none. Blog posts come from the
+ * CMS home BlogSection; press coverage from the CMS Media page (MediaItems).
  */
 
 /** Navbar dropdown, inserted before Contact unless the CMS already has an "Insights" link. */
@@ -21,6 +22,9 @@ export const blogPage = {
   empty: "New articles are on their way. Check back soon.",
   mediaPrompt: "Looking for press coverage?",
   mediaLabel: "See media & articles",
+  mediaUrl: "/media",
+  secondaryLabel: "Read the articles",
+  imageUrl: "", // CMS hero image; empty: the team photo
 };
 
 export const mediaPage = {
@@ -31,6 +35,8 @@ export const mediaPage = {
   listLabel: "(Coverage)",
   empty: "Press coverage is on its way. In the meantime, read our latest articles.",
   blogLabel: "Read the blog",
+  secondaryLabel: "See the coverage",
+  imageUrl: "", // CMS hero image; empty: the team photo
 };
 
 export interface MediaItem {

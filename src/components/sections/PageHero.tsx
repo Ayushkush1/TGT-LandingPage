@@ -6,10 +6,11 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { siteDefaults } from "@/content/site";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
-/** Default hero photo (the team at work), used unless a page passes its own image. */
-const DEFAULT_IMAGE = { src: "/images/hero/team.webp", alt: "The Gold Technologies team at work" };
+/** Alt text of the fallback hero photo (the team at work), shown when a hero has no image. */
+const DEFAULT_ALT = "The Gold Technologies team at work";
 
 interface Cta {
   label: string;
@@ -39,7 +40,7 @@ export const PageHero = ({
   description,
   primary,
   secondary,
-  image = DEFAULT_IMAGE,
+  image: pageImage,
   facts = [],
   srPrefix,
   compact,
@@ -54,8 +55,8 @@ export const PageHero = ({
   primary?: Cta;
   /** In-page anchor; shown with a down arrow. */
   secondary?: Cta;
-  /** Defaults to the team photo; case studies and articles pass their own. */
-  image?: { src: string; alt: string };
+  /** The page's hero image (from its CMS hero); without one, the team photo. */
+  image?: { src?: string; alt: string };
   /** Short facts listed in the details bar. */
   facts?: string[];
   /** Extra screen-reader text read before the headline, e.g. the service name. */
@@ -63,6 +64,8 @@ export const PageHero = ({
   /** Smaller headline for long words, e.g. client names. */
   compact?: boolean;
 }) => {
+  // Each page's hero image comes from its CMS hero section
+  const image = { src: pageImage?.src || siteDefaults.pageHero, alt: pageImage?.src ? pageImage.alt : DEFAULT_ALT };
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);

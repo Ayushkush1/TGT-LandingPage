@@ -6,19 +6,25 @@ import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
-import { mediaItems, mediaPage } from "@/content/insights";
+import { mediaItems as mediaDefaults, mediaPage as mediaPageDefaults, type MediaItem } from "@/content/insights";
+import { usePageSection } from "@/content/usePageSection";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /** Press coverage as an editorial index: outlet in gold, headline, then date and type. */
-export const MediaIndex = () => (
+export const MediaIndex = () => {
+  // CMS: Static pages → Media (MediaIndex, MediaItems)
+  const mediaPage = usePageSection("mediaData", "MediaIndex", mediaPageDefaults);
+  const mediaItems = usePageSection("mediaData", "MediaItems", { items: mediaDefaults as MediaItem[] }).items;
+  return (
   <>
     <PageHero
       label={mediaPage.label}
       top={mediaPage.top}
       highlight={mediaPage.highlight}
       description={mediaPage.description}
-      secondary={{ label: "See the coverage", href: "#coverage" }}
+      secondary={{ label: mediaPage.secondaryLabel, href: "#coverage" }}
+      image={{ src: mediaPage.imageUrl, alt: "" }}
       facts={mediaItems.length > 0 ? [`${mediaItems.length} features`] : []}
     />
 
@@ -78,4 +84,5 @@ export const MediaIndex = () => (
       </div>
     </section>
   </>
-);
+  );
+};

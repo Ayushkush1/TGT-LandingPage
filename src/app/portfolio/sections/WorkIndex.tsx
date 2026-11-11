@@ -8,6 +8,7 @@ import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { servicePillars, type PillarId } from "@/content/growth";
 import { portfolioContent } from "@/content/portfolio";
+import { usePageSection } from "@/content/usePageSection";
 import { useProjects, type Project } from "../useProjects";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -16,7 +17,7 @@ const pillarName = (id: PillarId) => servicePillars.pillars.find((p) => p.id ===
 
 /** One case study: large image with a "View case" disc on hover, details underneath. */
 // forwardRef: AnimatePresence "popLayout" measures the exiting card through its ref.
-const ProjectCard = forwardRef<HTMLLIElement, { project: Project; index: number }>(({ project, index }, ref) => (
+const ProjectCard = forwardRef<HTMLLIElement, { project: Project; index: number; viewLabel: string }>(({ project, index, viewLabel }, ref) => (
   <motion.li
     ref={ref}
     layout
@@ -41,7 +42,7 @@ const ProjectCard = forwardRef<HTMLLIElement, { project: Project; index: number 
         {/* Gold disc that blooms in the middle on hover */}
         <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#D4AF37] text-black flex flex-col items-center justify-center gap-1 text-xs font-semibold uppercase tracking-[0.15em] scale-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100">
           <ArrowUpRight className="w-5 h-5" />
-          {portfolioContent.index.viewLabel}
+          {viewLabel}
         </span>
 
         {project.stats.length > 0 && (
@@ -78,7 +79,7 @@ ProjectCard.displayName = "ProjectCard";
 
 /** Case study index: pillar filters over a staggered two-column grid. */
 export const WorkIndex = () => {
-  const copy = portfolioContent.index;
+  const copy = usePageSection("portfolioData", "main", portfolioContent.index, "index");
   const projects = useProjects();
   const [filter, setFilter] = useState<PillarId | "all">("all");
 
@@ -138,7 +139,7 @@ export const WorkIndex = () => {
             <ul key={c} className={cn("flex flex-col gap-12 md:gap-20", c === 1 && "mt-12 md:mt-40")}>
               <AnimatePresence mode="popLayout" initial={false}>
                 {col.map((p) => (
-                  <ProjectCard key={p.title} project={p} index={shown.indexOf(p)} />
+                  <ProjectCard viewLabel={copy.viewLabel} key={p.title} project={p} index={shown.indexOf(p)} />
                 ))}
               </AnimatePresence>
             </ul>

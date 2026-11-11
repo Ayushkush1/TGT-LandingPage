@@ -13,6 +13,7 @@ export const productsContent = {
     primaryUrl: BOOKING_URL,
     secondaryLabel: "See the products",
     secondaryUrl: "#products",
+    imageUrl: "", // CMS hero image; empty: the team photo
   },
   grid: {
     label: "(The suite)",

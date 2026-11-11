@@ -1,4 +1,7 @@
-/** Contact page copy. Email, phone, addresses and the map come from the CMS. */
+/**
+ * Default Contact page copy, used where the CMS (Static pages → Contact) has none.
+ * Email, phone, socials and office addresses come from the CMS Social Media & Footer.
+ */
 
 const BOOKING_URL = "https://calendar.app.google/5nNHP69fUR5WEMvt9";
 
@@ -13,6 +16,7 @@ export const contactContent = {
     primaryUrl: BOOKING_URL,
     secondaryLabel: "Send a brief",
     secondaryUrl: "#brief",
+    imageUrl: "", // CMS hero image; empty: the team photo
   },
   direct: {
     label: "(Direct lines)",
@@ -26,5 +30,6 @@ export const contactContent = {
     headlineMain: "Two offices,",
     headlineHighlight: "one team.",
     directionsLabel: "Get directions",
+    mapEmbedUrl: "",
   },
 };

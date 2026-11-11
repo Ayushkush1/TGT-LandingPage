@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { aboutContent } from "@/content/about";
+import { usePageSection } from "@/content/usePageSection";
 
 const Word = ({
   word,
@@ -28,7 +29,7 @@ const Word = ({
 
 /** Who we are: statement that lights up word by word as it scrolls, plus key numbers. */
 export const AboutStory = () => {
-  const copy = aboutContent.story;
+  const copy = usePageSection("aboutData", "AboutStory", aboutContent.story);
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.55"] });
   const words = copy.text.split(" ");

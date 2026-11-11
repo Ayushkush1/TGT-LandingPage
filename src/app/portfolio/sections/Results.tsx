@@ -2,12 +2,13 @@
 
 import { motion } from "framer-motion";
 import { portfolioContent } from "@/content/portfolio";
+import { usePageSection } from "@/content/usePageSection";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /** Dark band of headline numbers between the work and the testimonials. */
 export const Results = () => {
-  const copy = portfolioContent.results;
+  const copy = usePageSection("portfolioData", "main", portfolioContent.results, "results");
 
   return (
     <section className="bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24">

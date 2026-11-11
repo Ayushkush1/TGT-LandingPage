@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Play } from "lucide-react";
 import { aboutContent } from "@/content/about";
-import { useCMSStore } from "@/store/useCMSStore";
+import { usePageSection } from "@/content/usePageSection";
 
 /** YouTube video id from an embed/watch/short URL. */
 const youtubeId = (url = "") =>
@@ -14,10 +14,9 @@ const youtubeId = (url = "") =>
  * player (≈1MB of scripts) when the visitor presses play.
  */
 export const AboutFilm = () => {
-  const copy = aboutContent.film;
-  const video = useCMSStore((s) => s.aboutData?.VideoSection);
+  const copy = usePageSection("aboutData", "AboutFilm", aboutContent.film);
   const [playing, setPlaying] = useState(false);
-  const id = youtubeId(video?.videoUrl);
+  const id = youtubeId(copy.videoUrl);
   if (!id) return null;
 
   return (
@@ -30,8 +29,8 @@ export const AboutFilm = () => {
               {copy.headlineMain}{" "}
               <span className="font-serif italic font-normal text-[#D4AF37]">{copy.headlineHighlight}</span>
             </h2>
-            {video?.descriptionText && (
-              <p className="max-w-sm text-white/60 leading-relaxed">{video.descriptionText}</p>
+            {copy.descriptionText && (
+              <p className="max-w-sm text-white/60 leading-relaxed">{copy.descriptionText}</p>
             )}
           </div>
         </div>

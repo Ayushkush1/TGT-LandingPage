@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { aboutContent, team } from "@/content/about";
-import { useCMSStore } from "@/store/useCMSStore";
+import { usePageSection } from "@/content/usePageSection";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { RollText } from "@/components/ui/RollText";
 
@@ -27,20 +27,16 @@ const cleanUrl = (url?: string) => {
   const u = (url || "").trim().replace(/["'\s]+$/, "");
   return /^https?:\/\//.test(u) ? u : undefined;
 };
-const firstName = (name: string) => name.trim().split(/\s+/)[0].toLowerCase();
 
-/** Team from the content file; LinkedIn links come from the CMS when they're the person's own. */
-function usePeople(): Person[] {
-  const cms = useCMSStore((s) => s.aboutData?.OurTeam?.members);
-  return useMemo(() => {
-    const members = cms ?? [];
-    return team.map((p) => {
-      const url = cleanUrl(members.find((m) => firstName(m.name) === firstName(p.name))?.linkedinUrl);
-      // Several CMS entries point at the founder's profile; only keep unique links.
-      const own = url && members.filter((m) => cleanUrl(m.linkedinUrl) === url).length === 1 ? url : undefined;
-      return { ...p, linkedin: p.linkedin ?? own };
-    });
-  }, [cms]);
+/** Team members (CMS: About → Team), else the default list in content/about.ts. */
+function usePeople(members: Person[]): Person[] {
+  return useMemo(
+    () =>
+      members
+        .filter((m) => m?.name?.trim())
+        .map((m) => ({ ...m, photo: m.photo || undefined, tag: m.tag || undefined, linkedin: cleanUrl(m.linkedin) })),
+    [members],
+  );
 }
 
 const MemberCard = ({ person, index, lead }: { person: Person; index: number; lead: boolean }) => (
@@ -108,8 +104,8 @@ const MemberCard = ({ person, index, lead }: { person: Person; index: number; le
 
 /** Team: leadership first, then the core team, as light editorial cards with every face visible. */
 export const Team = () => {
-  const copy = aboutContent.team;
-  const people = usePeople();
+  const copy = usePageSection("aboutData", "Team", { ...aboutContent.team, members: team as Person[] });
+  const people = usePeople(copy.members);
   const leadership = people.slice(0, LEADERSHIP_COUNT);
   const crew = people.slice(LEADERSHIP_COUNT);
 

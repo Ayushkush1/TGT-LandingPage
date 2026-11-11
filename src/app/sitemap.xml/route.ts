@@ -1,9 +1,12 @@
-import { NextResponse } from "next/server";
+import { cmsHeaders, cmsUrl } from "@/lib/cmsServer";
+
+// Read fresh from the CMS on every request
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const cmsApiUrl = process.env.NEXT_PUBLIC_CMS_API_URL || "https://tgt-cms.vercel.app";
   try {
-    const res = await fetch(`${cmsApiUrl}/api/seo/sitemap`, {
+    const res = await fetch(cmsUrl("seo/sitemap"), {
+      headers: cmsHeaders(),
       cache: "no-store",
     });
 

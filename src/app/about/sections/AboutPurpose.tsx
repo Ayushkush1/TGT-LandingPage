@@ -3,12 +3,13 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { aboutContent } from "@/content/about";
+import { usePageSection } from "@/content/usePageSection";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /** Mission & vision as two editorial cards, with the commitments underneath. */
 export const AboutPurpose = () => {
-  const copy = aboutContent.purpose;
+  const copy = usePageSection("aboutData", "AboutPurpose", aboutContent.purpose);
 
   return (
     <section className="bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24">

@@ -2,11 +2,12 @@
 
 import { PageHero } from "@/components/sections/PageHero";
 import { portfolioContent } from "@/content/portfolio";
+import { usePageSection } from "@/content/usePageSection";
 import { useProjects } from "../useProjects";
 
 /** Portfolio hero: shared page hero; the facts lead with the featured case study's result. */
 export const PortfolioHero = () => {
-  const copy = portfolioContent.hero;
+  const copy = usePageSection("portfolioData", "main", portfolioContent.hero, "hero");
   const projects = useProjects();
   const featured = projects[0];
   const result = featured?.stats[0];
@@ -25,6 +26,7 @@ export const PortfolioHero = () => {
       description={copy.description}
       primary={{ label: copy.primaryLabel, href: copy.primaryUrl }}
       secondary={{ label: copy.secondaryLabel, href: copy.secondaryUrl }}
+      image={{ src: copy.imageUrl, alt: "" }}
       facts={facts}
     />
   );

@@ -14,18 +14,33 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useSectionContent } from "@/content/useSectionContent";
+import { useSiteFooter, type SiteFooter } from "@/content/site";
 import { useCMSStore } from "@/store/useCMSStore";
 
 // Official DMCA badge and status page for thegoldtechnologies.com.
 const DMCA_ID = "174176c9-e0fd-4010-b0f5-50e6ed21d715";
 
-/** Original "Women Owned" and DMCA badges, shown after the legal links. */
-const TrustBadges = () => (
+/** Footer badges from the CMS (e.g. "Women Owned") and the DMCA badge, shown after the legal links. */
+const TrustBadges = ({ badges }: { badges: SiteFooter["badges"] }) => (
   <div className="flex items-center gap-3">
-    <span className="inline-flex items-center h-9 rounded-md bg-white px-2.5" title="Women owned business">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/women-owned-logo.webp" alt="Women Owned business" width={61} height={28} loading="lazy" decoding="async" className="h-7 w-auto" />
-    </span>
+    {badges.map((badge) => {
+      const image = (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={badge.image} alt={badge.alt} height={28} loading="lazy" decoding="async" className="h-7 w-auto" />
+        </>
+      );
+      const box = "inline-flex items-center h-9 rounded-md bg-white px-2.5";
+      return badge.link ? (
+        <a key={badge.image} href={badge.link} target="_blank" rel="noopener noreferrer" title={badge.alt} className={box}>
+          {image}
+        </a>
+      ) : (
+        <span key={badge.image} className={box} title={badge.alt}>
+          {image}
+        </span>
+      );
+    })}
     <a
       href={`https://www.dmca.com/Protection/Status.aspx?ID=${DMCA_ID}`}
       target="_blank"
@@ -147,7 +162,7 @@ function useOfficeTimes() {
 }
 
 export const Footer = () => {
-  const data = useCMSStore((state) => state.homeData?.FooterCMS);
+  const site = useSiteFooter();
   const copy = useSectionContent("GrowthFooter");
   const times = useOfficeTimes();
 
@@ -161,26 +176,26 @@ export const Footer = () => {
   const badgeRotate = useTransform(scrollYProgress, [0, 1], [-90, 90]);
 
   // Company name split as written in the CMS: "THE" · "GOLD TECH" · "NOLOGIES".
-  const wordmarkLeft = (data?.leftText || copy.wordmarkLeft).trim();
-  const wordmark = (data?.centerText || copy.wordmark).trim();
-  const wordmarkRight = (data?.rightText || copy.wordmarkRight).trim();
+  const wordmarkLeft = (site.wordmark.left || copy.wordmarkLeft).trim();
+  const wordmark = (site.wordmark.center || copy.wordmark).trim();
+  const wordmarkRight = (site.wordmark.right || copy.wordmarkRight).trim();
   const fullName = `${wordmarkLeft} ${wordmark}${wordmarkRight}`;
   const labelOpacity = useTransform(scrollYProgress, [0.65, 0.95], [0, 1]);
   const labelY = useTransform(scrollYProgress, [0.65, 0.95], [20, 0]);
-  const offices = [
-    { country: data?.loc1Country, address: data?.loc1Address, time: times[0] },
-    { country: data?.loc2Country, address: data?.loc2Address, time: times[1] },
-  ].filter((o) => o.country);
+  const offices = site.offices
+    .slice(0, 2)
+    .map((office, i) => ({ ...office, time: times[i] }))
+    .filter((o) => o.country);
   const pillars = useSectionContent("ServicePillars").pillars;
   // A few featured products (not the whole catalogue)
   const products = (useCMSStore((state) => state.productData?.main?.products) ?? [])
     .filter((p) => p.title && p.link)
     .slice(0, FOOTER_PRODUCT_COUNT);
   const socials = [
-    { Icon: Linkedin, url: data?.linkedinUrl, label: "LinkedIn" },
-    { Icon: Instagram, url: data?.instagramUrl, label: "Instagram" },
-    { Icon: XIcon, url: data?.twitterUrl, label: "X" },
-    { Icon: Facebook, url: data?.facebookUrl, label: "Facebook" },
+    { Icon: Linkedin, url: site.socials.linkedin, label: "LinkedIn" },
+    { Icon: Instagram, url: site.socials.instagram, label: "Instagram" },
+    { Icon: XIcon, url: site.socials.twitter, label: "X" },
+    { Icon: Facebook, url: site.socials.facebook, label: "Facebook" },
   ].filter((s) => s.url);
 
   return (
@@ -199,7 +214,7 @@ export const Footer = () => {
           <div>
             <Link href="/" className="inline-flex items-center gap-3" aria-label="The Gold Technologies home page">
               <Image
-                src="/logo.jpeg"
+                src={site.logo}
                 alt=""
                 width={44}
                 height={44}
@@ -228,18 +243,18 @@ export const Footer = () => {
 
           <div>
             <p className="h-5 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
-            {data?.emailAddress && (
+            {site.email && (
               <a
-                href={`mailto:${data.emailAddress}`}
+                href={`mailto:${site.email}`}
                 className="group mt-2 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white break-all xl:break-normal xl:whitespace-nowrap"
               >
-                <span className="border-b border-transparent group-hover:border-[#D4AF37]">{data.emailAddress}</span>
+                <span className="border-b border-transparent group-hover:border-[#D4AF37]">{site.email}</span>
                 <ArrowUpRight className="w-4 h-4 shrink-0 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
               </a>
             )}
-            {data?.phoneNumber && (
-              <a href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`} className="mt-1.5 block text-sm text-white/55 hover:text-white transition-colors">
-                {data.phoneNumber.trim()}
+            {site.phone && (
+              <a href={`tel:${site.phone.replace(/\s+/g, "")}`} className="mt-1.5 block text-sm text-white/55 hover:text-white transition-colors">
+                {site.phone}
               </a>
             )}
           </div>
@@ -382,7 +397,7 @@ export const Footer = () => {
             <span>© {new Date().getFullYear()} The Gold Technologies</span>
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
-            <TrustBadges />
+            <TrustBadges badges={site.badges} />
           </div>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

@@ -3,31 +3,33 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { GrowthCTA } from "@/components/sections/GrowthCTA";
+import { CMSPageData } from "@/components/CMSDataInitializer";
+import { RenderSchema } from "@/components/RenderSchema";
+import { getPageSEO, loadPagesState, pageMetadata } from "@/lib/cms";
 import { BlogIndex } from "./BlogIndex";
 
-const title = "Blog | The Gold Technologies";
-const description =
-  "Practical guides on websites, SEO, software and digital marketing from The Gold Technologies team.";
+export const generateMetadata = (): Promise<Metadata> =>
+  pageMetadata("blog", {
+    title: "Blog | The Gold Technologies",
+    description: "Practical guides on websites, SEO, software and digital marketing from The Gold Technologies team.",
+  });
 
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: { title, description },
-  twitter: { card: "summary_large_image", title, description },
-};
-
-export default function BlogPage() {
+export default async function BlogPage() {
+  const [seo, cms] = await Promise.all([getPageSEO("blog"), loadPagesState("blog")]);
   return (
-    <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
-      <SmoothScroll />
-      <Navbar />
-      <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-        <BlogIndex />
-        <GrowthCTA />
-      </main>
-      <div className="bg-[#F4F1EA]">
-        <Footer />
+    <CMSPageData state={cms}>
+      <RenderSchema schema={seo?.schema} id="blog-schema" />
+      <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
+        <SmoothScroll />
+        <Navbar />
+        <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
+          <BlogIndex />
+          <GrowthCTA />
+        </main>
+        <div className="bg-[#F4F1EA]">
+          <Footer />
+        </div>
       </div>
-    </div>
+    </CMSPageData>
   );
 }

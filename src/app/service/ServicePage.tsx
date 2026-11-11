@@ -24,8 +24,8 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { servicePillars } from "@/content/growth";
 import { serviceExtras, servicePage, type ServiceExtra, type ServiceSlug } from "@/content/services";
-import { clientLogos } from "@/content/clients";
-import { techLogo } from "@/content/tech";
+import { useClientLogos } from "@/content/clients";
+import { useTechLogo } from "@/content/tech";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -40,12 +40,37 @@ type CmsItem = {
 
 interface CmsService {
   hero?: {
+    name?: string;
+    pillar?: string;
     paragraphs?: string[];
     pillars?: { number?: string; title: string; desc: string }[];
     imageUrl?: string;
     headingLine1?: string;
+    headingLine2?: string;
   };
   services?: CmsItem[];
+  work?: string[];
+  stack?: string[];
+  related?: string[];
+  proof?: ServiceExtra["proof"];
+}
+
+const filled = <T,>(list?: T[]) => (Array.isArray(list) && list.length > 0 ? list : undefined);
+
+/** The CMS service (Static pages → Services) over the page's default copy in content/services.ts. */
+function withCms(local: ServiceExtra, data: CmsService | null): ServiceExtra {
+  const hero = data?.hero;
+  const pillar = servicePillars.pillars.find((p) => p.id === hero?.pillar)?.id ?? local.pillar;
+  return {
+    ...local,
+    name: hero?.name?.trim() || local.name,
+    pillar,
+    promise: [hero?.headingLine1?.trim() || local.promise[0], hero?.headingLine2?.trim() || local.promise[1]],
+    stack: filled(data?.stack?.map((s) => s.trim()).filter(Boolean)) ?? local.stack,
+    work: filled(data?.work?.map((w) => w.trim()).filter(Boolean)) ?? local.work,
+    related: filled(data?.related?.filter((r) => r in serviceExtras)) ?? local.related,
+    proof: filled(data?.proof) ?? local.proof,
+  };
 }
 
 const clean = (t = "") => t.replace(/\s*[—–]\s*/g, ", ").trim();
@@ -57,7 +82,7 @@ const Label = ({ children, dark }: { children: ReactNode; dark?: boolean }) => (
 
 /* ── 1. Hero ─────────────────────────────────────────────────────────── */
 /** Shared page hero (default team photo) with the service's facts. */
-const Hero = ({ extra, intro, items }: { extra: ServiceExtra; intro?: string; items: CmsItem[] }) => {
+const Hero = ({ extra, intro, items, image }: { extra: ServiceExtra; intro?: string; items: CmsItem[]; image?: string }) => {
   const pillar = servicePillars.pillars.find((p) => p.id === extra.pillar);
   const metric = extra.proof?.find((p) => p.metrics?.length)?.metrics?.[0];
   const chips = [
@@ -76,6 +101,7 @@ const Hero = ({ extra, intro, items }: { extra: ServiceExtra; intro?: string; it
         </p>
       }
       srPrefix={extra.name}
+      image={{ src: image, alt: "" }}
       top={extra.promise[0]}
       highlight={extra.promise[1]}
       description={intro ? clean(intro) : undefined}
@@ -219,7 +245,7 @@ const tagIcons: [RegExp, LucideIcon][] = [
 
 /** A tag as a small visual tile: the tool's logo when we have one, otherwise a matching icon. */
 const TagTile = ({ tag }: { tag: string }) => {
-  const logo = techLogo(tag);
+  const logo = useTechLogo()(tag);
   const Icon = tagIcons.find(([re]) => re.test(tag))?.[1] ?? Sparkles;
   return (
     <li className="flex flex-col items-center justify-center gap-2.5 rounded-2xl bg-white/[0.04] ring-1 ring-white/10 px-2 py-4 text-center transition-colors duration-500 hover:bg-white/[0.07] hover:ring-[#D4AF37]/40">
@@ -375,7 +401,7 @@ const Deliver = ({ items }: { items: CmsItem[] }) => {
  * Clients without a logo yet show their name instead.
  */
 const ClientMark = ({ name }: { name: string }) => {
-  const logo = clientLogos[name];
+  const logo = useClientLogos()[name];
   if (!logo) return <span className="whitespace-nowrap text-3xl md:text-5xl font-semibold tracking-[-0.04em] text-[#0B0F29]/55">{name}</span>;
   const height = Math.round(Math.min(76, Math.max(32, 52 * Math.sqrt(2.5 / (logo.width / logo.height)))));
   return (
@@ -396,6 +422,7 @@ const ClientMark = ({ name }: { name: string }) => {
 const Proof = ({ extra }: { extra: ServiceExtra }) => {
   const proof = extra.proof ?? [];
   const work = extra.work ?? [];
+  const clientLogos = useClientLogos();
   const hasLogos = work.some((w) => clientLogos[w]);
   // No case results yet: lead with global reach instead of an empty "results" block.
   const hasResults = proof.length > 0 || work.length > 0;
@@ -608,7 +635,7 @@ const stackIcons: Record<string, LucideIcon> = {
 };
 
 const StackMark = ({ name }: { name: string }) => {
-  const logo = techLogo(name);
+  const logo = useTechLogo()(name);
   if (logo) return <Image src={logo} alt="" width={36} height={36} unoptimized className="w-8 h-8 md:w-9 md:h-9" />;
   const Icon = stackIcons[name] ?? Sparkles;
   return <Icon className="w-8 h-8 md:w-9 md:h-9 text-[#D4AF37]" strokeWidth={1.25} />;
@@ -700,13 +727,13 @@ const Stack = ({ extra }: { extra: ServiceExtra }) => (
 
 /** One template for every /service/[slug] page. */
 export const ServicePage = ({ slug, data }: { slug: ServiceSlug; data: CmsService | null }) => {
-  const extra = serviceExtras[slug];
+  const extra = withCms(serviceExtras[slug], data);
   const hero = data?.hero;
   const items = data?.services ?? [];
 
   return (
     <>
-      <Hero extra={extra} intro={hero?.paragraphs?.[0]} items={items} />
+      <Hero extra={extra} intro={hero?.paragraphs?.[0]} items={items} image={hero?.imageUrl} />
       <Approach text={hero?.paragraphs?.[1]} points={(hero?.pillars ?? []).slice(0, 4)} />
       <Deliver items={items} />
       <Proof extra={extra} />

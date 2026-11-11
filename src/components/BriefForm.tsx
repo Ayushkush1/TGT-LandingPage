@@ -5,9 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSectionContent } from "@/content/useSectionContent";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useSiteFooter } from "@/content/site";
+import { submitEnquiry } from "@/app/actions/submissions";
 
-const ENQUIRY_API = "https://tgt-cms.vercel.app/api/enquiries";
 
 /** Dark, theme-matched dropdown. Multi-select keeps the list open while ticking. */
 const Dropdown = ({
@@ -146,14 +146,8 @@ export const BriefForm = ({
   className?: string;
 }) => {
   const data = useSectionContent("GrowthCTA");
-  const enquiry = useCMSStore((s) => s.homeData?.EnquirySection);
-  const footer = useCMSStore((s) => s.homeData?.FooterCMS);
-  const email = enquiry?.email || footer?.emailAddress || "info@thegoldtechnologies.com";
-  const budgets =
-    enquiry?.budgetOptions
-      ?.split(",")
-      .map((b) => b.trim().replace(/\s*[-–—]\s*/g, " to "))
-      .filter(Boolean) ?? data.budgets;
+  const { email } = useSiteFooter();
+  const budgets = data.budgets; // CMS: Growth CTA
 
   const [interests, setInterests] = useState<string[]>([]);
   const [budget, setBudget] = useState<string | null>(null);
@@ -172,18 +166,15 @@ export const BriefForm = ({
     const message = String(form.get("message") || "");
     setStatus("sending");
     try {
-      const res = await fetch(ENQUIRY_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email: form.get("email"),
-          interestedIn: interests.join(", "),
-          budget: budget ?? "",
-          projectGoals: [company && `Company: ${company}`, message].filter(Boolean).join("\n"),
-        }),
+      // Sent from the website's server to the CMS (app/actions/submissions.ts)
+      const res = await submitEnquiry({
+        name,
+        email: String(form.get("email") || ""),
+        interestedIn: interests.join(", "),
+        budget: budget ?? "",
+        projectGoals: [company && `Company: ${company}`, message].filter(Boolean).join("\n"),
       });
-      if (!res.ok) throw new Error(String(res.status));
+      if (!res.ok) throw new Error(res.error);
       setStatus("sent");
       formEl.reset();
       setInterests([]);

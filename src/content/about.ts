@@ -1,7 +1,7 @@
 /**
- * About page copy for the "all-in-one growth partner" positioning.
- * Images, video and milestones come from the CMS; this file holds the
- * narrative copy around them, including the founder's note.
+ * Default About page copy, used where the CMS (Static pages → About) has none.
+ * Each key matches a CMS section on the About page: hero → AboutHero, story → AboutStory,
+ * purpose → AboutPurpose, founder → FounderNote, journey → Journey, team → Team, film → AboutFilm.
  */
 
 const BOOKING_URL = "https://calendar.app.google/5nNHP69fUR5WEMvt9";
@@ -18,6 +18,7 @@ export const aboutContent = {
     primaryUrl: BOOKING_URL,
     secondaryLabel: "Meet the team",
     secondaryUrl: "#team",
+    imageUrl: "", // CMS hero image; empty: the team photo
   },
   story: {
     label: "(Who we are)",
@@ -59,7 +60,7 @@ export const aboutContent = {
     ],
     name: "Meghna Tiwari",
     role: "Founder & CEO",
-    photo: "/images/founder/meghna-portrait.webp",
+    photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375986/tgt/meghna-portrait-1794375986015.webp",
     backdrop: "Founder's note",
     ctaLabel: "Book a free strategy call",
     ctaUrl: BOOKING_URL,
@@ -68,6 +69,28 @@ export const aboutContent = {
     label: "(Our journey)",
     headlineMain: "Founded in 2023,",
     headlineHighlight: "built on a decade.",
+    milestones: [
+      {
+        year: "2015",
+        title: "The Foundation",
+        description: "Established The Gold Technologies with a core focus on innovative digital solutions and setting a new standard for luxury web experiences."
+      },
+      {
+        year: "2018",
+        title: "Global Expansion",
+        description: "Opened our first international office, securing partnerships with Fortune 500 brands and accelerating our global footprint."
+      },
+      {
+        year: "2021",
+        title: "Transformative Growth",
+        description: "Tripled our workforce and expanded into cutting-edge AI and SaaS architecture, fundamentally shifting our delivery capabilities."
+      },
+      {
+        year: "2024",
+        title: "Industry Leadership",
+        description: "Recognized globally as a premier digital agency, setting the benchmark for performance, design, and reliable software engineering."
+      }
+    ] as { year: string; title: string; description: string }[],
   },
   team: {
     label: "(The team)",
@@ -82,12 +105,14 @@ export const aboutContent = {
     label: "(Inside TGT)",
     headlineMain: "See how we",
     headlineHighlight: "work.",
+    descriptionText: "At The Gold Technologies, we help businesses innovate, grow, and scale through smart, reliable technology solutions tailored to deliver real results.",
+    videoUrl: "https://www.youtube.com/embed/Zp1fuVhlP6o?si=M7ocbQbSEnPKZ0EQ",
   },
 };
 
 /**
  * Current team (from "TGT Company Portfolio_Updated.pdf", page 3). Order = display order.
- * `photo` is optional: drop a file in /public/images/team/ and set it here.
+ * `photo` is optional: upload it in the CMS and set its URL here.
  * Without it, the CMS photo with the same first name is used (if it's a real,
  * unique photo), otherwise an initials tile is shown.
  */
@@ -100,13 +125,13 @@ export const team: {
   tag?: string;
   linkedin?: string;
 }[] = [
-  { name: "Meghna Tiwari", photo: "/images/team/meghna-studio.webp", role: "Founder & CEO", bio: "The fuel that powers the company's vision, growth and innovation." },
-  { name: "Saubhagya R Swain", photo: "/images/team/saubhagya-studio.webp", role: "Co-Founder & Director", bio: "The powerhouse of the company." },
-  { name: "Mitali Gulati", photo: "/images/team/mitali-studio.webp", role: "CGO", bio: "The driving force that makes sure the business grows consistently." },
-  { name: "Pranay", tag: "Global", photo: "/images/team/pranay.webp", role: "Strategic Technical Partner", bio: "Shapes technology strategy and architecture so every product we build is ready to scale." },
-  { name: "Ayush", photo: "/images/team/ayush-full.webp", role: "Tech Lead, IT", bio: "Leads end-to-end technical architecture and development to accelerate project success." },
-  { name: "Kushal", photo: "/images/team/kushal-studio.webp", role: "Lead, Digital Marketing", bio: "Drives operational excellence, strategic growth and performance-focused digital marketing." },
-  { name: "Sudeesh", photo: "/images/team/sudeesh-studio.webp", role: "Full-Stack Developer", bio: "Builds scalable, high-performance web applications." },
-  { name: "Himanshu", photo: "/images/team/himanshu-studio.webp", role: "DevOps", bio: "Specialises in cloud infrastructure, CI/CD automation and scalable, secure systems." },
-  { name: "Sejal", photo: "/images/team/sejal-studio.webp", role: "LinkedIn Manager", bio: "Manages LinkedIn strategy, content and engagement to strengthen clients' online presence." },
+  { name: "Meghna Tiwari", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375984/tgt/meghna-studio-1794375984288.webp", role: "Founder & CEO", bio: "The fuel that powers the company's vision, growth and innovation." },
+  { name: "Saubhagya R Swain", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375985/tgt/saubhagya-studio-1794375985131.webp", role: "Co-Founder & Director", bio: "The powerhouse of the company." },
+  { name: "Mitali Gulati", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375985/tgt/mitali-studio-1794375984989.webp", role: "CGO", bio: "The driving force that makes sure the business grows consistently." },
+  { name: "Pranay", tag: "Global", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375985/tgt/pranay-1794375985074.webp", role: "Strategic Technical Partner", bio: "Shapes technology strategy and architecture so every product we build is ready to scale." },
+  { name: "Ayush", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375983/tgt/ayush-full-1794375983540.webp", role: "Tech Lead, IT", bio: "Leads end-to-end technical architecture and development to accelerate project success." },
+  { name: "Kushal", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375984/tgt/kushal-studio-1794375984285.webp", role: "Lead, Digital Marketing", bio: "Drives operational excellence, strategic growth and performance-focused digital marketing." },
+  { name: "Sudeesh", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375986/tgt/sudeesh-studio-1794375985918.webp", role: "Full-Stack Developer", bio: "Builds scalable, high-performance web applications." },
+  { name: "Himanshu", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375984/tgt/himanshu-studio-1794375984133.webp", role: "DevOps", bio: "Specialises in cloud infrastructure, CI/CD automation and scalable, secure systems." },
+  { name: "Sejal", photo: "https://res.cloudinary.com/dpa93copz/image/upload/v1794375986/tgt/sejal-studio-1794375985559.webp", role: "LinkedIn Manager", bio: "Manages LinkedIn strategy, content and engagement to strengthen clients' online presence." },
 ];

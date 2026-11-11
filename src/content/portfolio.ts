@@ -19,6 +19,7 @@ export const portfolioContent = {
     primaryUrl: BOOKING_URL,
     secondaryLabel: "See the work",
     secondaryUrl: "#work",
+    imageUrl: "", // CMS hero image; empty: the team photo
   },
   index: {
     label: "(Selected work)",

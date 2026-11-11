@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, MotionConfig, useScroll, useTransform } from "framer-motion";
 import { aboutContent } from "@/content/about";
+import { usePageSection } from "@/content/usePageSection";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { RollText } from "@/components/ui/RollText";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -34,7 +35,7 @@ const MaskWord = ({ word, i, gold }: { word: string; i: number; gold?: boolean }
  * All motion is transform / clip-path / stroke only.
  */
 export const FounderNote = () => {
-  const copy = aboutContent.founder;
+  const copy = usePageSection("aboutData", "FounderNote", aboutContent.founder);
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const backdropX = useTransform(scrollYProgress, [0, 1], ["6%", "-22%"]);

@@ -4,7 +4,9 @@ import "./globals.css";
 import Script from "next/script";
 import { CMSDataInitializer } from "@/components/CMSDataInitializer";
 import FooterScripts from "@/components/FooterScripts";
-import { getGlobalSEOData, getInitialCMSState } from "@/lib/cmsServer";
+import { getSite } from "@/lib/cmsServer";
+import { siteState } from "@/lib/cmsData";
+import { loadPagesState } from "@/lib/cms";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -13,9 +15,14 @@ const playfair = Playfair_Display({
   variable: "--font-serif-display",
 });
 
-// Cached for 60s (see cmsServer.ts) so title, description & favicon stay fresh
-// without a CMS round-trip on every request.
-const getGlobalSEO = getGlobalSEOData;
+/** Site-wide settings (cached under the "site" tag, refreshed when the CMS saves them). */
+const getGlobalSEO = async () => (await getSite())?.settings ?? null;
+
+/** Site-wide store data, plus the pages the navbar, footer and CTA use on every route. */
+async function getInitialCMSState() {
+  const [site, pages] = await Promise.all([getSite(), loadPagesState("home", "products")]);
+  return { ...siteState(site), ...pages };
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const globalSEO = await getGlobalSEO();

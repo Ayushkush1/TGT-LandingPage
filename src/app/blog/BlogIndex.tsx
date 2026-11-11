@@ -6,10 +6,12 @@ import { CinematicLayout } from "@/components/sections/Insights";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useCMSStore } from "@/store/useCMSStore";
-import { blogPage } from "@/content/insights";
+import { blogPage as blogDefaults } from "@/content/insights";
+import { usePageSection } from "@/content/usePageSection";
 
 /** Every CMS blog post: the latest full-bleed, the rest as image cards (same layout as the home page). */
 export const BlogIndex = () => {
+  const blogPage = usePageSection("blogData", "BlogIndex", blogDefaults); // CMS: Static pages → Blog
   const blogs = useCMSStore((s) => s.homeData?.BlogSection?.blogs) ?? [];
 
   return (
@@ -19,7 +21,8 @@ export const BlogIndex = () => {
         top={blogPage.top}
         highlight={blogPage.highlight}
         description={blogPage.description}
-        secondary={{ label: "Read the articles", href: "#articles" }}
+        secondary={{ label: blogPage.secondaryLabel, href: "#articles" }}
+        image={{ src: blogPage.imageUrl, alt: "" }}
         facts={blogs.length > 0 ? [`${blogs.length} articles`] : []}
       />
 
@@ -41,7 +44,7 @@ export const BlogIndex = () => {
 
           <div className="mt-14 md:mt-20 pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <p className="text-2xl md:text-3xl font-semibold tracking-[-0.03em]">{blogPage.mediaPrompt}</p>
-            <Link href="/media" className="group/roll inline-flex items-center gap-2 text-sm font-medium text-white/80">
+            <Link href={blogPage.mediaUrl} className="group/roll inline-flex items-center gap-2 text-sm font-medium text-white/80">
               <RollText>{blogPage.mediaLabel}</RollText>
               <HoverArrow />
             </Link>

@@ -10,6 +10,7 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { cn } from "@/lib/utils";
 import { productLinkFixes, productsContent } from "@/content/products";
+import { usePageSection } from "@/content/usePageSection";
 import type { ProductItemData } from "@/store/useCMSStore";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -40,14 +41,26 @@ function useLayout(): Layout {
   return layout;
 }
 
-type Product = ProductItemData & { live: boolean; href: string; domain: string };
+type Product = ProductItemData & { live: boolean; href: string; domain: string; visitLabel: string; domainLabel: string };
 
 /** Applies link fixes and works out where each product should open. */
-const prepare = (products: ProductItemData[]): Product[] =>
+const prepare = (
+  products: ProductItemData[],
+  hero: typeof productsContent.hero,
+  grid: typeof productsContent.grid,
+): Product[] =>
   products.map((p) => {
     const link = (productLinkFixes[p.title.trim()] ?? p.link ?? "").trim();
     const domain = host(link);
-    return { ...p, link, live: domain !== "", href: domain ? link : productsContent.hero.primaryUrl, domain };
+    return {
+      ...p,
+      link,
+      live: domain !== "",
+      href: domain ? link : hero.primaryUrl,
+      domain,
+      visitLabel: domain ? grid.liveLabel : grid.soonLabel,
+      domainLabel: domain || grid.soonLabel,
+    };
   });
 
 /** Product name with its last word set in gold serif italic. */
@@ -73,7 +86,7 @@ const Shot = ({ p, sizes, className }: { p: Product; sizes: string; className?: 
 
 const VisitLink = ({ p }: { p: Product }) => (
   <a href={p.href} target="_blank" rel="noopener noreferrer" className="group/roll inline-flex items-center gap-2 text-sm font-medium text-[#0B0F29]">
-    <RollText>{p.live ? productsContent.grid.liveLabel : productsContent.grid.soonLabel}</RollText>
+    <RollText>{p.visitLabel}</RollText>
     <HoverArrow className="!text-[#0B0F29]/40 group-hover/roll:!text-[#B8932A]" />
   </a>
 );
@@ -192,7 +205,7 @@ const SplitLayout = ({ items }: { items: Product[] }) => {
             <span className="font-serif italic normal-case tracking-normal text-sm text-[#B8932A]">
               {pad(active + 1)} / {pad(items.length)}
             </span>
-            <span className="truncate">{current?.domain || productsContent.grid.soonLabel}</span>
+            <span className="truncate">{current?.domainLabel}</span>
           </div>
         </div>
       </div>
@@ -260,7 +273,7 @@ const SpreadLayout = ({ items }: { items: Product[] }) => (
               </div>
               <figcaption className="mt-3 flex items-baseline justify-between gap-4 text-[11px] uppercase tracking-[0.2em] text-[#0B0F29]/50">
                 <span className="font-serif italic normal-case tracking-normal text-sm text-[#B8932A]">Fig. {pad(i + 1)}</span>
-                <span className="truncate">{p.domain || productsContent.grid.soonLabel}</span>
+                <span className="truncate">{p.domainLabel}</span>
               </figcaption>
             </figure>
           </a>
@@ -293,10 +306,11 @@ const SpreadLayout = ({ items }: { items: Product[] }) => (
 
 /** Products page: shared hero, product grid, then the "let's talk" section. */
 export const ProductsView = ({ products }: { products: ProductItemData[] }) => {
-  const hero = productsContent.hero;
-  const grid = productsContent.grid;
+  // CMS: Static pages → Products (main.hero, main.grid)
+  const hero = usePageSection("productData", "main", productsContent.hero, "hero");
+  const grid = usePageSection("productData", "main", productsContent.grid, "grid");
   const layout = useLayout();
-  const items = prepare(products);
+  const items = prepare(products, hero, grid);
 
   return (
     <>
@@ -307,6 +321,7 @@ export const ProductsView = ({ products }: { products: ProductItemData[] }) => {
         description={hero.description}
         primary={{ label: hero.primaryLabel, href: hero.primaryUrl }}
         secondary={{ label: hero.secondaryLabel, href: hero.secondaryUrl }}
+        image={{ src: hero.imageUrl, alt: "" }}
         number="04"
         facts={[`${products.length} products`, "Live and in use", "Built in house"]}
       />

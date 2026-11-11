@@ -12,6 +12,7 @@ import {
 } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Mail, MailOpen, Phone, ScanSearch } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSiteFooter } from "@/content/site";
 import { FreeAuditPopup } from "./FreeAuditPopup";
 import {
   Tooltip,
@@ -39,26 +40,29 @@ const withInsights = (links: NavLink[] | null): NavLink[] | null => {
   return [...links.slice(0, at), insights, ...links.slice(at)];
 };
 
-const Logo = ({ light }: { light: boolean }) => (
-  <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="The Gold Technologies home page">
-    <Image
-      src="/logo.jpeg"
-      alt=""
-      width={40}
-      height={40}
-      priority
-      className="w-9 h-9 md:w-10 md:h-10 rounded-full ring-1 ring-[#D4AF37]/40"
-    />
-    <span
-      className={cn(
-        "whitespace-nowrap text-[15px] md:text-xl font-bold tracking-tight transition-colors",
-        light ? "text-white" : "text-[#0B0F29]",
-      )}
-    >
-      The Gold Technologies
-    </span>
-  </Link>
-);
+const Logo = ({ light }: { light: boolean }) => {
+  const { logo } = useSiteFooter();
+  return (
+    <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="The Gold Technologies home page">
+      <Image
+        src={logo}
+        alt=""
+        width={40}
+        height={40}
+        priority
+        className="w-9 h-9 md:w-10 md:h-10 rounded-full ring-1 ring-[#D4AF37]/40"
+      />
+      <span
+        className={cn(
+          "whitespace-nowrap text-[15px] md:text-xl font-bold tracking-tight transition-colors",
+          light ? "text-white" : "text-[#0B0F29]",
+        )}
+      >
+        The Gold Technologies
+      </span>
+    </Link>
+  );
+};
 
 const MenuToggle = ({
   open,
@@ -108,9 +112,7 @@ const MenuToggle = ({
  * on hover (the original navbar animations); tooltips show the details.
  */
 const ContactIcons = ({ light }: { light: boolean }) => {
-  const footer = useCMSStore((s) => s.homeData?.FooterCMS);
-  const email = footer?.emailAddress || "info@thegoldtechnologies.com";
-  const phone = (footer?.phoneNumber || "+91 8368198551").trim();
+  const { email, phone } = useSiteFooter();
   const [mailHover, setMailHover] = React.useState(false);
   const [phoneHover, setPhoneHover] = React.useState(false);
   const iconClass = cn(
@@ -530,13 +532,13 @@ const SiteMenu = ({
 }) => {
   const copy = useSectionContent("SiteMenu");
   const pillars = useSectionContent("ServicePillars").pillars;
-  const footer = useCMSStore((s) => s.homeData?.FooterCMS);
-  const email = footer?.emailAddress || "info@thegoldtechnologies.com";
+  const footer = useSiteFooter();
+  const email = footer.email;
   const socials = [
-    { label: "LinkedIn", url: footer?.linkedinUrl },
-    { label: "Instagram", url: footer?.instagramUrl },
-    { label: "X", url: footer?.twitterUrl },
-    { label: "Facebook", url: footer?.facebookUrl },
+    { label: "LinkedIn", url: footer.socials.linkedin },
+    { label: "Instagram", url: footer.socials.instagram },
+    { label: "X", url: footer.socials.twitter },
+    { label: "Facebook", url: footer.socials.facebook },
   ].filter((s) => s.url);
 
   return (
@@ -641,12 +643,12 @@ const SiteMenu = ({
                 >
                   {email}
                 </a>
-                {footer?.phoneNumber && (
+                {footer.phone && (
                   <a
-                    href={`tel:${footer.phoneNumber.replace(/\s+/g, "")}`}
+                    href={`tel:${footer.phone.replace(/\s+/g, "")}`}
                     className="mt-1 block text-white/60 hover:text-white transition-colors"
                   >
-                    {footer.phoneNumber.trim()}
+                    {footer.phone}
                   </a>
                 )}
                 <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/60">

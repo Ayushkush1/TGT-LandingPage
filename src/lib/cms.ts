@@ -1,84 +1,49 @@
-import { PageSEO } from "@/store/useCMSStore";
-import { getRawPages } from "./cmsServer";
+/**
+ * Server helpers for routes: page data for the client store, and SEO metadata.
+ * All CMS reads go through cmsServer.ts (shared secret + tag caching).
+ */
+import type { Metadata } from "next";
+import { getPage, type CmsPageSlug } from "./cmsServer";
+import { pagesState, toPageSEO } from "./cmsData";
+import type { PageSEO } from "@/store/useCMSStore";
 
-/** All CMS pages, from the shared server-side cache (see cmsServer.ts). */
-export async function getPages(): Promise<any[]> {
-  return getRawPages();
+/** Store state for the given pages, for <CMSPageData state={…}>. */
+export async function loadPagesState(...slugs: CmsPageSlug[]) {
+  const pages = await Promise.all(slugs.map((slug) => getPage(slug)));
+  return pagesState(Object.fromEntries(slugs.map((slug, i) => [slug, pages[i]])));
 }
 
-export async function getPageSEO(slug: string): Promise<PageSEO | null> {
-  const pages = await getPages();
-  const page = pages.find((p: any) => p.slug === slug);
-  if (page) {
-    const seo = page.seo || {};
-    return {
-      metaTitle: seo.metaTitle || page.metaTitle || null,
-      metaDescription: seo.metaDescription || page.metaDescription || null,
-      targetKeywords: seo.targetKeywords || page.targetKeywords || null,
-      canonicalUrl: seo.canonicalUrl || page.canonicalUrl || null,
-      noIndex: seo.noIndex ?? page.noIndex ?? false,
-    };
-  }
-  return null;
+export async function getPageSEO(slug: CmsPageSlug): Promise<PageSEO | null> {
+  return toPageSEO((await getPage(slug))?.seo ?? null) ?? null;
 }
 
-export async function getServiceData(slug: string): Promise<any | null> {
-  const pages = await getPages();
-  const servicePage = pages.find((p: any) => p.slug === "services");
-  if (servicePage?.sections) {
-    const section = servicePage.sections.find((s: any) => s.type === slug);
-    return section?.content || null;
-  }
-  return null;
-}
-
-export async function getServiceSEO(slug: string): Promise<MetadataSEO | null> {
-  const pages = await getPages();
-  const servicePage = pages.find((p: any) => p.slug === "services");
-  if (!servicePage) return null;
-
-  const section = servicePage.sections?.find((s: any) => s.type === slug);
-  const sectionSEO = section?.content?.seo;
-
-  if (sectionSEO) {
-    return {
-      title: sectionSEO.metaTitle || null,
-      description: sectionSEO.metaDescription || null,
-      keywords: sectionSEO.targetKeywords || null,
-      canonical: sectionSEO.canonicalUrl || null,
-      noIndex: sectionSEO.noIndex || false,
-    };
-  }
-
+/** Next metadata from a page's CMS SEO, with defaults for anything not set. */
+export async function pageMetadata(
+  slug: CmsPageSlug,
+  fallback: { title: string; description: string },
+): Promise<Metadata> {
+  const seo = (await getPage(slug))?.seo;
+  const title = seo?.metaTitle || fallback.title;
+  const description = seo?.metaDescription || fallback.description;
+  const image = seo?.ogImage || seo?.featuredImage || undefined;
   return {
-    title: `${slug
-      .split("-")
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ")} | Services`,
-    description: servicePage.metaDescription || null,
-    keywords: servicePage.targetKeywords || null,
-    canonical: servicePage.canonicalUrl
-      ? `${servicePage.canonicalUrl}/${slug}`
-      : null,
-    noIndex: servicePage.noIndex || false,
+    title,
+    description,
+    keywords: seo?.targetKeywords || undefined,
+    alternates: { canonical: seo?.canonicalUrl || undefined },
+    robots: { index: !seo?.noIndex, follow: !seo?.noIndex },
+    openGraph: {
+      title: seo?.ogTitle || title,
+      description: seo?.ogDescription || description,
+      images: image ? [image] : undefined,
+    },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
-export async function getProductPageData(): Promise<any | null> {
-  const pages = await getPages();
-  const productPage = pages.find((p: any) => p.slug === "products");
-  if (productPage?.sections) {
-    const mainSection = productPage.sections.find(
-      (s: any) => s.type === "main",
-    );
-    if (mainSection?.content) {
-      return {
-        hero: mainSection.content.hero,
-        products: mainSection.content.products || [],
-      };
-    }
-  }
-  return null;
+/** One service's CMS content ({ hero, services, work, stack, seo, … }), or null. */
+export async function getServiceData(slug: string): Promise<any | null> {
+  return (await getPage("services"))?.data?.[slug] ?? null;
 }
 
 export interface MetadataSEO {
@@ -87,4 +52,35 @@ export interface MetadataSEO {
   keywords: string | null;
   canonical: string | null;
   noIndex: boolean;
+}
+
+/** A service page's SEO (SEO → Page Settings → service/<slug>), with a default title. */
+export async function getServiceSEO(slug: string): Promise<MetadataSEO | null> {
+  const page = await getPage("services");
+  if (!page) return null;
+  const seo = page.data?.[slug]?.seo;
+  if (seo) {
+    return {
+      title: seo.metaTitle || null,
+      description: seo.metaDescription || null,
+      keywords: seo.targetKeywords || null,
+      canonical: seo.canonicalUrl || null,
+      noIndex: seo.noIndex || false,
+    };
+  }
+  return {
+    title: `${slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")} | Services`,
+    description: page.seo?.metaDescription || null,
+    keywords: page.seo?.targetKeywords || null,
+    canonical: page.seo?.canonicalUrl ? `${page.seo.canonicalUrl}/${slug}` : null,
+    noIndex: page.seo?.noIndex || false,
+  };
+}
+
+/** The products page's main section ({ hero, grid, products }), or null. */
+export async function getProductPageData(): Promise<any | null> {
+  return (await getPage("products"))?.data?.main ?? null;
 }

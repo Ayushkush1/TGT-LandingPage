@@ -11,42 +11,58 @@ import { Insights } from "@/components/sections/Insights";
 import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { StickyCTA } from "@/components/StickyCTA";
+import { CMSPageData } from "@/components/CMSDataInitializer";
+import { RenderSchema } from "@/components/RenderSchema";
+import { siteDefaults } from "@/content/site";
+import { getPage, getSite } from "@/lib/cmsServer";
+import { loadPagesState } from "@/lib/cms";
 
-export default function Home() {
+// Title, description & heading: CMS SEO → Global Settings (see the root layout)
+export default async function Home() {
+  const [site, home, cms] = await Promise.all([
+    getSite(),
+    getPage("home"),
+    loadPagesState("about"), // case studies in the showreel & work showcase
+  ]);
+  const background = site?.siteImages?.homeBackground || siteDefaults.homeBackground;
+
   return (
-    <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
-      <SmoothScroll />
-      {/* Background Image */}
-      <div className="fixed inset-0 z-0">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('/bg-4.jpg')`,
-          }}
-        />
-        {/* Optional overlay for better text readability */}
-        <div className="absolute inset-0 bg-white/85" />
-      </div>
+    <CMSPageData state={cms}>
+      <RenderSchema schema={home?.seo?.schema} id="home-schema" />
+      <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
+        <SmoothScroll />
+        {/* Background Image */}
+        <div className="fixed inset-0 z-0">
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `url('${background}')`,
+            }}
+          />
+          {/* Optional overlay for better text readability */}
+          <div className="absolute inset-0 bg-white/85" />
+        </div>
 
-      {/* Content */}
-      <div className="relative z-10">
-        <Navbar />
-        <GrowthHero /> {/* Positioning + proof */}
-        <Showreel /> {/* Scroll-expanding wall of work */}
-        <div className="bg-[#F4F1EA]">
-          <Manifesto /> {/* Scroll-lit positioning statement */}
+        {/* Content */}
+        <div className="relative z-10">
+          <Navbar />
+          <GrowthHero /> {/* Positioning + proof */}
+          <Showreel /> {/* Scroll-expanding wall of work */}
+          <div className="bg-[#F4F1EA]">
+            <Manifesto /> {/* Scroll-lit positioning statement */}
+          </div>
+          <ServicePillars /> {/* Brand / Build / Grow / Scale stacking cards */}
+          <WorkShowcase /> {/* Horizontal case-study track */}
+          <GrowthProcess /> {/* How we work */}
+          <Testimonials /> {/* Client stories */}
+          <Insights /> {/* Articles with cursor preview */}
+          <GrowthCTA /> {/* Let's talk: book a call or send a brief */}
+          <div className="bg-[#F4F1EA]">
+            <Footer />
+          </div>
         </div>
-        <ServicePillars /> {/* Brand / Build / Grow / Scale stacking cards */}
-        <WorkShowcase /> {/* Horizontal case-study track */}
-        <GrowthProcess /> {/* How we work */}
-        <Testimonials /> {/* Client stories */}
-        <Insights /> {/* Articles with cursor preview */}
-        <GrowthCTA /> {/* Let's talk: book a call or send a brief */}
-        <div className="bg-[#F4F1EA]">
-          <Footer />
-        </div>
-      </div>
-      <StickyCTA />
-    </main>
+        <StickyCTA />
+      </main>
+    </CMSPageData>
   );
 }

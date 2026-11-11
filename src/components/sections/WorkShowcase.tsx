@@ -110,9 +110,9 @@ const CaseCard = ({
 /** Case studies on a horizontal track that is driven by vertical scroll on desktop. */
 export const WorkShowcase = () => {
   const data = useSectionContent("WorkShowcase");
-  const { caseStudies, fallback } = useWorkItems();
+  const { caseStudies } = useWorkItems();
   // Four featured projects; the rest live on the portfolio page.
-  const work = (caseStudies.length ? caseStudies : fallback).slice(0, 4);
+  const work = caseStudies.slice(0, 4);
 
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion();

@@ -11,7 +11,7 @@ import { HoverArrow } from "@/components/ui/HoverArrow";
 import { cn } from "@/lib/utils";
 import { productLinkFixes, productsContent } from "@/content/products";
 import { usePageSection } from "@/content/usePageSection";
-import type { ProductItemData } from "@/store/useCMSStore";
+import type { HeadingTag, ProductItemData } from "@/store/useCMSStore";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -305,7 +305,7 @@ const SpreadLayout = ({ items }: { items: Product[] }) => (
 );
 
 /** Products page: shared hero, product grid, then the "let's talk" section. */
-export const ProductsView = ({ products }: { products: ProductItemData[] }) => {
+export const ProductsView = ({ products, headingTag = "h1" }: { products: ProductItemData[]; headingTag?: HeadingTag }) => {
   // CMS: Static pages → Products (main.hero, main.grid)
   const hero = usePageSection("productData", "main", productsContent.hero, "hero");
   const grid = usePageSection("productData", "main", productsContent.grid, "grid");
@@ -324,6 +324,7 @@ export const ProductsView = ({ products }: { products: ProductItemData[] }) => {
         image={{ src: hero.imageUrl, alt: "" }}
         number="04"
         facts={[`${products.length} products`, "Live and in use", "Built in house"]}
+        headingTag={headingTag}
       />
 
       <section id="products" className="bg-[#F4F1EA] text-[#0B0F29] px-5 md:px-10 py-16 md:py-24 scroll-mt-20">

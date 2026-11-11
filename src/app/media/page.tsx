@@ -6,13 +6,10 @@ import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { CMSPageData } from "@/components/CMSDataInitializer";
 import { RenderSchema } from "@/components/RenderSchema";
 import { getPageSEO, loadPagesState, pageMetadata } from "@/lib/cms";
+import { resolveHeadingTag } from "@/lib/cmsData";
 import { MediaIndex } from "./MediaIndex";
 
-export const generateMetadata = (): Promise<Metadata> =>
-  pageMetadata("media", {
-    title: "Media & Articles | The Gold Technologies",
-    description: "Press coverage, interviews and articles featuring The Gold Technologies and our work.",
-  });
+export const generateMetadata = (): Promise<Metadata> => pageMetadata("media");
 
 export default async function MediaPage() {
   const [seo, cms] = await Promise.all([getPageSEO("media"), loadPagesState("media")]);
@@ -23,7 +20,7 @@ export default async function MediaPage() {
         <SmoothScroll />
         <Navbar />
         <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-          <MediaIndex />
+          <MediaIndex headingTag={resolveHeadingTag(seo?.headingOptions)} />
           <GrowthCTA />
         </main>
         <div className="bg-[#F4F1EA]">

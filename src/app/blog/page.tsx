@@ -6,13 +6,10 @@ import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { CMSPageData } from "@/components/CMSDataInitializer";
 import { RenderSchema } from "@/components/RenderSchema";
 import { getPageSEO, loadPagesState, pageMetadata } from "@/lib/cms";
+import { resolveHeadingTag } from "@/lib/cmsData";
 import { BlogIndex } from "./BlogIndex";
 
-export const generateMetadata = (): Promise<Metadata> =>
-  pageMetadata("blog", {
-    title: "Blog | The Gold Technologies",
-    description: "Practical guides on websites, SEO, software and digital marketing from The Gold Technologies team.",
-  });
+export const generateMetadata = (): Promise<Metadata> => pageMetadata("blog");
 
 export default async function BlogPage() {
   const [seo, cms] = await Promise.all([getPageSEO("blog"), loadPagesState("blog")]);
@@ -23,7 +20,7 @@ export default async function BlogPage() {
         <SmoothScroll />
         <Navbar />
         <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-          <BlogIndex />
+          <BlogIndex headingTag={resolveHeadingTag(seo?.headingOptions)} />
           <GrowthCTA />
         </main>
         <div className="bg-[#F4F1EA]">

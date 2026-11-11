@@ -25,16 +25,20 @@ async function getInitialCMSState() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const globalSEO = await getGlobalSEO();
+  if (!globalSEO) return {};
+
+  const title = globalSEO.siteTitle || undefined;
+  const description = globalSEO.siteDescription || undefined;
 
   return {
-    title: globalSEO?.siteTitle,
-    description: globalSEO?.siteDescription,
-    icons: {
-      icon: globalSEO?.favicon,
-    },
-    other: {
-      "google-site-verification": globalSEO?.searchConsoleId,
-    },
+    title,
+    description,
+    icons: globalSEO.favicon ? { icon: globalSEO.favicon } : undefined,
+    openGraph: title || description ? { title, description, type: "website" } : undefined,
+    twitter: title || description ? { card: "summary_large_image", title, description } : undefined,
+    other: globalSEO.searchConsoleId
+      ? { "google-site-verification": globalSEO.searchConsoleId }
+      : undefined,
   };
 }
 

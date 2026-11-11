@@ -8,6 +8,7 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteDefaults } from "@/content/site";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import type { HeadingTag } from "@/store/useCMSStore";
 
 /** Alt text of the fallback hero photo (the team at work), shown when a hero has no image. */
 const DEFAULT_ALT = "The Gold Technologies team at work";
@@ -44,6 +45,7 @@ export const PageHero = ({
   facts = [],
   srPrefix,
   compact,
+  headingTag = "h1",
 }: {
   label: ReactNode;
   /** Magazine-style page number, e.g. "03". */
@@ -63,6 +65,8 @@ export const PageHero = ({
   srPrefix?: string;
   /** Smaller headline for long words, e.g. client names. */
   compact?: boolean;
+  /** Main heading tag from CMS SEO headingOptions (defaults to h1). */
+  headingTag?: HeadingTag;
 }) => {
   // Each page's hero image comes from its CMS hero section
   const image = { src: pageImage?.src || siteDefaults.pageHero, alt: pageImage?.src ? pageImage.alt : DEFAULT_ALT };
@@ -72,6 +76,7 @@ export const PageHero = ({
   const dim = useTransform(scrollYProgress, [0, 1], [0, 0.5]);
   const external = primary && /^https?:/.test(primary.href);
   const DescriptionTag = typeof description === "string" ? "p" : "div";
+  const Heading = headingTag;
 
   return (
     <section ref={ref} className="relative overflow-hidden bg-[#0A0A0A] text-white">
@@ -96,7 +101,7 @@ export const PageHero = ({
         {/* Pushes the headline down; small minimum so short screens keep everything in view */}
         <div className="flex-1 min-h-[14svh] lg:min-h-[6svh]" />
 
-        <h1
+        <Heading
           className={cn(
             "font-semibold tracking-[-0.05em] [text-shadow:0_4px_50px_rgba(0,0,0,0.5)]",
             compact
@@ -109,7 +114,7 @@ export const PageHero = ({
           <HeroLine delay={0.27} className="pl-[0.5em] lg:pl-[1.2em]">
             <span className="font-serif italic font-normal tracking-[-0.02em] text-[#D4AF37]">{highlight}</span>
           </HeroLine>
-        </h1>
+        </Heading>
 
         {/* Details bar */}
         <div

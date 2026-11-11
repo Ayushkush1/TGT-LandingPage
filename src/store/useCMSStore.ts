@@ -9,6 +9,8 @@ import { createStore, useStore } from "zustand";
  * Anything missing falls back to the default copy in src/content/.
  */
 
+export type HeadingTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+
 export interface PageSEO {
   metaTitle: string | null;
   metaDescription: string | null;
@@ -16,6 +18,7 @@ export interface PageSEO {
   canonicalUrl: string | null;
   noIndex: boolean;
   schema?: string | null;
+  headingOptions?: HeadingTag | "";
 }
 
 export interface NavLink {
@@ -200,6 +203,7 @@ export interface PortfolioItemData {
     tags: string[];
     outcome: string;
   }[];
+  seo?: PageSEO;
 }
 
 export interface ProductPillarData {

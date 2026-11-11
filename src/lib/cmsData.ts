@@ -2,8 +2,16 @@
  * Pure helpers that turn CMS website API responses (see cmsServer.ts) into the CMS store's
  * shape. Used on the server; the result is handed to the client store (CMSDataInitializer).
  */
-import type { ApiNavLink, CMSState, GlobalSEOData, NavLink, PageSEO, SiteData } from "@/store/useCMSStore";
+import type { ApiNavLink, CMSState, GlobalSEOData, HeadingTag, NavLink, PageSEO, SiteData } from "@/store/useCMSStore";
 import type { CmsPage, CmsPageSlug, CmsSite } from "./cmsServer";
+
+const HEADING_TAGS = new Set<HeadingTag>(["h1", "h2", "h3", "h4", "h5", "h6"]);
+
+/** Normalizes CMS headingOptions ("h1".."h6" or "") to a valid heading tag, defaulting to "h1". */
+export function resolveHeadingTag(tag?: string | null): HeadingTag {
+  const clean = tag?.trim().toLowerCase() as HeadingTag | undefined;
+  return clean && HEADING_TAGS.has(clean) ? clean : "h1";
+}
 
 /** CMS page → store field. */
 export const PAGE_KEYS = {
@@ -26,6 +34,7 @@ export const toPageSEO = (seo: CmsPage["seo"]): PageSEO | undefined =>
         canonicalUrl: seo.canonicalUrl,
         noIndex: seo.noIndex ?? false,
         schema: seo.schema,
+        headingOptions: seo.headingOptions ? resolveHeadingTag(seo.headingOptions) : "",
       }
     : undefined;
 

@@ -3,7 +3,7 @@
 import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -12,6 +12,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { PageHero } from "@/components/sections/PageHero";
 import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { useCMSStore, type PortfolioItemData } from "@/store/useCMSStore";
+import { resolveHeadingTag } from "@/lib/cmsData";
 import { useProjects } from "@/app/portfolio/useProjects";
 
 const BOOKING_URL = "https://calendar.app.google/5nNHP69fUR5WEMvt9";
@@ -82,11 +83,13 @@ const StoryBody = ({ section }: { section: Section }) => {
 };
 
 export default function CaseStudyPage() {
-  const slug = useParams().name;
+  const param = useParams().name;
+  const slug = decodeURIComponent(Array.isArray(param) ? param[0] : param ?? "").toLowerCase();
   const portfolio = useCMSStore((s) => s.aboutData?.Portfolio);
   const projects = useProjects();
 
-  const raw = portfolio?.find((p) => slugOf(p.title) === slug) ?? portfolio?.[0];
+  const raw = portfolio?.find((p) => slugOf(p.title) === slug);
+  if (portfolio && !raw) notFound();
   const index = projects.findIndex((p) => p.title === raw?.title);
   const project = projects[index];
   const next = projects.length > 1 ? projects[(index + 1) % projects.length] : undefined;
@@ -127,6 +130,7 @@ export default function CaseStudyPage() {
                   ? project.stats.map((s) => `${s.value} ${s.label.toLowerCase()}`)
                   : [project.service, project.industry]
               }
+              headingTag={resolveHeadingTag(raw?.seo?.headingOptions)}
             />
 
             {/* The story: sticky chapter list beside numbered sections */}

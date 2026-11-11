@@ -4,9 +4,10 @@ import { PageHero } from "@/components/sections/PageHero";
 import { portfolioContent } from "@/content/portfolio";
 import { usePageSection } from "@/content/usePageSection";
 import { useProjects } from "../useProjects";
+import type { HeadingTag } from "@/store/useCMSStore";
 
 /** Portfolio hero: shared page hero; the facts lead with the featured case study's result. */
-export const PortfolioHero = () => {
+export const PortfolioHero = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
   const copy = usePageSection("portfolioData", "main", portfolioContent.hero, "hero");
   const projects = useProjects();
   const featured = projects[0];
@@ -28,6 +29,7 @@ export const PortfolioHero = () => {
       secondary={{ label: copy.secondaryLabel, href: copy.secondaryUrl }}
       image={{ src: copy.imageUrl, alt: "" }}
       facts={facts}
+      headingTag={headingTag}
     />
   );
 };

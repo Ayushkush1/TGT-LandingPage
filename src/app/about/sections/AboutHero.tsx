@@ -3,8 +3,9 @@
 import { PageHero } from "@/components/sections/PageHero";
 import { aboutContent } from "@/content/about";
 import { usePageSection } from "@/content/usePageSection";
+import type { HeadingTag } from "@/store/useCMSStore";
 
-export const AboutHero = () => {
+export const AboutHero = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
   const copy = usePageSection("aboutData", "AboutHero", aboutContent.hero);
 
   return (
@@ -18,6 +19,7 @@ export const AboutHero = () => {
       secondary={{ label: copy.secondaryLabel, href: copy.secondaryUrl }}
       image={{ src: copy.imageUrl, alt: "" }}
       facts={copy.meta}
+      headingTag={headingTag}
     />
   );
 };

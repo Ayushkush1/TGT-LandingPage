@@ -5,12 +5,12 @@ import { PageHero } from "@/components/sections/PageHero";
 import { CinematicLayout } from "@/components/sections/Insights";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, type HeadingTag } from "@/store/useCMSStore";
 import { blogPage as blogDefaults } from "@/content/insights";
 import { usePageSection } from "@/content/usePageSection";
 
 /** Every CMS blog post: the latest full-bleed, the rest as image cards (same layout as the home page). */
-export const BlogIndex = () => {
+export const BlogIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
   const blogPage = usePageSection("blogData", "BlogIndex", blogDefaults); // CMS: Static pages → Blog
   const blogs = useCMSStore((s) => s.homeData?.BlogSection?.blogs) ?? [];
 
@@ -24,6 +24,7 @@ export const BlogIndex = () => {
         secondary={{ label: blogPage.secondaryLabel, href: "#articles" }}
         image={{ src: blogPage.imageUrl, alt: "" }}
         facts={blogs.length > 0 ? [`${blogs.length} articles`] : []}
+        headingTag={headingTag}
       />
 
       <section id="articles" className="bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24 scroll-mt-24">

@@ -1,4 +1,5 @@
 import { getPageSEO, getProductPageData, loadPagesState, pageMetadata } from "@/lib/cms";
+import { resolveHeadingTag } from "@/lib/cmsData";
 import type { Metadata } from "next";
 import { RenderSchema } from "@/components/RenderSchema";
 import { Navbar } from "@/components/Navbar";
@@ -7,11 +8,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { CMSPageData } from "@/components/CMSDataInitializer";
 import { ProductsView } from "./sections/ProductsView";
 
-export const generateMetadata = (): Promise<Metadata> =>
-  pageMetadata("products", {
-    title: "Products & Solutions | The Gold Technologies",
-    description: "Explore our suite of innovative software products and enterprise digital solutions designed for scale.",
-  });
+export const generateMetadata = (): Promise<Metadata> => pageMetadata("products");
 
 export default async function ProductPage() {
   const productData = await getProductPageData();
@@ -24,7 +21,7 @@ export default async function ProductPage() {
         <SmoothScroll />
         <Navbar />
         <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-          <ProductsView products={productData?.products ?? []} />
+          <ProductsView products={productData?.products ?? []} headingTag={resolveHeadingTag(seo?.headingOptions)} />
         </main>
         <div className="bg-[#F4F1EA]">
           <Footer />

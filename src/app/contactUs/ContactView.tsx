@@ -11,6 +11,7 @@ import { contactContent } from "@/content/contact";
 import { useSectionContent } from "@/content/useSectionContent";
 import { usePageSection } from "@/content/usePageSection";
 import { useSiteFooter } from "@/content/site";
+import type { HeadingTag } from "@/store/useCMSStore";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -29,7 +30,7 @@ function useNow() {
 }
 
 /** Contact page: shared hero, direct lines beside the brief form, then offices and map. */
-export const ContactView = () => {
+export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
   // CMS: Static pages → Contact (ContactHero, ContactDirect, MapSection)
   const copy = {
     hero: usePageSection("contactData", "ContactHero", contactContent.hero),
@@ -68,6 +69,7 @@ export const ContactView = () => {
         image={{ src: copy.hero.imageUrl, alt: "" }}
         number="05"
         facts={["Reply within 24 hours", "Noida & Dubai"]}
+        headingTag={headingTag}
       />
 
       {/* Direct lines + brief form */}

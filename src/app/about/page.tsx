@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import type { Metadata } from "next";
 import { getPageSEO, loadPagesState, pageMetadata } from "@/lib/cms";
+import { resolveHeadingTag } from "@/lib/cmsData";
 import { RenderSchema } from "@/components/RenderSchema";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { CMSPageData } from "@/components/CMSDataInitializer";
@@ -14,11 +15,7 @@ import { Journey } from "./sections/Journey";
 import { Team } from "./sections/Team";
 import { AboutFilm } from "./sections/AboutFilm";
 
-export const generateMetadata = (): Promise<Metadata> =>
-  pageMetadata("about", {
-    title: "About Us | The Gold Technologies",
-    description: "Learn about The Gold Technologies, our engineering team, mission, vision, and craftsmanship in digital solutions.",
-  });
+export const generateMetadata = (): Promise<Metadata> => pageMetadata("about");
 
 async function AboutPage() {
   const [seo, cms] = await Promise.all([getPageSEO("about"), loadPagesState("about")]);
@@ -29,7 +26,7 @@ async function AboutPage() {
         <SmoothScroll />
         <Navbar />
         <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-          <AboutHero /> {/* Who we are, at a glance */}
+          <AboutHero headingTag={resolveHeadingTag(seo?.headingOptions)} /> {/* Who we are, at a glance */}
           <AboutStory /> {/* Scroll-lit story + numbers */}
           <AboutPurpose /> {/* Mission & vision */}
           <FounderNote /> {/* Short note from the founder */}

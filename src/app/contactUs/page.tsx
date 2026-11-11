@@ -3,15 +3,12 @@ import { Navbar } from "@/components/Navbar";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { CMSPageData } from "@/components/CMSDataInitializer";
 import { getPageSEO, loadPagesState, pageMetadata } from "@/lib/cms";
+import { resolveHeadingTag } from "@/lib/cmsData";
 import type { Metadata } from "next";
 import { RenderSchema } from "@/components/RenderSchema";
 import { ContactView } from "./ContactView";
 
-export const generateMetadata = (): Promise<Metadata> =>
-  pageMetadata("contactUs", {
-    title: "Contact Us | The Gold Technologies",
-    description: "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
-  });
+export const generateMetadata = (): Promise<Metadata> => pageMetadata("contactUs");
 
 async function ContactUs() {
   const [seo, cms] = await Promise.all([getPageSEO("contactUs"), loadPagesState("contactUs")]);
@@ -22,7 +19,7 @@ async function ContactUs() {
         <SmoothScroll />
         <Navbar />
         <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-          <ContactView />
+          <ContactView headingTag={resolveHeadingTag(seo?.headingOptions)} />
         </main>
         <div className="bg-[#F4F1EA]">
           <Footer />

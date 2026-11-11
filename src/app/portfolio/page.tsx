@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getPageSEO, loadPagesState, pageMetadata } from "@/lib/cms";
+import { resolveHeadingTag } from "@/lib/cmsData";
 import { RenderSchema } from "@/components/RenderSchema";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -11,11 +12,7 @@ import { PortfolioHero } from "./sections/PortfolioHero";
 import { WorkIndex } from "./sections/WorkIndex";
 import { Results } from "./sections/Results";
 
-export const generateMetadata = (): Promise<Metadata> =>
-  pageMetadata("portfolio", {
-    title: "Portfolio & Case Studies | The Gold Technologies",
-    description: "Explore a curated showcase of our most impactful digital projects and client success stories.",
-  });
+export const generateMetadata = (): Promise<Metadata> => pageMetadata("portfolio");
 
 export default async function PortfolioPage() {
   const [seo, cms] = await Promise.all([getPageSEO("portfolio"), loadPagesState("portfolio", "about")]);
@@ -26,7 +23,7 @@ export default async function PortfolioPage() {
         <SmoothScroll />
         <Navbar />
         <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-          <PortfolioHero /> {/* Positioning + featured case study */}
+          <PortfolioHero headingTag={resolveHeadingTag(seo?.headingOptions)} /> {/* Positioning + featured case study */}
           <WorkIndex /> {/* Filterable case studies */}
           <Results /> {/* Headline numbers */}
           <Testimonials /> {/* Client stories */}

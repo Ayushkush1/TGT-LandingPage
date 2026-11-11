@@ -26,6 +26,7 @@ import { servicePillars } from "@/content/growth";
 import { serviceExtras, servicePage, type ServiceExtra, type ServiceSlug } from "@/content/services";
 import { useClientLogos } from "@/content/clients";
 import { useTechLogo } from "@/content/tech";
+import type { HeadingTag } from "@/store/useCMSStore";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -82,7 +83,19 @@ const Label = ({ children, dark }: { children: ReactNode; dark?: boolean }) => (
 
 /* ── 1. Hero ─────────────────────────────────────────────────────────── */
 /** Shared page hero (default team photo) with the service's facts. */
-const Hero = ({ extra, intro, items, image }: { extra: ServiceExtra; intro?: string; items: CmsItem[]; image?: string }) => {
+const Hero = ({
+  extra,
+  intro,
+  items,
+  image,
+  headingTag = "h1",
+}: {
+  extra: ServiceExtra;
+  intro?: string;
+  items: CmsItem[];
+  image?: string;
+  headingTag?: HeadingTag;
+}) => {
   const pillar = servicePillars.pillars.find((p) => p.id === extra.pillar);
   const metric = extra.proof?.find((p) => p.metrics?.length)?.metrics?.[0];
   const chips = [
@@ -109,6 +122,7 @@ const Hero = ({ extra, intro, items, image }: { extra: ServiceExtra; intro?: str
       secondary={{ label: servicePage.secondaryLabel, href: "#deliver" }}
       number={pillar?.number}
       facts={chips}
+      headingTag={headingTag}
     />
   );
 };
@@ -726,14 +740,22 @@ const Stack = ({ extra }: { extra: ServiceExtra }) => (
 );
 
 /** One template for every /service/[slug] page. */
-export const ServicePage = ({ slug, data }: { slug: ServiceSlug; data: CmsService | null }) => {
+export const ServicePage = ({
+  slug,
+  data,
+  headingTag = "h1",
+}: {
+  slug: ServiceSlug;
+  data: CmsService | null;
+  headingTag?: HeadingTag;
+}) => {
   const extra = withCms(serviceExtras[slug], data);
   const hero = data?.hero;
   const items = data?.services ?? [];
 
   return (
     <>
-      <Hero extra={extra} intro={hero?.paragraphs?.[0]} items={items} image={hero?.imageUrl} />
+      <Hero extra={extra} intro={hero?.paragraphs?.[0]} items={items} image={hero?.imageUrl} headingTag={headingTag} />
       <Approach text={hero?.paragraphs?.[1]} points={(hero?.pillars ?? []).slice(0, 4)} />
       <Deliver items={items} />
       <Proof extra={extra} />

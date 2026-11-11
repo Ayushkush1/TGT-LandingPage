@@ -23,8 +23,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Error proxying robots.txt:", error);
-    return new Response("User-agent: *\nAllow: /", {
-      headers: { "Content-Type": "text/plain" },
-    });
+    return new Response("Robots config not found", { status: 500 });
   }
 }

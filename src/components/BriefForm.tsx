@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -145,6 +146,7 @@ export const BriefForm = ({
   headingLevel?: "p" | "h2";
   className?: string;
 }) => {
+  const pathname = usePathname() || "/";
   const data = useSectionContent("GrowthCTA");
   const { email } = useSiteFooter();
   const budgets = data.budgets; // CMS: Growth CTA
@@ -173,6 +175,7 @@ export const BriefForm = ({
         interestedIn: interests.join(", "),
         budget: budget ?? "",
         projectGoals: [company && `Company: ${company}`, message].filter(Boolean).join("\n"),
+        sourcePage: pathname,
       });
       if (!res.ok) throw new Error(res.error);
       setStatus("sent");
@@ -184,6 +187,7 @@ export const BriefForm = ({
         `Name: ${name}`,
         `Email: ${form.get("email")}`,
         `Company: ${company || "Not given"}`,
+        `Page: ${pathname}`,
         `Interested in: ${interests.join(", ") || "Not given"}`,
         `Budget: ${budget || "Not given"}`,
         "",

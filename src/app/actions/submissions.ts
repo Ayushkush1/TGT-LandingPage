@@ -12,6 +12,16 @@ export type SubmitResult = { ok: true } | { ok: false; error: string };
 
 const text = (value: unknown, max: number) => (typeof value === "string" ? value.trim().slice(0, max) : "");
 
+function getRefererPath(): string {
+  const referer = headers().get("referer");
+  if (!referer) return "";
+  try {
+    return new URL(referer).pathname || "";
+  } catch {
+    return "";
+  }
+}
+
 async function postToCms(path: string, body: Record<string, string>): Promise<SubmitResult> {
   const ip = headers().get("x-forwarded-for")?.split(",")[0].trim() || headers().get("x-real-ip") || "";
   try {
@@ -41,16 +51,19 @@ export async function submitEnquiry(input: {
   interestedIn: string;
   budget: string;
   projectGoals: string;
+  sourcePage?: string;
 }): Promise<SubmitResult> {
   const name = text(input?.name, 200);
   const email = text(input?.email, 200);
   if (!name || !email) return { ok: false, error: "Name and email are required" };
+  const sourcePage = text(input.sourcePage, 500) || text(getRefererPath(), 500);
   return postToCms("enquiries", {
     name,
     email,
     interestedIn: text(input.interestedIn, 1000),
     budget: text(input.budget, 200),
     projectGoals: text(input.projectGoals, 5000),
+    ...(sourcePage && { sourcePage }),
   });
 }
 

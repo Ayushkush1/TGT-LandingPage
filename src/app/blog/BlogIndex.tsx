@@ -43,13 +43,15 @@ export const BlogIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) =>
             )}
           </div>
 
-          <div className="mt-14 md:mt-20 pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <p className="text-2xl md:text-3xl font-semibold tracking-[-0.03em]">{blogPage.mediaPrompt}</p>
-            <Link href={blogPage.mediaUrl} className="group/roll inline-flex items-center gap-2 text-sm font-medium text-white/80">
-              <RollText>{blogPage.mediaLabel}</RollText>
-              <HoverArrow />
-            </Link>
-          </div>
+          {blogPage.mediaUrl && blogPage.mediaLabel && (
+            <div className="mt-14 md:mt-20 pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <p className="text-2xl md:text-3xl font-semibold tracking-[-0.03em]">{blogPage.mediaPrompt}</p>
+              <Link href={blogPage.mediaUrl} className="group/roll inline-flex items-center gap-2 text-sm font-medium text-white/80">
+                <RollText>{blogPage.mediaLabel}</RollText>
+                <HoverArrow />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
     </>

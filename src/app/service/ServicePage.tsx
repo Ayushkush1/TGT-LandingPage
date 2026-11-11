@@ -22,7 +22,8 @@ import { cn } from "@/lib/utils";
 import { PageHero } from "@/components/sections/PageHero";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
-import { servicePillars } from "@/content/growth";
+import type { Pillar } from "@/content/growth";
+import { useSectionContent } from "@/content/useSectionContent";
 import { serviceExtras, servicePage, type ServiceExtra, type ServiceSlug } from "@/content/services";
 import { useClientLogos } from "@/content/clients";
 import { useTechLogo } from "@/content/tech";
@@ -58,19 +59,19 @@ interface CmsService {
 
 const filled = <T,>(list?: T[]) => (Array.isArray(list) && list.length > 0 ? list : undefined);
 
-/** The CMS service (Static pages → Services) over the page's default copy in content/services.ts. */
-function withCms(local: ServiceExtra, data: CmsService | null): ServiceExtra {
+/** Reads service fields strictly from CMS `services` data, keeping only the route pillar fallback. */
+function withCms(local: ServiceExtra, data: CmsService | null, pillars: readonly Pillar[]): ServiceExtra {
   const hero = data?.hero;
-  const pillar = servicePillars.pillars.find((p) => p.id === hero?.pillar)?.id ?? local.pillar;
+  const pillar = pillars.find((p) => p.id === hero?.pillar)?.id ?? local.pillar;
   return {
     ...local,
-    name: hero?.name?.trim() || local.name,
+    name: hero?.name?.trim() || "",
     pillar,
-    promise: [hero?.headingLine1?.trim() || local.promise[0], hero?.headingLine2?.trim() || local.promise[1]],
-    stack: filled(data?.stack?.map((s) => s.trim()).filter(Boolean)) ?? local.stack,
-    work: filled(data?.work?.map((w) => w.trim()).filter(Boolean)) ?? local.work,
-    related: filled(data?.related?.filter((r) => r in serviceExtras)) ?? local.related,
-    proof: filled(data?.proof) ?? local.proof,
+    promise: [hero?.headingLine1?.trim() || "", hero?.headingLine2?.trim() || ""],
+    stack: filled(data?.stack?.map((s) => s.trim()).filter(Boolean)) ?? [],
+    work: filled(data?.work?.map((w) => w.trim()).filter(Boolean)) ?? [],
+    related: filled(data?.related?.filter((r) => r in serviceExtras)) ?? [],
+    proof: filled(data?.proof) ?? [],
   };
 }
 
@@ -85,18 +86,24 @@ const Label = ({ children, dark }: { children: ReactNode; dark?: boolean }) => (
 /** Shared page hero (default team photo) with the service's facts. */
 const Hero = ({
   extra,
+  pillars,
+  bookingLabel,
+  bookingUrl,
   intro,
   items,
   image,
   headingTag = "h1",
 }: {
   extra: ServiceExtra;
+  pillars: readonly Pillar[];
+  bookingLabel: string;
+  bookingUrl: string;
   intro?: string;
   items: CmsItem[];
   image?: string;
   headingTag?: HeadingTag;
 }) => {
-  const pillar = servicePillars.pillars.find((p) => p.id === extra.pillar);
+  const pillar = pillars.find((p) => p.id === extra.pillar);
   const metric = extra.proof?.find((p) => p.metrics?.length)?.metrics?.[0];
   const chips = [
     pillar && `${pillar.number} ${pillar.name}`,
@@ -109,8 +116,12 @@ const Hero = ({
       label={
         <span className="flex items-center gap-3">
           <Link href="/#services" className="hover:text-[#D4AF37] transition-colors">(Services)</Link>
-          <span className="w-6 h-px bg-white/20" />
-          <span className="text-[#D4AF37]">{extra.name}</span>
+          {extra.name && (
+            <>
+              <span className="w-6 h-px bg-white/20" />
+              <span className="text-[#D4AF37]">{extra.name}</span>
+            </>
+          )}
         </span>
       }
       srPrefix={extra.name}
@@ -118,8 +129,8 @@ const Hero = ({
       top={extra.promise[0]}
       highlight={extra.promise[1]}
       description={intro ? clean(intro) : undefined}
-      primary={{ label: servicePage.bookingLabel, href: servicePage.bookingUrl }}
-      secondary={{ label: servicePage.secondaryLabel, href: "#deliver" }}
+      primary={bookingLabel && bookingUrl ? { label: bookingLabel, href: bookingUrl } : undefined}
+      secondary={items.length > 0 ? { label: servicePage.secondaryLabel, href: "#deliver" } : undefined}
       number={pillar?.number}
       facts={chips}
       headingTag={headingTag}
@@ -438,9 +449,8 @@ const Proof = ({ extra }: { extra: ServiceExtra }) => {
   const work = extra.work ?? [];
   const clientLogos = useClientLogos();
   const hasLogos = work.some((w) => clientLogos[w]);
-  // No case results yet: lead with global reach instead of an empty "results" block.
-  const hasResults = proof.length > 0 || work.length > 0;
-  const headline = hasResults ? servicePage.proofHeadline : servicePage.reachHeadline;
+  if (proof.length === 0 && work.length === 0) return null;
+  const headline = servicePage.proofHeadline;
   const marquee = work.length >= 4 ? [...work, ...work] : [];
 
   return (
@@ -558,47 +568,6 @@ const Proof = ({ extra }: { extra: ServiceExtra }) => {
             ))}
           </ul>
         ))}
-
-      <div className="max-w-[1600px] mx-auto px-5 md:px-10">
-        {!hasResults && (
-          <div className="mt-12 md:mt-16">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">{servicePage.reach.label}</p>
-            <ul className="mt-5 flex flex-wrap gap-x-8 gap-y-3">
-              {servicePage.reach.countries.map((c, i) => (
-                <li key={c} className={cn("text-4xl md:text-6xl tracking-[-0.04em]", i % 2 ? "font-serif italic text-[#B8932A]" : "font-semibold")}>
-                  {c}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-8 max-w-xl text-[#0B0F29]/60 leading-relaxed">{servicePage.reach.industries}</p>
-          </div>
-        )}
-
-        {/* Why us: the numbers behind the work */}
-        <div className="mt-14 md:mt-20 rounded-[2rem] border border-[#0B0F29]/10 bg-white/50 p-6 md:p-10">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">{servicePage.why.label}</p>
-            {hasResults && (
-              <p className="text-sm text-[#0B0F29]/60">
-                {servicePage.reach.label}{" "}
-                <span className="font-semibold text-[#0B0F29]">{servicePage.reach.countries.join(" · ")}</span>
-              </p>
-            )}
-          </div>
-          <dl className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-y-8">
-            {servicePage.why.stats.map((s, i) => (
-              <div key={s.label} className={cn("pr-6", i > 0 && "lg:border-l lg:border-[#0B0F29]/10 lg:pl-8", i % 2 === 1 && "border-l border-[#0B0F29]/10 pl-6 lg:pl-8")}>
-                <dt className="sr-only">{s.label}</dt>
-                <dd className="text-5xl md:text-6xl font-semibold tracking-[-0.05em] leading-none">
-                  {s.value.replace(/\D+$/, "")}
-                  <span className="font-serif italic font-normal text-[#B8932A]">{s.value.match(/\D+$/)?.[0]}</span>
-                </dd>
-                <dd className="mt-3 text-sm text-[#0B0F29]/60">{s.label}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </div>
     </section>
   );
 };
@@ -655,111 +624,135 @@ const StackMark = ({ name }: { name: string }) => {
   return <Icon className="w-8 h-8 md:w-9 md:h-9 text-[#D4AF37]" strokeWidth={1.25} />;
 };
 
-const Stack = ({ extra }: { extra: ServiceExtra }) => (
-  <section className="relative overflow-hidden bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24">
-    <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-12 lg:gap-10">
-      <div className="lg:col-span-4 flex flex-col">
-        <Label dark>{servicePage.stackLabel}</Label>
-        <h2 className="mt-6 text-5xl md:text-6xl xl:text-7xl font-semibold tracking-[-0.045em] leading-[0.95]">
-          {servicePage.stackHeadline[0]}{" "}
-          <span className="font-serif italic font-normal text-[#D4AF37]">{servicePage.stackHeadline[1]}</span>
-        </h2>
-        <div className="mt-8 lg:mt-auto lg:pt-10 flex items-end gap-4">
-          <span className="text-[6rem] md:text-[8rem] leading-[0.8] font-semibold tracking-[-0.06em] text-transparent [-webkit-text-stroke:1.5px_#D4AF37]">
-            {servicePage.stackCount}
-          </span>
-          <p className="pb-1 text-sm text-white/55 max-w-[220px] leading-relaxed">{servicePage.stackNote}</p>
-        </div>
-      </div>
+const Stack = ({
+  extra,
+  pillars,
+  allServices,
+}: {
+  extra: ServiceExtra;
+  pillars: readonly Pillar[];
+  allServices: Record<string, CmsService> | null;
+}) => {
+  if (extra.stack.length === 0 && extra.related.length === 0) return null;
+  return (
+    <section className="relative overflow-hidden bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24">
+      {extra.stack.length > 0 && (
+        <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-12 lg:gap-10">
+          <div className="lg:col-span-4 flex flex-col">
+            <Label dark>{servicePage.stackLabel}</Label>
+            <h2 className="mt-6 text-5xl md:text-6xl xl:text-7xl font-semibold tracking-[-0.045em] leading-[0.95]">
+              {servicePage.stackHeadline[0]}{" "}
+              <span className="font-serif italic font-normal text-[#D4AF37]">{servicePage.stackHeadline[1]}</span>
+            </h2>
+          </div>
 
-      <ul className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-px rounded-[1.5rem] overflow-hidden bg-white/10 ring-1 ring-white/10 self-start">
-        {extra.stack.map((s, i) => (
-          <motion.li
-            key={s}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease, delay: Math.min(i, 12) * 0.04 }}
-            className="group relative bg-[#0A0A0A] p-5 md:p-7 min-h-[120px] md:min-h-[150px] flex flex-col justify-between transition-colors duration-500 hover:bg-[#15130c]"
-          >
-            <span className="flex items-start justify-between text-xs text-white/30 tabular-nums">
-              <span className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:scale-110">
-                <StackMark name={s} />
-              </span>
-              {pad(i + 1)}
-            </span>
-            <span className="text-lg md:text-2xl font-semibold tracking-[-0.03em] leading-tight transition-colors duration-500 group-hover:text-[#D4AF37]">{s}</span>
-          </motion.li>
-        ))}
-        {/* Fill the last row so the grid stays a clean rectangle */}
-        {Array.from({ length: (3 - (extra.stack.length % 3)) % 3 }).map((_, i) => (
-          <li key={`f${i}`} aria-hidden className="hidden sm:block bg-[#0A0A0A]" />
-        ))}
-        {extra.stack.length % 2 === 1 && <li aria-hidden className="sm:hidden bg-[#0A0A0A]" />}
-      </ul>
-    </div>
-
-    <div className="max-w-[1600px] mx-auto mt-16 md:mt-24">
-      <p className="text-[11px] uppercase tracking-[0.25em] text-white/50">{servicePage.relatedLabel}</p>
-      <ul className="mt-5 grid md:grid-cols-3 gap-3">
-        {extra.related.map((r) => {
-          const rel = serviceExtras[r as ServiceSlug];
-          if (!rel) return null;
-          const pillar = servicePillars.pillars.find((p) => p.id === rel.pillar);
-          return (
-            <li key={r}>
-              <Link
-                href={`/service/${r}`}
-                className="group/roll relative flex h-full min-h-[200px] flex-col justify-between gap-8 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6 md:p-7 transition-colors duration-500 hover:border-[#D4AF37]/50"
+          <ul className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-px rounded-[1.5rem] overflow-hidden bg-white/10 ring-1 ring-white/10 self-start">
+            {extra.stack.map((s, i) => (
+              <motion.li
+                key={s}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease, delay: Math.min(i, 12) * 0.04 }}
+                className="group relative bg-[#0A0A0A] p-5 md:p-7 min-h-[120px] md:min-h-[150px] flex flex-col justify-between transition-colors duration-500 hover:bg-[#15130c]"
               >
-                <span
-                  aria-hidden
-                  className="absolute inset-0 origin-bottom scale-y-0 bg-gradient-to-t from-[#D4AF37]/15 to-transparent transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/roll:scale-y-100"
-                />
-                <span className="relative flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
-                  <span>
-                    {pillar?.number} {pillar?.name}
+                <span className="flex items-start justify-between text-xs text-white/30 tabular-nums">
+                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:scale-110">
+                    <StackMark name={s} />
                   </span>
-                  <HoverArrow className="[&>svg]:w-5 [&>svg]:h-5" />
+                  {pad(i + 1)}
                 </span>
-                <span className="relative">
-                  <span className="block text-2xl md:text-3xl font-semibold tracking-[-0.03em] leading-tight">
-                    <RollText>{rel.name}</RollText>
-                  </span>
-                  <span className="mt-2 block font-serif italic text-white/50">
-                    {rel.promise[0]} {rel.promise[1]}
-                  </span>
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  </section>
-);
+                <span className="text-lg md:text-2xl font-semibold tracking-[-0.03em] leading-tight transition-colors duration-500 group-hover:text-[#D4AF37]">{s}</span>
+              </motion.li>
+            ))}
+            {/* Fill the last row so the grid stays a clean rectangle */}
+            {Array.from({ length: (3 - (extra.stack.length % 3)) % 3 }).map((_, i) => (
+              <li key={`f${i}`} aria-hidden className="hidden sm:block bg-[#0A0A0A]" />
+            ))}
+            {extra.stack.length % 2 === 1 && <li aria-hidden className="sm:hidden bg-[#0A0A0A]" />}
+          </ul>
+        </div>
+      )}
+
+      {extra.related.length > 0 && (
+        <div className={cn("max-w-[1600px] mx-auto", extra.stack.length > 0 && "mt-16 md:mt-24")}>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-white/50">{servicePage.relatedLabel}</p>
+          <ul className="mt-5 grid md:grid-cols-3 gap-3">
+            {extra.related.map((r) => {
+              const relHero = allServices?.[r]?.hero;
+              if (!relHero?.name) return null;
+              const pillar = pillars.find((p) => p.id === (relHero.pillar ?? serviceExtras[r as ServiceSlug]?.pillar));
+              return (
+                <li key={r}>
+                  <Link
+                    href={`/service/${r}`}
+                    className="group/roll relative flex h-full min-h-[200px] flex-col justify-between gap-8 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6 md:p-7 transition-colors duration-500 hover:border-[#D4AF37]/50"
+                  >
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 origin-bottom scale-y-0 bg-gradient-to-t from-[#D4AF37]/15 to-transparent transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/roll:scale-y-100"
+                    />
+                    <span className="relative flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                      <span>
+                        {pillar?.number} {pillar?.name}
+                      </span>
+                      <HoverArrow className="[&>svg]:w-5 [&>svg]:h-5" />
+                    </span>
+                    <span className="relative">
+                      <span className="block text-2xl md:text-3xl font-semibold tracking-[-0.03em] leading-tight">
+                        <RollText>{relHero.name}</RollText>
+                      </span>
+                      {(relHero.headingLine1 || relHero.headingLine2) && (
+                        <span className="mt-2 block font-serif italic text-white/50">
+                          {relHero.headingLine1} {relHero.headingLine2}
+                        </span>
+                      )}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+};
 
 /** One template for every /service/[slug] page. */
 export const ServicePage = ({
   slug,
   data,
+  allServices = null,
   headingTag = "h1",
 }: {
   slug: ServiceSlug;
   data: CmsService | null;
+  allServices?: Record<string, CmsService> | null;
   headingTag?: HeadingTag;
 }) => {
-  const extra = withCms(serviceExtras[slug], data);
+  const pillars = useSectionContent("ServicePillars").pillars;
+  const growthCta = useSectionContent("GrowthCTA");
+  const extra = withCms(serviceExtras[slug], data, pillars);
   const hero = data?.hero;
   const items = data?.services ?? [];
 
   return (
     <>
-      <Hero extra={extra} intro={hero?.paragraphs?.[0]} items={items} image={hero?.imageUrl} headingTag={headingTag} />
+      <Hero
+        extra={extra}
+        pillars={pillars}
+        bookingLabel={growthCta.primaryButtonLabel}
+        bookingUrl={growthCta.primaryButtonUrl}
+        intro={hero?.paragraphs?.[0]}
+        items={items}
+        image={hero?.imageUrl}
+        headingTag={headingTag}
+      />
       <Approach text={hero?.paragraphs?.[1]} points={(hero?.pillars ?? []).slice(0, 4)} />
       <Deliver items={items} />
       <Proof extra={extra} />
-      <Stack extra={extra} />
+      <Stack extra={extra} pillars={pillars} allServices={allServices} />
     </>
   );
 };

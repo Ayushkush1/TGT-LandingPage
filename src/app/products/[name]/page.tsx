@@ -13,9 +13,9 @@ import { PageHero } from "@/components/sections/PageHero";
 import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { useCMSStore, type PortfolioItemData } from "@/store/useCMSStore";
 import { resolveHeadingTag } from "@/lib/cmsData";
+import { useSectionContent } from "@/content/useSectionContent";
 import { useProjects } from "@/app/portfolio/useProjects";
 
-const BOOKING_URL = "https://calendar.app.google/5nNHP69fUR5WEMvt9";
 const ease = [0.22, 1, 0.36, 1] as const;
 const pad = (n: number) => String(n).padStart(2, "0");
 const clean = (t = "") => t.replace(/\s*[—–]\s*/g, ", ").replace(/\s+/g, " ").trim();
@@ -90,6 +90,8 @@ export default function CaseStudyPage() {
 
   const raw = portfolio?.find((p) => slugOf(p.title) === slug);
   if (portfolio && !raw) notFound();
+  const bookingUrl = useSectionContent("GrowthCTA").primaryButtonUrl;
+  const bookingLabel = useSectionContent("GrowthCTA").primaryButtonLabel;
   const index = projects.findIndex((p) => p.title === raw?.title);
   const project = projects[index];
   const next = projects.length > 1 ? projects[(index + 1) % projects.length] : undefined;
@@ -121,7 +123,7 @@ export default function CaseStudyPage() {
               top={project.client}
               highlight={`${project.service.toLowerCase()}.`}
               description={project.summary}
-              primary={site ? { label: "Visit the live site", href: site } : { label: "Book a free strategy call", href: BOOKING_URL }}
+              primary={site ? { label: "Visit the live site", href: site } : bookingUrl && bookingLabel ? { label: bookingLabel, href: bookingUrl } : undefined}
               secondary={{ label: "Read the story", href: "#story" }}
               number={pad(index + 1)}
               image={{ src: project.image, alt: `${project.client}, ${project.service}` }}

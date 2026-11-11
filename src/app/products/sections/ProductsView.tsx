@@ -9,7 +9,7 @@ import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { cn } from "@/lib/utils";
-import { productLinkFixes, productsContent } from "@/content/products";
+import { productsContent } from "@/content/products";
 import { usePageSection } from "@/content/usePageSection";
 import type { HeadingTag, ProductItemData } from "@/store/useCMSStore";
 
@@ -50,7 +50,7 @@ const prepare = (
   grid: typeof productsContent.grid,
 ): Product[] =>
   products.map((p) => {
-    const link = (productLinkFixes[p.title.trim()] ?? p.link ?? "").trim();
+    const link = (p.link ?? "").trim();
     const domain = host(link);
     return {
       ...p,
@@ -307,7 +307,12 @@ const SpreadLayout = ({ items }: { items: Product[] }) => (
 /** Products page: shared hero, product grid, then the "let's talk" section. */
 export const ProductsView = ({ products, headingTag = "h1" }: { products: ProductItemData[]; headingTag?: HeadingTag }) => {
   // CMS: Static pages → Products (main.hero, main.grid)
-  const hero = usePageSection("productData", "main", productsContent.hero, "hero");
+  const hero = usePageSection<typeof productsContent.hero & { headingLine?: string; headingHighlight?: string }>(
+    "productData",
+    "main",
+    productsContent.hero,
+    "hero",
+  );
   const grid = usePageSection("productData", "main", productsContent.grid, "grid");
   const layout = useLayout();
   const items = prepare(products, hero, grid);
@@ -316,8 +321,8 @@ export const ProductsView = ({ products, headingTag = "h1" }: { products: Produc
     <>
       <PageHero
         label={hero.label}
-        top={hero.headlineTop}
-        highlight={hero.headlineHighlight}
+        top={hero.headingLine?.trim() || hero.headlineTop}
+        highlight={hero.headingHighlight?.trim() || hero.headlineHighlight}
         description={hero.description}
         primary={{ label: hero.primaryLabel, href: hero.primaryUrl }}
         secondary={{ label: hero.secondaryLabel, href: hero.secondaryUrl }}

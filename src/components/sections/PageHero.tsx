@@ -6,12 +6,8 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { siteDefaults } from "@/content/site";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import type { HeadingTag } from "@/store/useCMSStore";
-
-/** Alt text of the fallback hero photo (the team at work), shown when a hero has no image. */
-const DEFAULT_ALT = "The Gold Technologies team at work";
 
 interface Cta {
   label: string;
@@ -68,13 +64,15 @@ export const PageHero = ({
   /** Main heading tag from CMS SEO headingOptions (defaults to h1). */
   headingTag?: HeadingTag;
 }) => {
-  // Each page's hero image comes from its CMS hero section
-  const image = { src: pageImage?.src || siteDefaults.pageHero, alt: pageImage?.src ? pageImage.alt : DEFAULT_ALT };
+  // Each page's hero image comes strictly from its CMS hero section
+  const image = pageImage?.src ? { src: pageImage.src, alt: pageImage.alt } : null;
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const dim = useTransform(scrollYProgress, [0, 1], [0, 0.5]);
-  const external = primary && /^https?:/.test(primary.href);
+  const primaryLink = primary?.label?.trim() && primary?.href?.trim() ? primary : null;
+  const secondaryLink = secondary?.label?.trim() && secondary?.href?.trim() ? secondary : null;
+  const external = primaryLink ? /^https?:/.test(primaryLink.href) : false;
   const DescriptionTag = typeof description === "string" ? "p" : "div";
   const Heading = headingTag;
 
@@ -136,26 +134,26 @@ export const PageHero = ({
               ))}
             </ul>
           )}
-          {(primary || secondary) && (
+          {(primaryLink || secondaryLink) && (
             <div className="lg:col-span-4 lg:col-start-9 lg:justify-self-end flex flex-wrap items-center gap-x-7 gap-y-4">
-              {primary && (
+              {primaryLink && (
                 <MagneticButton intensity={0.2}>
                   <a
-                    href={primary.href}
+                    href={primaryLink.href}
                     {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     className="group inline-flex items-center gap-3 rounded-full bg-[#D4AF37] pl-5 pr-1.5 py-1.5 text-sm text-black font-semibold transition-shadow hover:shadow-[0_0_40px_rgba(212,175,55,0.45)]"
                   >
-                    {primary.label}
+                    {primaryLink.label}
                     <span className="w-9 h-9 rounded-full bg-black text-[#D4AF37] flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
                       <ArrowUpRight className="w-5 h-5" />
                     </span>
                   </a>
                 </MagneticButton>
               )}
-              {secondary && (
-                <Link href={secondary.href} className="group inline-flex items-center gap-2 text-sm font-medium">
+              {secondaryLink && (
+                <Link href={secondaryLink.href} className="group inline-flex items-center gap-2 text-sm font-medium">
                   <span className="relative">
-                    {secondary.label}
+                    {secondaryLink.label}
                     <span className="absolute left-0 -bottom-1 h-px w-full bg-white/40 origin-left transition-transform duration-500 group-hover:scale-x-0" />
                   </span>
                   <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />

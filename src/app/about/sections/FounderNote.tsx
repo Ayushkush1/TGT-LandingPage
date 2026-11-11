@@ -94,13 +94,15 @@ export const FounderNote = () => {
                     }}
                     className="relative w-full h-full origin-top"
                   >
-                    <Image
-                      src={copy.photo}
-                      alt={`${copy.name}, ${copy.role} of The Gold Technologies`}
-                      fill
-                      sizes="(max-width: 1024px) 300px, 320px"
-                      className="object-cover object-top"
-                    />
+                    {copy.photo && (
+                      <Image
+                        src={copy.photo}
+                        alt={`${copy.name}, ${copy.role} of The Gold Technologies`}
+                        fill
+                        sizes="(max-width: 1024px) 300px, 320px"
+                        className="object-cover object-top"
+                      />
+                    )}
                   </motion.div>
                 </div>
               </motion.div>
@@ -168,19 +170,21 @@ export const FounderNote = () => {
                   </div>
                 </div>
 
-                <MagneticButton intensity={0.2}>
-                  <a
-                    href={copy.ctaUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/roll inline-flex items-center gap-3 rounded-full bg-[#0B0F29] text-white pl-6 pr-1.5 py-1.5 font-medium"
-                  >
-                    <RollText>{copy.ctaLabel}</RollText>
-                    <span className="w-10 h-10 rounded-full bg-[#D4AF37] flex items-center justify-center">
-                      <HoverArrow className="!text-black" />
-                    </span>
-                  </a>
-                </MagneticButton>
+                {copy.ctaUrl && copy.ctaLabel && (
+                  <MagneticButton intensity={0.2}>
+                    <a
+                      href={copy.ctaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/roll inline-flex items-center gap-3 rounded-full bg-[#0B0F29] text-white pl-6 pr-1.5 py-1.5 font-medium"
+                    >
+                      <RollText>{copy.ctaLabel}</RollText>
+                      <span className="w-10 h-10 rounded-full bg-[#D4AF37] flex items-center justify-center">
+                        <HoverArrow className="!text-black" />
+                      </span>
+                    </a>
+                  </MagneticButton>
+                )}
               </div>
             </div>
           </div>

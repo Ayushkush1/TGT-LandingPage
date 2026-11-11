@@ -6,14 +6,14 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { servicePillars, type PillarId } from "@/content/growth";
+import { type PillarId } from "@/content/growth";
 import { portfolioContent } from "@/content/portfolio";
 import { usePageSection } from "@/content/usePageSection";
+import { useSectionContent } from "@/content/useSectionContent";
 import { useProjects, type Project } from "../useProjects";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const pad = (n: number) => String(n).padStart(2, "0");
-const pillarName = (id: PillarId) => servicePillars.pillars.find((p) => p.id === id)?.name ?? id;
 
 /** One case study: large image with a "View case" disc on hover, details underneath. */
 // forwardRef: AnimatePresence "popLayout" measures the exiting card through its ref.
@@ -80,6 +80,7 @@ ProjectCard.displayName = "ProjectCard";
 /** Case study index: pillar filters over a staggered two-column grid. */
 export const WorkIndex = () => {
   const copy = usePageSection("portfolioData", "main", portfolioContent.index, "index");
+  const pillars = useSectionContent("ServicePillars").pillars;
   const projects = useProjects();
   const [filter, setFilter] = useState<PillarId | "all">("all");
 
@@ -87,7 +88,7 @@ export const WorkIndex = () => {
 
   const filters = [
     { id: "all" as const, name: copy.allLabel, count: projects.length },
-    ...servicePillars.pillars
+    ...pillars
       .map((p) => ({ id: p.id, name: p.name, count: projects.filter((x) => x.pillars.includes(p.id)).length }))
       .filter((f) => f.count > 0),
   ];

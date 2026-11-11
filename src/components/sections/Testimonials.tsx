@@ -6,7 +6,6 @@ import { ArrowUpRight, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSectionContent } from "@/content/useSectionContent";
 import { useCMSStore } from "@/store/useCMSStore";
-import { placeholderTestimonials } from "@/content/growth";
 
 interface Story {
   quote: string;
@@ -150,7 +149,7 @@ const Row = ({ stories, duration, reverse, offset }: { stories: Story[]; duratio
 export const Testimonials = () => {
   const data = useSectionContent("Testimonials");
   const cms = useCMSStore((s) => s.homeData?.OurReputation);
-  const stories: Story[] = [...(cms?.testimonials ?? []), ...placeholderTestimonials];
+  const stories: Story[] = cms?.testimonials ?? [];
   const half = Math.ceil(stories.length / 2);
   const rows = [stories.slice(0, half), stories.slice(half)];
 
@@ -175,27 +174,33 @@ export const Testimonials = () => {
       </div>
 
       {/* Full-width rows; hovering pauses both so a quote can be read */}
-      <div className="group mt-12 md:mt-16 space-y-2" aria-label="Client testimonials">
-        <Row stories={rows[0]} duration={75} offset={0} />
-        {rows[1].length > 0 && <Row stories={rows[1]} duration={85} reverse offset={rows[0].length} />}
-      </div>
-
-      <div className="px-5 md:px-10">
-        <div className="max-w-[1600px] mx-auto mt-12 md:mt-16 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t border-[#0B0F29]/15 pt-8">
-          {cms?.footerCtaText && <p className="font-serif italic text-2xl md:text-3xl">{cms.footerCtaText}</p>}
-          <a
-            href={data.ctaUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 self-start rounded-full bg-[#0B0F29] text-white pl-6 pr-1.5 py-1.5 font-medium"
-          >
-            {data.ctaLabel}
-            <span className="w-10 h-10 rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
-              <ArrowUpRight className="w-4 h-4" />
-            </span>
-          </a>
+      {stories.length > 0 && (
+        <div className="group mt-12 md:mt-16 space-y-2" aria-label="Client testimonials">
+          <Row stories={rows[0]} duration={75} offset={0} />
+          {rows[1].length > 0 && <Row stories={rows[1]} duration={85} reverse offset={rows[0].length} />}
         </div>
-      </div>
+      )}
+
+      {(cms?.footerCtaText || (data.ctaUrl && data.ctaLabel)) && (
+        <div className="px-5 md:px-10">
+          <div className="max-w-[1600px] mx-auto mt-12 md:mt-16 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t border-[#0B0F29]/15 pt-8">
+            {cms?.footerCtaText && <p className="font-serif italic text-2xl md:text-3xl">{cms.footerCtaText}</p>}
+            {data.ctaUrl && data.ctaLabel && (
+              <a
+                href={data.ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 self-start rounded-full bg-[#0B0F29] text-white pl-6 pr-1.5 py-1.5 font-medium"
+              >
+                {data.ctaLabel}
+                <span className="w-10 h-10 rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
+              </a>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

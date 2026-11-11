@@ -35,14 +35,16 @@ const Logo = ({ light }: { light: boolean }) => {
   const { logo } = useSiteFooter();
   return (
     <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="The Gold Technologies home page">
-      <Image
-        src={logo}
-        alt=""
-        width={40}
-        height={40}
-        priority
-        className="w-9 h-9 md:w-10 md:h-10 rounded-full ring-1 ring-[#D4AF37]/40"
-      />
+      {logo && (
+        <Image
+          src={logo}
+          alt=""
+          width={40}
+          height={40}
+          priority
+          className="w-9 h-9 md:w-10 md:h-10 rounded-full ring-1 ring-[#D4AF37]/40"
+        />
+      )}
       <span
         className={cn(
           "whitespace-nowrap text-[15px] md:text-xl font-bold tracking-tight transition-colors",
@@ -526,6 +528,7 @@ const SiteMenu = ({
   navLinks: NavLink[] | null;
 }) => {
   const copy = useSectionContent("SiteMenu");
+  const stickyCta = useSectionContent("StickyCTA");
   const pillars = useSectionContent("ServicePillars").pillars;
   // Big links: every top-level CMS link (a menu opens its own page, or its first link)
   const primary = navLinks?.length
@@ -679,17 +682,19 @@ const SiteMenu = ({
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <a
-                  href={copy.ctaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 rounded-full bg-[#D4AF37] pl-6 pr-1.5 py-1.5 font-semibold text-black"
-                >
-                  {copy.ctaLabel}
-                  <span className="w-10 h-10 rounded-full bg-black text-[#D4AF37] flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
-                    <ArrowUpRight className="w-4 h-4" />
-                  </span>
-                </a>
+                {stickyCta.buttonUrl && stickyCta.buttonLabel && (
+                  <a
+                    href={stickyCta.buttonUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-3 rounded-full bg-[#D4AF37] pl-6 pr-1.5 py-1.5 font-semibold text-black"
+                  >
+                    {stickyCta.buttonLabel}
+                    <span className="w-10 h-10 rounded-full bg-black text-[#D4AF37] flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </span>
+                  </a>
+                )}
                 <button
                   onClick={onAudit}
                   className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium hover:border-white/40 transition-colors"

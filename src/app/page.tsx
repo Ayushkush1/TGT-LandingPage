@@ -14,7 +14,6 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { StickyCTA } from "@/components/StickyCTA";
 import { CMSPageData } from "@/components/CMSDataInitializer";
 import { RenderSchema } from "@/components/RenderSchema";
-import { siteDefaults } from "@/content/siteDefaults";
 import { getPage, getSite } from "@/lib/cmsServer";
 import { resolveHeadingTag } from "@/lib/cmsData";
 import { homeMetadata, loadPagesState } from "@/lib/cms";
@@ -28,7 +27,7 @@ export default async function Home() {
     getPage("home"),
     loadPagesState("about"), // case studies in the showreel & work showcase
   ]);
-  const background = site?.siteImages?.homeBackground || siteDefaults.homeBackground;
+  const background = site?.siteImages?.homeBackground?.trim() || "";
   const globalSEO = site?.settings;
   const headingTag = resolveHeadingTag(globalSEO?.headingOptions || home?.seo?.headingOptions);
   const globalSchema = globalSEO?.schema?.trim() || null;
@@ -43,17 +42,19 @@ export default async function Home() {
       />
       <main className="min-h-screen bg-white font-sans selection:bg-brand-gold/20">
         <SmoothScroll />
-        {/* Background Image */}
-        <div className="fixed inset-0 z-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url('${background}')`,
-            }}
-          />
-          {/* Optional overlay for better text readability */}
-          <div className="absolute inset-0 bg-white/85" />
-        </div>
+        {/* Background Image (from CMS global siteImages) */}
+        {background && (
+          <div className="fixed inset-0 z-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url('${background}')`,
+              }}
+            />
+            {/* Optional overlay for better text readability */}
+            <div className="absolute inset-0 bg-white/85" />
+          </div>
+        )}
 
         {/* Content */}
         <div className="relative z-10">

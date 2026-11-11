@@ -173,6 +173,7 @@ const menuLabel = (title: string) => (title.trim() === "Service" ? "Services" : 
 export const Footer = () => {
   const site = useSiteFooter();
   const copy = useSectionContent("GrowthFooter");
+  const stickyCta = useSectionContent("StickyCTA");
   const times = useOfficeTimes();
 
   const containerRef = useRef<HTMLElement>(null);
@@ -261,14 +262,18 @@ export const Footer = () => {
         <div className="relative grid md:grid-cols-2 xl:grid-cols-[auto_auto_minmax(0,1fr)_minmax(0,1.3fr)_auto] gap-x-10 gap-y-10 items-start">
           <div>
             <Link href="/" className="inline-flex items-center gap-3" aria-label="The Gold Technologies home page">
-              <Image
-                src={site.logo}
-                alt=""
-                width={44}
-                height={44}
-                className="w-10 h-10 md:w-11 md:h-11 rounded-full ring-1 ring-[#D4AF37]/40"
-              />
-              <span className="text-xl md:text-2xl font-semibold tracking-[-0.02em] leading-none whitespace-nowrap">The Gold Technologies</span>
+              {site.logo && (
+                <Image
+                  src={site.logo}
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="w-10 h-10 md:w-11 md:h-11 rounded-full ring-1 ring-[#D4AF37]/40"
+                />
+              )}
+              <span className="text-xl md:text-2xl font-semibold tracking-[-0.02em] leading-none whitespace-nowrap">
+                {site.companyName ? "The Gold Technologies" : "The Gold Technologies"}
+              </span>
             </Link>
             {socials.length > 0 && (
               <ul className="mt-6 flex gap-2.5">
@@ -328,21 +333,23 @@ export const Footer = () => {
             );
           })}
 
-          <MagneticButton intensity={0.3} className="hidden xl:block justify-self-end -mt-4">
-            <a href={copy.ctaUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.ctaLabel} className="group relative block w-28 h-28 md:w-32 md:h-32">
-              <motion.svg aria-hidden viewBox="0 0 200 200" style={{ rotate: badgeRotate }} className="absolute inset-0 w-full h-full will-change-transform">
-                <defs>
-                  <path id="footer-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
-                </defs>
-                <text className="fill-white/70 text-[15px] uppercase tracking-[0.3em]">
-                  <textPath href="#footer-badge-circle">{`${copy.ctaLabel} • ${copy.ctaLabel} • `}</textPath>
-                </text>
-              </motion.svg>
-              <span className="absolute inset-[26%] rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-                <ArrowUpRight className="w-7 h-7 transition-transform duration-500 group-hover:rotate-45" />
-              </span>
-            </a>
-          </MagneticButton>
+          {stickyCta.buttonUrl && stickyCta.buttonLabel && (
+            <MagneticButton intensity={0.3} className="hidden xl:block justify-self-end -mt-4">
+              <a href={stickyCta.buttonUrl} target="_blank" rel="noopener noreferrer" aria-label={stickyCta.buttonLabel} className="group relative block w-28 h-28 md:w-32 md:h-32">
+                <motion.svg aria-hidden viewBox="0 0 200 200" style={{ rotate: badgeRotate }} className="absolute inset-0 w-full h-full will-change-transform">
+                  <defs>
+                    <path id="footer-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+                  </defs>
+                  <text className="fill-white/70 text-[15px] uppercase tracking-[0.3em]">
+                    <textPath href="#footer-badge-circle">{`${stickyCta.buttonLabel} • ${stickyCta.buttonLabel} • `}</textPath>
+                  </text>
+                </motion.svg>
+                <span className="absolute inset-[26%] rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                  <ArrowUpRight className="w-7 h-7 transition-transform duration-500 group-hover:rotate-45" />
+                </span>
+              </a>
+            </MagneticButton>
+          )}
         </div>
 
         {/* Links (CMS: Menu Links placed in the footer): services by growth stage, then a column per menu */}

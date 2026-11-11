@@ -1,17 +1,19 @@
 "use client";
 
+import { useMemo } from "react";
 import { useCMSStore } from "@/store/useCMSStore";
 import { growthContent, type GrowthSectionKey } from "./growth";
+import { mergeContent } from "./usePageSection";
 
 /**
- * Returns local defaults for a growth section, overridden by any fields the
- * CMS "home" page provides under a section of the same `type`.
+ * Returns strictly the fields provided by the CMS "home" page under a section
+ * of type `key`, using empty typed shapes for any missing or empty field.
  */
 export function useSectionContent<K extends GrowthSectionKey>(
   key: K,
 ): (typeof growthContent)[K] {
   const cms = useCMSStore(
-    (state) => (state.homeData as Record<string, any> | null)?.[key],
+    (state) => (state.homeData as Record<string, unknown> | null)?.[key],
   );
-  return cms ? { ...growthContent[key], ...cms } : growthContent[key];
+  return useMemo(() => mergeContent(growthContent[key], cms), [key, cms]);
 }

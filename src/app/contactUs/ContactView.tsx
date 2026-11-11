@@ -68,7 +68,7 @@ export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) 
         secondary={{ label: copy.hero.secondaryLabel, href: copy.hero.secondaryUrl }}
         image={{ src: copy.hero.imageUrl, alt: "" }}
         number="05"
-        facts={["Reply within 24 hours", "Noida & Dubai"]}
+        facts={[copy.direct.replyNote, ...offices.map((o) => o.country)].filter(Boolean)}
         headingTag={headingTag}
       />
 
@@ -78,15 +78,17 @@ export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) 
           <div className="lg:col-span-4">
             <p className="text-[11px] uppercase tracking-[0.25em] text-white/50">{copy.direct.label}</p>
             <ul className="mt-8 space-y-8">
-              <li>
-                <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
-                  <Mail className="w-3.5 h-3.5" /> {copy.direct.emailLabel}
-                </p>
-                <a href={`mailto:${email}`} className="group/roll mt-2 inline-flex items-center gap-2 text-xl md:text-2xl font-semibold tracking-[-0.02em] break-all">
-                  <RollText>{email}</RollText>
-                  <HoverArrow />
-                </a>
-              </li>
+              {email && (
+                <li>
+                  <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                    <Mail className="w-3.5 h-3.5" /> {copy.direct.emailLabel}
+                  </p>
+                  <a href={`mailto:${email}`} className="group/roll mt-2 inline-flex items-center gap-2 text-xl md:text-2xl font-semibold tracking-[-0.02em] break-all">
+                    <RollText>{email}</RollText>
+                    <HoverArrow />
+                  </a>
+                </li>
+              )}
               {phone && (
                 <li>
                   <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">

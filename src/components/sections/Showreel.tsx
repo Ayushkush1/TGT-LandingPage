@@ -18,7 +18,6 @@ export const Showreel = () => {
   const images = Array.from(
     new Set([...caseStudies, ...products].map((w) => w.image)),
   );
-
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,

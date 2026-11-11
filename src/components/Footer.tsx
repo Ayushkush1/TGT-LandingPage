@@ -15,6 +15,7 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useSectionContent } from "@/content/useSectionContent";
 import { useSiteFooter, type SiteFooter } from "@/content/site";
+import { groupByPillar, isServicesMenu } from "@/content/navGroups";
 import { useCMSStore } from "@/store/useCMSStore";
 
 // Official DMCA badge and status page for thegoldtechnologies.com.
@@ -161,6 +162,29 @@ function useOfficeTimes() {
   return times;
 }
 
+/** One footer link; external links open in a new tab. */
+const FooterLink = ({ href, label }: { href: string; label: string }) => {
+  const className = "group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap";
+  const content = (
+    <>
+      <RollText>{label}</RollText>
+      <HoverArrow />
+    </>
+  );
+  return /^https?:\/\//.test(href) ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {content}
+    </a>
+  ) : (
+    <Link href={href} className={className}>
+      {content}
+    </Link>
+  );
+};
+
+/** Display label for a CMS menu ("Service" reads as "Services"). */
+const menuLabel = (title: string) => (title.trim() === "Service" ? "Services" : title.trim());
+
 export const Footer = () => {
   const site = useSiteFooter();
   const copy = useSectionContent("GrowthFooter");
@@ -191,6 +215,45 @@ export const Footer = () => {
   const products = (useCMSStore((state) => state.productData?.main?.products) ?? [])
     .filter((p) => p.title && p.link)
     .slice(0, FOOTER_PRODUCT_COUNT);
+  const footerLinks = useCMSStore((state) => state.footerLinks);
+  const linkArea = React.useMemo(() => {
+    type Column = { title: string; links: { label: string; href: string }[] };
+    if (footerLinks?.length) {
+      // From the CMS: the services menu by growth stage, a column per other menu, then the plain links
+      const servicesMenu = footerLinks.find(isServicesMenu);
+      const menus = footerLinks.filter((l) => l !== servicesMenu && l.dropdown?.length);
+      const plain = footerLinks.filter((l) => !l.dropdown?.length && l.link);
+      const columns: Column[] = menus.map((menu) => ({
+        title: menuLabel(menu.title),
+        links: (menu.dropdown ?? []).filter((d) => d.link).map((d) => ({ label: d.title, href: d.link })),
+      }));
+      if (plain.length) {
+        columns.push({ title: "Company", links: plain.map((l) => ({ label: menuLabel(l.title), href: l.link })) });
+      }
+      return {
+        services: servicesMenu
+          ? { title: menuLabel(servicesMenu.title), groups: groupByPillar(servicesMenu.dropdown ?? [], pillars) }
+          : null,
+        columns,
+      };
+    }
+    // No footer links in the CMS yet: services by stage, featured products and company links
+    return {
+      services: {
+        title: "Services",
+        groups: pillars.map((p) => ({
+          id: p.id,
+          number: p.number,
+          name: p.name,
+          links: p.services.map((sv) => ({ title: sv.name, link: sv.href })),
+        })),
+      },
+      columns: [
+        { title: "Products", links: products.map((pr) => ({ label: pr.title.trim(), href: pr.link })) },
+        { title: "Company", links: copy.companyLinks.map((l) => ({ label: l.label, href: l.href })) },
+      ] as Column[],
+    };
+  }, [footerLinks, pillars, products, copy.companyLinks]);
   const socials = [
     { Icon: Linkedin, url: site.socials.linkedin, label: "LinkedIn" },
     { Icon: Instagram, url: site.socials.instagram, label: "Instagram" },
@@ -274,7 +337,7 @@ export const Footer = () => {
                   )}
                 </p>
                 <p className="mt-2 text-sm text-white/55 leading-relaxed">
-                  {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
+                  {office.address?.replace(/\s+[-–—]\s+/g, ", ")}
                 </p>
               </div>
             );
@@ -297,62 +360,44 @@ export const Footer = () => {
           </MagneticButton>
         </div>
 
-        {/* Links: the four service stages side by side, then products and company */}
+        {/* Links (CMS: Menu Links placed in the footer): services by growth stage, then a column per menu */}
         <div className="relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-10">
-          <div className="col-span-2 md:col-span-4">
-            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Services</p>
-            <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6">
-              {pillars.map((pillar) => (
-                <div key={pillar.id}>
-                  <p className="flex items-baseline gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
-                    <span className="font-serif italic normal-case tracking-normal text-sm font-normal text-[#D4AF37]">{pillar.number}</span>
-                    {pillar.name}
-                  </p>
-                  <ul className="mt-1.5 text-sm">
-                    {pillar.services.map((service) => (
-                      <li key={service.name}>
-                        <Link href={service.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
-                          <RollText>{SHORT_SERVICE_LABELS[service.name] ?? service.name}</RollText>
-                          <HoverArrow />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+          {linkArea.services && (
+            <div className="col-span-2 md:col-span-4">
+              <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">{linkArea.services.title}</p>
+              <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6">
+                {linkArea.services.groups.map((group) => (
+                  <div key={group.id}>
+                    <p className="flex items-baseline gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                      {group.number && (
+                        <span className="font-serif italic normal-case tracking-normal text-sm font-normal text-[#D4AF37]">{group.number}</span>
+                      )}
+                      {group.name}
+                    </p>
+                    <ul className="mt-1.5 text-sm">
+                      {group.links.map((service) => (
+                        <li key={service.link}>
+                          <FooterLink href={service.link} label={SHORT_SERVICE_LABELS[service.title.trim()] ?? service.title} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div>
-            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Products</p>
-            <ul className="mt-3 text-sm">
-              {products.map((product) => (
-                <li key={product.title}>
-                  <a
-                    href={product.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap"
-                  >
-                    <RollText>{SHORT_PRODUCT_LABELS[product.title.trim()] ?? product.title.trim()}</RollText>
-                    <HoverArrow />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Company</p>
-            <ul className="mt-3 text-sm">
-              {copy.companyLinks.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
-                    <RollText>{link.label}</RollText>
-                    <HoverArrow />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
+          {linkArea.columns.map((column) => (
+            <div key={column.title}>
+              <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">{column.title}</p>
+              <ul className="mt-3 text-sm">
+                {column.links.map((link) => (
+                  <li key={link.href + link.label}>
+                    <FooterLink href={link.href} label={SHORT_PRODUCT_LABELS[link.label.trim()] ?? link.label} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Giant wordmark: "GOLD TECH" rises letter by letter, flanked by THE / NOLOGIES */}

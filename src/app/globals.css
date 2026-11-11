@@ -88,6 +88,13 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Text typed in the CMS keeps its line breaks: Enter in a paragraph field starts a new line */
+  p,
+  blockquote,
+  figcaption {
+    white-space: pre-line;
+  }
 }
 
 /* ── Landing page utilities ─────────────────────────────────────── */

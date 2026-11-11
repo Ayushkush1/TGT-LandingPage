@@ -244,7 +244,8 @@ export type MediaPageData = PageData<{}>;
 export interface CMSState {
   site: SiteData | null;
   globalSEO: GlobalSEOData | null;
-  navLinks: NavLink[] | null;
+  navLinks: NavLink[] | null; // navbar (CMS Menu Links placed in the navbar)
+  footerLinks: NavLink[] | null; // footer (CMS Menu Links placed in the footer)
   banners: any[] | null;
   homeData: HomeData | null;
   aboutData: AboutData | null;
@@ -260,6 +261,7 @@ const initialState: CMSState = {
   site: null,
   globalSEO: null,
   navLinks: null,
+  footerLinks: null,
   banners: null,
   homeData: null,
   aboutData: null,

@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useCMSStore, type CMSState } from "@/store/useCMSStore";
 
-type PageKey = Exclude<keyof CMSState, "site" | "globalSEO" | "navLinks" | "banners">;
+type PageKey = Exclude<keyof CMSState, "site" | "globalSEO" | "navLinks" | "footerLinks" | "banners">;
 
 /** `cms` laid over `defaults`; empty CMS values ("", null, []) keep the default. */
 export function mergeContent<T extends object>(defaults: T, cms: unknown): T {

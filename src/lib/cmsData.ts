@@ -44,15 +44,21 @@ export function siteState(site: CmsSite | null): Partial<CMSState> {
   return {
     globalSEO: { ...site.settings, socialLinks: site.socialLinks } as GlobalSEOData,
     site: { footer: site.footer, socialLinks: site.socialLinks, siteImages: site.siteImages } as SiteData,
-    navLinks: formatNavLinks(site.navLinks ?? []),
+    navLinks: formatNavLinks(site.navLinks ?? [], "navbar"),
+    footerLinks: formatNavLinks(site.navLinks ?? [], "footer"),
     banners: site.banners ?? [],
   };
 }
 
-/** Builds the nested navigation from the flat nav-links list. */
-export function formatNavLinks(rawLinks: ApiNavLink[]): NavLink[] {
+/**
+ * Builds the nested navigation from the flat nav-links list (CMS: Navigation & Links → Menu Links)
+ * for one place on the site. A top-level link or menu shows where its placement says
+ * ("navbar", "footer" or "both"); a menu's links go wherever the menu goes.
+ */
+export function formatNavLinks(rawLinks: ApiNavLink[], where: "navbar" | "footer"): NavLink[] {
+  const shownIn = (link: ApiNavLink) => (link.placement ?? "navbar") === where || link.placement === "both";
   return rawLinks
-    .filter((link) => link.parent === "-")
+    .filter((link) => link.parent === "-" && shownIn(link))
     .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label))
     .map((mainLink) => ({
       title: mainLink.label,

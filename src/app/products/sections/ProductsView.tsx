@@ -202,10 +202,10 @@ const SplitLayout = ({ items }: { items: Product[] }) => {
             </div>
           </a>
           <div className="mt-4 flex items-baseline justify-between text-[11px] uppercase tracking-[0.2em] text-[#0B0F29]/55">
-            <span className="font-serif italic normal-case tracking-normal text-sm text-[#B8932A]">
+            <p className="font-serif italic normal-case tracking-normal text-sm text-[#B8932A]">
               {pad(active + 1)} / {pad(items.length)}
-            </span>
-            <span className="truncate">{current?.domainLabel}</span>
+            </p>
+            <p className="truncate">{current?.domainLabel}</p>
           </div>
         </div>
       </div>

@@ -123,13 +123,13 @@ export default function BlogPostPage() {
             <PageHero
               compact
               label={
-                <p className="flex flex-wrap items-center gap-3">
+                <span className="flex flex-wrap items-center gap-3">
                   <Link href="/#BlogSection" className="inline-flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors">
                     <ArrowLeft className="w-3.5 h-3.5" /> All articles
                   </Link>
                   <span className="w-6 h-px bg-white/20" />
                   <span className="text-[#D4AF37]">{blog.category}</span>
-                </p>
+                </span>
               }
               top={top}
               highlight={highlight}

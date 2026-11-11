@@ -31,6 +31,12 @@ export const siteDefaults = {
       alt: "Women Owned business",
       link: "",
     },
+    {
+      image:
+        "https://images.dmca.com/Badges/dmca_protected_sml_120c.png?ID=174176c9-e0fd-4010-b0f5-50e6ed21d715",
+      alt: "DMCA.com Protection Status",
+      link: "https://www.dmca.com/Protection/Status.aspx?ID=174176c9-e0fd-4010-b0f5-50e6ed21d715",
+    },
   ],
   wordmark: { left: "The", center: "GOLD TECH", right: "NOLOGIES" },
   socials: {

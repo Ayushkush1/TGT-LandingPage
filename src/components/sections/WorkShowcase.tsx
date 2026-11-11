@@ -249,7 +249,7 @@ export const WorkShowcase = () => {
 
       <AnimatePresence>
         {pinned && hovering && (
-          <motion.div
+          <motion.p
             aria-hidden
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -259,7 +259,7 @@ export const WorkShowcase = () => {
             className="pointer-events-none fixed z-50 -ml-12 -mt-12 w-24 h-24 rounded-full bg-[#D4AF37] text-black flex items-center justify-center text-sm font-semibold"
           >
             View
-          </motion.div>
+          </motion.p>
         )}
       </AnimatePresence>
     </section>

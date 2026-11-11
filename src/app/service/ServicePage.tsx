@@ -94,11 +94,11 @@ const Hero = ({ extra, intro, items, image }: { extra: ServiceExtra; intro?: str
   return (
     <PageHero
       label={
-        <p className="flex items-center gap-3">
+        <span className="flex items-center gap-3">
           <Link href="/#services" className="hover:text-[#D4AF37] transition-colors">(Services)</Link>
           <span className="w-6 h-px bg-white/20" />
           <span className="text-[#D4AF37]">{extra.name}</span>
-        </p>
+        </span>
       }
       srPrefix={extra.name}
       image={{ src: image, alt: "" }}
@@ -263,12 +263,12 @@ const Detail = ({ item, index, total, compact }: { item: CmsItem; index: number;
   <>
     {!compact && (
     <div className="flex items-start justify-between gap-6">
-      <span className="text-[7rem] xl:text-[9rem] leading-[0.8] font-semibold tracking-[-0.06em] text-transparent [-webkit-text-stroke:1.5px_#D4AF37]">
+      <p className="text-[7rem] xl:text-[9rem] leading-[0.8] font-semibold tracking-[-0.06em] text-transparent [-webkit-text-stroke:1.5px_#D4AF37]">
         {pad(index + 1)}
-      </span>
-      <span className="text-xs text-white/40 tabular-nums">
+      </p>
+      <p className="text-xs text-white/40 tabular-nums">
         {pad(index + 1)} / {pad(total)}
-      </span>
+      </p>
     </div>
     )}
     <p className={cn("text-[11px] uppercase tracking-[0.25em] text-[#D4AF37]", !compact && "mt-8")}>{clean(item.category)}</p>

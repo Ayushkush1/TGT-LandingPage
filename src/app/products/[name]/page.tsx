@@ -107,13 +107,13 @@ export default function CaseStudyPage() {
             <PageHero
               compact
               label={
-                <p className="flex flex-wrap items-center gap-3">
+                <span className="flex flex-wrap items-center gap-3">
                   <Link href="/portfolio#work" className="inline-flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors">
                     <ArrowLeft className="w-3.5 h-3.5" /> All work
                   </Link>
                   <span className="w-6 h-px bg-white/20" />
                   <span className="text-[#D4AF37]">{project.industry}</span>
-                </p>
+                </span>
               }
               top={project.client}
               highlight={`${project.service.toLowerCase()}.`}

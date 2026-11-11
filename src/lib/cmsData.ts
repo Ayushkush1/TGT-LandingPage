@@ -53,7 +53,8 @@ export function siteState(site: CmsSite | null): Partial<CMSState> {
 /**
  * Builds the nested navigation from the flat nav-links list (CMS: Navigation & Links → Menu Links)
  * for one place on the site. A top-level link or menu shows where its placement says
- * ("navbar", "footer" or "both"); a menu's links go wherever the menu goes.
+ * ("navbar", "footer" or "both"); a menu's link shows only where both it and its menu are
+ * set to show (a link hidden from both is "none").
  */
 export function formatNavLinks(rawLinks: ApiNavLink[], where: "navbar" | "footer"): NavLink[] {
   const shownIn = (link: ApiNavLink) => (link.placement ?? "navbar") === where || link.placement === "both";
@@ -68,7 +69,7 @@ export function formatNavLinks(rawLinks: ApiNavLink[], where: "navbar" | "footer
       dropdown:
         mainLink.type === "Dropdown"
           ? rawLinks
-              .filter((child) => child.parent === mainLink.id)
+              .filter((child) => child.parent === mainLink.id && shownIn(child))
               .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label))
               .map((child) => ({
                 title: child.label,

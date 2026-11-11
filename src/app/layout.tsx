@@ -3,7 +3,6 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import { CMSDataInitializer } from "@/components/CMSDataInitializer";
-import FooterScripts from "@/components/FooterScripts";
 import { getSite } from "@/lib/cmsServer";
 import { siteState } from "@/lib/cmsData";
 import { loadPagesState } from "@/lib/cms";
@@ -103,12 +102,6 @@ export default async function RootLayout({
             />
           </>
         )}
-        {/* Custom Header Scripts */}
-        {globalSEO?.customHeaderScripts && (
-          <script
-            dangerouslySetInnerHTML={{ __html: globalSEO.customHeaderScripts }}
-          />
-        )}
       </head>
       <body className={`${inter.className} ${playfair.variable}`}>
         {/* GTM Noscript */}
@@ -125,10 +118,6 @@ export default async function RootLayout({
         <CMSDataInitializer initialState={initialCMSState}>
           {children}
         </CMSDataInitializer>
-        {/* Custom Footer Scripts */}
-        {globalSEO?.customFooterScripts && (
-          <FooterScripts html={globalSEO.customFooterScripts} />
-        )}
       </body>
     </html>
   );

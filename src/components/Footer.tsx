@@ -18,50 +18,32 @@ import { useSiteFooter, type SiteFooter } from "@/content/site";
 import { groupByPillar, isServicesMenu } from "@/content/navGroups";
 import { useCMSStore } from "@/store/useCMSStore";
 
-// Official DMCA badge and status page for thegoldtechnologies.com.
-const DMCA_ID = "174176c9-e0fd-4010-b0f5-50e6ed21d715";
-
-/** Footer badges from the CMS (e.g. "Women Owned") and the DMCA badge, shown after the legal links. */
-const TrustBadges = ({ badges }: { badges: SiteFooter["badges"] }) => (
-  <div className="flex items-center gap-3">
-    {badges.map((badge) => {
-      const image = (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={badge.image} alt={badge.alt} height={28} loading="lazy" decoding="async" className="h-7 w-auto" />
-        </>
-      );
-      const box = "inline-flex items-center h-9 rounded-md bg-white px-2.5";
-      return badge.link ? (
-        <a key={badge.image} href={badge.link} target="_blank" rel="noopener noreferrer" title={badge.alt} className={box}>
-          {image}
-        </a>
-      ) : (
-        <span key={badge.image} className={box} title={badge.alt}>
-          {image}
-        </span>
-      );
-    })}
-    <a
-      href={`https://www.dmca.com/Protection/Status.aspx?ID=${DMCA_ID}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      title="DMCA.com Protection Status"
-      className="inline-flex items-center h-9 rounded-md bg-white px-2.5"
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={`https://images.dmca.com/Badges/dmca_protected_sml_120c.png?ID=${DMCA_ID}`}
-        alt="DMCA.com Protection Status"
-        width={120}
-        height={21}
-        loading="lazy"
-        decoding="async"
-        className="h-[21px] w-auto"
-      />
-    </a>
-  </div>
-);
+/** Footer badges from the CMS (e.g. "Women Owned", "DMCA"), shown after the legal links. */
+const TrustBadges = ({ badges }: { badges: SiteFooter["badges"] }) => {
+  if (badges.length === 0) return null;
+  return (
+    <div className="flex items-center gap-3">
+      {badges.map((badge) => {
+        const image = (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={badge.image} alt={badge.alt} loading="lazy" decoding="async" className="max-h-7 w-auto" />
+          </>
+        );
+        const box = "inline-flex items-center h-9 rounded-md bg-white px-2.5";
+        return badge.link ? (
+          <a key={badge.image} href={badge.link} target="_blank" rel="noopener noreferrer" title={badge.alt} className={box}>
+            {image}
+          </a>
+        ) : (
+          <span key={badge.image} className={box} title={badge.alt}>
+            {image}
+          </span>
+        );
+      })}
+    </div>
+  );
+};
 
 type IconProps = { className?: string };
 
@@ -107,7 +89,10 @@ const SHORT_SERVICE_LABELS: Record<string, string> = {
   "Search & Content Marketing": "SEO & Content",
   "Social & Performance Marketing": "Social & Paid Ads",
   "Business Intelligence": "BI & Analytics",
+  "Business Intelligence Solutions": "BI & Analytics",
   "Branding & Identity": "Branding",
+  "UI/UX Designing": "UI/UX Design",
+  "AI & ML Solution": "AI & ML",
   "AI & ML Solutions": "AI & ML",
 };
 
@@ -361,9 +346,20 @@ export const Footer = () => {
         </div>
 
         {/* Links (CMS: Menu Links placed in the footer): services by growth stage, then a column per menu */}
-        <div className="relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-10">
+        <div
+          className={
+            linkArea.columns.length > 2
+              ? "relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-[minmax(0,1fr)_repeat(var(--footer-cols),auto)] gap-x-6 xl:gap-x-10 gap-y-10"
+              : "relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-10"
+          }
+          style={
+            linkArea.columns.length > 2
+              ? ({ "--footer-cols": linkArea.columns.length } as React.CSSProperties)
+              : undefined
+          }
+        >
           {linkArea.services && (
-            <div className="col-span-2 md:col-span-4">
+            <div className={linkArea.columns.length > 2 ? "col-span-2 md:col-span-4 xl:col-span-1" : "col-span-2 md:col-span-4"}>
               <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">{linkArea.services.title}</p>
               <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6">
                 {linkArea.services.groups.map((group) => (
@@ -439,7 +435,7 @@ export const Footer = () => {
         {/* Bottom bar */}
         <div className="relative mt-8 flex flex-col md:flex-row items-center justify-between gap-5 text-sm text-white/50">
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <span>© {new Date().getFullYear()} The Gold Technologies</span>
+            <p>© {new Date().getFullYear()} The Gold Technologies</p>
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
             <TrustBadges badges={site.badges} />

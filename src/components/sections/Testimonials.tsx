@@ -163,7 +163,7 @@ export const Testimonials = () => {
             {data.headlineMain} <span className="font-serif italic font-normal text-[#B8932A]">{data.headlineHighlight}</span>
           </h2>
           <div className="lg:col-span-3 lg:text-right">
-            <div className="text-6xl md:text-7xl font-semibold tracking-[-0.05em]">{data.rating}</div>
+            <p className="text-6xl md:text-7xl font-semibold tracking-[-0.05em]">{data.rating}</p>
             <div className="mt-2 flex lg:justify-end gap-1">
               {[0, 1, 2, 3, 4].map((i) => (
                 <Star key={i} className="w-4 h-4 fill-[#B8932A] text-[#B8932A]" />

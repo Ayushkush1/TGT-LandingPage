@@ -71,6 +71,7 @@ export const PageHero = ({
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const dim = useTransform(scrollYProgress, [0, 1], [0, 0.5]);
   const external = primary && /^https?:/.test(primary.href);
+  const DescriptionTag = typeof description === "string" ? "p" : "div";
 
   return (
     <section ref={ref} className="relative overflow-hidden bg-[#0A0A0A] text-white">
@@ -88,7 +89,7 @@ export const PageHero = ({
       <div className="relative max-w-[1600px] mx-auto px-5 md:px-10 pt-24 md:pt-28 pb-8 md:pb-10 min-h-[100svh] flex flex-col">
         {/* Masthead */}
         <div className="hero-fade flex items-center justify-between gap-6 border-b border-white/15 pb-4 text-[11px] uppercase tracking-[0.25em] text-white/60">
-          <div className="min-w-0">{label}</div>
+          <p className="min-w-0">{label}</p>
           {number && <p className="shrink-0 font-serif italic normal-case tracking-normal text-lg text-[#D4AF37]">No. {number}</p>}
         </div>
 
@@ -116,7 +117,9 @@ export const PageHero = ({
           style={{ animationDelay: "0.45s" }}
         >
           {description && (
-            <div className="lg:col-span-5 text-base md:text-[17px] leading-relaxed max-w-lg text-white/60 lg:line-clamp-3">{description}</div>
+            <DescriptionTag className="lg:col-span-5 text-base md:text-[17px] leading-relaxed max-w-lg text-white/60 lg:line-clamp-3">
+              {description}
+            </DescriptionTag>
           )}
           {facts.length > 0 && (
             <ul className="lg:col-span-3 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/60">

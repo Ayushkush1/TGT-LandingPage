@@ -169,11 +169,11 @@ export const GrowthHero = () => {
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-3 text-sm">
-              <span className="text-white/80">{data.proofLine}</span>
-              <span className="flex items-center gap-1.5 text-white/50 shrink-0">
+              <p className="text-white/80">{data.proofLine}</p>
+              <p className="flex items-center gap-1.5 text-white/50 shrink-0">
                 <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
                 {data.responseLine}
-              </span>
+              </p>
             </div>
           </div>
         </div>

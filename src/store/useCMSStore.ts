@@ -45,8 +45,6 @@ export interface GlobalSEOData {
   googleAnalyticsId: string | null;
   gtmId: string | null;
   searchConsoleId: string | null;
-  customHeaderScripts: string | null;
-  customFooterScripts: string | null;
   schema: string | null;
   headingOptions: string;
   socialLinks: { platform: string; url: string }[];

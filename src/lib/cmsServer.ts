@@ -15,10 +15,11 @@
  */
 import { cache } from "react";
 
-const CMS_URL = (process.env.CMS_URL || "https://tgt-cms.vercel.app").replace(/\/$/, "");
+const CMS_URL = (process.env.CMS_URL ?? "").replace(/\/$/, "");
 const CMS_SECRET = process.env.CMS_SHARED_SECRET ?? "";
 const REVALIDATE_S = 3600;
 
+if (!CMS_URL) console.warn("[cms] CMS_URL is not set: CMS content can't be loaded");
 if (!CMS_SECRET) console.warn("[cms] CMS_SHARED_SECRET is not set: CMS content can't be loaded");
 
 /** Cache tags. Must match WebsiteTag in tgt-cms/src/lib/websiteSections.ts */
@@ -68,13 +69,14 @@ export interface CmsSite {
   banners: any[];
 }
 
-export const cmsUrl = (path: string) => `${CMS_URL}/api/${path.replace(/^\//, "")}`;
+export const cmsUrl = (path: string) => (CMS_URL ? `${CMS_URL}/api/${path.replace(/^\//, "")}` : "");
 export const cmsHeaders = (): Record<string, string> => ({ "x-cms-secret": CMS_SECRET });
 
 const lastGood = new Map<string, unknown>();
 
 /** GET a CMS API path; returns the whole JSON body, cached under the given tags. */
 async function cmsFetch<T>(path: string, tags: string[]): Promise<T | null> {
+  if (!CMS_URL) return (lastGood.get(path) as T) ?? null;
   try {
     const response = await fetch(cmsUrl(path), {
       headers: cmsHeaders(),

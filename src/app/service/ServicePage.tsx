@@ -25,7 +25,7 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import type { Pillar } from "@/content/growth";
 import { useSectionContent } from "@/content/useSectionContent";
-import { serviceExtras, servicePage, type ServiceExtra, type ServiceSlug } from "@/content/services";
+import { isServicePage, serviceExtraFor, servicePage, type ServiceExtra } from "@/content/services";
 import { useClientLogos } from "@/content/clients";
 import { useTechIcon, useTechLogo } from "@/content/tech";
 import type { HeadingTag } from "@/store/useCMSStore";
@@ -61,7 +61,12 @@ interface CmsService {
 const filled = <T,>(list?: T[]) => (Array.isArray(list) && list.length > 0 ? list : undefined);
 
 /** Reads service fields strictly from CMS `services` data, keeping only the route pillar fallback. */
-function withCms(local: ServiceExtra, data: CmsService | null, pillars: readonly Pillar[]): ServiceExtra {
+function withCms(
+  local: ServiceExtra,
+  data: CmsService | null,
+  pillars: readonly Pillar[],
+  allServices: Record<string, CmsService> | null,
+): ServiceExtra {
   const hero = data?.hero;
   const pillar = pillars.find((p) => p.id === hero?.pillar)?.id ?? local.pillar;
   return {
@@ -71,7 +76,7 @@ function withCms(local: ServiceExtra, data: CmsService | null, pillars: readonly
     promise: [hero?.headingLine1?.trim() || "", hero?.headingLine2?.trim() || ""],
     stack: filled(data?.stack?.map((s) => s.trim()).filter(Boolean)) ?? [],
     work: filled(data?.work?.map((w) => w.trim()).filter(Boolean)) ?? [],
-    related: filled(data?.related?.filter((r) => r in serviceExtras)) ?? [],
+    related: filled(data?.related?.filter((r) => isServicePage(r, allServices))) ?? [],
     proof: filled(data?.proof) ?? [],
   };
 }
@@ -699,7 +704,7 @@ const Stack = ({
             {extra.related.map((r) => {
               const relHero = allServices?.[r]?.hero;
               if (!relHero?.name) return null;
-              const pillar = pillars.find((p) => p.id === (relHero.pillar ?? serviceExtras[r as ServiceSlug]?.pillar));
+              const pillar = pillars.find((p) => p.id === (relHero.pillar ?? serviceExtraFor(r).pillar));
               return (
                 <li key={r}>
                   <Link
@@ -744,14 +749,14 @@ export const ServicePage = ({
   allServices = null,
   headingTag = "h1",
 }: {
-  slug: ServiceSlug;
+  slug: string;
   data: CmsService | null;
   allServices?: Record<string, CmsService> | null;
   headingTag?: HeadingTag;
 }) => {
   const pillars = useSectionContent("ServicePillars").pillars;
   const growthCta = useSectionContent("GrowthCTA");
-  const extra = withCms(serviceExtras[slug], data, pillars);
+  const extra = withCms(serviceExtraFor(slug), data, pillars, allServices);
   const hero = data?.hero;
   const items = data?.services ?? [];
 

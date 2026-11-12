@@ -8,23 +8,23 @@ import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { serviceMetadata } from "@/lib/cms";
 import { getPage } from "@/lib/cmsServer";
 import { resolveHeadingTag } from "@/lib/cmsData";
-import { SERVICE_SLUGS, type ServiceSlug } from "@/content/services";
+import { isServicePage } from "@/content/services";
 import { ServicePage } from "../ServicePage";
 
-const isServiceSlug = (slug: string): slug is ServiceSlug => (SERVICE_SLUGS as readonly string[]).includes(slug);
+/** The CMS services by slug; built-in services and ones added with "Add service" in the CMS. */
+const loadServices = async () => (await getPage("services"))?.data ?? null;
 
 // Rendered per request (like the other pages) so CMS edits show up without a rebuild.
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  if (!isServiceSlug(params.slug)) return {};
+  if (!isServicePage(params.slug, await loadServices())) return {};
   return serviceMetadata(params.slug);
 }
 
 export default async function ServiceRoute({ params }: { params: { slug: string } }) {
-  if (!isServiceSlug(params.slug)) notFound();
-  const servicesPage = await getPage("services");
-  const allServices = servicesPage?.data ?? null;
+  const allServices = await loadServices();
+  if (!isServicePage(params.slug, allServices)) notFound();
   const data = allServices?.[params.slug] ?? null;
 
   return (

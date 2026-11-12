@@ -14,38 +14,36 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useSectionContent } from "@/content/useSectionContent";
+import { useSiteFooter, type SiteFooter } from "@/content/site";
+import { groupByPillar, isServicesMenu } from "@/content/navGroups";
 import { useCMSStore } from "@/store/useCMSStore";
 
-// Official DMCA badge and status page for thegoldtechnologies.com.
-const DMCA_ID = "174176c9-e0fd-4010-b0f5-50e6ed21d715";
-
-/** Original "Women Owned" and DMCA badges, shown after the legal links. */
-const TrustBadges = () => (
-  <div className="flex items-center gap-3">
-    <span className="inline-flex items-center h-9 rounded-md bg-white px-2.5" title="Women owned business">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/women-owned-logo.webp" alt="Women Owned business" width={61} height={28} loading="lazy" decoding="async" className="h-7 w-auto" />
-    </span>
-    <a
-      href={`https://www.dmca.com/Protection/Status.aspx?ID=${DMCA_ID}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      title="DMCA.com Protection Status"
-      className="inline-flex items-center h-9 rounded-md bg-white px-2.5"
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={`https://images.dmca.com/Badges/dmca_protected_sml_120c.png?ID=${DMCA_ID}`}
-        alt="DMCA.com Protection Status"
-        width={120}
-        height={21}
-        loading="lazy"
-        decoding="async"
-        className="h-[21px] w-auto"
-      />
-    </a>
-  </div>
-);
+/** Footer badges from the CMS (e.g. "Women Owned", "DMCA"), shown after the legal links. */
+const TrustBadges = ({ badges }: { badges: SiteFooter["badges"] }) => {
+  if (badges.length === 0) return null;
+  return (
+    <div className="flex items-center gap-3">
+      {badges.map((badge) => {
+        const image = (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={badge.image} alt={badge.alt} loading="lazy" decoding="async" className="max-h-7 w-auto" />
+          </>
+        );
+        const box = "inline-flex items-center h-9 rounded-md bg-white px-2.5";
+        return badge.link ? (
+          <a key={badge.image} href={badge.link} target="_blank" rel="noopener noreferrer" title={badge.alt} className={box}>
+            {image}
+          </a>
+        ) : (
+          <span key={badge.image} className={box} title={badge.alt}>
+            {image}
+          </span>
+        );
+      })}
+    </div>
+  );
+};
 
 type IconProps = { className?: string };
 
@@ -91,7 +89,10 @@ const SHORT_SERVICE_LABELS: Record<string, string> = {
   "Search & Content Marketing": "SEO & Content",
   "Social & Performance Marketing": "Social & Paid Ads",
   "Business Intelligence": "BI & Analytics",
+  "Business Intelligence Solutions": "BI & Analytics",
   "Branding & Identity": "Branding",
+  "UI/UX Designing": "UI/UX Design",
+  "AI & ML Solution": "AI & ML",
   "AI & ML Solutions": "AI & ML",
 };
 
@@ -146,9 +147,33 @@ function useOfficeTimes() {
   return times;
 }
 
+/** One footer link; external links open in a new tab. */
+const FooterLink = ({ href, label }: { href: string; label: string }) => {
+  const className = "group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap";
+  const content = (
+    <>
+      <RollText>{label}</RollText>
+      <HoverArrow />
+    </>
+  );
+  return /^https?:\/\//.test(href) ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {content}
+    </a>
+  ) : (
+    <Link href={href} className={className}>
+      {content}
+    </Link>
+  );
+};
+
+/** Display label for a CMS menu ("Service" reads as "Services"). */
+const menuLabel = (title: string) => (title.trim() === "Service" ? "Services" : title.trim());
+
 export const Footer = () => {
-  const data = useCMSStore((state) => state.homeData?.FooterCMS);
+  const site = useSiteFooter();
   const copy = useSectionContent("GrowthFooter");
+  const stickyCta = useSectionContent("StickyCTA");
   const times = useOfficeTimes();
 
   const containerRef = useRef<HTMLElement>(null);
@@ -161,26 +186,65 @@ export const Footer = () => {
   const badgeRotate = useTransform(scrollYProgress, [0, 1], [-90, 90]);
 
   // Company name split as written in the CMS: "THE" · "GOLD TECH" · "NOLOGIES".
-  const wordmarkLeft = (data?.leftText || copy.wordmarkLeft).trim();
-  const wordmark = (data?.centerText || copy.wordmark).trim();
-  const wordmarkRight = (data?.rightText || copy.wordmarkRight).trim();
+  const wordmarkLeft = (site.wordmark.left || copy.wordmarkLeft).trim();
+  const wordmark = (site.wordmark.center || copy.wordmark).trim();
+  const wordmarkRight = (site.wordmark.right || copy.wordmarkRight).trim();
   const fullName = `${wordmarkLeft} ${wordmark}${wordmarkRight}`;
   const labelOpacity = useTransform(scrollYProgress, [0.65, 0.95], [0, 1]);
   const labelY = useTransform(scrollYProgress, [0.65, 0.95], [20, 0]);
-  const offices = [
-    { country: data?.loc1Country, address: data?.loc1Address, time: times[0] },
-    { country: data?.loc2Country, address: data?.loc2Address, time: times[1] },
-  ].filter((o) => o.country);
+  const offices = site.offices
+    .slice(0, 2)
+    .map((office, i) => ({ ...office, time: times[i] }))
+    .filter((o) => o.country);
   const pillars = useSectionContent("ServicePillars").pillars;
   // A few featured products (not the whole catalogue)
   const products = (useCMSStore((state) => state.productData?.main?.products) ?? [])
     .filter((p) => p.title && p.link)
     .slice(0, FOOTER_PRODUCT_COUNT);
+  const footerLinks = useCMSStore((state) => state.footerLinks);
+  const linkArea = React.useMemo(() => {
+    type Column = { title: string; links: { label: string; href: string }[] };
+    if (footerLinks?.length) {
+      // From the CMS: the services menu by growth stage, a column per other menu, then the plain links
+      const servicesMenu = footerLinks.find(isServicesMenu);
+      const menus = footerLinks.filter((l) => l !== servicesMenu && l.dropdown?.length);
+      const plain = footerLinks.filter((l) => !l.dropdown?.length && l.link);
+      const columns: Column[] = menus.map((menu) => ({
+        title: menuLabel(menu.title),
+        links: (menu.dropdown ?? []).filter((d) => d.link).map((d) => ({ label: d.title, href: d.link })),
+      }));
+      if (plain.length) {
+        columns.push({ title: "Company", links: plain.map((l) => ({ label: menuLabel(l.title), href: l.link })) });
+      }
+      return {
+        services: servicesMenu
+          ? { title: menuLabel(servicesMenu.title), groups: groupByPillar(servicesMenu.dropdown ?? [], pillars) }
+          : null,
+        columns,
+      };
+    }
+    // No footer links in the CMS yet: services by stage, featured products and company links
+    return {
+      services: {
+        title: "Services",
+        groups: pillars.map((p) => ({
+          id: p.id,
+          number: p.number,
+          name: p.name,
+          links: p.services.map((sv) => ({ title: sv.name, link: sv.href })),
+        })),
+      },
+      columns: [
+        { title: "Products", links: products.map((pr) => ({ label: pr.title.trim(), href: pr.link })) },
+        { title: "Company", links: copy.companyLinks.map((l) => ({ label: l.label, href: l.href })) },
+      ] as Column[],
+    };
+  }, [footerLinks, pillars, products, copy.companyLinks]);
   const socials = [
-    { Icon: Linkedin, url: data?.linkedinUrl, label: "LinkedIn" },
-    { Icon: Instagram, url: data?.instagramUrl, label: "Instagram" },
-    { Icon: XIcon, url: data?.twitterUrl, label: "X" },
-    { Icon: Facebook, url: data?.facebookUrl, label: "Facebook" },
+    { Icon: Linkedin, url: site.socials.linkedin, label: "LinkedIn" },
+    { Icon: Instagram, url: site.socials.instagram, label: "Instagram" },
+    { Icon: XIcon, url: site.socials.twitter, label: "X" },
+    { Icon: Facebook, url: site.socials.facebook, label: "Facebook" },
   ].filter((s) => s.url);
 
   return (
@@ -198,14 +262,18 @@ export const Footer = () => {
         <div className="relative grid md:grid-cols-2 xl:grid-cols-[auto_auto_minmax(0,1fr)_minmax(0,1.3fr)_auto] gap-x-10 gap-y-10 items-start">
           <div>
             <Link href="/" className="inline-flex items-center gap-3" aria-label="The Gold Technologies home page">
-              <Image
-                src="/logo.jpeg"
-                alt=""
-                width={44}
-                height={44}
-                className="w-10 h-10 md:w-11 md:h-11 rounded-full ring-1 ring-[#D4AF37]/40"
-              />
-              <span className="text-xl md:text-2xl font-semibold tracking-[-0.02em] leading-none whitespace-nowrap">The Gold Technologies</span>
+              {site.logo && (
+                <Image
+                  src={site.logo}
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="w-10 h-10 md:w-11 md:h-11 rounded-full ring-1 ring-[#D4AF37]/40"
+                />
+              )}
+              <span className="text-xl md:text-2xl font-semibold tracking-[-0.02em] leading-none whitespace-nowrap">
+                {site.companyName ? "The Gold Technologies" : "The Gold Technologies"}
+              </span>
             </Link>
             {socials.length > 0 && (
               <ul className="mt-6 flex gap-2.5">
@@ -228,18 +296,18 @@ export const Footer = () => {
 
           <div>
             <p className="h-5 flex items-center text-[11px] uppercase tracking-[0.25em] text-white/40">Email us</p>
-            {data?.emailAddress && (
+            {site.email && (
               <a
-                href={`mailto:${data.emailAddress}`}
+                href={`mailto:${site.email}`}
                 className="group mt-2 inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white break-all xl:break-normal xl:whitespace-nowrap"
               >
-                <span className="border-b border-transparent group-hover:border-[#D4AF37]">{data.emailAddress}</span>
+                <span className="border-b border-transparent group-hover:border-[#D4AF37]">{site.email}</span>
                 <ArrowUpRight className="w-4 h-4 shrink-0 text-[#D4AF37] transition-transform duration-500 group-hover:rotate-45" />
               </a>
             )}
-            {data?.phoneNumber && (
-              <a href={`tel:${data.phoneNumber.replace(/\s+/g, "")}`} className="mt-1.5 block text-sm text-white/55 hover:text-white transition-colors">
-                {data.phoneNumber.trim()}
+            {site.phone && (
+              <a href={`tel:${site.phone.replace(/\s+/g, "")}`} className="mt-1.5 block text-sm text-white/55 hover:text-white transition-colors">
+                {site.phone}
               </a>
             )}
           </div>
@@ -259,85 +327,80 @@ export const Footer = () => {
                   )}
                 </p>
                 <p className="mt-2 text-sm text-white/55 leading-relaxed">
-                  {office.address?.replace(/\n/g, ", ").replace(/\s+[-–—]\s+/g, ", ")}
+                  {office.address?.replace(/\s+[-–—]\s+/g, ", ")}
                 </p>
               </div>
             );
           })}
 
-          <MagneticButton intensity={0.3} className="hidden xl:block justify-self-end -mt-4">
-            <a href={copy.ctaUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.ctaLabel} className="group relative block w-28 h-28 md:w-32 md:h-32">
-              <motion.svg aria-hidden viewBox="0 0 200 200" style={{ rotate: badgeRotate }} className="absolute inset-0 w-full h-full will-change-transform">
-                <defs>
-                  <path id="footer-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
-                </defs>
-                <text className="fill-white/70 text-[15px] uppercase tracking-[0.3em]">
-                  <textPath href="#footer-badge-circle">{`${copy.ctaLabel} • ${copy.ctaLabel} • `}</textPath>
-                </text>
-              </motion.svg>
-              <span className="absolute inset-[26%] rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-                <ArrowUpRight className="w-7 h-7 transition-transform duration-500 group-hover:rotate-45" />
-              </span>
-            </a>
-          </MagneticButton>
+          {stickyCta.buttonUrl && stickyCta.buttonLabel && (
+            <MagneticButton intensity={0.3} className="hidden xl:block justify-self-end -mt-4">
+              <a href={stickyCta.buttonUrl} target="_blank" rel="noopener noreferrer" aria-label={stickyCta.buttonLabel} className="group relative block w-28 h-28 md:w-32 md:h-32">
+                <motion.svg aria-hidden viewBox="0 0 200 200" style={{ rotate: badgeRotate }} className="absolute inset-0 w-full h-full will-change-transform">
+                  <defs>
+                    <path id="footer-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+                  </defs>
+                  <text className="fill-white/70 text-[15px] uppercase tracking-[0.3em]">
+                    <textPath href="#footer-badge-circle">{`${stickyCta.buttonLabel} • ${stickyCta.buttonLabel} • `}</textPath>
+                  </text>
+                </motion.svg>
+                <span className="absolute inset-[26%] rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                  <ArrowUpRight className="w-7 h-7 transition-transform duration-500 group-hover:rotate-45" />
+                </span>
+              </a>
+            </MagneticButton>
+          )}
         </div>
 
-        {/* Links: the four service stages side by side, then products and company */}
-        <div className="relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-10">
-          <div className="col-span-2 md:col-span-4">
-            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Services</p>
-            <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6">
-              {pillars.map((pillar) => (
-                <div key={pillar.id}>
-                  <p className="flex items-baseline gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
-                    <span className="font-serif italic normal-case tracking-normal text-sm font-normal text-[#D4AF37]">{pillar.number}</span>
-                    {pillar.name}
-                  </p>
-                  <ul className="mt-1.5 text-sm">
-                    {pillar.services.map((service) => (
-                      <li key={service.name}>
-                        <Link href={service.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
-                          <RollText>{SHORT_SERVICE_LABELS[service.name] ?? service.name}</RollText>
-                          <HoverArrow />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+        {/* Links (CMS: Menu Links placed in the footer): services by growth stage, then a column per menu */}
+        <div
+          className={
+            linkArea.columns.length > 2
+              ? "relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-[minmax(0,1fr)_repeat(var(--footer-cols),auto)] gap-x-6 xl:gap-x-10 gap-y-10"
+              : "relative mt-12 md:mt-14 pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-x-6 gap-y-10"
+          }
+          style={
+            linkArea.columns.length > 2
+              ? ({ "--footer-cols": linkArea.columns.length } as React.CSSProperties)
+              : undefined
+          }
+        >
+          {linkArea.services && (
+            <div className={linkArea.columns.length > 2 ? "col-span-2 md:col-span-4 xl:col-span-1" : "col-span-2 md:col-span-4"}>
+              <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">{linkArea.services.title}</p>
+              <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6">
+                {linkArea.services.groups.map((group) => (
+                  <div key={group.id}>
+                    <p className="flex items-baseline gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                      {group.number && (
+                        <span className="font-serif italic normal-case tracking-normal text-sm font-normal text-[#D4AF37]">{group.number}</span>
+                      )}
+                      {group.name}
+                    </p>
+                    <ul className="mt-1.5 text-sm">
+                      {group.links.map((service) => (
+                        <li key={service.link}>
+                          <FooterLink href={service.link} label={SHORT_SERVICE_LABELS[service.title.trim()] ?? service.title} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div>
-            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Products</p>
-            <ul className="mt-3 text-sm">
-              {products.map((product) => (
-                <li key={product.title}>
-                  <a
-                    href={product.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap"
-                  >
-                    <RollText>{SHORT_PRODUCT_LABELS[product.title.trim()] ?? product.title.trim()}</RollText>
-                    <HoverArrow />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">Company</p>
-            <ul className="mt-3 text-sm">
-              {copy.companyLinks.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="group/roll inline-flex items-center gap-1.5 py-[5px] text-white/70 whitespace-nowrap">
-                    <RollText>{link.label}</RollText>
-                    <HoverArrow />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
+          {linkArea.columns.map((column) => (
+            <div key={column.title}>
+              <p className="h-5 flex items-end text-[11px] uppercase tracking-[0.25em] text-white/40">{column.title}</p>
+              <ul className="mt-3 text-sm">
+                {column.links.map((link) => (
+                  <li key={link.href + link.label}>
+                    <FooterLink href={link.href} label={SHORT_PRODUCT_LABELS[link.label.trim()] ?? link.label} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Giant wordmark: "GOLD TECH" rises letter by letter, flanked by THE / NOLOGIES */}
@@ -379,10 +442,10 @@ export const Footer = () => {
         {/* Bottom bar */}
         <div className="relative mt-8 flex flex-col md:flex-row items-center justify-between gap-5 text-sm text-white/50">
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <span>© {new Date().getFullYear()} The Gold Technologies</span>
+            <p>© {new Date().getFullYear()} The Gold Technologies</p>
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
-            <TrustBadges />
+            <TrustBadges badges={site.badges} />
           </div>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

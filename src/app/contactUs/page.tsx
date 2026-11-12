@@ -1,57 +1,31 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { SmoothScroll } from "@/components/SmoothScroll";
-import { getPageSEO } from "@/lib/cms";
-import { Metadata } from "next";
+import { CMSPageData } from "@/components/CMSDataInitializer";
+import { getPageSEO, loadPagesState, pageMetadata } from "@/lib/cms";
+import { resolveHeadingTag } from "@/lib/cmsData";
+import type { Metadata } from "next";
 import { RenderSchema } from "@/components/RenderSchema";
 import { ContactView } from "./ContactView";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await getPageSEO("contactUs");
-
-  return {
-    title: seo?.metaTitle || "Contact Us | The Gold Technologies",
-    description:
-      seo?.metaDescription ||
-      "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
-    keywords: seo?.targetKeywords || undefined,
-    alternates: {
-      canonical: seo?.canonicalUrl || undefined,
-    },
-    robots: {
-      index: !seo?.noIndex,
-      follow: !seo?.noIndex,
-    },
-    openGraph: {
-      title: seo?.metaTitle || "Contact Us | The Gold Technologies",
-      description:
-        seo?.metaDescription ||
-        "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: seo?.metaTitle || "Contact Us | The Gold Technologies",
-      description:
-        seo?.metaDescription ||
-        "Get in touch with The Gold Technologies for web development, software enquiries, or project consultations.",
-    },
-  };
-}
+export const generateMetadata = (): Promise<Metadata> => pageMetadata("contactUs");
 
 async function ContactUs() {
-  const seo = await getPageSEO("contactUs");
+  const [seo, cms] = await Promise.all([getPageSEO("contactUs"), loadPagesState("contactUs")]);
   return (
-    <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
-      <RenderSchema schema={seo?.schema} id="contact-schema" />
-      <SmoothScroll />
-      <Navbar />
-      <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
-        <ContactView />
-      </main>
-      <div className="bg-[#F4F1EA]">
-        <Footer />
+    <CMSPageData state={cms}>
+      <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-brand-gold/20">
+        <RenderSchema schema={seo?.schema} id="contact-schema" />
+        <SmoothScroll />
+        <Navbar />
+        <main id="main-content" tabIndex={-1} className="relative z-10 focus:outline-none">
+          <ContactView headingTag={resolveHeadingTag(seo?.headingOptions)} />
+        </main>
+        <div className="bg-[#F4F1EA]">
+          <Footer />
+        </div>
       </div>
-    </div>
+    </CMSPageData>
   );
 }
 

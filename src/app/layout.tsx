@@ -3,8 +3,9 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import { CMSDataInitializer } from "@/components/CMSDataInitializer";
-import FooterScripts from "@/components/FooterScripts";
-import { getGlobalSEOData, getInitialCMSState } from "@/lib/cmsServer";
+import { getSite } from "@/lib/cmsServer";
+import { siteState } from "@/lib/cmsData";
+import { loadPagesState } from "@/lib/cms";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -13,22 +14,31 @@ const playfair = Playfair_Display({
   variable: "--font-serif-display",
 });
 
-// Cached for 60s (see cmsServer.ts) so title, description & favicon stay fresh
-// without a CMS round-trip on every request.
-const getGlobalSEO = getGlobalSEOData;
+/** Site-wide settings (cached under the "site" tag, refreshed when the CMS saves them). */
+const getGlobalSEO = async () => (await getSite())?.settings ?? null;
+
+/** Site-wide store data, plus the pages the navbar, footer and CTA use on every route. */
+async function getInitialCMSState() {
+  const [site, pages] = await Promise.all([getSite(), loadPagesState("home", "products")]);
+  return { ...siteState(site), ...pages };
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const globalSEO = await getGlobalSEO();
+  if (!globalSEO) return {};
+
+  const title = globalSEO.siteTitle || undefined;
+  const description = globalSEO.siteDescription || undefined;
 
   return {
-    title: globalSEO?.siteTitle,
-    description: globalSEO?.siteDescription,
-    icons: {
-      icon: globalSEO?.favicon,
-    },
-    other: {
-      "google-site-verification": globalSEO?.searchConsoleId,
-    },
+    title,
+    description,
+    icons: globalSEO.favicon ? { icon: globalSEO.favicon } : undefined,
+    openGraph: title || description ? { title, description, type: "website" } : undefined,
+    twitter: title || description ? { card: "summary_large_image", title, description } : undefined,
+    other: globalSEO.searchConsoleId
+      ? { "google-site-verification": globalSEO.searchConsoleId }
+      : undefined,
   };
 }
 
@@ -96,12 +106,6 @@ export default async function RootLayout({
             />
           </>
         )}
-        {/* Custom Header Scripts */}
-        {globalSEO?.customHeaderScripts && (
-          <script
-            dangerouslySetInnerHTML={{ __html: globalSEO.customHeaderScripts }}
-          />
-        )}
       </head>
       <body className={`${inter.className} ${playfair.variable}`}>
         {/* GTM Noscript */}
@@ -118,10 +122,6 @@ export default async function RootLayout({
         <CMSDataInitializer initialState={initialCMSState}>
           {children}
         </CMSDataInitializer>
-        {/* Custom Footer Scripts */}
-        {globalSEO?.customFooterScripts && (
-          <FooterScripts html={globalSEO.customFooterScripts} />
-        )}
       </body>
     </html>
   );

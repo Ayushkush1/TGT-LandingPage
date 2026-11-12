@@ -1,9 +1,12 @@
-import { NextResponse } from "next/server";
+import { cmsHeaders, cmsUrl } from "@/lib/cmsServer";
+
+// Read fresh from the CMS on every request
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const cmsApiUrl = process.env.NEXT_PUBLIC_CMS_API_URL || "https://tgt-cms.vercel.app";
   try {
-    const res = await fetch(`${cmsApiUrl}/api/seo/robots`, {
+    const res = await fetch(cmsUrl("seo/robots"), {
+      headers: cmsHeaders(),
       cache: "no-store",
     });
 
@@ -20,8 +23,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Error proxying robots.txt:", error);
-    return new Response("User-agent: *\nAllow: /", {
-      headers: { "Content-Type": "text/plain" },
-    });
+    return new Response("Robots config not found", { status: 500 });
   }
 }

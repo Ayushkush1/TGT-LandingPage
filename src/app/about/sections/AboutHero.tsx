@@ -2,9 +2,11 @@
 
 import { PageHero } from "@/components/sections/PageHero";
 import { aboutContent } from "@/content/about";
+import { usePageSection } from "@/content/usePageSection";
+import type { HeadingTag } from "@/store/useCMSStore";
 
-export const AboutHero = () => {
-  const copy = aboutContent.hero;
+export const AboutHero = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
+  const copy = usePageSection("aboutData", "AboutHero", aboutContent.hero);
 
   return (
     <PageHero
@@ -15,7 +17,9 @@ export const AboutHero = () => {
       description={copy.description}
       primary={{ label: copy.primaryLabel, href: copy.primaryUrl }}
       secondary={{ label: copy.secondaryLabel, href: copy.secondaryUrl }}
+      image={{ src: copy.imageUrl, alt: "" }}
       facts={copy.meta}
+      headingTag={headingTag}
     />
   );
 };

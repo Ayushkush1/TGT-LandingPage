@@ -12,18 +12,16 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
+      // Every image (CMS uploads and the site's own) is served from Cloudinary, folder "tgt"
       {
         protocol: "https",
-        hostname: "jrltxuhcmvqxuwukacju.supabase.co",
-        pathname: "/storage/v1/object/public/uploadsFiles/**",
+        hostname: "res.cloudinary.com",
+        pathname: "/dpa93copz/**",
       },
+      // Direct image URLs pasted into the CMS
       {
         protocol: "https",
         hostname: "thegoldtechnologies.com",
-      },
-      {
-        protocol: "https",
-        hostname: "i.pravatar.cc",
       },
     ],
   },

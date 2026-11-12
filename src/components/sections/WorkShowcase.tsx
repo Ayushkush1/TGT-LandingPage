@@ -13,15 +13,15 @@ import {
   useTransform,
 } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { servicePillars, workShowcase, type PillarId } from "@/content/growth";
+import { type Pillar, type PillarId } from "@/content/growth";
 import { useSectionContent } from "@/content/useSectionContent";
 import { useWorkItems, type WorkItem } from "@/content/useWorkItems";
 
-/** Short name for CMS case-study titles too long for one line. */
-const displayTitle = (title: string) => workShowcase.shortTitles[title.trim()] ?? title;
+const displayTitle = (title: string, shortTitles: Record<string, string>) =>
+  shortTitles[title.trim()] ?? title;
 
-const pillarName = (id: PillarId) =>
-  servicePillars.pillars.find((p) => p.id === id)?.name ?? id;
+const pillarName = (id: PillarId, pillars: readonly Pillar[]) =>
+  pillars.find((p) => p.id === id)?.name ?? id;
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -39,11 +39,15 @@ const CaseCard = ({
   item,
   index,
   total,
+  pillars,
+  shortTitles,
   onHover,
 }: {
   item: WorkItem;
   index: number;
   total: number;
+  pillars: readonly Pillar[];
+  shortTitles: Record<string, string>;
   onHover: (hovering: boolean) => void;
 }) => (
   <Link
@@ -95,13 +99,13 @@ const CaseCard = ({
               key={id}
               className="rounded-full border border-[#0B0F29]/15 px-3 py-1 text-[11px] font-medium text-[#0B0F29]/70"
             >
-              {pillarName(id)}
+              {pillarName(id, pillars)}
             </span>
           ))}
         </div>
       </div>
       <h3 className="mt-2 text-xl md:text-2xl font-semibold tracking-[-0.02em] text-[#0B0F29] truncate">
-        {displayTitle(item.title)}
+        {displayTitle(item.title, shortTitles)}
       </h3>
     </div>
   </Link>
@@ -110,9 +114,10 @@ const CaseCard = ({
 /** Case studies on a horizontal track that is driven by vertical scroll on desktop. */
 export const WorkShowcase = () => {
   const data = useSectionContent("WorkShowcase");
-  const { caseStudies, fallback } = useWorkItems();
+  const pillars = useSectionContent("ServicePillars").pillars;
+  const { caseStudies } = useWorkItems();
   // Four featured projects; the rest live on the portfolio page.
-  const work = (caseStudies.length ? caseStudies : fallback).slice(0, 4);
+  const work = caseStudies.slice(0, 4);
 
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion();
@@ -192,15 +197,17 @@ export const WorkShowcase = () => {
               <p className="mt-6 text-[#0B0F29]/60 leading-relaxed max-w-sm">
                 {data.description}
               </p>
-              <Link
-                href={data.viewAllUrl}
-                className="group mt-8 inline-flex items-center gap-3 rounded-full bg-[#0B0F29] text-white pl-6 pr-1.5 py-1.5 font-medium"
-              >
-                {data.viewAllLabel}
-                <span className="w-9 h-9 rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform group-hover:translate-x-1">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </Link>
+              {data.viewAllUrl && data.viewAllLabel && (
+                <Link
+                  href={data.viewAllUrl}
+                  className="group mt-8 inline-flex items-center gap-3 rounded-full bg-[#0B0F29] text-white pl-6 pr-1.5 py-1.5 font-medium"
+                >
+                  {data.viewAllLabel}
+                  <span className="w-9 h-9 rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform group-hover:translate-x-1">
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                </Link>
+              )}
             </div>
           </div>
 
@@ -210,6 +217,8 @@ export const WorkShowcase = () => {
               item={item}
               index={i}
               total={work.length}
+              pillars={pillars}
+              shortTitles={data.shortTitles ?? {}}
               onHover={setHovering}
             />
           ))}
@@ -223,17 +232,19 @@ export const WorkShowcase = () => {
               <h3 className="text-4xl md:text-6xl font-semibold tracking-[-0.045em] leading-[0.95] text-black">
                 {data.ctaTitle}
               </h3>
-              <a
-                href={data.ctaButtonUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-8 inline-flex items-center gap-3 rounded-full bg-black text-white pl-6 pr-1.5 py-1.5 font-medium"
-              >
-                {data.ctaButtonLabel}
-                <span className="w-9 h-9 rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
-                  <ArrowUpRight className="w-4 h-4" />
-                </span>
-              </a>
+              {data.ctaButtonUrl && data.ctaButtonLabel && (
+                <a
+                  href={data.ctaButtonUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-8 inline-flex items-center gap-3 rounded-full bg-black text-white pl-6 pr-1.5 py-1.5 font-medium"
+                >
+                  {data.ctaButtonLabel}
+                  <span className="w-9 h-9 rounded-full bg-[#D4AF37] text-black flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </span>
+                </a>
+              )}
             </div>
           </div>
         </motion.div>
@@ -249,7 +260,7 @@ export const WorkShowcase = () => {
 
       <AnimatePresence>
         {pinned && hovering && (
-          <motion.div
+          <motion.p
             aria-hidden
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -259,7 +270,7 @@ export const WorkShowcase = () => {
             className="pointer-events-none fixed z-50 -ml-12 -mt-12 w-24 h-24 rounded-full bg-[#D4AF37] text-black flex items-center justify-center text-sm font-semibold"
           >
             View
-          </motion.div>
+          </motion.p>
         )}
       </AnimatePresence>
     </section>

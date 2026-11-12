@@ -8,7 +8,7 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useSectionContent } from "@/content/useSectionContent";
 import { RevealPill } from "./HeroPills";
 import { useWorkItems } from "@/content/useWorkItems";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, type HeadingTag } from "@/store/useCMSStore";
 
 
 /**
@@ -24,8 +24,9 @@ const Line = ({ children, delay }: { children: ReactNode; delay: number }) => (
   </span>
 );
 
-export const GrowthHero = () => {
+export const GrowthHero = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
   const data = useSectionContent("GrowthHero");
+  const Heading = motion[headingTag];
   const logos = useCMSStore((s) => s.homeData?.TrustedBySection?.images) ?? [];
   const { products, caseStudies } = useWorkItems();
   const productWork = products.length ? products : caseStudies;
@@ -73,7 +74,7 @@ export const GrowthHero = () => {
 
       {/* First screen: headline, CTA and proof card; the ticker sits just below the fold */}
       <div className="relative z-10 min-h-[100svh] lg:min-h-[600px] lg:h-[100svh] flex flex-col w-full max-w-[1600px] mx-auto px-5 md:px-10 pt-28 md:pt-32">
-        <motion.h1
+        <Heading
           style={{ y: headlineY }}
           className="mt-6 font-semibold tracking-[-0.045em] leading-[0.95] text-[12.5vw] sm:text-[10vw] lg:text-[length:min(7.6vw,13.5svh)] 2xl:text-[length:min(8.5rem,13.5svh)] will-change-transform"
         >
@@ -115,7 +116,7 @@ export const GrowthHero = () => {
             </span>{" "}
             {data.headlineSuffix}
           </Line>
-        </motion.h1>
+        </Heading>
 
         <div className="mt-auto pt-12 lg:pt-8 pb-12 md:pb-16 grid lg:grid-cols-12 gap-10 items-end">
           <div className="hero-fade lg:col-span-6" style={{ animationDelay: "0.35s" }}>
@@ -169,11 +170,11 @@ export const GrowthHero = () => {
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-3 text-sm">
-              <span className="text-white/80">{data.proofLine}</span>
-              <span className="flex items-center gap-1.5 text-white/50 shrink-0">
+              <p className="text-white/80">{data.proofLine}</p>
+              <p className="flex items-center gap-1.5 text-white/50 shrink-0">
                 <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
                 {data.responseLine}
-              </span>
+              </p>
             </div>
           </div>
         </div>

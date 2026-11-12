@@ -6,7 +6,7 @@ import { ArrowUpRight, Check, Mail, Phone } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { BriefModal, openBriefForm } from "@/components/BriefModal";
 import { useSectionContent } from "@/content/useSectionContent";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useSiteFooter } from "@/content/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -32,11 +32,7 @@ function useNow() {
 export const GrowthCTA = () => {
   const data = useSectionContent("GrowthCTA");
   const now = useNow();
-  const enquiry = useCMSStore((s) => s.homeData?.EnquirySection);
-  const footer = useCMSStore((s) => s.homeData?.FooterCMS);
-
-  const email = enquiry?.email || footer?.emailAddress || "info@thegoldtechnologies.com";
-  const phone = enquiry?.phone || footer?.phoneNumber;
+  const { email, phone } = useSiteFooter();
 
   return (
     <section

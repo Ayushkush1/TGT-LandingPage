@@ -14,11 +14,10 @@ const TILES_PER_COLUMN = 5;
 /** A wall of real work that expands to full screen as it scrolls into view. */
 export const Showreel = () => {
   const data = useSectionContent("Showreel");
-  const { caseStudies, products, fallback } = useWorkItems();
+  const { caseStudies, products } = useWorkItems();
   const images = Array.from(
-    new Set([...caseStudies, ...products, ...fallback].map((w) => w.image)),
+    new Set([...caseStudies, ...products].map((w) => w.image)),
   );
-
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,

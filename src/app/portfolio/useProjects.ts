@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import { useCMSStore } from "@/store/useCMSStore";
 import { pillarKeywords, type PillarId } from "@/content/growth";
-import { projectNames } from "@/content/portfolio";
 
 export interface Project {
   title: string;
@@ -30,17 +29,15 @@ export function useProjects(): Project[] {
       (portfolio ?? [])
         .filter((p) => p.image && p.title)
         .map((p) => {
-          const name = projectNames[p.title.trim()];
           const summary = p.SERVICES?.find((s) => /summary/i.test(s.category))?.description;
           return {
             title: p.title,
-            client: name?.client ?? p.title,
-            service: name?.service ?? p.subtitle,
+            client: p.title,
+            service: p.subtitle,
             industry: p.subtitle,
             image: p.image,
             href: `/products/${caseStudySlug(p.title)}`,
-            // Explicit pillars when known; otherwise guess from the title.
-            pillars: name?.pillars ?? pillarKeywords.filter((k) => k.match.test(p.title)).map((k) => k.pillar),
+            pillars: pillarKeywords.filter((k) => k.match.test(p.title)).map((k) => k.pillar),
             stats: (p.stats ?? []).filter((s) => s.value?.trim() && s.label?.trim()),
             summary: summary ? clean(summary) : undefined,
           };

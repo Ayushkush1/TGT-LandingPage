@@ -24,9 +24,6 @@ const caseStudySlug = (title: string) => title.toLowerCase().replace(/\s+/g, "-"
 export function useWorkItems() {
   const portfolio = useCMSStore((state) => state.aboutData?.Portfolio);
   const products = useCMSStore((state) => state.productData?.main?.products);
-  const heroProjects = useCMSStore(
-    (state) => state.homeData?.HeroSection?.projects,
-  );
 
   return useMemo(() => {
     const caseStudies: WorkItem[] = (portfolio ?? [])
@@ -53,15 +50,6 @@ export function useWorkItems() {
         stats: [],
       }));
 
-    const fallback: WorkItem[] = (heroProjects ?? []).map((p) => ({
-      title: p.title,
-      category: p.category,
-      image: p.image,
-      href: "/portfolio",
-      pillars: [],
-      stats: [],
-    }));
-
-    return { caseStudies, products: productItems, fallback };
-  }, [portfolio, products, heroProjects]);
+    return { caseStudies, products: productItems };
+  }, [portfolio, products]);
 }

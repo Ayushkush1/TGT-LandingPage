@@ -12,6 +12,7 @@ import {
 } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Mail, MailOpen, Phone, ScanSearch } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSiteFooter } from "@/content/site";
 import { FreeAuditPopup } from "./FreeAuditPopup";
 import {
   Tooltip,
@@ -24,41 +25,37 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { useCMSStore, type NavLink } from "@/store/useCMSStore";
 import { useSectionContent } from "@/content/useSectionContent";
-import { insightsNav } from "@/content/insights";
+import { groupByPillar, isServicesMenu } from "@/content/navGroups";
 import { Cover } from "@/components/sections/Insights";
 import { blogSlug } from "@/lib/cmsData";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/** Adds the Insights dropdown (before Contact) when the CMS nav doesn't have one yet. */
-const withInsights = (links: NavLink[] | null): NavLink[] | null => {
-  if (!links || links.some((l) => l.title.trim().toLowerCase() === "insights")) return links;
-  const insights: NavLink = { title: insightsNav.title, link: insightsNav.dropdown[0].link, type: "Dropdown", dropdown: insightsNav.dropdown };
-  const contact = links.findIndex((l) => /contact/i.test(l.title));
-  const at = contact === -1 ? links.length : contact;
-  return [...links.slice(0, at), insights, ...links.slice(at)];
-};
-
-const Logo = ({ light }: { light: boolean }) => (
-  <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="The Gold Technologies home page">
-    <Image
-      src="/logo.jpeg"
-      alt=""
-      width={40}
-      height={40}
-      priority
-      className="w-9 h-9 md:w-10 md:h-10 rounded-full ring-1 ring-[#D4AF37]/40"
-    />
-    <span
-      className={cn(
-        "whitespace-nowrap text-[15px] md:text-xl font-bold tracking-tight transition-colors",
-        light ? "text-white" : "text-[#0B0F29]",
+const Logo = ({ light }: { light: boolean }) => {
+  const { logo } = useSiteFooter();
+  return (
+    <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="The Gold Technologies home page">
+      {logo && (
+        <Image
+          src={logo}
+          alt=""
+          width={40}
+          height={40}
+          priority
+          className="w-9 h-9 md:w-10 md:h-10 rounded-full ring-1 ring-[#D4AF37]/40"
+        />
       )}
-    >
-      The Gold Technologies
-    </span>
-  </Link>
-);
+      <span
+        className={cn(
+          "whitespace-nowrap text-[15px] md:text-xl font-bold tracking-tight transition-colors",
+          light ? "text-white" : "text-[#0B0F29]",
+        )}
+      >
+        The Gold Technologies
+      </span>
+    </Link>
+  );
+};
 
 const MenuToggle = ({
   open,
@@ -108,9 +105,7 @@ const MenuToggle = ({
  * on hover (the original navbar animations); tooltips show the details.
  */
 const ContactIcons = ({ light }: { light: boolean }) => {
-  const footer = useCMSStore((s) => s.homeData?.FooterCMS);
-  const email = footer?.emailAddress || "info@thegoldtechnologies.com";
-  const phone = (footer?.phoneNumber || "+91 8368198551").trim();
+  const { email, phone } = useSiteFooter();
   const [mailHover, setMailHover] = React.useState(false);
   const [phoneHover, setPhoneHover] = React.useState(false);
   const iconClass = cn(
@@ -183,26 +178,27 @@ const ContactIcons = ({ light }: { light: boolean }) => {
   );
 };
 
-/** Services mega panel, organised by the four growth stages. */
-const ServicesPanel = ({ onAudit }: { onAudit: () => void }) => {
-  const data = useSectionContent("ServicePillars");
+/** Services mega panel: the CMS menu's links, organised by the four growth stages. */
+const ServicesPanel = ({ items, onAudit }: { items: NavLink[]; onAudit: () => void }) => {
+  const pillars = useSectionContent("ServicePillars").pillars;
+  const groups = groupByPillar(items, pillars);
   return (
     <div className="grid grid-cols-12 gap-8">
-      <div className="col-span-9 grid grid-cols-4 gap-x-8">
-        {data.pillars.map((pillar) => (
-          <div key={pillar.id}>
+      <div className={cn("col-span-9 grid gap-x-8", groups.length > 4 ? "grid-cols-5" : "grid-cols-4")}>
+        {groups.map((group) => (
+          <div key={group.id}>
             <p className="flex items-baseline gap-2 border-b border-white/10 pb-3">
-              <span className="font-serif italic text-sm text-[#D4AF37]">{pillar.number}</span>
-              <span className="text-xl font-semibold tracking-tight text-white">{pillar.name}</span>
+              {group.number && <span className="font-serif italic text-sm text-[#D4AF37]">{group.number}</span>}
+              <span className="text-xl font-semibold tracking-tight text-white">{group.name}</span>
             </p>
             <ul className="mt-2">
-              {pillar.services.map((service) => (
-                <li key={service.name}>
+              {group.links.map((service) => (
+                <li key={service.link}>
                   <Link
-                    href={service.href}
+                    href={service.link}
                     className="group/roll flex items-center justify-between gap-3 rounded-lg -mx-2 px-2 py-3 text-sm text-white/75 hover:bg-white/[0.04]"
                   >
-                    <RollText>{service.name}</RollText>
+                    <RollText>{service.title}</RollText>
                     <HoverArrow />
                   </Link>
                 </li>
@@ -457,12 +453,12 @@ const ProductsPanel = ({ items, images }: { items: NavLink[]; images: Map<string
  * Insights dropdown: the sections on the left (same link style as Services),
  * the latest blog posts with their cover images on the right.
  */
-const InsightsPanel = ({ items }: { items: NavLink[] }) => {
+const InsightsPanel = ({ title, items }: { title: string; items: NavLink[] }) => {
   const blogs = (useCMSStore((s) => s.homeData?.BlogSection?.blogs) ?? []).slice(0, 3);
   return (
     <div className="grid grid-cols-12 gap-10">
       <div className="col-span-4 flex flex-col">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">({insightsNav.title})</p>
+        <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">({title})</p>
         <ul className="mt-3">
           {items.map((item, i) => (
             <li key={item.title} className="border-b border-white/10">
@@ -515,28 +511,42 @@ const InsightsPanel = ({ items }: { items: NavLink[] }) => {
 /** Display label for a CMS nav link ("Service" reads as "Services"). */
 const navLabel = (title: string) => (title.trim() === "Service" ? "Services" : title);
 
-const isServicesDropdown = (item: NavLink) =>
-  (item.dropdown ?? []).some((d) => d.link?.startsWith("/service/"));
+/** The CMS menu whose links are the blog and media pages. */
+const isInsightsMenu = (item: NavLink) => (item.dropdown ?? []).some((d) => /^\/(blog|media)\b/.test(d.link ?? ""));
 
 /** Full-screen menu for phones and tablets, where the inline links are hidden. */
 const SiteMenu = ({
   open,
   onClose,
   onAudit,
+  navLinks,
 }: {
   open: boolean;
   onClose: () => void;
   onAudit: () => void;
+  /** CMS Menu Links placed in the navbar */
+  navLinks: NavLink[] | null;
 }) => {
   const copy = useSectionContent("SiteMenu");
+  const stickyCta = useSectionContent("StickyCTA");
   const pillars = useSectionContent("ServicePillars").pillars;
-  const footer = useCMSStore((s) => s.homeData?.FooterCMS);
-  const email = footer?.emailAddress || "info@thegoldtechnologies.com";
+  // Big links: every top-level CMS link (a menu opens its own page, or its first link)
+  const primary = navLinks?.length
+    ? navLinks
+        .map((item) => ({
+          label: navLabel(item.title),
+          href: item.link || (isServicesMenu(item) ? "/#services" : item.dropdown?.[0]?.link ?? ""),
+        }))
+        .filter((l) => l.href)
+    : copy.links;
+  const menus = (navLinks ?? []).filter((item) => item.dropdown?.length);
+  const footer = useSiteFooter();
+  const email = footer.email;
   const socials = [
-    { label: "LinkedIn", url: footer?.linkedinUrl },
-    { label: "Instagram", url: footer?.instagramUrl },
-    { label: "X", url: footer?.twitterUrl },
-    { label: "Facebook", url: footer?.facebookUrl },
+    { label: "LinkedIn", url: footer.socials.linkedin },
+    { label: "Instagram", url: footer.socials.instagram },
+    { label: "X", url: footer.socials.twitter },
+    { label: "Facebook", url: footer.socials.facebook },
   ].filter((s) => s.url);
 
   return (
@@ -563,7 +573,7 @@ const SiteMenu = ({
             <nav className="lg:col-span-7" aria-label="Primary">
               <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">(Menu)</p>
               <ul className="mt-6 group/list">
-                {copy.links.map((link, i) => (
+                {primary.map((link, i) => (
                   <li key={link.href} className="overflow-hidden border-b border-white/10">
                     <motion.div
                       initial={{ y: "100%" }}
@@ -596,42 +606,55 @@ const SiteMenu = ({
               transition={{ duration: 0.8, delay: 0.45, ease }}
               className="lg:col-span-4 lg:col-start-9 flex flex-col gap-10"
             >
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">(Services)</p>
-                <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-5">
-                  {pillars.map((pillar) => (
-                    <div key={pillar.id}>
-                      <p className="text-sm font-semibold text-[#D4AF37]">{pillar.name}</p>
-                      <ul className="mt-2 space-y-1.5">
-                        {pillar.services.map((service) => (
-                          <li key={service.name}>
+              {/* Each CMS menu with its links; services grouped by growth stage */}
+              {menus.map((menu) =>
+                isServicesMenu(menu) ? (
+                  <div key={menu.title}>
+                    <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">({navLabel(menu.title)})</p>
+                    <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-5">
+                      {groupByPillar(menu.dropdown ?? [], pillars).map((group) => (
+                        <div key={group.id}>
+                          <p className="text-sm font-semibold text-[#D4AF37]">{group.name}</p>
+                          <ul className="mt-2 space-y-1.5">
+                            {group.links.map((service) => (
+                              <li key={service.link}>
+                                <Link
+                                  href={service.link}
+                                  onClick={onClose}
+                                  className="text-sm text-white/60 hover:text-white transition-colors"
+                                >
+                                  {service.title}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={menu.title}>
+                    <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">({navLabel(menu.title)})</p>
+                    <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                      {(menu.dropdown ?? []).map((item) => {
+                        const external = /^https?:\/\//.test(item.link);
+                        return (
+                          <li key={item.link + item.title}>
                             <Link
-                              href={service.href}
+                              href={item.link}
                               onClick={onClose}
-                              className="text-sm text-white/60 hover:text-white transition-colors"
+                              {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+                              className="text-white/60 hover:text-white transition-colors"
                             >
-                              {service.name}
+                              {item.title}
                             </Link>
                           </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">({insightsNav.title})</p>
-                <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-                  {insightsNav.dropdown.map((item) => (
-                    <li key={item.link}>
-                      <Link href={item.link} onClick={onClose} className="text-white/60 hover:text-white transition-colors">
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ),
+              )}
 
               <div>
                 <p className="text-[11px] uppercase tracking-[0.25em] text-white/40">(Say hello)</p>
@@ -641,12 +664,12 @@ const SiteMenu = ({
                 >
                   {email}
                 </a>
-                {footer?.phoneNumber && (
+                {footer.phone && (
                   <a
-                    href={`tel:${footer.phoneNumber.replace(/\s+/g, "")}`}
+                    href={`tel:${footer.phone.replace(/\s+/g, "")}`}
                     className="mt-1 block text-white/60 hover:text-white transition-colors"
                   >
-                    {footer.phoneNumber.trim()}
+                    {footer.phone}
                   </a>
                 )}
                 <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/60">
@@ -659,17 +682,19 @@ const SiteMenu = ({
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <a
-                  href={copy.ctaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 rounded-full bg-[#D4AF37] pl-6 pr-1.5 py-1.5 font-semibold text-black"
-                >
-                  {copy.ctaLabel}
-                  <span className="w-10 h-10 rounded-full bg-black text-[#D4AF37] flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
-                    <ArrowUpRight className="w-4 h-4" />
-                  </span>
-                </a>
+                {stickyCta.buttonUrl && stickyCta.buttonLabel && (
+                  <a
+                    href={stickyCta.buttonUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-3 rounded-full bg-[#D4AF37] pl-6 pr-1.5 py-1.5 font-semibold text-black"
+                  >
+                    {stickyCta.buttonLabel}
+                    <span className="w-10 h-10 rounded-full bg-black text-[#D4AF37] flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </span>
+                  </a>
+                )}
                 <button
                   onClick={onAudit}
                   className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-medium hover:border-white/40 transition-colors"
@@ -688,8 +713,8 @@ const SiteMenu = ({
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const cmsNavLinks = useCMSStore((state) => state.navLinks);
-  const navLinks = React.useMemo(() => withInsights(cmsNavLinks), [cmsNavLinks]);
+  // CMS: Navigation & Links → Menu Links placed in the navbar
+  const navLinks = useCMSStore((state) => state.navLinks);
 
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
@@ -741,9 +766,9 @@ export const Navbar = () => {
   const productImages = useProductImages();
   const panelKind = !activePanel
     ? null
-    : isServicesDropdown(activePanel)
+    : isServicesMenu(activePanel)
       ? "services"
-      : activePanel.title === insightsNav.title
+      : isInsightsMenu(activePanel)
         ? "insights"
         : (activePanel.dropdown ?? []).some((d) => productImages.has(normalise(d.title)))
           ? "products"
@@ -879,9 +904,9 @@ export const Navbar = () => {
                 )}
               >
                 {panelKind === "services" ? (
-                  <ServicesPanel onAudit={openAudit} />
+                  <ServicesPanel items={activePanel.dropdown ?? []} onAudit={openAudit} />
                 ) : panelKind === "insights" ? (
-                  <InsightsPanel items={activePanel.dropdown ?? []} />
+                  <InsightsPanel title={navLabel(activePanel.title)} items={activePanel.dropdown ?? []} />
                 ) : panelKind === "products" ? (
                   <ProductsPanel items={activePanel.dropdown ?? []} images={productImages} />
                 ) : (
@@ -893,7 +918,7 @@ export const Navbar = () => {
         </AnimatePresence>
       </motion.header>
 
-      <SiteMenu open={menuOpen} onClose={() => setMenuOpen(false)} onAudit={openAudit} />
+      <SiteMenu open={menuOpen} onClose={() => setMenuOpen(false)} onAudit={openAudit} navLinks={navLinks} />
       <FreeAuditPopup setOpenAuditForm={setOpenAuditForm} openAuditForm={openAuditForm} />
     </>
   );

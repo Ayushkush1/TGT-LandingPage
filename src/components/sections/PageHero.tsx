@@ -7,9 +7,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-
-/** Default hero photo (the team at work), used unless a page passes its own image. */
-const DEFAULT_IMAGE = { src: "/images/hero/team.webp", alt: "The Gold Technologies team at work" };
+import type { HeadingTag } from "@/store/useCMSStore";
 
 interface Cta {
   label: string;
@@ -39,10 +37,11 @@ export const PageHero = ({
   description,
   primary,
   secondary,
-  image = DEFAULT_IMAGE,
+  image: pageImage,
   facts = [],
   srPrefix,
   compact,
+  headingTag = "h1",
 }: {
   label: ReactNode;
   /** Magazine-style page number, e.g. "03". */
@@ -54,20 +53,28 @@ export const PageHero = ({
   primary?: Cta;
   /** In-page anchor; shown with a down arrow. */
   secondary?: Cta;
-  /** Defaults to the team photo; case studies and articles pass their own. */
-  image?: { src: string; alt: string };
+  /** The page's hero image (from its CMS hero); without one, the team photo. */
+  image?: { src?: string; alt: string };
   /** Short facts listed in the details bar. */
   facts?: string[];
   /** Extra screen-reader text read before the headline, e.g. the service name. */
   srPrefix?: string;
   /** Smaller headline for long words, e.g. client names. */
   compact?: boolean;
+  /** Main heading tag from CMS SEO headingOptions (defaults to h1). */
+  headingTag?: HeadingTag;
 }) => {
+  // Each page's hero image comes strictly from its CMS hero section
+  const image = pageImage?.src ? { src: pageImage.src, alt: pageImage.alt } : null;
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const dim = useTransform(scrollYProgress, [0, 1], [0, 0.5]);
-  const external = primary && /^https?:/.test(primary.href);
+  const primaryLink = primary?.label?.trim() && primary?.href?.trim() ? primary : null;
+  const secondaryLink = secondary?.label?.trim() && secondary?.href?.trim() ? secondary : null;
+  const external = primaryLink ? /^https?:/.test(primaryLink.href) : false;
+  const DescriptionTag = typeof description === "string" ? "p" : "div";
+  const Heading = headingTag;
 
   return (
     <section ref={ref} className="relative overflow-hidden bg-[#0A0A0A] text-white">
@@ -85,14 +92,14 @@ export const PageHero = ({
       <div className="relative max-w-[1600px] mx-auto px-5 md:px-10 pt-24 md:pt-28 pb-8 md:pb-10 min-h-[100svh] flex flex-col">
         {/* Masthead */}
         <div className="hero-fade flex items-center justify-between gap-6 border-b border-white/15 pb-4 text-[11px] uppercase tracking-[0.25em] text-white/60">
-          <div className="min-w-0">{label}</div>
+          <p className="min-w-0">{label}</p>
           {number && <p className="shrink-0 font-serif italic normal-case tracking-normal text-lg text-[#D4AF37]">No. {number}</p>}
         </div>
 
         {/* Pushes the headline down; small minimum so short screens keep everything in view */}
         <div className="flex-1 min-h-[14svh] lg:min-h-[6svh]" />
 
-        <h1
+        <Heading
           className={cn(
             "font-semibold tracking-[-0.05em] [text-shadow:0_4px_50px_rgba(0,0,0,0.5)]",
             compact
@@ -105,7 +112,7 @@ export const PageHero = ({
           <HeroLine delay={0.27} className="pl-[0.5em] lg:pl-[1.2em]">
             <span className="font-serif italic font-normal tracking-[-0.02em] text-[#D4AF37]">{highlight}</span>
           </HeroLine>
-        </h1>
+        </Heading>
 
         {/* Details bar */}
         <div
@@ -113,7 +120,9 @@ export const PageHero = ({
           style={{ animationDelay: "0.45s" }}
         >
           {description && (
-            <div className="lg:col-span-5 text-base md:text-[17px] leading-relaxed max-w-lg text-white/60 lg:line-clamp-3">{description}</div>
+            <DescriptionTag className="lg:col-span-5 text-base md:text-[17px] leading-relaxed max-w-lg text-white/60 lg:line-clamp-3">
+              {description}
+            </DescriptionTag>
           )}
           {facts.length > 0 && (
             <ul className="lg:col-span-3 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/60">
@@ -125,26 +134,26 @@ export const PageHero = ({
               ))}
             </ul>
           )}
-          {(primary || secondary) && (
+          {(primaryLink || secondaryLink) && (
             <div className="lg:col-span-4 lg:col-start-9 lg:justify-self-end flex flex-wrap items-center gap-x-7 gap-y-4">
-              {primary && (
+              {primaryLink && (
                 <MagneticButton intensity={0.2}>
                   <a
-                    href={primary.href}
+                    href={primaryLink.href}
                     {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     className="group inline-flex items-center gap-3 rounded-full bg-[#D4AF37] pl-5 pr-1.5 py-1.5 text-sm text-black font-semibold transition-shadow hover:shadow-[0_0_40px_rgba(212,175,55,0.45)]"
                   >
-                    {primary.label}
+                    {primaryLink.label}
                     <span className="w-9 h-9 rounded-full bg-black text-[#D4AF37] flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
                       <ArrowUpRight className="w-5 h-5" />
                     </span>
                   </a>
                 </MagneticButton>
               )}
-              {secondary && (
-                <Link href={secondary.href} className="group inline-flex items-center gap-2 text-sm font-medium">
+              {secondaryLink && (
+                <Link href={secondaryLink.href} className="group inline-flex items-center gap-2 text-sm font-medium">
                   <span className="relative">
-                    {secondary.label}
+                    {secondaryLink.label}
                     <span className="absolute left-0 -bottom-1 h-px w-full bg-white/40 origin-left transition-transform duration-500 group-hover:scale-x-0" />
                   </span>
                   <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />

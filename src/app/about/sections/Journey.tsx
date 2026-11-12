@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 import { aboutContent } from "@/content/about";
-import { useCMSStore } from "@/store/useCMSStore";
+import { usePageSection } from "@/content/usePageSection";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/** Company milestones (from the CMS CEO timeline) as an editorial timeline. */
+/** Company milestones (CMS: About → Journey) as an editorial timeline. */
 export const Journey = () => {
-  const copy = aboutContent.journey;
-  const milestones = useCMSStore((s) => s.ceoData?.main?.timeline?.milestones) ?? [];
+  const copy = usePageSection("aboutData", "Journey", aboutContent.journey);
+  const milestones = copy.milestones;
   if (milestones.length === 0) return null;
 
   return (

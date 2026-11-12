@@ -3,7 +3,7 @@
 import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -12,9 +12,10 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { PageHero } from "@/components/sections/PageHero";
 import { GrowthCTA } from "@/components/sections/GrowthCTA";
 import { useCMSStore, type PortfolioItemData } from "@/store/useCMSStore";
+import { resolveHeadingTag } from "@/lib/cmsData";
+import { useSectionContent } from "@/content/useSectionContent";
 import { useProjects } from "@/app/portfolio/useProjects";
 
-const BOOKING_URL = "https://calendar.app.google/5nNHP69fUR5WEMvt9";
 const ease = [0.22, 1, 0.36, 1] as const;
 const pad = (n: number) => String(n).padStart(2, "0");
 const clean = (t = "") => t.replace(/\s*[—–]\s*/g, ", ").replace(/\s+/g, " ").trim();
@@ -82,11 +83,15 @@ const StoryBody = ({ section }: { section: Section }) => {
 };
 
 export default function CaseStudyPage() {
-  const slug = useParams().name;
+  const param = useParams().name;
+  const slug = decodeURIComponent(Array.isArray(param) ? param[0] : param ?? "").toLowerCase();
   const portfolio = useCMSStore((s) => s.aboutData?.Portfolio);
   const projects = useProjects();
 
-  const raw = portfolio?.find((p) => slugOf(p.title) === slug) ?? portfolio?.[0];
+  const raw = portfolio?.find((p) => slugOf(p.title) === slug);
+  if (portfolio && !raw) notFound();
+  const bookingUrl = useSectionContent("GrowthCTA").primaryButtonUrl;
+  const bookingLabel = useSectionContent("GrowthCTA").primaryButtonLabel;
   const index = projects.findIndex((p) => p.title === raw?.title);
   const project = projects[index];
   const next = projects.length > 1 ? projects[(index + 1) % projects.length] : undefined;
@@ -107,18 +112,18 @@ export default function CaseStudyPage() {
             <PageHero
               compact
               label={
-                <p className="flex flex-wrap items-center gap-3">
+                <span className="flex flex-wrap items-center gap-3">
                   <Link href="/portfolio#work" className="inline-flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors">
                     <ArrowLeft className="w-3.5 h-3.5" /> All work
                   </Link>
                   <span className="w-6 h-px bg-white/20" />
                   <span className="text-[#D4AF37]">{project.industry}</span>
-                </p>
+                </span>
               }
               top={project.client}
               highlight={`${project.service.toLowerCase()}.`}
               description={project.summary}
-              primary={site ? { label: "Visit the live site", href: site } : { label: "Book a free strategy call", href: BOOKING_URL }}
+              primary={site ? { label: "Visit the live site", href: site } : bookingUrl && bookingLabel ? { label: bookingLabel, href: bookingUrl } : undefined}
               secondary={{ label: "Read the story", href: "#story" }}
               number={pad(index + 1)}
               image={{ src: project.image, alt: `${project.client}, ${project.service}` }}
@@ -127,6 +132,7 @@ export default function CaseStudyPage() {
                   ? project.stats.map((s) => `${s.value} ${s.label.toLowerCase()}`)
                   : [project.service, project.industry]
               }
+              headingTag={resolveHeadingTag(raw?.seo?.headingOptions)}
             />
 
             {/* The story: sticky chapter list beside numbered sections */}

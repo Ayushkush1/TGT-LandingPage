@@ -4,6 +4,7 @@ import React, { useState, Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, X, Loader2, CheckCircle2 } from "lucide-react";
+import { submitAudit } from "@/app/actions/submissions";
 
 type AuditFormData = {
   name: string;
@@ -31,17 +32,9 @@ export const FreeAuditPopup = ({
     setErrorMessage("");
 
     try {
-      const response = await fetch("https://tgt-cms.vercel.app/api/audits", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit audit request. Please try again later.");
-      }
+      // Sent from the website's server to the CMS (app/actions/submissions.ts)
+      const result = await submitAudit(formData);
+      if (!result.ok) throw new Error(result.error);
 
       setSubmitStatus("success");
       reset();

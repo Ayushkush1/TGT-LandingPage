@@ -9,7 +9,9 @@ import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import { contactContent } from "@/content/contact";
 import { useSectionContent } from "@/content/useSectionContent";
-import { useCMSStore } from "@/store/useCMSStore";
+import { usePageSection } from "@/content/usePageSection";
+import { useSiteFooter } from "@/content/site";
+import type { HeadingTag } from "@/store/useCMSStore";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -28,27 +30,32 @@ function useNow() {
 }
 
 /** Contact page: shared hero, direct lines beside the brief form, then offices and map. */
-export const ContactView = () => {
-  const copy = contactContent;
+export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
+  // CMS: Static pages → Contact (ContactHero, ContactDirect, MapSection)
+  const copy = {
+    hero: usePageSection("contactData", "ContactHero", contactContent.hero),
+    direct: usePageSection("contactData", "ContactDirect", contactContent.direct),
+    offices: usePageSection("contactData", "MapSection", contactContent.offices),
+  };
   const clocks = useSectionContent("GrowthCTA").clocks;
   const now = useNow();
-  const enquiry = useCMSStore((s) => s.homeData?.EnquirySection);
-  const footer = useCMSStore((s) => s.homeData?.FooterCMS);
-  const mapUrl = useCMSStore((s) => s.contactData?.MapSection?.mapEmbedUrl);
+  // Email, phone, socials and offices: CMS Social Media & Footer
+  const footer = useSiteFooter();
+  const mapUrl = copy.offices.mapEmbedUrl;
 
-  const email = enquiry?.email || footer?.emailAddress || "info@thegoldtechnologies.com";
-  const phone = (enquiry?.phone || footer?.phoneNumber || "").trim();
+  const email = footer.email;
+  const phone = footer.phone;
   const socials = [
-    { label: "LinkedIn", href: footer?.linkedinUrl },
-    { label: "Instagram", href: footer?.instagramUrl },
-    { label: "X", href: footer?.twitterUrl },
-    { label: "Facebook", href: footer?.facebookUrl },
+    { label: "LinkedIn", href: footer.socials.linkedin },
+    { label: "Instagram", href: footer.socials.instagram },
+    { label: "X", href: footer.socials.twitter },
+    { label: "Facebook", href: footer.socials.facebook },
   ].filter((s): s is { label: string; href: string } => !!s.href);
 
-  const offices = [
-    { address: footer?.loc1Address || enquiry?.address, country: footer?.loc1Country || "India", clock: clocks[0] },
-    { address: footer?.loc2Address, country: footer?.loc2Country || "UAE", clock: clocks[1] },
-  ].filter((o) => o.address);
+  const offices = footer.offices
+    .slice(0, 2)
+    .map((office, i) => ({ ...office, clock: clocks[i] }))
+    .filter((o) => o.address);
 
   return (
     <>
@@ -59,8 +66,10 @@ export const ContactView = () => {
         description={copy.hero.description}
         primary={{ label: copy.hero.primaryLabel, href: copy.hero.primaryUrl }}
         secondary={{ label: copy.hero.secondaryLabel, href: copy.hero.secondaryUrl }}
+        image={{ src: copy.hero.imageUrl, alt: "" }}
         number="05"
-        facts={["Reply within 24 hours", "Noida & Dubai"]}
+        facts={[copy.direct.replyNote, ...offices.map((o) => o.country)].filter(Boolean)}
+        headingTag={headingTag}
       />
 
       {/* Direct lines + brief form */}
@@ -69,15 +78,17 @@ export const ContactView = () => {
           <div className="lg:col-span-4">
             <p className="text-[11px] uppercase tracking-[0.25em] text-white/50">{copy.direct.label}</p>
             <ul className="mt-8 space-y-8">
-              <li>
-                <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
-                  <Mail className="w-3.5 h-3.5" /> {copy.direct.emailLabel}
-                </p>
-                <a href={`mailto:${email}`} className="group/roll mt-2 inline-flex items-center gap-2 text-xl md:text-2xl font-semibold tracking-[-0.02em] break-all">
-                  <RollText>{email}</RollText>
-                  <HoverArrow />
-                </a>
-              </li>
+              {email && (
+                <li>
+                  <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                    <Mail className="w-3.5 h-3.5" /> {copy.direct.emailLabel}
+                  </p>
+                  <a href={`mailto:${email}`} className="group/roll mt-2 inline-flex items-center gap-2 text-xl md:text-2xl font-semibold tracking-[-0.02em] break-all">
+                    <RollText>{email}</RollText>
+                    <HoverArrow />
+                  </a>
+                </li>
+              )}
               {phone && (
                 <li>
                   <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#D4AF37]">

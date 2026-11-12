@@ -1,53 +1,74 @@
 /**
- * Pure helpers that turn raw CMS API responses into the shape the CMS store
- * uses. Shared by the server (initial render) and the client store.
+ * Pure helpers that turn CMS website API responses (see cmsServer.ts) into the CMS store's
+ * shape. Used on the server; the result is handed to the client store (CMSDataInitializer).
  */
-import type { ApiNavLink, NavLink, PageSEO } from "@/store/useCMSStore";
+import type { ApiNavLink, CMSState, GlobalSEOData, HeadingTag, NavLink, PageSEO, SiteData } from "@/store/useCMSStore";
+import type { CmsPage, CmsPageSlug, CmsSite } from "./cmsServer";
 
-const transformSections = (sections: any[]) =>
-  sections.reduce((acc: any, section: any) => {
-    acc[section.type] = section.content;
-    return acc;
-  }, {});
+const HEADING_TAGS = new Set<HeadingTag>(["h1", "h2", "h3", "h4", "h5", "h6"]);
 
-const extractSEO = (p: any): PageSEO | undefined => {
-  if (!p) return undefined;
-  const seo = p.seo || {};
-  return {
-    metaTitle: seo.metaTitle || p.metaTitle,
-    metaDescription: seo.metaDescription || p.metaDescription,
-    targetKeywords: seo.targetKeywords || p.targetKeywords,
-    canonicalUrl: seo.canonicalUrl || p.canonicalUrl,
-    noIndex: seo.noIndex ?? p.noIndex ?? false,
-  };
-};
+/** Normalizes CMS headingOptions ("h1".."h6" or "") to a valid heading tag, defaulting to "h1". */
+export function resolveHeadingTag(tag?: string | null): HeadingTag {
+  const clean = tag?.trim().toLowerCase() as HeadingTag | undefined;
+  return clean && HEADING_TAGS.has(clean) ? clean : "h1";
+}
 
-const PAGE_KEYS = {
+/** CMS page → store field. */
+export const PAGE_KEYS = {
   home: "homeData",
   about: "aboutData",
   contactUs: "contactData",
   products: "productData",
   services: "serviceData",
   portfolio: "portfolioData",
-  ceo: "ceoData",
-} as const;
+  blog: "blogData",
+  media: "mediaData",
+} as const satisfies Record<CmsPageSlug, string>;
 
-/** Maps the CMS pages array onto homeData / aboutData / … store fields. */
-export function buildPagesState(pages: any[]) {
-  const state: Record<string, any> = {};
-  for (const [slug, key] of Object.entries(PAGE_KEYS)) {
-    const page = pages.find((p: any) => p.slug === slug);
-    if (page?.sections) {
-      state[key] = { ...transformSections(page.sections), seo: extractSEO(page) };
-    }
+export const toPageSEO = (seo: CmsPage["seo"]): PageSEO | undefined =>
+  seo
+    ? {
+        metaTitle: seo.metaTitle,
+        metaDescription: seo.metaDescription,
+        targetKeywords: seo.targetKeywords,
+        canonicalUrl: seo.canonicalUrl,
+        noIndex: seo.noIndex ?? false,
+        schema: seo.schema,
+        headingOptions: seo.headingOptions ? resolveHeadingTag(seo.headingOptions) : "",
+      }
+    : undefined;
+
+/** { homeData: { ...sections, seo } } and so on, for the pages given. */
+export function pagesState(pages: Partial<Record<CmsPageSlug, CmsPage | null>>): Partial<CMSState> {
+  const state: Record<string, unknown> = {};
+  for (const [slug, page] of Object.entries(pages) as [CmsPageSlug, CmsPage | null][]) {
+    if (page) state[PAGE_KEYS[slug]] = { ...page.data, seo: toPageSEO(page.seo) };
   }
   return state;
 }
 
-/** Builds the nested navigation from the flat nav-links API response. */
-export function formatNavLinks(rawLinks: ApiNavLink[]): NavLink[] {
+/** Store fields filled from /api/site/global. */
+export function siteState(site: CmsSite | null): Partial<CMSState> {
+  if (!site) return {};
+  return {
+    globalSEO: { ...site.settings, socialLinks: site.socialLinks } as GlobalSEOData,
+    site: { footer: site.footer, socialLinks: site.socialLinks, siteImages: site.siteImages } as SiteData,
+    navLinks: formatNavLinks(site.navLinks ?? [], "navbar"),
+    footerLinks: formatNavLinks(site.navLinks ?? [], "footer"),
+    banners: site.banners ?? [],
+  };
+}
+
+/**
+ * Builds the nested navigation from the flat nav-links list (CMS: Navigation & Links → Menu Links)
+ * for one place on the site. A top-level link or menu shows where its placement says
+ * ("navbar", "footer" or "both"); a menu's link shows only where both it and its menu are
+ * set to show (a link hidden from both is "none").
+ */
+export function formatNavLinks(rawLinks: ApiNavLink[], where: "navbar" | "footer"): NavLink[] {
+  const shownIn = (link: ApiNavLink) => (link.placement ?? "navbar") === where || link.placement === "both";
   return rawLinks
-    .filter((link) => link.parent === "-")
+    .filter((link) => link.parent === "-" && shownIn(link))
     .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label))
     .map((mainLink) => ({
       title: mainLink.label,
@@ -57,7 +78,7 @@ export function formatNavLinks(rawLinks: ApiNavLink[]): NavLink[] {
       dropdown:
         mainLink.type === "Dropdown"
           ? rawLinks
-              .filter((child) => child.parent === mainLink.id)
+              .filter((child) => child.parent === mainLink.id && shownIn(child))
               .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label))
               .map((child) => ({
                 title: child.label,
@@ -66,28 +87,6 @@ export function formatNavLinks(rawLinks: ApiNavLink[]): NavLink[] {
               }))
           : undefined,
     }));
-}
-
-/**
- * Drops blog post bodies (which embed base64 images — ~7.8MB of the ~8MB
- * response) so the data shipped to every browser stays small. Blog post pages
- * receive their own body on the server instead.
- */
-export function slimPages(pages: any[]) {
-  return pages.map((page: any) => ({
-    ...page,
-    sections: (page.sections ?? []).map((section: any) =>
-      section.type === "BlogSection" && Array.isArray(section.content?.blogs)
-        ? {
-            ...section,
-            content: {
-              ...section.content,
-              blogs: section.content.blogs.map(({ contentHtml, ...blog }: any) => blog),
-            },
-          }
-        : section,
-    ),
-  }));
 }
 
 export const blogSlug = (title: string) => title.toLowerCase().replace(/\s+/g, "-");

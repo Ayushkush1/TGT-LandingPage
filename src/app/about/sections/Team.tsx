@@ -11,9 +11,12 @@ import { HoverArrow } from "@/components/ui/HoverArrow";
 import { RollText } from "@/components/ui/RollText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+/** Used only when the CMS hasn't set a section on members: the first 3 are Leadership. */
 const LEADERSHIP_COUNT = 3;
 
 interface Person {
+  /** CMS About → Team: "leadership" or "pillars" (Our Pillars). */
+  group?: string;
   name: string;
   role: string;
   bio: string;
@@ -106,8 +109,9 @@ const MemberCard = ({ person, index, lead }: { person: Person; index: number; le
 export const Team = () => {
   const copy = usePageSection("aboutData", "Team", { ...aboutContent.team, members: team as Person[] });
   const people = usePeople(copy.members);
-  const leadership = people.slice(0, LEADERSHIP_COUNT);
-  const crew = people.slice(LEADERSHIP_COUNT);
+  const grouped = people.some((p) => p.group === "leadership" || p.group === "pillars");
+  const leadership = grouped ? people.filter((p) => p.group === "leadership") : people.slice(0, LEADERSHIP_COUNT);
+  const crew = grouped ? people.filter((p) => p.group !== "leadership") : people.slice(LEADERSHIP_COUNT);
 
   return (
     <section id="team" className="bg-[#F4F1EA] text-[#0B0F29] px-5 md:px-10 py-16 md:py-24 scroll-mt-24">
@@ -126,7 +130,7 @@ export const Team = () => {
         {[
           { label: "Leadership", list: leadership, lead: true },
           { label: "Our Pillars", list: crew, lead: false },
-        ].map((group) => (
+        ].filter((group) => group.list.length > 0).map((group) => (
           <div key={group.label} className="mt-10 md:mt-16">
             <p className="flex items-center gap-4 text-[11px] uppercase tracking-[0.25em] text-[#0B0F29]/65">
               <span className="font-serif italic normal-case tracking-normal text-base text-[#B8932A]">{group.label}</span>

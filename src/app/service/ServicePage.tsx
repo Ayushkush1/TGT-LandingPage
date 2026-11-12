@@ -18,15 +18,16 @@ import {
   Sparkles, Target, TrendingUp, UserRound, Users, Video, Wallet, Wand2, Workflow, Wrench,
   type LucideIcon,
 } from "lucide-react";
+import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 import { cn } from "@/lib/utils";
 import { PageHero } from "@/components/sections/PageHero";
 import { RollText } from "@/components/ui/RollText";
 import { HoverArrow } from "@/components/ui/HoverArrow";
 import type { Pillar } from "@/content/growth";
 import { useSectionContent } from "@/content/useSectionContent";
-import { serviceExtras, servicePage, type ServiceExtra, type ServiceSlug } from "@/content/services";
+import { isServicePage, serviceExtraFor, servicePage, type ServiceExtra } from "@/content/services";
 import { useClientLogos } from "@/content/clients";
-import { useTechLogo } from "@/content/tech";
+import { useTechIcon, useTechLogo } from "@/content/tech";
 import type { HeadingTag } from "@/store/useCMSStore";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -60,7 +61,12 @@ interface CmsService {
 const filled = <T,>(list?: T[]) => (Array.isArray(list) && list.length > 0 ? list : undefined);
 
 /** Reads service fields strictly from CMS `services` data, keeping only the route pillar fallback. */
-function withCms(local: ServiceExtra, data: CmsService | null, pillars: readonly Pillar[]): ServiceExtra {
+function withCms(
+  local: ServiceExtra,
+  data: CmsService | null,
+  pillars: readonly Pillar[],
+  allServices: Record<string, CmsService> | null,
+): ServiceExtra {
   const hero = data?.hero;
   const pillar = pillars.find((p) => p.id === hero?.pillar)?.id ?? local.pillar;
   return {
@@ -70,7 +76,7 @@ function withCms(local: ServiceExtra, data: CmsService | null, pillars: readonly
     promise: [hero?.headingLine1?.trim() || "", hero?.headingLine2?.trim() || ""],
     stack: filled(data?.stack?.map((s) => s.trim()).filter(Boolean)) ?? [],
     work: filled(data?.work?.map((w) => w.trim()).filter(Boolean)) ?? [],
-    related: filled(data?.related?.filter((r) => r in serviceExtras)) ?? [],
+    related: filled(data?.related?.filter((r) => isServicePage(r, allServices))) ?? [],
     proof: filled(data?.proof) ?? [],
   };
 }
@@ -268,16 +274,32 @@ const tagIcons: [RegExp, LucideIcon][] = [
   [/scraping|code/i, Code2],
 ];
 
-/** A tag as a small visual tile: the tool's logo when we have one, otherwise a matching icon. */
+/**
+ * An icon picked in the CMS (a lucide name), loaded on demand. While it loads, or if the
+ * name is unknown, the built-in `Fallback` icon shows instead.
+ */
+const CmsIcon = ({ name, fallback: Fallback, className, strokeWidth }: {
+  name: string | undefined;
+  fallback: LucideIcon;
+  className: string;
+  strokeWidth: number;
+}) => {
+  const icon = <Fallback className={className} strokeWidth={strokeWidth} />;
+  if (!name) return icon;
+  return <DynamicIcon name={name as IconName} className={className} strokeWidth={strokeWidth} fallback={() => icon} />;
+};
+
+/** A tag as a small visual tile: the tool's logo, else the CMS-picked icon, else a matching icon. */
 const TagTile = ({ tag }: { tag: string }) => {
   const logo = useTechLogo()(tag);
+  const cmsIcon = useTechIcon()(tag);
   const Icon = tagIcons.find(([re]) => re.test(tag))?.[1] ?? Sparkles;
   return (
     <li className="flex flex-col items-center justify-center gap-2.5 rounded-2xl bg-white/[0.04] ring-1 ring-white/10 px-2 py-4 text-center transition-colors duration-500 hover:bg-white/[0.07] hover:ring-[#D4AF37]/40">
       {logo ? (
         <Image src={logo} alt="" width={24} height={24} unoptimized className="w-6 h-6" />
       ) : (
-        <Icon className="w-6 h-6 text-[#D4AF37]" strokeWidth={1.5} />
+        <CmsIcon name={cmsIcon} fallback={Icon} className="w-6 h-6 text-[#D4AF37]" strokeWidth={1.5} />
       )}
       <span className="text-[9.5px] font-medium uppercase tracking-[0.12em] leading-tight text-white/60 line-clamp-2">{tag}</span>
     </li>
@@ -438,7 +460,7 @@ const ClientMark = ({ name }: { name: string }) => {
       style={{ "--h": `${height}px` } as CSSProperties}
       className={cn(
         "h-[calc(var(--h)*0.7)] md:h-[var(--h)] w-auto max-w-none object-contain transition-[filter,opacity] duration-500",
-        logo.dark ? "invert grayscale opacity-80 hover:opacity-100" : "grayscale opacity-75 hover:grayscale-0 hover:opacity-100",
+        logo.dark && "invert",
       )}
     />
   );
@@ -534,7 +556,7 @@ const Proof = ({ extra }: { extra: ServiceExtra }) => {
       {/* Clients: logo marquee when we have their logos, otherwise big editorial names (or a static row when there are few) */}
       {work.length > 0 &&
         (hasLogos ? (
-          <div className="mt-8 md:mt-10 flex w-max animate-marquee-slow hover:[animation-play-state:paused] motion-reduce:animate-none">
+          <div className="mt-8 md:mt-10 flex w-max animate-marquee-slow [animation-duration:35s] hover:[animation-play-state:paused] motion-reduce:animate-none">
             {[0, 1].map((k) => (
               <ul key={k} aria-hidden={k === 1} className="flex shrink-0 items-center">
                 {(work.length >= 4 ? work : [...work, ...work, ...work]).map((w, i) => (
@@ -547,7 +569,7 @@ const Proof = ({ extra }: { extra: ServiceExtra }) => {
             ))}
           </div>
         ) : marquee.length > 0 ? (
-          <div className="mt-6 flex w-max animate-marquee-slow hover:[animation-play-state:paused]">
+          <div className="mt-6 flex w-max animate-marquee-slow [animation-duration:35s] hover:[animation-play-state:paused]">
             {[0, 1].map((k) => (
               <ul key={k} aria-hidden={k === 1} className="flex shrink-0 items-center">
                 {marquee.map((w, i) => (
@@ -619,9 +641,10 @@ const stackIcons: Record<string, LucideIcon> = {
 
 const StackMark = ({ name }: { name: string }) => {
   const logo = useTechLogo()(name);
+  const cmsIcon = useTechIcon()(name);
   if (logo) return <Image src={logo} alt="" width={36} height={36} unoptimized className="w-8 h-8 md:w-9 md:h-9" />;
   const Icon = stackIcons[name] ?? Sparkles;
-  return <Icon className="w-8 h-8 md:w-9 md:h-9 text-[#D4AF37]" strokeWidth={1.25} />;
+  return <CmsIcon name={cmsIcon} fallback={Icon} className="w-8 h-8 md:w-9 md:h-9 text-[#D4AF37]" strokeWidth={1.25} />;
 };
 
 const Stack = ({
@@ -681,7 +704,7 @@ const Stack = ({
             {extra.related.map((r) => {
               const relHero = allServices?.[r]?.hero;
               if (!relHero?.name) return null;
-              const pillar = pillars.find((p) => p.id === (relHero.pillar ?? serviceExtras[r as ServiceSlug]?.pillar));
+              const pillar = pillars.find((p) => p.id === (relHero.pillar ?? serviceExtraFor(r).pillar));
               return (
                 <li key={r}>
                   <Link
@@ -726,14 +749,14 @@ export const ServicePage = ({
   allServices = null,
   headingTag = "h1",
 }: {
-  slug: ServiceSlug;
+  slug: string;
   data: CmsService | null;
   allServices?: Record<string, CmsService> | null;
   headingTag?: HeadingTag;
 }) => {
   const pillars = useSectionContent("ServicePillars").pillars;
   const growthCta = useSectionContent("GrowthCTA");
-  const extra = withCms(serviceExtras[slug], data, pillars);
+  const extra = withCms(serviceExtraFor(slug), data, pillars, allServices);
   const hero = data?.hero;
   const items = data?.services ?? [];
 

@@ -58,6 +58,26 @@ const emptyService = (pillar: PillarId): ServiceExtra => ({
   related: [],
 });
 
+/** Old CMS entries kept as source content that must not become pages of their own. */
+const LEGACY_SERVICE_SLUGS = ["digital-marketing"];
+
+/**
+ * True when /service/<slug> is a real page, i.e. the CMS has that service: a built-in one, or one
+ * added with "Add service" (which needs a name). A service deleted in the CMS is no longer a page.
+ * If the CMS can't be reached, the built-in services stay up.
+ */
+export function isServicePage(slug: string, allServices: Record<string, { hero?: { name?: string } }> | null | undefined): boolean {
+  if (LEGACY_SERVICE_SLUGS.includes(slug)) return false;
+  const builtIn = (SERVICE_SLUGS as readonly string[]).includes(slug);
+  if (!allServices) return builtIn;
+  const service = allServices[slug];
+  return builtIn ? Boolean(service) : Boolean(service?.hero?.name?.trim());
+}
+
+/** Layout defaults for a service; CMS-added services start in the "brand" pillar until the CMS says otherwise. */
+export const serviceExtraFor = (slug: string): ServiceExtra =>
+  serviceExtras[slug as ServiceSlug] ?? emptyService("brand");
+
 export const serviceExtras: Record<ServiceSlug, ServiceExtra> = {
   branding: emptyService("brand"),
   "ui-ux-designing": emptyService("brand"),

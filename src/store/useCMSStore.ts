@@ -70,6 +70,8 @@ export interface SiteFooterData {
 export interface TechLogoData {
   name: string;
   image: string;
+  /** A lucide icon name (kebab-case, e.g. "bar-chart-3") picked in the CMS instead of an image. */
+  icon?: string;
   matches: string[];
 }
 

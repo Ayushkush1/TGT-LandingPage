@@ -19,7 +19,8 @@ export async function GET() {
     return new Response(xml, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "public, s-maxage=86400, stale-while-revalidate",
+        // No CDN caching: CMS saves must show up straight away
+        "Cache-Control": "no-store, max-age=0",
       },
     });
   } catch (error) {

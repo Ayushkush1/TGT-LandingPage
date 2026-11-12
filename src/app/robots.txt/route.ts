@@ -19,6 +19,7 @@ export async function GET() {
     return new Response(text, {
       headers: {
         "Content-Type": "text/plain",
+        "Cache-Control": "no-store, max-age=0",
       },
     });
   } catch (error) {

@@ -136,7 +136,7 @@ export const Team = () => {
               <span className="font-serif italic normal-case tracking-normal text-base text-[#B8932A]">{group.label}</span>
               <span className="h-px flex-1 bg-[#0B0F29]/10" />
             </p>
-            <ul className="mt-4 md:mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4">
+            <ul className="mt-4 md:mt-5 grid md:grid-cols-2 min-[1300px]:grid-cols-3 gap-2.5 md:gap-4">
               {group.list.map((person, i) => (
                 <MemberCard key={person.name} person={person} index={i} lead={group.lead} />
               ))}

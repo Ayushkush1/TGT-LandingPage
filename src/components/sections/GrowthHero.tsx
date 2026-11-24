@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Clock, Star } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useSectionContent } from "@/content/useSectionContent";
+import { useCustomSection } from "@/content/customSection";
 import { RevealPill } from "./HeroPills";
 import { useWorkItems } from "@/content/useWorkItems";
 import { useCMSStore, type HeadingTag } from "@/store/useCMSStore";
@@ -27,7 +28,11 @@ const Line = ({ children, delay }: { children: ReactNode; delay: number }) => (
 export const GrowthHero = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
   const data = useSectionContent("GrowthHero");
   const Heading = motion[headingTag];
-  const logos = useCMSStore((s) => s.homeData?.TrustedBySection?.images) ?? [];
+  // Hero pill logos: the site-wide client logos (TrustedBySection.images); a custom page's
+  // section uses its own `images` when it has some
+  const custom = useCustomSection("GrowthHero")?.content as { images?: string[] } | undefined;
+  const homeLogos = useCMSStore((s) => s.homeData?.TrustedBySection?.images);
+  const logos = (custom?.images?.length ? custom.images : homeLogos) ?? [];
   const { products, caseStudies } = useWorkItems();
   const productWork = products.length ? products : caseStudies;
   const productScreens = productWork.map((p) => p.image);

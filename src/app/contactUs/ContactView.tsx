@@ -29,8 +29,19 @@ function useNow() {
   return now;
 }
 
-/** Contact page: shared hero, direct lines beside the brief form, then offices and map. */
-export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
+export type ContactPart = "hero" | "direct" | "offices";
+
+/**
+ * Contact page: shared hero, direct lines beside the brief form, then offices and map.
+ * `parts` shows only some of them (custom pages: CMS ContactHero / ContactDirect / MapSection).
+ */
+export const ContactView = ({
+  headingTag = "h1",
+  parts = ["hero", "direct", "offices"],
+}: {
+  headingTag?: HeadingTag;
+  parts?: readonly ContactPart[];
+}) => {
   // CMS: Static pages → Contact (ContactHero, ContactDirect, MapSection)
   const copy = {
     hero: usePageSection("contactData", "ContactHero", contactContent.hero),
@@ -59,6 +70,7 @@ export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) 
 
   return (
     <>
+      {parts.includes("hero") && (
       <PageHero
         label={copy.hero.label}
         top={copy.hero.headlineTop}
@@ -71,9 +83,14 @@ export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) 
         facts={[copy.direct.replyNote, ...offices.map((o) => o.country)].filter(Boolean)}
         headingTag={headingTag}
       />
+      )}
 
       {/* Direct lines + brief form */}
-      <section id="brief" className="bg-[#0A0A0A] text-white px-5 md:px-10 pb-16 md:pb-24 scroll-mt-20">
+      {parts.includes("direct") && (
+      <section
+        id="brief"
+        className={`bg-[#0A0A0A] text-white px-5 md:px-10 pb-16 md:pb-24 scroll-mt-20 ${parts.includes("hero") ? "" : "pt-16 md:pt-24"}`}
+      >
         <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-12 lg:gap-16 border-t border-white/10 pt-12 md:pt-16">
           <div className="lg:col-span-4">
             <p className="text-[11px] uppercase tracking-[0.25em] text-white/50">{copy.direct.label}</p>
@@ -142,8 +159,10 @@ export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) 
           </div>
         </div>
       </section>
+      )}
 
       {/* Offices + map */}
+      {parts.includes("offices") && (
       <section className="bg-[#F4F1EA] text-[#0B0F29] px-5 md:px-10 py-16 md:py-24">
         <div className="max-w-[1600px] mx-auto">
           <div className="grid lg:grid-cols-12 gap-10 items-end">
@@ -203,6 +222,7 @@ export const ContactView = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) 
           </div>
         </div>
       </section>
+      )}
     </>
   );
 };

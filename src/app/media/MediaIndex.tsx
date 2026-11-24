@@ -12,13 +12,23 @@ import type { HeadingTag } from "@/store/useCMSStore";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/** Press coverage as an editorial index: outlet in gold, headline, then date and type. */
-export const MediaIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
+/**
+ * Press coverage as an editorial index: outlet in gold, headline, then date and type.
+ * `parts` shows only the hero or the list (custom pages: CMS MediaHero / MediaCoverage).
+ */
+export const MediaIndex = ({
+  headingTag = "h1",
+  parts = ["hero", "list"],
+}: {
+  headingTag?: HeadingTag;
+  parts?: readonly ("hero" | "list")[];
+}) => {
   // CMS: Static pages → Media (MediaIndex, MediaItems)
   const mediaPage = usePageSection("mediaData", "MediaIndex", mediaPageDefaults);
   const mediaItems = usePageSection("mediaData", "MediaItems", { items: mediaDefaults as MediaItem[] }).items;
   return (
   <>
+    {parts.includes("hero") && (
     <PageHero
       label={mediaPage.label}
       top={mediaPage.top}
@@ -29,7 +39,9 @@ export const MediaIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) =
       facts={mediaItems.length > 0 ? [`${mediaItems.length} features`] : []}
       headingTag={headingTag}
     />
+    )}
 
+    {parts.includes("list") && (
     <section id="coverage" className="bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24 scroll-mt-24">
       <div className="max-w-[1600px] mx-auto">
         <p className="flex items-center gap-4 text-[11px] uppercase tracking-[0.25em] text-white/50">
@@ -85,6 +97,7 @@ export const MediaIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) =
         )}
       </div>
     </section>
+    )}
   </>
   );
 };

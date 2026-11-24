@@ -304,8 +304,21 @@ const SpreadLayout = ({ items }: { items: Product[] }) => (
   </ol>
 );
 
-/** Products page: shared hero, product grid, then the "let's talk" section. */
-export const ProductsView = ({ products, headingTag = "h1" }: { products: ProductItemData[]; headingTag?: HeadingTag }) => {
+export type ProductsPart = "hero" | "grid" | "cta";
+
+/**
+ * Products page: shared hero, product grid, then the "let's talk" section.
+ * `parts` shows only some of them (custom pages: CMS ProductHero / ProductSuite).
+ */
+export const ProductsView = ({
+  products,
+  headingTag = "h1",
+  parts = ["hero", "grid", "cta"],
+}: {
+  products: ProductItemData[];
+  headingTag?: HeadingTag;
+  parts?: readonly ProductsPart[];
+}) => {
   // CMS: Static pages → Products (main.hero, main.grid)
   const hero = usePageSection<typeof productsContent.hero & { headingLine?: string; headingHighlight?: string }>(
     "productData",
@@ -319,6 +332,7 @@ export const ProductsView = ({ products, headingTag = "h1" }: { products: Produc
 
   return (
     <>
+      {parts.includes("hero") && (
       <PageHero
         label={hero.label}
         top={hero.headingLine?.trim() || hero.headlineTop}
@@ -331,7 +345,9 @@ export const ProductsView = ({ products, headingTag = "h1" }: { products: Produc
         facts={[`${products.length} products`, "Live and in use", "Built in house"]}
         headingTag={headingTag}
       />
+      )}
 
+      {parts.includes("grid") && (
       <section id="products" className="bg-[#F4F1EA] text-[#0B0F29] px-5 md:px-10 py-16 md:py-24 scroll-mt-20">
         <div className="max-w-[1600px] mx-auto">
           <div className="grid lg:grid-cols-12 gap-10 items-end">
@@ -356,8 +372,9 @@ export const ProductsView = ({ products, headingTag = "h1" }: { products: Produc
           </div>
         </div>
       </section>
+      )}
 
-      <GrowthCTA />
+      {parts.includes("cta") && <GrowthCTA />}
     </>
   );
 };

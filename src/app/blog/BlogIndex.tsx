@@ -10,12 +10,20 @@ import { blogPage as blogDefaults } from "@/content/insights";
 import { usePageSection } from "@/content/usePageSection";
 
 /** Every CMS blog post: the latest full-bleed, the rest as image cards (same layout as the home page). */
-export const BlogIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) => {
+export const BlogIndex = ({
+  headingTag = "h1",
+  parts = ["hero", "list"],
+}: {
+  headingTag?: HeadingTag;
+  /** Only the hero or the list (custom pages: CMS BlogIndex shows the header). */
+  parts?: readonly ("hero" | "list")[];
+}) => {
   const blogPage = usePageSection("blogData", "BlogIndex", blogDefaults); // CMS: Static pages → Blog
   const blogs = useCMSStore((s) => s.homeData?.BlogSection?.blogs) ?? [];
 
   return (
     <>
+      {parts.includes("hero") && (
       <PageHero
         label={blogPage.label}
         top={blogPage.top}
@@ -26,7 +34,9 @@ export const BlogIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) =>
         facts={blogs.length > 0 ? [`${blogs.length} articles`] : []}
         headingTag={headingTag}
       />
+      )}
 
+      {parts.includes("list") && (
       <section id="articles" className="bg-[#0A0A0A] text-white px-5 md:px-10 py-16 md:py-24 scroll-mt-24">
         <div className="max-w-[1600px] mx-auto">
           <p className="flex items-center gap-4 text-[11px] uppercase tracking-[0.25em] text-white/50">
@@ -54,6 +64,7 @@ export const BlogIndex = ({ headingTag = "h1" }: { headingTag?: HeadingTag }) =>
           )}
         </div>
       </section>
+      )}
     </>
   );
 };

@@ -41,7 +41,7 @@ type CmsItem = {
   outcome?: string;
 };
 
-interface CmsService {
+export interface CmsService {
   hero?: {
     name?: string;
     pillar?: string;
@@ -778,4 +778,56 @@ export const ServicePage = ({
       <Stack extra={extra} pillars={pillars} allServices={allServices} />
     </>
   );
+};
+
+/** The parts of the service template that the CMS can place on a custom page. */
+export type ServicePart = "hero" | "approach" | "deliver" | "proof" | "stack";
+
+/**
+ * One part of the service template on its own, for custom pages (CMS: Custom Pages →
+ * ServiceHero, ServiceApproach, ServiceDeliver, ServiceProof, ServiceStack). `data` is in the
+ * same shape as one service's CMS content ({ hero, services, proof, work, stack, related }).
+ */
+export const ServiceSection = ({
+  part,
+  data,
+  allServices = null,
+  headingTag = "h1",
+}: {
+  part: ServicePart;
+  data: CmsService | null;
+  allServices?: Record<string, CmsService> | null;
+  headingTag?: HeadingTag;
+}) => {
+  const pillars = useSectionContent("ServicePillars").pillars;
+  const growthCta = useSectionContent("GrowthCTA");
+  const extra = withCms(serviceExtraFor(""), data, pillars, allServices);
+  const hero = data?.hero;
+  const items = data?.services ?? [];
+
+  switch (part) {
+    case "hero":
+      return (
+        <Hero
+          extra={extra}
+          pillars={pillars}
+          bookingLabel={growthCta.primaryButtonLabel}
+          bookingUrl={growthCta.primaryButtonUrl}
+          intro={hero?.paragraphs?.[0]}
+          items={items}
+          image={hero?.imageUrl}
+          headingTag={headingTag}
+        />
+      );
+    case "approach":
+      return <Approach text={hero?.paragraphs?.[1]} points={(hero?.pillars ?? []).slice(0, 4)} />;
+    case "deliver":
+      return <Deliver items={items} />;
+    case "proof":
+      return <Proof extra={extra} />;
+    case "stack":
+      return <Stack extra={extra} pillars={pillars} allServices={allServices} />;
+    default:
+      return null;
+  }
 };

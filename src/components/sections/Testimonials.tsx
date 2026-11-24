@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowUpRight, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSectionContent } from "@/content/useSectionContent";
+import { useCustomSection } from "@/content/customSection";
 import { useCMSStore } from "@/store/useCMSStore";
 
 interface Story {
@@ -148,8 +149,10 @@ const Row = ({ stories, duration, reverse, offset }: { stories: Story[]; duratio
 /** Client stories: header like every section, then two rows of quotes gliding in opposite directions. */
 export const Testimonials = () => {
   const data = useSectionContent("Testimonials");
+  // Client stories: OurReputation.testimonials, or a custom page's own (its section's `testimonials`)
+  const custom = useCustomSection("Testimonials")?.content as { testimonials?: Story[] } | undefined;
   const cms = useCMSStore((s) => s.homeData?.OurReputation);
-  const stories: Story[] = cms?.testimonials ?? [];
+  const stories: Story[] = (custom ? custom.testimonials : cms?.testimonials) ?? [];
   const half = Math.ceil(stories.length / 2);
   const rows = [stories.slice(0, half), stories.slice(half)];
 

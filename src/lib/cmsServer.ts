@@ -4,6 +4,7 @@
  * Reads the CMS's website API (/api/site/*), which needs `x-cms-secret`:
  *   - global:              settings, footer, social links, site images, navigation, banners
  *   - pages/<slug>:        { data: { [section]: content }, seo } for one page
+ *                          (custom pages: { custom: true, sections: [{ id, type, content, order }], seo })
  *   - blogs/<slug>:        one blog post body
  *
  * Every response is kept in Next's data cache under a tag (CmsTag) and refetched only when the
@@ -60,6 +61,12 @@ export interface CmsPage {
   seo: CmsPageSEO | null;
 }
 
+/** A page made in the CMS's Custom Pages, served at /<slug>. */
+export interface CmsCustomPage {
+  sections: { id: string; type: string; content: Record<string, any>; order: number }[];
+  seo: CmsPageSEO | null;
+}
+
 export interface CmsSite {
   settings: Record<string, any>;
   footer: Record<string, any> | null;
@@ -104,6 +111,14 @@ export const getSite = cache(async (): Promise<CmsSite | null> => {
 export const getPage = cache(async (slug: CmsPageSlug): Promise<CmsPage | null> => {
   const json = await cmsFetch<CmsPage>(`site/pages/${slug}`, [CmsTag.page(slug)]);
   return json ? { data: json.data ?? {}, seo: json.seo ?? null } : null;
+});
+
+/** A custom page (CMS: Custom Pages) by its slug, sections in page order; null if there is none. */
+export const getCustomPage = cache(async (slug: string): Promise<CmsCustomPage | null> => {
+  if (!/^[A-Za-z0-9-]+$/.test(slug)) return null;
+  const json = await cmsFetch<{ custom?: boolean } & CmsCustomPage>(`site/pages/${slug}`, [CmsTag.page(slug)]);
+  if (!json?.custom) return null;
+  return { sections: Array.isArray(json.sections) ? json.sections : [], seo: json.seo ?? null };
 });
 
 /** Full HTML body of one blog post, by its URL slug. */
